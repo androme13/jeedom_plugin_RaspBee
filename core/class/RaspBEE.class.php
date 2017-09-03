@@ -60,6 +60,13 @@ class RaspBEE extends eqLogic {
 		}else{	
 			$return['state'] = 'ok';	
 		}
+		$key = config::byKey('raspbeeIP','RaspBEE');
+		//echo "valeur clé:".$key;
+		if ( $key == '') {
+			
+			$return['launchable'] = 'nok';
+		//config::save('api::raspbee::mode', 'localhost');
+	}    
 		//
 		return $return;
 	}
@@ -73,14 +80,13 @@ class RaspBEE extends eqLogic {
 		if ($deamon_info['launchable'] != 'ok') {
 			throw new Exception(__('Veuillez vérifier la configuration', __FILE__));
 		}
-		$sensor_path = realpath(dirname(__FILE__) . '/../../daemon');
-		$cmd = 'nice -n 19 nodejs ' . $sensor_path . '/daemon.js ';
+		$daemon_path = realpath(dirname(__FILE__) . '/../../daemon');
+		$cmd = 'nice -n 19 nodejs ' . $daemon_path . '/daemon.js ';
 		//$cmd = 'nice -n 19 nodejs ' . $sensor_path . '/jeeorangetv.js ' . $url . ' ' . $log . ' ' . $freq;
 		log::add('RaspBEE', 'debug', 'Lancement démon RaspBEE : ' . $cmd);
 		$result = exec('nohup ' . $cmd . ' >> ' . log::getPathToLog('RaspBEE_node') . ' 2>&1 &');
-		//$result = exec('nohup ' . $cmd . ' >> ' . log::getPathToLog('JeeOrangeTv_node') . ' 2>&1 &');
 		if (strpos(strtolower($result), 'error') !== false || strpos(strtolower($result), 'traceback') !== false) {
-			//log::add('JeeOrangeTv', 'error', $result);
+
 			log::add('RaspBEE', 'error', 'Impossible de lancer le démon RaspBEE : '.$result, 'unableStartDeamon');
 			return false;
 		}
@@ -99,7 +105,6 @@ class RaspBEE extends eqLogic {
 			exec('kill -9 $(ps aux | grep "RaspBEE/daemon/daemon.js" | awk \'{print $2}\')');
 		}
 		
-		$deamon_info = self::deamon_info();
 		if ($deamon_info['state'] == 'ok') {
 			sleep(1);
 			exec('sudo kill -9 $(ps aux | grep "RaspBEE/daemon/daemon.js" | awk \'{print $2}\')');
@@ -108,7 +113,7 @@ class RaspBEE extends eqLogic {
 	}
 
 	public static function deamon_changeAutoMode($_mode) {
-
+		//config::save('api::raspbee::mode', 'localhost');
 	}
 	/*     * *************************Attributs****************************** */
 
