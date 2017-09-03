@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info>
+    <id>RaspBEE</id>
+    <name>RaspBEE</name>
+    <description>Plugin raspbee pour le contrôle d'une passerelle RaspBEE</description>
+    <icon>fa fa-keyboard-o</icon>
+    <licence>AGPL</licence>
+    <author>Thierry MATHIEU</author>
+    <installation>Aucune</installation>
+    <require>3.0</require>
+    <category>communication</category>
+	<hasDependency>1</hasDependency>
+	<hasOwnDeamon>1</hasOwnDeamon>
+</info>

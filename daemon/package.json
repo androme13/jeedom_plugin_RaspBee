@@ -1,0 +1,15 @@
+{
+  "name": "daemon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "daemon.js",
+  "dependencies": {
+    "websocket": "^1.0.24"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
