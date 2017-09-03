@@ -18,19 +18,19 @@
 
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
-function raspbee_install() {
+function RaspBEE_install() {
 	/*if (config::byKey('api::raspbee::mode') == '') {
 		config::save('api::raspbee::mode', 'localhost');
 	}    */
 }
 
-function raspbee_update() {
+function RaspBEE_update() {
     
 }
 
 
-function raspbee_remove() {
-	        $cron = cron::byClassAndFunction('raspbee', 'pull');
+function RaspBEE_remove() {
+	        $cron = cron::byClassAndFunction('RaspBEE', 'pull');
         if (is_object($cron)) {
                 $cron->remove();
         }    

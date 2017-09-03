@@ -184,7 +184,7 @@ class RaspBEE extends eqLogic {
 	/*     * **********************Getteur Setteur*************************** */
 }
 
-class raspbeeCmd extends cmd {
+class RaspBEECmd extends cmd {
 	/*     * *************************Attributs****************************** */
 
 
