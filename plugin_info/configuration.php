@@ -51,10 +51,10 @@ curl_close($ch);
         <div class="form-group">
             <label class="col-lg-4 control-label">{{Clé API RaspBEE}}</label>
 			<div class="col-lg-2">
-                <input class="configKey form-control" data-l1key="raspbeeAPIKEY" value="80" />
+                <input disabled class="configKey form-control" id="raspbeeAPIKEY" data-l1key="raspbeeAPIKEY" value="80"/>
             </div>
 			<div class="col-lg-5">
-				<a class="btn btn-info tooltips" id="bt_raspbeeGETNEWKEY" title="{{Demande une nouvelle cléf API}}"><i class="fa fa-refresh"></i></a>
+				<a class="btn btn-info tooltips" id="bt_raspbeeGETNEWKEY" title="{{Demande une nouvelle cléf API}}" disabled><i class="fa fa-refresh"></i></a>
 			</div>		
         </div>
 	<legend><i class="fa fa-list-alt"></i> {{Général}}</legend>
@@ -74,16 +74,47 @@ curl_close($ch);
 		type : 'GET',
 		dataType : 'json',
 		success : function(resp, statut){
-			$('#raspbeeGWIP').val(resp[0].internalipaddress+":"+resp[0].internalport);
+			var value= resp[0].internalipaddress+":"+resp[0].internalport;
+			$('#raspbeeGWIP').val(value);
+			fieldValidate(value);
 		},
 		error : function(resp, statut, erreur){
 		$('#md_modal2').dialog({title: "{{Erreur RaspBEE}}"});
 		$('#md_modal2').html('Aucune passerelle RaspBEE ne peut être trouvée<br>'+resp).dialog('open');	
        }		
     });
-	
-	
 });
+
+	$('#raspbeeGWIP').on('change paste keyup', function () {		
+		fieldValidate($(this).val());
+	});
 	
+function fieldValidate(value){	
+	if (validateIpAndPort(value)==true){
+				$('#raspbeeAPIKEY').prop('disabled', false);
+				$('#bt_raspbeeGETNEWKEY').removeAttr('disabled');
+		}
+		else{
+				$('#raspbeeAPIKEY').prop('disabled', true);
+				$('#bt_raspbeeGETNEWKEY').attr('disabled', 'disabled');  
+
+		}	
+}	
+	
+function validateIpAndPort(input) {
+    var parts = input.split(":");
+    var ip = parts[0].split(".");
+    var port = parts[1];
+    return validateNum(port, 1, 65535) &&
+        ip.length == 4 &&
+        ip.every(function (segment) {
+            return validateNum(segment, 0, 255);
+        });
+}
+
+function validateNum(input, min, max) {
+    var num = +input;
+    return num >= min && num <= max && input === num.toString();
+}
 	
 </script>

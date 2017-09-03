@@ -2,9 +2,9 @@
 if (!isConnect('admin')) {
 	throw new Exception('{{401 - Accès non autorisé}}');
 }
-$plugin = plugin::byId('raspbee');
-sendVarToJS('eqType', 'raspbee');
-$eqLogics = eqLogic::byType('raspbee');
+$plugin = plugin::byId('RaspBEE');
+sendVarToJS('eqType', 'RaspBEE');
+$eqLogics = eqLogic::byType('RaspBEE');
 echo '<div id="div_inclusionAlert"></div>';
 ?>
 
@@ -58,7 +58,7 @@ foreach ($eqLogics as $eqLogic) {
 foreach ($eqLogics as $eqLogic) {
 	echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
 	echo "<center>";
-	echo '<img src="plugins/raspbee/doc/images/template_icon.png" height="105" width="95" />';
+	echo '<img src="plugins/RaspBEE/doc/images/template_icon.png" height="105" width="95" />';
 	echo "</center>";
 	echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
 	echo '</div>';
@@ -132,5 +132,5 @@ foreach (object::all() as $object) {
 </div>
 </div>
 
-<?php include_file('desktop', 'raspbee', 'js', 'raspbee');?>
+<?php include_file('desktop', 'RaspBEE', 'js', 'RaspBEE');?>
 <?php include_file('core', 'plugin.template', 'js');?>
