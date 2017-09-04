@@ -4,7 +4,8 @@
   "description": "",
   "main": "daemon.js",
   "dependencies": {
-    "websocket": "^1.0.24"
+    "config": "^1.26.2",
+    "websocket": "^1.0.24",
   },
   "devDependencies": {},
   "scripts": {

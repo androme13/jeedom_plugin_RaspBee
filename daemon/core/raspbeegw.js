@@ -6,7 +6,7 @@ raspbeegw = module.exports = {
 
 	connect : function (host, port) {
 		raspbeegw.setup();
-		WSclient.connect('ws://10.0.0.19:443/');
+		WSclient.connect('ws://'+host+':'+port);
 	},
 
 	close : function() {
