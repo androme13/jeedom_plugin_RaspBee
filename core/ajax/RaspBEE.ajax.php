@@ -24,6 +24,12 @@ try {
         throw new Exception(__('401 - Accès non autorisé', __FILE__));
     }
 
+	if (init('action') == 'websocket') {
+       // $sql = "SELECT cmd.name FROM cmd WHERE cmd.eqtype='ABC'";
+       // $result =  DB::Prepare($sql, array(), DB::FETCH_TYPE_ALL);
+	   $result ={'name':'ajax'};
+        ajax::success($result);
+   }
 
 
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));

@@ -19,21 +19,44 @@
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 function RaspBEE_install() {
-	/*if (config::byKey('api::raspbee::mode') == '') {
+	if (config::byKey('api::raspbee::mode') == '') {
 		config::save('api::raspbee::mode', 'localhost');
-	}    */
+	}
+	/*$cron = cron::byClassAndFunction('RaspBEE', 'pull');
+    if (!is_object($cron)) {
+        $cron = new cron();
+        $cron->setClass('RaspBEE');
+        $cron->setFunction('pull');
+        $cron->setEnable(1);
+        $cron->setDeamon(1);
+        $cron->setSchedule('* * * * *');
+        $cron->save();
+    }*/
 }
 
 function RaspBEE_update() {
-    
+	if (config::byKey('api::raspbee::mode') == '') {
+		config::save('api::raspbee::mode', 'localhost');
+	}
+   /* $cron = cron::byClassAndFunction('RaspBEE', 'pull');
+    if (!is_object($cron)) {
+        $cron = new cron();
+        $cron->setClass('RaspBEE');
+        $cron->setFunction('pull');
+        $cron->setEnable(1);
+        $cron->setDeamon(1);
+        $cron->setSchedule('* * * * *');
+        $cron->save();
+    }
+    $cron->stop();*/
 }
 
 
 function RaspBEE_remove() {
-	        $cron = cron::byClassAndFunction('RaspBEE', 'pull');
+	   /* $cron = cron::byClassAndFunction('RaspBEE', 'pull');
         if (is_object($cron)) {
                 $cron->remove();
-        }    
+        }*/
 }
 
 ?>

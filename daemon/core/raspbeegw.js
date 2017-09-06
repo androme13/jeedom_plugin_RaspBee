@@ -1,11 +1,12 @@
 const util = require('util');
 var WebSocketClient = require('websocket').client;
+var WebSocketClientParser = require('./websocketclientparser.js');
 var WSclient = new WebSocketClient();
 
 raspbeegw = module.exports = {
 
-	connect : function (host, port) {
-		raspbeegw.setup();
+	connect : function (host, port, callback) {
+		raspbeegw.setup(callback);
 		WSclient.connect('ws://'+host+':'+port);
 	},
 
@@ -13,7 +14,7 @@ raspbeegw = module.exports = {
 		
 	},
 
-	setup : function(){
+	setup : function(callback){
 		
 		WSclient.on('connectFailed', function(error) {
 			console.log('Connect Error: ' + error.toString());
@@ -29,12 +30,17 @@ raspbeegw = module.exports = {
 			});
 			connection.on('message', function(message) {
 				if (message.type === 'utf8') {
-					var tempMessage = JSON.parse(message.utf8Data);
-					console.log("RAW: '" + message.utf8Data + "'");
-					if (tempMessage.r=="sensors" && tempMessage.e=="changed"){
-						console.log(util.inspect(tempMessage.state, false, null))
+					var tempMessage = JSON.parse(message.utf8Data);						
+						try{
+						callback(WebSocketClientParser.process(tempMessage));
+						}
+						catch (err){
+							console.log(err);
+						}
+						//callback(util.inspect(tempMessage.state, false, null));
+						//console.log(util.inspect(tempMessage.state, false, null))
 						//console.log("Received: '" + tempMessage.state.buttonevent + "'");
-					}
+					//}
 				}
 			});
 		})

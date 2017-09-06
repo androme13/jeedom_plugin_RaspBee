@@ -112,7 +112,23 @@ class RaspBEE extends eqLogic {
 		
 	}
 
-	public static function deamon_changeAutoMode($_mode) {
+	public static function deamon_changeAutoMode($_mode) {	
+	$cron = cron::byClassAndFunction('RaspBEE', 'pull');
+    if (!is_object($cron)) {
+        $cron = new cron();
+        $cron->setClass('RaspBEE');
+        $cron->setFunction('pull');
+        $cron->setEnable(1);
+        $cron->setDeamon(1);
+        $cron->setSchedule('* * * * *');
+        $cron->save();
+	}
+		$cron = cron::byClassAndFunction('RaspBEE', 'pull');
+		if (!is_object($cron)) {
+			throw new Exception(__('Tâche cron introuvable', __FILE__));
+		}
+		$cron->setEnable($_mode);
+		$cron->save();
 		//config::save('api::raspbee::mode', 'localhost');
 	}
 	/*     * *************************Attributs****************************** */

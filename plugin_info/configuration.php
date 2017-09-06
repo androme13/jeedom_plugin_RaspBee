@@ -57,6 +57,15 @@ curl_close($ch);
 				<a class="btn btn-info tooltips" id="bt_raspbeeGETNEWKEY" title="{{Demande une nouvelle cléf API}}" disabled><i class="fa fa-refresh"></i></a>
 			</div>		
         </div>
+		<div class="form-group">
+            <label class="col-lg-4 control-label">{{Clé API plugin}}</label>
+			<div class="col-lg-2">
+                <input class="configKey form-control" id="pluginAPIKEY" data-l1key="pluginAPIKEY" value="80"/>
+            </div>
+			<div class="col-lg-5">
+				<a class="btn btn-info tooltips" id="bt_pluginSETNEWKEY" title="{{Genere une nouvelle cléf API}}"><i class="fa fa-refresh"></i></a>
+			</div>		
+        </div>
 	<legend><i class="fa fa-list-alt"></i> {{Général}}</legend>
 	<div class="form-group">
 		<label class="col-lg-4 control-label">{{Supprimer automatiquement les périphériques exclus de la passerelle}}</label>
@@ -67,6 +76,12 @@ curl_close($ch);
   </fieldset>
 </form>
 <script>
+
+$('#bt_pluginSETNEWKEY').on('click', function () {			
+	//var key=config::genKey(32);
+	//$('#raspbeeGWIP').val(key);
+	
+});
 
 	$('#bt_searchRaspBEE').on('click', function () {			
 	$.ajax({

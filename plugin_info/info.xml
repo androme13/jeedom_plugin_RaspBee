@@ -10,6 +10,7 @@
 	<version>1.0</version>
     <require>3.0</require>
     <category>communication</category>
+	<allowRemote>1</allowRemote>
 	<hasDependency>1</hasDependency>
 	<hasOwnDeamon>1</hasOwnDeamon>
 </info>
