@@ -19,11 +19,35 @@ if (!is_object($results)) {
 }
 
 if ($results->type == "sensors"){
+
+
 	if (is_object($results->info))
 	{
-	echo "{'id':".$results->id.",'battery':".$results->info->battery."}";	
+		
+	foreach (eqLogic::byType('RaspBEE') as $equipement) {
+			$boucle=$boucle+1;
+			echo "id:".$equipement->getId();
+			echo "name:".$equipement->getName();
+			
+			foreach ($equipement->getCmd('info') as $cmd){
+				echo "INFO ";
+				echo "cmdid:".$cmd->getId();
+				echo "cmdname:".$cmd->getName();
+				echo "battery:".$results->info->battery;
+				if ($cmd->getName()=='Bouton'){
+					// on set le niveau de batterie de l'eqlogic
+				$equipement->batteryStatus($results->info->battery);
+			}
+			//$equipement->save(); // ca fait un refresh du dashboard
+			echo "boucle ".$boucle;
+			//$JeeOrangeTv->ActionInfo($JeeOrangeTv->getConfiguration('box_ip'));
+		}	
+		
+		
+	//echo "{'id':".$results->id.",'battery':".$results->info->battery."}";	
 	}
-	//else
+}
+	else
 	if (is_object($results->action)){
 		$boucle=0;
 		foreach (eqLogic::byType('RaspBEE') as $equipement) {
@@ -31,15 +55,17 @@ if ($results->type == "sensors"){
 			echo "id:".$equipement->getId();
 			echo "name:".$equipement->getName();
 			foreach ($equipement->getCmd('info') as $cmd){
+						echo "ACTION ";
+
 				echo "cmdid:".$cmd->getId();
 				echo "cmdname:".$cmd->getName();
-				$cmd->setValue($results->action->buttonevent);
-				
+				if ($cmd->getName()=='Bouton'){
+				$cmd->setValue($results->action->buttonevent);				
 				$cmd->event($results->action->buttonevent);
-				$cmd->save();
-				echo "cmdvalue:".$cmd->getValue();
+				$cmd->save();}
+				//echo "cmdvalue:".$cmd->getValue();
 			}
-			$equipement->save();
+			//$equipement->save(); // ca fait un refresh du dashboard
 			echo "boucle ".$boucle;
 			//$JeeOrangeTv->ActionInfo($JeeOrangeTv->getConfiguration('box_ip'));
 		}

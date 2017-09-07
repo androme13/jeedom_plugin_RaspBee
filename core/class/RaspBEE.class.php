@@ -168,6 +168,25 @@ class RaspBEE extends eqLogic {
 
 	/*     * *********************Méthodes d'instance************************* */
 
+	
+	public function createEqLogic(){
+		        if (!is_object($weatherCmd)) {
+            $weatherCmd = new weatherCmd();
+        }
+		
+		$weatherCmd->setName(__('Température', __FILE__));
+        $weatherCmd->setLogicalId('temperature');
+        $weatherCmd->setEqLogic_id($this->getId());
+        $weatherCmd->setConfiguration('day', '-1');
+        $weatherCmd->setConfiguration('data', 'temp');
+        $weatherCmd->setUnite('°C');
+        $weatherCmd->setType('info');
+        $weatherCmd->setSubType('numeric');
+        $weatherCmd->save();
+		
+	}
+	
+	
 	public function preInsert() {
 		//this->setConfiguration('value',100);
 		
@@ -264,48 +283,9 @@ class RaspBEECmd extends cmd {
 			//print_r ($cmd);
 			//echo "action:".$this->getValue();
 			return 200;
-		//	$this.setValue(200);
-			//echo "action:".$valueinfo.$this->getConfiguration('value');
-			//print_r($_options);
-			//$cmdval = $this->setConfiguration('value',1002);
-			//$this->save();
-			//return $this->getConfiguration('value');
+
 		}
-		//$value = $this->getConfiguration('value');
-		//echo "value".$value;
-		//$value = $this->getCmd(null, 'value');
-		//$eqLogic = $this->getEqLogic();
-		//$value = $eqLogic->getCmd(null, 'but2');
-		//$cmdval = $this->setConfiguration('value',1002);
-		//$valueinfo= $eqLogic->byLogicalId('Button','numeric');
-		//$value->setValue("1002");
-		//$box_ip = $eqLogic->getConfiguration('box_ip');
-		//$eqLogic->setValue(1002);
-		//$id = $eqLogic->getId();
-		//echo "valueinfo:".$valueinfo;
-		//$id = $this->getId();
-		//echo "name:".$this->getName()." id:".$id;
-		//echo "config: ";print_r($eqLogic->getConfiguration());
-		
-		//echo "value: ".$value->getValue();
-		
-		//echo "cmd: ";print_r($eqLogic);
-		
-		
-		//foreach ($eqLogic::getCmd() as $info) {
-			/*if ($info->getName() == 'Button') {
-				//$info->setValue(1001);
-			}*/
-			/*if ($info->getConfiguration('Button')) {
-						//$info->setConfiguration('Button', 1001);
-						$info->setValue(1001);
-						$info->save();
-						$info->event(1);
-						//JeeOrangeTv::refreshWidget();
-					}*/
-			
-		//}
-		//return '1002';//$this->getConfiguration('value');
+
 		
 	}
 
