@@ -29,7 +29,9 @@ function addCmdToTable(_cmd) {
     }
     var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
     tr += '<td>';
-    tr += '<span class="cmdAttr" data-l1key="id" style="display:none;"></span>';
+    tr += '<span class="cmdAttr" data-l1key="id" style="" placeholder="#"></span>';
+	tr += '</td>';
+	tr += '<td>';
     tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="width : 140px;" placeholder="{{Nom}}">';
     tr += '</td>';
     tr += '<td>';
@@ -43,7 +45,9 @@ function addCmdToTable(_cmd) {
     }
     tr += '<i class="fa fa-minus-circle pull-right cmdAction cursor" data-action="remove"></i>';
     tr += '</td>';
-    tr += '</tr>';
+	tr += '<td>';
+	tr += '<input class="cmdAttr form-control input-sm" data-l1key="Configuration" data-l2key="value"  style="width : 140px;" placeholder="{{Config}}">';
+	tr += '</td>';
     $('#table_cmd tbody').append(tr);
     $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
     if (isset(_cmd.type)) {

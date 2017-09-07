@@ -51,7 +51,7 @@ curl_close($ch);
         <div class="form-group">
             <label class="col-lg-4 control-label">{{Clé API RaspBEE}}</label>
 			<div class="col-lg-2">
-                <input disabled class="configKey form-control" id="raspbeeAPIKEY" data-l1key="raspbeeAPIKEY" value="80"/>
+                <input disabled class="configKey form-control" id="raspbeeAPIKEY" data-l1key="raspbeeAPIKEY"/>
             </div>
 			<div class="col-lg-5">
 				<a class="btn btn-info tooltips" id="bt_raspbeeGETNEWKEY" title="{{Demande une nouvelle cléf API}}" disabled><i class="fa fa-refresh"></i></a>
@@ -60,10 +60,19 @@ curl_close($ch);
 		<div class="form-group">
             <label class="col-lg-4 control-label">{{Clé API plugin}}</label>
 			<div class="col-lg-2">
-                <input class="configKey form-control" id="pluginAPIKEY" data-l1key="pluginAPIKEY" value="80"/>
+                <input class="configKey form-control" id="pluginAPIKEY" data-l1key="pluginAPIKEY"/>
             </div>
 			<div class="col-lg-5">
 				<a class="btn btn-info tooltips" id="bt_pluginSETNEWKEY" title="{{Genere une nouvelle cléf API}}"><i class="fa fa-refresh"></i></a>
+			</div>		
+        </div>
+				<div class="form-group">
+            <label class="col-lg-4 control-label">{{Token API plugin}}</label>
+			<div class="col-lg-2">
+                <input class="configKey form-control" id="pluginTOKENKEY" data-l1key="pluginTOKENKEY"/>
+            </div>
+			<div class="col-lg-5">
+				<a class="btn btn-info tooltips" id="bt_pluginSETNEWTOKEN" title="{{Genere une nouvelle cléf API}}"><i class="fa fa-refresh"></i></a>
 			</div>		
         </div>
 	<legend><i class="fa fa-list-alt"></i> {{Général}}</legend>

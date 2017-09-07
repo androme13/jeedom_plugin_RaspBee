@@ -49,7 +49,7 @@ function checkcfgfile (){
 
 function websocketCallBack(jsondata){
 	try {
-	AjaxClient.sendPOST("a","a");
+	AjaxClient.sendPOST(jsondata,"a");
 	}
 	catch (err){
 		console.log("websocketcallback error: ",err);

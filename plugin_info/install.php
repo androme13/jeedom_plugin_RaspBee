@@ -53,10 +53,10 @@ function RaspBEE_update() {
 
 
 function RaspBEE_remove() {
-	   /* $cron = cron::byClassAndFunction('RaspBEE', 'pull');
+	    $cron = cron::byClassAndFunction('RaspBEE', 'pull');
         if (is_object($cron)) {
                 $cron->remove();
-        }*/
+        }
 }
 
 ?>

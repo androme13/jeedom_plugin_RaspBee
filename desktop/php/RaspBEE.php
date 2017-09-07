@@ -7,7 +7,9 @@ sendVarToJS('eqType', 'RaspBEE');
 $eqLogics = eqLogic::byType('RaspBEE');
 echo '<div id="div_inclusionAlert"></div>';
 ?>
-
+<div class="alert alert-info">
+	{{Obligatoire pour que cela fonctionne.}}
+</div>
 <div class="row row-overflow">
     <div class="col-lg-2 col-md-3 col-sm-4">
         <div class="bs-sidebar">
@@ -101,7 +103,7 @@ foreach (object::all() as $object) {
        <div class="form-group">
         <label class="col-sm-3 control-label">{{deconz param 1}}</label>
         <div class="col-sm-3">
-            <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="city" placeholder="param1"/>
+            <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="param1" placeholder="param1"/>
         </div>
     </div>
 </fieldset>
@@ -112,7 +114,11 @@ foreach (object::all() as $object) {
 <table id="table_cmd" class="table table-bordered table-condensed">
     <thead>
         <tr>
-            <th>{{Nom}}</th><th>{{Type}}</th><th>{{Action}}</th>
+			<th>#</th>
+            <th>{{Nom}}</th>
+			<th>{{Type}}</th>
+			<th>{{Action}}</th>
+			<th>{{value}}</th>
         </tr>
     </thead>
     <tbody>

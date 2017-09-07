@@ -65,7 +65,7 @@ class RaspBEE extends eqLogic {
 		if ( $key == '') {
 			
 			$return['launchable'] = 'nok';
-		//config::save('api::raspbee::mode', 'localhost');
+		//config::save('api::RaspBee::mode', 'localhost');
 	}    
 		//
 		return $return;
@@ -73,8 +73,13 @@ class RaspBEE extends eqLogic {
 	
 	public static function deamon_start($_debug = false) {
 		$log = log::convertLogLevel(log::getLogLevel('RaspBEE'));
+		$char = jeedom::getApiKey('RaspBEE');
+		$char2 = ajax::getToken();
+		config::save('pluginTOKENKEY',$char2,'RaspBEE');
+		if ($char=="") $testkey = config::genKey();
+	
 		log::add('RaspBEE', 'info', 'test : ');
-
+		echo "teskey: ".$char."token: ".$char2;
 		self::deamon_stop();
 		$deamon_info = self::deamon_info();
 		if ($deamon_info['launchable'] != 'ok') {
@@ -113,7 +118,7 @@ class RaspBEE extends eqLogic {
 	}
 
 	public static function deamon_changeAutoMode($_mode) {	
-	$cron = cron::byClassAndFunction('RaspBEE', 'pull');
+	/*$cron = cron::byClassAndFunction('RaspBEE', 'pull');
     if (!is_object($cron)) {
         $cron = new cron();
         $cron->setClass('RaspBEE');
@@ -128,7 +133,7 @@ class RaspBEE extends eqLogic {
 			throw new Exception(__('Tâche cron introuvable', __FILE__));
 		}
 		$cron->setEnable($_mode);
-		$cron->save();
+		$cron->save();*/
 		//config::save('api::raspbee::mode', 'localhost');
 	}
 	/*     * *************************Attributs****************************** */
@@ -164,6 +169,7 @@ class RaspBEE extends eqLogic {
 	/*     * *********************Méthodes d'instance************************* */
 
 	public function preInsert() {
+		//this->setConfiguration('value',100);
 		
 	}
 
@@ -222,6 +228,84 @@ class RaspBEECmd extends cmd {
 	*/
 
 	public function execute($_options = array()) {
+		//echo "commande:".$cmd->getValue();
+		//echo "type:".$this->getType();
+		if ($this->getType() != 'action') {
+			//echo "info:".this;
+			//$result = 200;
+			$eqLogic = $this->getEqLogic();
+			$cmd = $eqLogic->getCmd('info', 'Bouton');
+			if (is_object($cmd)) {
+				$eqLogic->checkAndUpdateCmd($cmd, 1002);
+			}
+		//	$this->setValue(200);
+			//$this->save();
+			return 1002;
+			
+			//echo "typ:".$this->getType();
+			//echo "info:".$valueinfo.$this->getConfiguration('value');
+			//echo "info:".$valueinfo.$this->getValue();
+			//return 
+		}
+		if ($this->getType() == 'action'){
+			
+			$eqLogic = $this->getEqLogic();
+			$cmd=$eqLogic->getCmd('Button');
+			//$config=$this->>getConfiguration(  $_key = '',   $_default = '') 
+			//$value = $eqLogic->getCmd(null, 'Button');
+			//$this->setValue(1002);
+			//$this->save();
+			//$cmd->setValue(1000);
+			echo "type:".$this->getName();
+			echo "id:".$this->getId();
+			echo "gellogicazlid:".$this->getLogicalId();
+			$this->setConfiguration('value',1002);
+			$this->save();
+			//print_r ($cmd);
+			//echo "action:".$this->getValue();
+			return 200;
+		//	$this.setValue(200);
+			//echo "action:".$valueinfo.$this->getConfiguration('value');
+			//print_r($_options);
+			//$cmdval = $this->setConfiguration('value',1002);
+			//$this->save();
+			//return $this->getConfiguration('value');
+		}
+		//$value = $this->getConfiguration('value');
+		//echo "value".$value;
+		//$value = $this->getCmd(null, 'value');
+		//$eqLogic = $this->getEqLogic();
+		//$value = $eqLogic->getCmd(null, 'but2');
+		//$cmdval = $this->setConfiguration('value',1002);
+		//$valueinfo= $eqLogic->byLogicalId('Button','numeric');
+		//$value->setValue("1002");
+		//$box_ip = $eqLogic->getConfiguration('box_ip');
+		//$eqLogic->setValue(1002);
+		//$id = $eqLogic->getId();
+		//echo "valueinfo:".$valueinfo;
+		//$id = $this->getId();
+		//echo "name:".$this->getName()." id:".$id;
+		//echo "config: ";print_r($eqLogic->getConfiguration());
+		
+		//echo "value: ".$value->getValue();
+		
+		//echo "cmd: ";print_r($eqLogic);
+		
+		
+		//foreach ($eqLogic::getCmd() as $info) {
+			/*if ($info->getName() == 'Button') {
+				//$info->setValue(1001);
+			}*/
+			/*if ($info->getConfiguration('Button')) {
+						//$info->setConfiguration('Button', 1001);
+						$info->setValue(1001);
+						$info->save();
+						$info->event(1);
+						//JeeOrangeTv::refreshWidget();
+					}*/
+			
+		//}
+		//return '1002';//$this->getConfiguration('value');
 		
 	}
 

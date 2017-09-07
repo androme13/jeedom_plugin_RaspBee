@@ -27,8 +27,9 @@ try {
 	if (init('action') == 'websocket') {
        // $sql = "SELECT cmd.name FROM cmd WHERE cmd.eqtype='ABC'";
        // $result =  DB::Prepare($sql, array(), DB::FETCH_TYPE_ALL);
-	   $result ={'name':'ajax'};
-        ajax::success($result);
+	   $result ={name:'ajax'};
+	    ajax::error($result);
+        //ajax::success($result);
    }
 
 
