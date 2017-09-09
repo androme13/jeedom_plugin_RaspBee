@@ -14,7 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
-
+$('#bt_syncEqLogic').on('click', function () {
+    syncEqLogicWithRaspBEE();
+});
 
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 /*
@@ -32,11 +34,7 @@ function addCmdToTable(_cmd) {
     tr += '<span class="cmdAttr" data-l1key="id" style="" placeholder="#"></span>';
 	tr += '</td>';
 	tr += '<td>';
-    tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="width : 140px;" placeholder="{{Nom}}">';
-    tr += '</td>';
-    tr += '<td>';
-    tr += '<span class="type" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + '</span>';
-    tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
+    tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="width : 140px;" placeholder="{{Nom}}" readonly>';
     tr += '</td>';
     tr += '<td>';
     if (is_numeric(_cmd.id)) {
@@ -45,13 +43,31 @@ function addCmdToTable(_cmd) {
     }
     tr += '<i class="fa fa-minus-circle pull-right cmdAction cursor" data-action="remove"></i>';
     tr += '</td>';
-	tr += '<td>';
-	tr += '<input class="cmdAttr form-control input-sm" data-l1key="Configuration" data-l2key="value"  style="width : 140px;" placeholder="{{Config}}">';
-	tr += '</td>';
     $('#table_cmd tbody').append(tr);
     $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
     if (isset(_cmd.type)) {
         $('#table_cmd tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
     }
     jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
+}
+
+function syncEqLogicWithRaspBEE() {
+    $.ajax({
+        type: "POST", 
+        url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+        data: {
+            action: "syncEqLogicWithRaspBEE",
+        },
+        dataType: 'json',
+        error: function (request, status, error) {
+            handleAjaxError(request, status, error);
+        },
+        success: function (data) { 
+            if (data.state != 'ok') {
+                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                return;
+            }
+            window.location.reload();
+        }
+    });
 }

@@ -17,25 +17,33 @@
  */
 
 try {
-    require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
+    require_once dirname(__FILE__).'/../../../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
 
     if (!isConnect('admin')) {
         throw new Exception(__('401 - Accès non autorisé', __FILE__));
     }
+	
+	ajax::init();
+	  
+   	if (init('action') == 'syncEqLogicWithRaspBEE') {
+		if (RaspBEE::syncEqLogicWithRaspBEE()==true){
+			ajax::success();
+		}else{
+			ajax::error();
+		}
+	}
+	
+	if (init('action') == 'findRaspBEE') {
+		//$response=RaspBEE::findRaspBEE();		
+		ajax::success(RaspBEE::findRaspBEE());
+	}
+	
 
-	if (init('action') == 'websocket') {
-       // $sql = "SELECT cmd.name FROM cmd WHERE cmd.eqtype='ABC'";
-       // $result =  DB::Prepare($sql, array(), DB::FETCH_TYPE_ALL);
-	   $result ={name:'ajax'};
-	    ajax::error($result);
-        //ajax::success($result);
-   }
 
-
-    throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
-    /*     * *********Catch exeption*************** */
+	throw new Exception('Aucune methode correspondante');
+	/*     * *********Catch exeption*************** */
 } catch (Exception $e) {
-    ajax::error(displayExeption($e), $e->getCode());
+	ajax::error(displayExeption($e), $e->getCode());
 }
 ?>

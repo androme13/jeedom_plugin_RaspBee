@@ -1,10 +1,26 @@
 <?php
+/* This file is part of Jeedom.
+ *
+ * Jeedom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Jeedom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+// c'est ici que le daemon transmet ses infos
+
 require_once dirname(__FILE__) . "/../../../../core/php/core.inc.php";
 
 if (!jeedom::apiAccess(init('apikey'), 'RaspBEE')) {
 	echo __('Vous n\'etes pas autorisé à effectuer cette action', __FILE__);	
-	//echo "clé: ".jeedom::getApiKey('RaspBEE');
-	//echo " clé 2".jeedom::apiAccess(init('apikey'), 'RaspBEE');
 	die();
 }
 if (isset($_GET['test'])) {
@@ -25,7 +41,7 @@ if ($results->type == "sensors"){
 	{
 		
 	foreach (eqLogic::byType('RaspBEE') as $equipement) {
-			$boucle=$boucle+1;
+			//$boucle=$boucle+1;
 			echo "id:".$equipement->getId();
 			echo "name:".$equipement->getName();
 			
@@ -39,7 +55,7 @@ if ($results->type == "sensors"){
 				$equipement->batteryStatus($results->info->battery);
 			}
 			//$equipement->save(); // ca fait un refresh du dashboard
-			echo "boucle ".$boucle;
+			//echo "boucle ".$boucle;
 			//$JeeOrangeTv->ActionInfo($JeeOrangeTv->getConfiguration('box_ip'));
 		}	
 		

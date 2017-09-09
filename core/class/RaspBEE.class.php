@@ -17,11 +17,58 @@
 */
 
 /* * ***************************Includes********************************* */
+
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
+require_once dirname(__FILE__) . '/../php/RaspBEECom.php';
 
 class RaspBEE extends eqLogic {
+	//private $raspbeecom = null; // attention les variables déclarées ici s'enregistrent dans la base sql lors du save
+	public function createDevice(){
+		
+		$eqLogic = new eqLogic();
+			$eqLogic->setEqType_name('RaspBEE');
+			$eqLogic->setName('RaspBEEDevice'.strval(rand(1000,100000)));
+			$eqLogic->setIsEnable(1);
+			$_logical_id = null;
+			$eqLogic->setLogicalId($_logical_id);
+			/*if (isset($result['data']['product_name']['value']) && trim($result['data']['product_name']['value']) != '') {
+				$eqLogic->setName($eqLogic->getLogicalId() . ' ' . $result['data']['product_name']['value']);
+			} else {
+				$eqLogic->setName('Device ' . $_logical_id);
+			}*/
+			// on fabrique un sensor ZHASwitch (avec bouton)
+			$eqLogic->setConfiguration('eqlogicidraspbee', 2);
+			$eqLogic->setConfiguration('etag', "e6797100e644d32ac0019ea2a8336bcd");
+			$eqLogic->setConfiguration('manufacturername', 'Philips');
+			$eqLogic->setConfiguration('mode', 1);
+			$eqLogic->setConfiguration('modelid', 'RWL021');
+			$eqLogic->setConfiguration('swversion', '5.45.1.17846');
+			$eqLogic->setConfiguration('type', 'ZHASwitch');
+			$eqLogic->setConfiguration('uniqueid', '00:17:88:01:02:e2:0c:5f-02-fc00');
+			$eqLogic->setIsVisible(1);
+			$eqLogic->batteryStatus(100);
+			$eqLogic->save();
+		if (!is_object($RaspBEECmd)) {
+			$RaspBEECmd = new RaspBEECmd();
+        }
+		
+		$RaspBEECmd->setName(__('Bouton', __FILE__));
+        $RaspBEECmd->setLogicalId('Bouton');
+        $RaspBEECmd->setEqLogic_id($eqLogic->getId());
+        //$RaspBEECmd->setConfiguration('day', '-1');
+        //$RaspBEECmd->setConfiguration('data', 'temp');
+        //$RaspBEECmd->setUnite('°C');
+        $RaspBEECmd->setType('info');
+        $RaspBEECmd->setSubType('numeric');
+        $RaspBEECmd->save();
+		return true;	
+			
+			//$eqLogic->save();
+			//return;
+
+	}
 	
-	//private $daemonpid=0;
+	
 	public static function dependancy_info() {
 		$return = array();
 		$return['log'] = 'RaspBEE_dep';
@@ -167,24 +214,6 @@ class RaspBEE extends eqLogic {
 
 
 	/*     * *********************Méthodes d'instance************************* */
-
-	
-	public function createEqLogic(){
-		        if (!is_object($weatherCmd)) {
-            $weatherCmd = new weatherCmd();
-        }
-		
-		$weatherCmd->setName(__('Température', __FILE__));
-        $weatherCmd->setLogicalId('temperature');
-        $weatherCmd->setEqLogic_id($this->getId());
-        $weatherCmd->setConfiguration('day', '-1');
-        $weatherCmd->setConfiguration('data', 'temp');
-        $weatherCmd->setUnite('°C');
-        $weatherCmd->setType('info');
-        $weatherCmd->setSubType('numeric');
-        $weatherCmd->save();
-		
-	}
 	
 	
 	public function preInsert() {
@@ -219,7 +248,18 @@ class RaspBEE extends eqLogic {
 	public function postRemove() {
 		
 	}
-
+	
+	
+	public function syncEqLogicWithRaspBEE($_logical_id = null, $_exclusion = 0){
+		return RaspBEE::createDevice();
+	}
+	
+	public function findRaspBEE(){
+		$raspbeecom = new RaspBEECom;
+		$result = $raspbeecom->findRaspBEE();
+		unset($raspbeecom);
+		return $result;
+	}
 	/*
 	* Non obligatoire mais permet de modifier l'affichage du widget si vous en avez besoin
 	public function toHtml($_version = 'dashboard') {
@@ -254,9 +294,9 @@ class RaspBEECmd extends cmd {
 			//$result = 200;
 			$eqLogic = $this->getEqLogic();
 			$cmd = $eqLogic->getCmd('info', 'Bouton');
-			if (is_object($cmd)) {
+			/*if (is_object($cmd)) {
 				$eqLogic->checkAndUpdateCmd($cmd, 1002);
-			}
+			}*/
 		//	$this->setValue(200);
 			//$this->save();
 			return 1002;
@@ -278,8 +318,6 @@ class RaspBEECmd extends cmd {
 			echo "type:".$this->getName();
 			echo "id:".$this->getId();
 			echo "gellogicazlid:".$this->getLogicalId();
-			$this->setConfiguration('value',1002);
-			$this->save();
 			//print_r ($cmd);
 			//echo "action:".$this->getValue();
 			return 200;

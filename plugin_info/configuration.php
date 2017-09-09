@@ -21,20 +21,14 @@ if (!isConnect()) {
     include_file('desktop', '404', 'php');
     die();
 }
+//require '../core/php/RaspBEECom.php';  // Ok.
+//require_once dirname(__FILE__).'/../core/php/RaspBEECom.php';
 
-$ch = curl_init('http://10.0.0.19/api');
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
-'Content-Type: application/json',                                                                                
-'Content-Length: ' . strlen($data_string))                                                                       
-);  
-//curl_setopt($ch, CURLOPT_POSTFIELDS,   $data_string );
-curl_setopt($ch, CURLOPT_CUSTOMREQUEST,  'POST');
 
-$result = curl_exec($ch);
-$json = json_decode($result, true);
-print_r($json);
-curl_close($ch);
+//$com = new RaspBEECom;
+//echo json_decode($com->findRaspBEE());
+//echo $com->getAPIAccess();
+
 ?>
 <form class="form-horizontal">
     <fieldset>
@@ -86,26 +80,66 @@ curl_close($ch);
 </form>
 <script>
 
-$('#bt_pluginSETNEWKEY').on('click', function () {			
-	//var key=config::genKey(32);
-	//$('#raspbeeGWIP').val(key);
-	
-});
-
 	$('#bt_searchRaspBEE').on('click', function () {			
+	
 	$.ajax({
+        type: "POST", 
+        url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+        data: {
+            action: "findRaspBEE",
+        },
+        dataType: 'json',
+        error: function (resp, statut, erreur) {
+		$('#md_modal2').dialog({title: "{{Erreur RaspBEE}}"});
+		$('#md_modal2').html('Aucune passerelle RaspBEE ne peut être trouvée<br>'+resp+"|"+erreur).dialog('open');	
+            handleAjaxError(request, status, error);
+		return;	
+        },
+        success: function (resp,statut) {			
+			var value= resp[0].internalipaddress+":"+resp[0].internalport;
+			$('#raspbeeGWIP').val(value);
+			fieldValidate(value);
+            //window.location.reload();
+        }
+    });
+	
+	
+	/*$.ajax({
 		url : 'https://dresden-light.appspot.com/discover',
 		type : 'GET',
 		dataType : 'json',
 		success : function(resp, statut){
 			var value= resp[0].internalipaddress+":"+resp[0].internalport;
 			$('#raspbeeGWIP').val(value);
+			console.log(resp);
 			fieldValidate(value);
 		},
 		error : function(resp, statut, erreur){
 		$('#md_modal2').dialog({title: "{{Erreur RaspBEE}}"});
 		$('#md_modal2').html('Aucune passerelle RaspBEE ne peut être trouvée<br>'+resp).dialog('open');	
        }		
+    });*/
+});
+
+$('#raspbeeAPIKEY').on('click', function () {	
+
+ $.ajax({
+        type: "POST", 
+        url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+        data: {
+            action: "getAPIAccess",
+        },
+        dataType: 'json',
+        error: function (request, status, error) {
+            handleAjaxError(request, status, error);
+        },
+        success: function (data) { 
+            if (data.state != 'ok') {
+                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                return;
+            }
+            //window.location.reload();
+        }
     });
 });
 
