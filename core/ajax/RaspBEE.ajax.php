@@ -27,7 +27,7 @@ try {
 	ajax::init();
 	  
    	if (init('action') == 'syncEqLogicWithRaspBEE') {
-		if (RaspBEE::syncEqLogicWithRaspBEE()==true){
+		if (RaspBEE::syncEqLogicWithRaspBEE()===true){
 			ajax::success();
 		}else{
 			ajax::error();
@@ -35,8 +35,19 @@ try {
 	}
 	
 	if (init('action') == 'findRaspBEE') {
-		//$response=RaspBEE::findRaspBEE();		
+	if (RaspBEE::findRaspBEE()===false){		
+		ajax::error();
+	} else{
 		ajax::success(RaspBEE::findRaspBEE());
+	}
+	}
+	
+		if (init('action') == 'getAPIAccess') {
+	if (RaspBEE::findRaspBEE()===false){		
+		ajax::error();
+	} else{
+		ajax::success(RaspBEE::getApiKey());
+	}
 	}
 	
 

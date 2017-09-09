@@ -260,6 +260,13 @@ class RaspBEE extends eqLogic {
 		unset($raspbeecom);
 		return $result;
 	}
+	
+	public function getApiKey(){
+		$raspbeecom = new RaspBEECom;
+		$result = $raspbeecom->getAPIAccess();
+		unset($raspbeecom);
+		return $result;
+	}
 	/*
 	* Non obligatoire mais permet de modifier l'affichage du widget si vous en avez besoin
 	public function toHtml($_version = 'dashboard') {

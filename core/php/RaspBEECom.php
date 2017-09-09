@@ -21,25 +21,33 @@ class RaspBEECom{
 
 	public function findRaspBEE(){
 		$ch = curl_init();
-
 		$opts = [
 		CURLOPT_SSL_VERIFYPEER => false,
 		CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
 		CURLOPT_URL            => "https://dresden-light.appspot.com/discover",
 		CURLOPT_RETURNTRANSFER => true,
-		CURLOPT_TIMEOUT        => 30,
-		CURLOPT_CONNECTTIMEOUT => 30
+		//CURLOPT_TIMEOUT        => 30,
+		//CURLOPT_CONNECTTIMEOUT => 30
 		];
 		curl_setopt_array($ch, $opts);
 		$result=curl_exec ($ch);
 		curl_close($ch);
-		return json_encode($result);
+		if ($result===false){
+		return false;	
+		}else{
+		return substr($result,1,-1);	
+		}
+			
+		
+		//return json_encode(substr($result,1,-1));
 	}
 
 	public function getAPIAccess(){
 		$ch = curl_init();
 		$opts = [
 		CURLOPT_SSL_VERIFYPEER => false,
+		CURLOPT_FORBID_REUSE   => true,
+		CURLOPT_POSTFIELDS     => "{\"devicetype\":\"jeedomPlugin\"}",
 		CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
 		CURLOPT_URL            => "http://10.0.0.19/api",
 		CURLOPT_POST		   => true,
@@ -50,7 +58,11 @@ class RaspBEECom{
 		curl_setopt_array($ch, $opts);
 		$result=curl_exec ($ch);
 		curl_close($ch);
-		return $result;
+		if ($result===false){
+		return false;	
+		}else{
+		return substr($result,1,-1);
+		}
 	}
 }
 ?>
