@@ -64,5 +64,29 @@ class RaspBEECom{
 		return substr($result,1,-1);
 		}
 	}
+	
+	public function getConf(){
+		$ch = curl_init();
+		$opts = [
+		CURLOPT_SSL_VERIFYPEER => false,
+		CURLOPT_FORBID_REUSE   => true,
+		//CURLOPT_POSTFIELDS     => "{\"devicetype\":\"jeedomPlugin\"}",
+		CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
+		//http://10.0.0.19/api/1C947DD461/config
+		CURLOPT_URL            => "http://10.0.0.19/api/C2FFE38AE7/config",
+		//CURLOPT_POST		   => true,
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_TIMEOUT        => 30,
+		CURLOPT_CONNECTTIMEOUT => 30
+		];
+		curl_setopt_array($ch, $opts);
+		$result=curl_exec ($ch);
+		curl_close($ch);
+		if ($result===false){
+		return false;	
+		}else{
+		return $result;//substr($result,1,-1);
+		}
+	}
 }
 ?>

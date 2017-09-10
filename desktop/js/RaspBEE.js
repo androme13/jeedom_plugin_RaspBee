@@ -15,7 +15,20 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 $('#bt_syncEqLogic').on('click', function () {
-    syncEqLogicWithRaspBEE();
+	$('#md_modal').dialog({title: "{{Synchronisation}}"});
+    $('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=synchronize').dialog('open');
+    //syncEqLogicWithRaspBEE();
+});
+
+
+$('#bt_RaspBEEHealth').on('click', function () {
+    $('#md_modal').dialog({title: "{{Santé RaspBEE}}"});
+    $('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=health').dialog('open');
+});
+
+$('#bt_RaspBEENetwork').on('click', function () {
+    $('#md_modal').dialog({title: "{{Réseaux RaspBEE}}"});
+    $('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=network').dialog('open');
 });
 
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
@@ -49,6 +62,10 @@ function addCmdToTable(_cmd) {
         $('#table_cmd tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
     }
     jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
+}
+
+function showRaspBEENetwork(){
+	
 }
 
 function syncEqLogicWithRaspBEE() {

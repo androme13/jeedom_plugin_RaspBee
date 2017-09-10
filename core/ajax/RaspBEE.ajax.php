@@ -42,11 +42,19 @@ try {
 	}
 	}
 	
-		if (init('action') == 'getAPIAccess') {
+	if (init('action') == 'getAPIAccess') {
 	if (RaspBEE::findRaspBEE()===false){		
 		ajax::error();
 	} else{
 		ajax::success(RaspBEE::getApiKey());
+	}
+	}
+	
+	if (init('action') == 'getRaspBEEConf') {
+	if (RaspBEE::findRaspBEE()===false){		
+		ajax::error();
+	} else{
+		ajax::success(RaspBEE::getRaspBEEConf());
 	}
 	}
 	

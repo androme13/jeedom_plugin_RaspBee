@@ -71,15 +71,23 @@ if ($controllerMode == 5) {
 	echo '</div>';
 	
 	// bouton synchroniser
-	echo '<div class="cursor card disabled" disabled="disabled" id="bt_syncEqLogic" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
+	echo '<div class="cursor card disabled" id="bt_syncEqLogic" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
 	echo '<center>';
 	echo '<i class="fa fa-refresh" style="font-size : 6em;color:#767676;"></i>';
 	echo '</center>';
 	echo '<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676"><center>{{Synchroniser}}</center></span>';
 	echo '</div>';
+
+	// bouton Réseau RaspBEE
+	echo '<div class="cursor card" id="bt_RaspBEENetwork" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
+	echo '<center>';
+	echo '<i class="fa fa-sitemap" style="font-size : 6em;color:#767676;"></i>';
+	echo '</center>';
+	echo '<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676"><center>{{Réseau RaspBEE}}</center></span>';
+	echo '</div>';
 	
 	// bouton santé
-	echo '<div class="cursor card" data-action="gotoPluginHealth" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
+	echo '<div class="cursor card" id="bt_RaspBEEHealth" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
 	echo '<center>';
 	echo '<i class="fa fa-medkit" style="font-size : 6em;color:#767676;"></i>';
 	echo '</center>';
