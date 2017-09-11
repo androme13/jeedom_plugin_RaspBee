@@ -95,10 +95,10 @@ $raspbeecom = new RaspBEECom;
 							<?php
 							echo $RaspBEEConfJson->name;
 							?>
-							</span></p>	
-							<p>{{ID bridge RaspBEE}} <span class="label label-default" style="font-size : 1em;">
+							</span></p>
+							<p>{{ID Modèle}} <span class="label label-default" style="font-size : 1em;">
 							<?php
-							echo $RaspBEEConfJson->bridgeid;
+							echo $RaspBEEConfJson->modelid;
 							?>
 							</span></p>
                             <p>{{Version (deconz)}} <span class="label label-default" style="font-size : 1em;">
@@ -106,6 +106,16 @@ $raspbeecom = new RaspBEECom;
 							echo $RaspBEEConfJson->swversion;
 							?>
 							</span></p>								
+                            <p>{{UUID}} <span class="label label-default" style="font-size : 1em;">
+							<?php
+							echo $RaspBEEConfJson->uuid;
+							?>
+							</span></p>								
+							<p>{{ID bridge RaspBEE}} <span class="label label-default" style="font-size : 1em;">
+							<?php
+							echo $RaspBEEConfJson->bridgeid;
+							?>
+							</span></p>							
                             <p>{{Port Websocket}} <span class="label label-default" style="font-size : 1em;">
 							<?php
 							echo $RaspBEEConfJson->websocketport;
@@ -181,6 +191,11 @@ $raspbeecom = new RaspBEECom;
                     <div class="panel panel-primary">
                         <div class="panel-heading"><h4 class="panel-title">{{Système}}</h4></div>
                         <div class="panel-body">
+                            <p>{{Heure}} <span class="label label-default" style="font-size : 1em;">
+							<?php
+							echo $RaspBEEConfJson->localtime;
+							?>
+							</span></p>							
                             <p>{{Format de l'heure}} <span class="label label-default" style="font-size : 1em;">
 							<?php
 							echo $RaspBEEConfJson->timeformat;
@@ -190,12 +205,7 @@ $raspbeecom = new RaspBEECom;
 							<?php
 							echo $RaspBEEConfJson->timezone;
 							?>
-							</span></p>
-                            <p>{{UUID}} <span class="label label-default" style="font-size : 1em;">
-							<?php
-							echo $RaspBEEConfJson->uuid;
-							?>
-							</span></p>								
+							</span></p>							
                         </div>
                     </div>
                 </div>
