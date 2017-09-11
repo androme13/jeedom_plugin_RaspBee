@@ -13,7 +13,12 @@
  * You should have received a copy of the GNU General Public License
  * along with Plugin openzwave for jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
-
+//$('#textarealog').value("coucou");
+ $('#bt_synchronize').on('click', function () {
+	 alert("ok");
+ });
+ 
+ 
  /*$('#bt_createBackup').off().on('click', function (event) {
     bootbox.confirm('{{Etes-vous sûr de vouloir créer un backup ? Une fois lancée cette opération ne peut être annulée.}}',
         function (result) {

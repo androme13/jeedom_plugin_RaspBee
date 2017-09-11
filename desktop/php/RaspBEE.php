@@ -1,4 +1,20 @@
 <?php
+/* This file is part of Plugin RaspBEE for jeedom.
+ *
+ * Plugin RaspBEE for jeedom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Plugin RaspBEE for jeedom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Plugin RaspBEE for jeedom. If not, see <http://www.gnu.org/licenses/>.
+ */
+ 
 if (!isConnect('admin')) {
 	throw new Exception('{{401 - Accès non autorisé}}');
 }
@@ -111,44 +127,116 @@ foreach ($eqLogics as $eqLogic) {
 </div>
 </div>
 <div class="col-lg-10 col-md-9 col-sm-8 eqLogic" style="border-left: solid 1px #EEE; padding-left: 25px;display: none;">
-    <form class="form-horizontal">
-        <fieldset>
-            <legend><i class="fa fa-arrow-circle-left eqLogicAction cursor" data-action="returnToThumbnailDisplay"></i> {{Général}}  <i class='fa fa-cogs eqLogicAction pull-right cursor expertModeVisible' data-action='configure'></i></legend>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">{{Nom de l'équipement RaspBEE}}</label>
-                <div class="col-sm-3">
-                    <input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;" />
-                    <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l'équipement RaspBEE}}"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label" >{{Objet parent}}</label>
-                <div class="col-sm-3">
-                    <select id="sel_object" class="eqLogicAttr form-control" data-l1key="object_id">
-                        <option value="">{{Aucun}}</option>
-                        <?php
+  
+
+
+        
+		
+		 <div class="row">
+            <div class="col-sm-7">
+                <form class="form-horizontal">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{{Nom de l'équipement}}</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;"/>
+                                <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l'équipement}}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{{Objet parent}}</label>
+                            <div class="col-sm-6">
+                                <select class="eqLogicAttr form-control" data-l1key="object_id">
+                                    <option value="">{{Aucun}}</option>
+                                    <?php
 foreach (object::all() as $object) {
 	echo '<option value="' . $object->getId() . '">' . $object->getName() . '</option>';
 }
 ?>
-                   </select>
-               </div>
-           </div>
-           <div class="form-group">
-            <label class="col-sm-3 control-label" >{{Activer}}</label>
-            <div class="col-sm-9">			   
-			  <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked/>{{Activer}}</label>
-              <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked/>{{Visible}}</label>			   
-           </div>
-       </div>
-       <div class="form-group">
-        <label class="col-sm-3 control-label">{{deconz param 1}}</label>
-        <div class="col-sm-3">
-            <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="param1" placeholder="param1"/>
-        </div>
+                               </select>
+                           </div>
+                       </div>
+                       <div class="form-group">
+                        <label class="col-sm-4 control-label">{{Catégorie}}</label>
+                        <div class="col-sm-8">
+                            <?php
+foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
+	echo '<label class="checkbox-inline">';
+	echo '<input type="checkbox" class="eqLogicAttr" data-l1key="category" data-l2key="' . $key . '" />' . $value['name'];
+	echo '</label>';
+}
+?>
+                       </div>
+                   </div>
+                   <div class="form-group">
+                    <label class="col-sm-4 control-label"></label>
+                    <div class="col-sm-8">
+                        <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked/>{{Activer}}</label>
+                        <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked/>{{Visible}}</label>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
     </div>
-</fieldset>
-</form>
+    <div class="col-sm-5">
+        <form class="form-horizontal">
+            <fieldset>
+			                <div class="form-group">
+                    <label class="col-sm-2 control-label">{{ID Origine}}</label>
+                    <div class="col-sm-8">
+					<span class="label label-default" style='font-size : 1em;'>
+                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="eqlogicidraspbee"></span>
+					</span>				
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">{{Marque}}</label>
+                    <div class="col-sm-8">
+					<span class="label label-default" style='font-size : 1em;'>
+                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="manufacturername"></span>
+					</span>&nbsp
+					<span class="label label-default" style='font-size : 1em;'>
+                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="modelid"></span>
+					</span>					
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">{{Firmware}}</label>
+                    <div class="col-sm-8">
+						<span class="label label-default" style='font-size : 1em;'>
+                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="swversion"></span>
+					</span>			
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">{{Type}}</label>
+				<div class="col-sm-8">
+				  <span class="label label-default" style='font-size : 1em;'>
+					<span class="eqLogicAttr" data-l1key="configuration" data-l2key="product_name"></span>
+					<span class="eqLogicAttr" data-l1key="configuration" data-l2key="type" title="{{Version de la configuration}}"></span>
+				</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">{{UID}}</label>
+                <div class="col-sm-8">
+				  <span class="label label-default" style='font-size : 1em;'>
+					<span class="eqLogicAttr" data-l1key="configuration" data-l2key="uniqueid"></span>
+					</span>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+</div>
+		
+		
+		
+		
+		
+
+
+
 
 <legend>{{RaspBEE}}</legend>
 <a class="btn btn-success btn-sm cmdAction" data-action="add"><i class="fa fa-plus-circle"></i> {{Commandes}}</a><br/><br/>
@@ -175,7 +263,7 @@ foreach (object::all() as $object) {
 
 
 </div>
-</div>
+
 
 <?php include_file('desktop', 'RaspBEE', 'js', 'RaspBEE');?>
 <?php include_file('core', 'plugin.template', 'js');?>

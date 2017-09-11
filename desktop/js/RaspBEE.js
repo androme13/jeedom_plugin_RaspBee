@@ -15,8 +15,10 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 $('#bt_syncEqLogic').on('click', function () {
+	syncEqLogicWithRaspBEE();
 	$('#md_modal').dialog({title: "{{Synchronisation}}"});
     $('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=synchronize').dialog('open');
+	
     //syncEqLogicWithRaspBEE();
 });
 

@@ -6,25 +6,24 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Plugin openzwave for jeedom is distributed in the hope that it will be useful,
+ * Plugin RaspBEE for jeedom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Plugin openzwave for jeedom. If not, see <http://www.gnu.org/licenses/>.
+ * along with Plugin RaspBEE for jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 if (!isConnect('admin')) {
 	throw new Exception('401 Unauthorized');
 }
-echo dirname(__FILE__);
 require_once dirname(__FILE__) . '/../../core/php/RaspBEECom.php';
 $raspbeecom = new RaspBEECom;
-		//$RaspBEEConf = $raspbeecom->getConf();
 		$RaspBEEConfJson = json_decode($raspbeecom->getConf());
-		print_r($RaspBEEConfJson);
-		echo "debut :".$RaspBEEConfJson->apiversion;
+		//print_r(get_object_vars($RaspBEEConfJson));
+		//print_r($RaspBEEConfJson);
+		//echo "debut :".$RaspBEEConfJson->apiversion;
 ?>
 <script type="text/javascript" src="plugins/openzwave/3rdparty/vivagraph/vivagraph.min.js"></script>
 <style>
@@ -101,7 +100,7 @@ $raspbeecom = new RaspBEECom;
 							echo $RaspBEEConfJson->modelid;
 							?>
 							</span></p>
-                            <p>{{Version (deconz)}} <span class="label label-default" style="font-size : 1em;">
+                            <p>{{Version}} <span class="label label-default" style="font-size : 1em;">
 							<?php
 							echo $RaspBEEConfJson->swversion;
 							?>
@@ -243,35 +242,28 @@ $raspbeecom = new RaspBEECom;
                 </div>
                 <div id="api_users" class="tab-pane">
                     <br/>
-                    <div id="div_routingTable"></div>
-                    <table class="table table-bordered table-condensed" style="width: 500px;">
-                        <thead><tr><th colspan="2">{{Légende}}</th></tr></thead>
-                        <tbody>
-                            <tr>
-                                <td colspan="2">{{Nombre de [routes directes / avec 1 saut / 2 sauts]}}</td>
-                            </tr>
-                            <tr>
-                                <td class="node-direct-link-color" style="width: 35px"><i class="fa fa-square fa-2x"></i></td>
-                                <td>{{Communication directe}}</td>
-                            </tr>
-                            <tr>
-                                <td class="node-remote-control-color"><i class="fa fa-square fa-2x"></i></td>
-                                <td>{{Au moins 2 routes avec un saut}}</td>
-                            </tr>
-                            <tr>
-                                <td class="node-more-of-one-up-color"><i class="fa fa-square fa-2x"></i></td>
-                                <td>{{Moins de 2 routes avec un saut}}</td>
-                            </tr>
-                            <tr>
-                                <td class="node-more-of-two-up-color"><i class="fa fa-square fa-2x"></i></td>
-                                <td>{{Toutes les routes ont plus d'un saut}}</td>
-                            </tr>
-                            <tr>
-                                <td class="node-interview-not-completed-color"><i class="fa fa-square fa-2x"></i></td>
-                                <td>{{Interview non completé}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+					<table class="table table-bordered table-condensed" style="width:100%">
+					<tr>
+						<th>{{Clé}}</th>
+						<th>{{Nom}}</th>
+						<th>{{Date de création}}</th>
+						<th>{{Date dernière utilisation}}</th>
+						<th>{{Action}}</th>
+					</tr>
+					<tbody>
+					<?php
+					foreach ($RaspBEEConfJson->whitelist as $user => $value) {
+						echo "<tr>";
+						echo "<td>".$user."</td>";
+						echo "<td>".$value->name."</td>";
+						echo "<td>".$value->{"create date"}."</td>";
+						echo "<td>".$value->{"last use date"}."</td>";
+						echo "<td>Supprimer</td>";
+						echo "</tr>";
+					}
+					?>
+					</tbody>
+					</table>
                 </div>
                 <div class="tab-pane" id="actions_network">
                     <table class="table">
@@ -334,82 +326,6 @@ $raspbeecom = new RaspBEECom;
                         <tr>
                             <td><b>{{Nombre d'émissions lues :}}</b></td>
                             <td><span class="zwaveNetworkAttr" data-l1key="controllerStatistics" data-l2key="broadcastReadCnt"></span></td>
-                        </tr>
-                        <tr>
-                            <td><b>{{Nombre d'émissions envoyées :}}</b></td>
-                            <td><span class="zwaveNetworkAttr" data-l1key="controllerStatistics" data-l2key="broadcastWriteCnt"></span></td>
-                        </tr>
-                        <tr>
-                            <td><b>{{Nombre de bits ACK reçus :}}</b></td>
-                            <td><span class="zwaveNetworkAttr" data-l1key="controllerStatistics" data-l2key="ACKCnt"></span></td>
-                        </tr>
-                        <tr>
-                            <td><b>{{Nombre de messages non-sollicités alors qu'en attente d'ACK :}}</b></td>
-                            <td><span class="zwaveNetworkAttr" data-l1key="controllerStatistics" data-l2key="ACKWaiting"></span></td>
-                        </tr>
-                        <tr>
-                            <td><b>{{Nombre de bits CAN reçus :}}</b></td>
-                            <td><span class="zwaveNetworkAttr" data-l1key="controllerStatistics" data-l2key="CANCnt"></span></td>
-                        </tr>
-                        <tr>
-                            <td><b>{{Nombre de bits NAK reçus :}}</b></td>
-                            <td><span class="zwaveNetworkAttr" data-l1key="controllerStatistics" data-l2key="NAKCnt"></span></td>
-                        </tr>
-                        <tr>
-                            <td><b>{{Nombre de bits jamais arrivés :}}</b></td>
-                            <td><span class="zwaveNetworkAttr" data-l1key="controllerStatistics" data-l2key="OOFCnt"></span></td>
-                        </tr>
-                        <tr>
-                            <td><b>{{Nombre de bits SOF reçus :}}</b></td>
-                            <td><span class="zwaveNetworkAttr" data-l1key="controllerStatistics" data-l2key="SOFCnt"></span></td>
-                        </tr>
-                        <tr>
-                            <td><b>{{Nombre de mauvais checksums :}}</b></td>
-                            <td><span class="zwaveNetworkAttr" data-l1key="controllerStatistics" data-l2key="badChecksum"></span></td>
-                        </tr>
-                        <tr>
-                            <td><b>{{Nombre de retours inattendus :}}</b></td>
-                            <td><span class="zwaveNetworkAttr" data-l1key="controllerStatistics" data-l2key="callbacks"></span></td>
-                        </tr>
-                        <tr>
-                            <td><b>{{Nombre de ACK retournés en erreur :}}</b></td>
-                            <td><span class="zwaveNetworkAttr" data-l1key="controllerStatistics" data-l2key="noack"></span></td>
-                        </tr>
-                        <tr>
-                            <td><b>{{Nombre de lectures en échec dues au timeout :}}</b></td>
-                            <td><span class="zwaveNetworkAttr" data-l1key="controllerStatistics" data-l2key="readAborts"></span></td>
-                        </tr>
-                        <tr>
-                            <td><b>{{Nombre de messages d'échec dus au réseau occupé :}}</b></td>
-                            <td><span class="zwaveNetworkAttr" data-l1key="controllerStatistics" data-l2key="netbusy"></span></td>
-                        </tr>
-                        <tr>
-                            <td><b>{{Nombre de messages correctement reçus :}}</b></td>
-                            <td><span class="zwaveNetworkAttr" data-l1key="controllerStatistics" data-l2key="readCnt"></span></td>
-                        </tr>
-                        <tr>
-                            <td><b>{{Nombre de messages correctement envoyés :}}</b></td>
-                            <td><span class="zwaveNetworkAttr" data-l1key="controllerStatistics" data-l2key="writeCnt"></span></td>
-                        </tr>
-                        <tr>
-                            <td><b>{{Nombre de messages non remis au réseau :}}</b></td>
-                            <td><span class="zwaveNetworkAttr" data-l1key="controllerStatistics" data-l2key="nondelivery"></span></td>
-                        </tr>
-                        <tr>
-                            <td><b>{{Nombre de messages jetés ou non délivrés :}}</b></td>
-                            <td><span class="zwaveNetworkAttr" data-l1key="controllerStatistics" data-l2key="dropped"></span></td>
-                        </tr>
-                        <tr>
-                            <td><b>{{Nombre de messages en échec à cause d'un mauvais routage :}}</b></td>
-                            <td><span class="zwaveNetworkAttr" data-l1key="controllerStatistics" data-l2key="badroutes"></span></td>
-                        </tr>
-                        <tr>
-                            <td><b>{{Nombre de messages retransmis :}}</b></td>
-                            <td><span class="zwaveNetworkAttr" data-l1key="controllerStatistics" data-l2key="retries"></span></td>
-                        </tr>
-                        <tr>
-                            <td><b>{{Nombre de messages reçus avec statut de routage occupé :}}</b></td>
-                            <td><span class="zwaveNetworkAttr" data-l1key="controllerStatistics" data-l2key="routedbusy"></span></td>
                         </tr>
                     </table>
                 </div>
