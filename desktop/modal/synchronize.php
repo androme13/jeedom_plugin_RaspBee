@@ -22,7 +22,7 @@ if (!isConnect('admin')) {
 require_once dirname(__FILE__) . '/../../core/php/RaspBEECom.php';
 $raspbeecom = new RaspBEECom;
 		$sensorsJson = json_decode($raspbeecom->getSensors());
-		//print_r($RaspBEEConfJson);
+		print_r($sensorsJson);
 ?>
 <span class="pull-left alert" id="span_state" style="background-color : #dff0d8;color : #3c763d;height:35px;border-color:#d6e9c6;display:none;margin-bottom:0px;"><span style="position:relative; top : -7px;">{{Demande envoyée}}</span></span>
 <br/><br/>
@@ -38,7 +38,6 @@ $raspbeecom = new RaspBEECom;
         </div>        
         </fieldset>
 		 <textarea rows="10" cols="100" id="textarealog">
-<?php print_r($sensorsJson);?>
 </textarea> 
     </form>
 </div>

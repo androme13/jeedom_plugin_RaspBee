@@ -15,8 +15,20 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 $('#bt_syncEqLogic').on('click', function () {
-	syncEqLogicWithRaspBEE();
-	$('#md_modal').dialog({title: "{{Synchronisation}}"});
+	//syncEqLogicWithRaspBEE();
+	$('#md_modal').dialog({
+	title: "{{Synchronisation}}",
+	  dialogClass: "no-close",
+	  buttons: [
+		{
+		  text: "Fermer",
+		  click: function() {
+			$( this ).dialog( "close" );
+		  }
+		}
+	  ],
+	  //width: 400
+	});
     $('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=synchronize').dialog('open');
 	
     //syncEqLogicWithRaspBEE();
@@ -86,7 +98,7 @@ function syncEqLogicWithRaspBEE() {
                 $('#div_alert').showAlert({message: data.result, level: 'danger'});
                 return;
             }
-            window.location.reload();
+            //window.location.reload();
         }
     });
 }

@@ -36,7 +36,6 @@ if (!is_object($results)) {
 
 if ($results->type == "sensors"){
 
-
 	if (is_object($results->info))
 	{
 		
@@ -76,10 +75,22 @@ if ($results->type == "sensors"){
 				echo "cmdid:".$cmd->getId();
 				echo "cmdname:".$cmd->getName();
 				if ($cmd->getName()=='Bouton'){
-				$cmd->setValue($results->action->buttonevent);				
+				$cmd->setValue($results->action->buttonevent);
+				$dateInLocal = new DateTime($results->action->lastupdated,new DateTimeZone('UTC'));
+				// il faut connaitre le timezone local
+				$dateInLocal->setTimeZone(new DateTimeZone('Europe/Paris'));
+				$cmd->setValueDate($dateInLocal->format("Y-m-d H:i:s"));				
 				$cmd->event($results->action->buttonevent);
 				$cmd->save();}
-				//echo "cmdvalue:".$cmd->getValue();
+
+			/*	echo "\n";
+				echo "getValueDate:".$cmd->getValueDate();
+				echo "\n";
+				echo "lastupdated:".$results->action->lastupdated;
+				echo "\n";
+				echo "getValueDate:".$cmd->getValueDate();
+				echo "\n";*/
+
 			}
 			//$equipement->save(); // ca fait un refresh du dashboard
 			echo "boucle ".$boucle;
