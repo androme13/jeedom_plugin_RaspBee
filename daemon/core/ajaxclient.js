@@ -9,10 +9,12 @@ catch (err){
 
 
 ajaxclient = module.exports = {
+	
+	
 sendPOST: function ($DATA,$URL){
 	
 request.post({
-  url: "http://10.0.0.215/plugins/RaspBEE/core/php/jeeRaspBEE.php?apikey=AreSJAdQkeMCHvA6GXrJkOYuBCqYl4D4&test2",
+  url: "http://10.0.0.215/plugins/RaspBEE/core/php/jeeRaspBEE.php?apikey=iAVqJ05VEO54rmXDKkRXrYlYMFfRJOa0&test2",
   data: $DATA,
   //data: {"params":{"hello":"bonjour"}},
   headers: {}

@@ -29,6 +29,7 @@ if (isset($_GET['test'])) {
 }
 
 $results = json_decode(file_get_contents("php://input"));
+print_r($results);
 
 if (!is_object($results)) {
 	die();
@@ -49,10 +50,10 @@ if ($results->type == "sensors"){
 				echo "cmdid:".$cmd->getId();
 				echo "cmdname:".$cmd->getName();
 				echo "battery:".$results->info->battery;
-				if ($cmd->getName()=='Bouton'){
+				//if ($cmd->getName()=='Bouton'){
 					// on set le niveau de batterie de l'eqlogic
 				$equipement->batteryStatus($results->info->battery);
-			}
+			//}
 			//$equipement->save(); // ca fait un refresh du dashboard
 			//echo "boucle ".$boucle;
 			//$JeeOrangeTv->ActionInfo($JeeOrangeTv->getConfiguration('box_ip'));
@@ -84,6 +85,42 @@ if ($results->type == "sensors"){
 				$cmd->event($results->action->buttonevent);
 				$cmd->save();
 				}	//$JeeOrangeTv->ActionInfo($JeeOrangeTv->getConfiguration('box_ip'));
+				
+				if ($cmd->getName()=='temperature'){
+				$cmd->setValue($results->action->temperature/100);
+				// deCONZ  utilise le format UTC pour les dates
+				$dateInLocal = new DateTime($results->action->lastupdated,new DateTimeZone('UTC'));
+				// il faut connaitre le timezone local
+				$dateInLocal->setTimeZone(new DateTimeZone('Europe/Paris'));
+				$cmd->setValueDate($dateInLocal->format("Y-m-d H:i:s"));				
+				$cmd->event($results->action->temperature);
+				$cmd->save();
+				}	//$JeeOrangeTv->ActionInfo($JeeOrangeTv->getConfiguration('box_ip'));
+				
+				if ($cmd->getName()=='humidity'){
+				$cmd->setValue($results->action->humidity/100);
+				// deCONZ  utilise le format UTC pour les dates
+				$dateInLocal = new DateTime($results->action->lastupdated,new DateTimeZone('UTC'));
+				// il faut connaitre le timezone local
+				$dateInLocal->setTimeZone(new DateTimeZone('Europe/Paris'));
+				$cmd->setValueDate($dateInLocal->format("Y-m-d H:i:s"));				
+				$cmd->event($results->action->humidity);
+				$cmd->save();
+				}	//$JeeOrangeTv->ActionInfo($JeeOrangeTv->getConfiguration('box_ip'));
+				
+				if ($cmd->getName()=='pressure'){
+				$cmd->setValue($results->action->pressure);
+				// deCONZ  utilise le format UTC pour les dates
+				$dateInLocal = new DateTime($results->action->lastupdated,new DateTimeZone('UTC'));
+				// il faut connaitre le timezone local
+				$dateInLocal->setTimeZone(new DateTimeZone('Europe/Paris'));
+				$cmd->setValueDate($dateInLocal->format("Y-m-d H:i:s"));				
+				$cmd->event($results->action->pressure);
+				$cmd->save();
+				}	//$JeeOrangeTv->ActionInfo($JeeOrangeTv->getConfiguration('box_ip'));
+				
+				
+				
 		}
 	}
 	}

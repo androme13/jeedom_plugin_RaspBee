@@ -23,7 +23,8 @@ $('#bt_syncEqLogic').on('click', function () {
 		{
 		  text: "Fermer",
 		  click: function() {
-			$( this ).dialog( "close" );
+			  window.location.reload();
+			//$( this ).dialog( "close" );
 		  }
 		}
 	  ],
@@ -61,7 +62,7 @@ success: function (data) {
 				$('#div_alert').showAlert({message: data.result, level: 'danger'});
 				return;
 			}
-				
+			window.location.reload();	
 			}
 	});
 });
