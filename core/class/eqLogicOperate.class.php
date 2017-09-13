@@ -23,22 +23,18 @@
 		  //error_log("createDevice ".$device[type]);
 		  switch ($device[type]){
 					case "ZHASwitch" :{
-						//addZHASwitch($sensor);
 						eqLogicOperate::createZHASwitch($device);
 						break;
 					}
 					case "ZHATemperature" :{
-						//addZHASwitch($sensor);
 						eqLogicOperate::createZHATemperature($device);
 						break;
 					}
 					case "ZHAHumidity" :{
-						//addZHASwitch($sensor);
 						eqLogicOperate::createZHAHumidity($device);
 						break;
 					}
 					case "ZHAPressure" :{
-						//addZHASwitch($sensor);
 						eqLogicOperate::createZHAPressure($device);
 						break;
 					}
@@ -227,7 +223,6 @@
 
         //$RaspBEECmd->setConfiguration('day', '-1');
         //$RaspBEECmd->setConfiguration('data', 'temp');
-        $RaspBEECmd->setUnite('%');
         $RaspBEECmd->setType('info');
         $RaspBEECmd->setSubType('numeric');
         $RaspBEECmd->save();

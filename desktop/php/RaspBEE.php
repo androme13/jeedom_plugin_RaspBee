@@ -124,8 +124,46 @@ if ($controllerMode == 5) {
 foreach ($eqLogics as $eqLogic) {
 	echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
 	echo "<center>";
-	echo '<img src="plugins/RaspBEE/doc/images/template_icon.png" height="105" width="95" />';
-	echo "</center>";
+	//echo '<img src="plugins/RaspBEE/doc/images/template_icon.png" height="105" width="95" />';
+	//echo $eqLogic->getConfiguration('type');
+	//echo "<span>";
+	switch ($eqLogic->getConfiguration('type')){
+		case "ZHASwitch" :
+		echo '<i class="fa fa-th-large" style="font-size : 6em;color:#767676;"></i>';
+		break;
+		case "ZHATemperature" :
+		echo '<i class="jeedom jeedom-thermometre" style="font-size : 6em;color:#767676;"></i>';
+		break;
+		case "ZHAHumidity" :
+		echo '<i class="jeedom2 jeedom2-plante_eau2" style="font-size : 6em;color:#767676;"></i>';
+		break;
+		case "ZHAPressure" :
+		echo '<i class="meteo meteo-nuage-soleil-pluie" style="font-size : 6em;color:#767676;"></i>';
+		break;
+		
+	}
+	//
+	echo '<br>';
+	echo '<span style="font-size : 0.8em;">';
+		switch ($eqLogic->getConfiguration('type')){
+		case "ZHASwitch" :
+		echo '{{Commande}}';
+		break;
+		case "ZHATemperature" :
+		echo '{{Capteur de température}}';
+		break;
+		case "ZHAHumidity" :
+		echo '{{Capteur d\'humidité}}';
+		break;
+		case "ZHAPressure" :
+		echo '{{Capteur de pression}}';
+		break;
+		
+	}
+	
+	echo '</span>';
+	echo '</center>';
+	
 	echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
 	echo '</div>';
 }
@@ -252,6 +290,7 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
         <tr>
 			<th>#</th>
             <th>{{Nom}}</th>
+			<th>{{Paramètres}}</th>
 			<th>{{Action}}</th>
         </tr>
     </thead>

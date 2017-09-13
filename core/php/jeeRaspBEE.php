@@ -86,16 +86,23 @@ if ($results->type == "sensors"){
 				$cmd->save();
 				}	//$JeeOrangeTv->ActionInfo($JeeOrangeTv->getConfiguration('box_ip'));
 				
+				
+				
 				if ($cmd->getName()=='temperature'){
-				$cmd->setValue($results->action->temperature/100);
+					$temp = (float)($results->action->temperature/100);
+					$cmd->setValue($temp);	
+				//$cmd->setValue(intval($results->action->temperature)/100);
 				// deCONZ  utilise le format UTC pour les dates
 				$dateInLocal = new DateTime($results->action->lastupdated,new DateTimeZone('UTC'));
 				// il faut connaitre le timezone local
 				$dateInLocal->setTimeZone(new DateTimeZone('Europe/Paris'));
 				$cmd->setValueDate($dateInLocal->format("Y-m-d H:i:s"));				
-				$cmd->event($results->action->temperature);
+				$cmd->event($results->action->temperature/100);
 				$cmd->save();
 				}	//$JeeOrangeTv->ActionInfo($JeeOrangeTv->getConfiguration('box_ip'));
+				
+				
+				
 				
 				if ($cmd->getName()=='humidity'){
 				$cmd->setValue($results->action->humidity/100);
@@ -104,9 +111,13 @@ if ($results->type == "sensors"){
 				// il faut connaitre le timezone local
 				$dateInLocal->setTimeZone(new DateTimeZone('Europe/Paris'));
 				$cmd->setValueDate($dateInLocal->format("Y-m-d H:i:s"));				
-				$cmd->event($results->action->humidity);
+				$cmd->event($results->action->humidity/100);
 				$cmd->save();
 				}	//$JeeOrangeTv->ActionInfo($JeeOrangeTv->getConfiguration('box_ip'));
+				
+				
+				
+				
 				
 				if ($cmd->getName()=='pressure'){
 				$cmd->setValue($results->action->pressure);
