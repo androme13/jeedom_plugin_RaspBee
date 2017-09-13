@@ -109,6 +109,13 @@ if ($controllerMode == 5) {
 	echo '</center>';
 	echo '<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676"><center>{{Santé}}</center></span>';
 	echo '</div>';
+	// bouton removeall(debug)
+	echo '<div class="cursor card" id="bt_RaspBEERemoveAll" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
+	echo '<center>';
+	echo '<i class="fa fa-times" style="font-size : 6em;color:#94ca02;"></i>';
+	echo '</center>';
+	echo '<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676"><center>{{Remove ALL}}</center></span>';
+	echo '</div>';
 ?>	 
   </div>
 <legend><i class="fa fa-table"></i> {{Mes équipements RaspBEE}}</legend>
@@ -185,7 +192,7 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
                     <label class="col-sm-2 control-label">{{ID Origine}}</label>
                     <div class="col-sm-8">
 					<span class="label label-default" style='font-size : 1em;'>
-                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="eqlogicidraspbee"></span>
+                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="origid"></span>
 					</span>				
                     </div>
                 </div>

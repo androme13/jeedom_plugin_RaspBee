@@ -1,19 +1,19 @@
 <?php
 
-/* This file is part of Jeedom.
+/* This file is part of Plugin RaspBEE for jeedom.
  *
- * Jeedom is free software: you can redistribute it and/or modify
+ * Plugin openzwave for jeedom is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Jeedom is distributed in the hope that it will be useful,
+ * Plugin RaspBEE for jeedom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+ * along with Plugin RaspBEE for jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 try {
@@ -27,37 +27,70 @@ try {
 	ajax::init();
 	  
    	if (init('action') == 'syncEqLogicWithRaspBEE') {
-		if (RaspBEE::syncEqLogicWithRaspBEE()===true){
-			ajax::success();
-		}else{
+		$resp=RaspBEE::syncEqLogicWithRaspBEE();		
+		if ($resp===false){
 			ajax::error();
+		}else{
+			ajax::success($resp);
 		}
 	}
 	
 	if (init('action') == 'findRaspBEE') {
-	if (RaspBEE::findRaspBEE()===false){		
-		ajax::error();
-	} else{
-		ajax::success(RaspBEE::findRaspBEE());
-	}
+		$resp=RaspBEE::findRaspBEE();
+		if ($resp===false){		
+			ajax::error();
+		} else{
+			ajax::success($resp);
+		}
 	}
 	
 	if (init('action') == 'getAPIAccess') {
-	if (RaspBEE::findRaspBEE()===false){		
-		ajax::error();
-	} else{
-		ajax::success(RaspBEE::getApiKey());
-	}
+		$resp=RaspBEE::getApiKey();
+		if ($resp===false){		
+			ajax::error();
+		} else{
+			ajax::success($resp);
+		}
 	}
 	
 	if (init('action') == 'getRaspBEEConf') {
-	if (RaspBEE::findRaspBEE()===false){		
-		ajax::error();
-	} else{
-		ajax::success(RaspBEE::getRaspBEEConf());
-	}
+		$resp=RaspBEE::getRaspBEEConf();
+		if ($resp===false){		
+			ajax::error();
+		} else{
+			ajax::success($resp);
+		}
 	}
 	
+	if (init('action') == 'getRaspBEESensors') {
+		$resp=RaspBEE::getRaspBEESensors();
+		if ($resp===false){		
+			ajax::error();
+		} else{
+			ajax::success($resp);
+		}
+	}
+	
+	if (init('action') == 'createDevice') {
+		error_log("creation du device demande ajax");
+		$resp=RaspBEE::createDevice(init('device'));
+		if ($resp===false){		
+			ajax::error();
+		} else{
+			ajax::success($resp);
+		}
+	}
+	
+	if (init('action') == 'removeAll') {
+		error_log("removeall");
+		$resp=RaspBEE::removeAll();
+		if ($resp===false){		
+			ajax::error();
+		} else{
+			ajax::success($resp);
+		}
+	}
+
 
 
 	throw new Exception('Aucune methode correspondante');

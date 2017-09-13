@@ -66,38 +66,26 @@ if ($results->type == "sensors"){
 	if (is_object($results->action)){
 		$boucle=0;
 		foreach (eqLogic::byType('RaspBEE') as $equipement) {
-			$boucle=$boucle+1;
 			echo "id:".$equipement->getId();
 			echo "name:".$equipement->getName();
+			if ($equipement->getConfiguration('origid')==$results->id)			
 			foreach ($equipement->getCmd('info') as $cmd){
-						echo "ACTION ";
+				//echo "ACTION ";
 
-				echo "cmdid:".$cmd->getId();
-				echo "cmdname:".$cmd->getName();
-				if ($cmd->getName()=='Bouton'){
+				//echo "cmdid:".$cmd->getId();
+				//echo "cmdname:".$cmd->getName();
+				if ($cmd->getName()=='buttonevent'){
 				$cmd->setValue($results->action->buttonevent);
+				// deCONZ  utilise le format UTC pour les dates
 				$dateInLocal = new DateTime($results->action->lastupdated,new DateTimeZone('UTC'));
 				// il faut connaitre le timezone local
 				$dateInLocal->setTimeZone(new DateTimeZone('Europe/Paris'));
 				$cmd->setValueDate($dateInLocal->format("Y-m-d H:i:s"));				
 				$cmd->event($results->action->buttonevent);
-				$cmd->save();}
-
-			/*	echo "\n";
-				echo "getValueDate:".$cmd->getValueDate();
-				echo "\n";
-				echo "lastupdated:".$results->action->lastupdated;
-				echo "\n";
-				echo "getValueDate:".$cmd->getValueDate();
-				echo "\n";*/
-
-			}
-			//$equipement->save(); // ca fait un refresh du dashboard
-			echo "boucle ".$boucle;
-			//$JeeOrangeTv->ActionInfo($JeeOrangeTv->getConfiguration('box_ip'));
+				$cmd->save();
+				}	//$JeeOrangeTv->ActionInfo($JeeOrangeTv->getConfiguration('box_ip'));
 		}
-		echo "{'id':".$results->id.",'button':".$results->action->buttonevent."}";
-		
+	}
 	}
 			
 	

@@ -18,6 +18,9 @@
 // interactions vers le RASPBEE
 
 class RaspBEECom{
+	
+	//public $TIMEOUT = 30;
+	//public $CONNECTTIMEOUT = 30;
 
 	public function findRaspBEE(){
 		$ch = curl_init();

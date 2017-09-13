@@ -19,56 +19,13 @@
 /* * ***************************Includes********************************* */
 
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
+
 require_once dirname(__FILE__) . '/../php/RaspBEECom.php';
+require_once dirname(__FILE__) . '/eqLogicOperate.class.php';
 
 class RaspBEE extends eqLogic {
 	//private $raspbeecom = null; // attention les variables déclarées ici s'enregistrent dans la base sql lors du save
-	public function createDevice(){
 		
-		$eqLogic = new eqLogic();
-			$eqLogic->setEqType_name('RaspBEE');
-			$eqLogic->setName('RaspBEEDevice'.strval(rand(1000,100000)));
-			$eqLogic->setIsEnable(1);
-			$_logical_id = null;
-			$eqLogic->setLogicalId($_logical_id);
-			/*if (isset($result['data']['product_name']['value']) && trim($result['data']['product_name']['value']) != '') {
-				$eqLogic->setName($eqLogic->getLogicalId() . ' ' . $result['data']['product_name']['value']);
-			} else {
-				$eqLogic->setName('Device ' . $_logical_id);
-			}*/
-			// on fabrique un sensor ZHASwitch (avec bouton)
-			$eqLogic->setConfiguration('eqlogicidraspbee', 2);
-			$eqLogic->setConfiguration('etag', "e6797100e644d32ac0019ea2a8336bcd");
-			$eqLogic->setConfiguration('manufacturername', 'Philips');
-			$eqLogic->setConfiguration('mode', 1);
-			$eqLogic->setConfiguration('modelid', 'RWL021');
-			$eqLogic->setConfiguration('swversion', '5.45.1.17846');
-			$eqLogic->setConfiguration('type', 'ZHASwitch');
-			$eqLogic->setConfiguration('uniqueid', '00:17:88:01:02:e2:0c:5f-02-fc00');
-			$eqLogic->setIsVisible(1);
-			$eqLogic->batteryStatus(100);
-			$eqLogic->save();
-		if (!is_object($RaspBEECmd)) {
-			$RaspBEECmd = new RaspBEECmd();
-        }
-		
-		$RaspBEECmd->setName(__('Bouton', __FILE__));
-        $RaspBEECmd->setLogicalId('Bouton');
-        $RaspBEECmd->setEqLogic_id($eqLogic->getId());
-        //$RaspBEECmd->setConfiguration('day', '-1');
-        //$RaspBEECmd->setConfiguration('data', 'temp');
-        //$RaspBEECmd->setUnite('°C');
-        $RaspBEECmd->setType('info');
-        $RaspBEECmd->setSubType('numeric');
-        $RaspBEECmd->save();
-		return true;	
-			
-			//$eqLogic->save();
-			//return;
-
-	}
-	
-	
 	public static function dependancy_info() {
 		$return = array();
 		$return['log'] = 'RaspBEE_dep';
@@ -251,7 +208,7 @@ class RaspBEE extends eqLogic {
 	
 	
 	public function syncEqLogicWithRaspBEE($_logical_id = null, $_exclusion = 0){
-		return RaspBEE::createDevice();
+		return eqLogicOperate::createDevice();
 	}
 	
 	public function findRaspBEE(){
@@ -273,6 +230,27 @@ class RaspBEE extends eqLogic {
 		$result = $raspbeecom->getConf();
 		unset($raspbeecom);
 		return $result;
+	}
+	
+	public function getRaspBEESensors(){
+		//error_log("getRaspBEESensors pass");
+		$raspbeecom = new RaspBEECom;
+		$result = $raspbeecom->getSensors();
+		unset($raspbeecom);
+		return $result;
+	}
+	
+	public function createDevice($device){
+		//error_log("createDevice pass");
+		return eqLogicOperate::createDevice($device);
+		//$eql = new eqLogicOperate();
+		//return $eql->createDevice($device);
+	}
+	
+	public function removeAll(){
+		foreach (eqLogic::byType('RaspBEE') as $equipement) {
+			$equipement->remove();
+		}
 	}
 	/*
 	* Non obligatoire mais permet de modifier l'affichage du widget si vous en avez besoin

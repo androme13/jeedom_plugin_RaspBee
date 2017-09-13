@@ -45,6 +45,27 @@ $('#bt_RaspBEENetwork').on('click', function () {
     $('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=network').dialog('open');
 });
 
+$('#bt_RaspBEERemoveAll').on('click', function () {
+	$.ajax({
+type: "POST", 
+url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+data: {
+action: "removeAll",
+		},
+dataType: 'json',
+error: function (request, status, error) {
+			handleAjaxError(request, status, error);
+		},
+success: function (data) { 
+			if (data.state != 'ok') {
+				$('#div_alert').showAlert({message: data.result, level: 'danger'});
+				return;
+			}
+				
+			}
+	});
+});
+
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 /*
  * Fonction pour l'ajout de commande, appellé automatiquement par plugin.deconz
