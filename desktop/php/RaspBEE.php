@@ -23,9 +23,6 @@ sendVarToJS('eqType', 'RaspBEE');
 $eqLogics = eqLogic::byType('RaspBEE');
 echo '<div id="div_inclusionAlert"></div>';
 ?>
-<div class="alert alert-info">
-	{{Obligatoire pour que cela fonctionne.}}
-</div>
 <div class="row row-overflow">
     <div class="col-lg-2 col-md-3 col-sm-4">
         <div class="bs-sidebar">

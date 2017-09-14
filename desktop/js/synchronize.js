@@ -36,6 +36,7 @@ success: function (data) {
 
 			// on parse les sensors
 			let sensors = JSON.parse(data.result);
+			//on verifie si il n'existe pas deja			
 			for (var sensor in sensors) {
 				//console.log(sensor);
 				sensors[sensor].origid=sensor;
