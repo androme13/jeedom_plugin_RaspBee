@@ -49,62 +49,69 @@ class RaspBEE extends eqLogic {
 	public static function deamon_info() {	
 		$return = array();
 		$return['log'] = 'RaspBEE_node';	
-		$pidfile = file_get_contents('/tmp/raspbee.pid', true);
-		$cfgfile = file_get_contents('plugins/RaspBEE/daemon/raspbee.cfg', true);
-		if ($cfgfile==false){
-			//		if (strlen($cfgfile)==0){
-			$return['launchable'] = 'ok';
-		} else {
-			$return['launchable'] = 'nok';
+		$return['state'] = 'nok';
+		$pid_file = '/tmp/raspbee.pid';
+		if (file_exists($pid_file)) {
+			if (posix_getsid(trim(file_get_contents($pid_file)))) {
+				$return['state'] = 'ok';
+			} else {
+				shell_exec('sudo rm -rf ' . $pid_file . ' 2>&1 > /dev/null;rm -rf ' . $pid_file . ' 2>&1 > /dev/null;');
+			}
 		}
-		
-		if ($pidfile==false){
-			//if (strlen($pidfile)==0){
-			$return['state'] = 'nok';	
-		}else{	
-			$return['state'] = 'ok';	
-		}
-		$key = config::byKey('raspbeeIP','RaspBEE');
-		//echo "valeur clé:".$key;
-		if ( $key == '') {
-			
+		$return['launchable'] = 'ok';
+		$ip = config::byKey('raspbeeIP','RaspBEE');
+		$apikey = config::byKey('raspbeeAPIKEY','RaspBEE');
+		if ($ip == '') {
 			$return['launchable'] = 'nok';
-		//config::save('api::RaspBee::mode', 'localhost');
-	}    
-		//
+			$return['launchable_message'] = __('<br><br>L\'IP de la passerelle RaspBEE n\'est pas configurée', __FILE__);
+			return $return;
+			}
+		if ($apikey == '') {
+			$return['launchable'] = 'nok';
+			$return['launchable_message'] = __('<br><br>La clé API de la passerelle RaspBEE n\'est pas configurée', __FILE__);
+			}			
 		return $return;
 	}
 	
 	public static function deamon_start($_debug = false) {
-		$log = log::convertLogLevel(log::getLogLevel('RaspBEE'));
-		$char = jeedom::getApiKey('RaspBEE');
-		$char2 = ajax::getToken();
-		config::save('pluginTOKENKEY',$char2,'RaspBEE');
-		if ($char=="") $testkey = config::genKey();
-	
-		log::add('RaspBEE', 'info', 'test : ');
-		echo "teskey: ".$char."token: ".$char2;
 		self::deamon_stop();
 		$deamon_info = self::deamon_info();
 		if ($deamon_info['launchable'] != 'ok') {
 			throw new Exception(__('Veuillez vérifier la configuration', __FILE__));
 		}
 		$daemon_path = realpath(dirname(__FILE__) . '/../../daemon');
-		$cmd = 'nice -n 19 nodejs ' . $daemon_path . '/daemon.js ';
-		//$cmd = 'nice -n 19 nodejs ' . $sensor_path . '/jeeorangetv.js ' . $url . ' ' . $log . ' ' . $freq;
-		log::add('RaspBEE', 'debug', 'Lancement démon RaspBEE : ' . $cmd);
-		$result = exec('nohup ' . $cmd . ' >> ' . log::getPathToLog('RaspBEE_node') . ' 2>&1 &');
-		if (strpos(strtolower($result), 'error') !== false || strpos(strtolower($result), 'traceback') !== false) {
-
-			log::add('RaspBEE', 'error', 'Impossible de lancer le démon RaspBEE : '.$result, 'unableStartDeamon');
+		$jurl = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]"."/plugins/RaspBEE/core/php/jeeRaspBEE.php";
+		$japikey=jeedom::getApiKey('RaspBEE');;
+		$cmd = 'nice -n 19 nodejs ' . $daemon_path . '/daemon.js ' .'apikey='.$japikey . ' jurl='.$jurl;
+		log::add('RaspBEE', 'info', 'Lancement du démon RAspBEE : ' . $cmd);
+		exec('nohup ' . $cmd . ' >> ' . log::getPathToLog('RaspBEE_node') . ' 2>&1 &');
+		$i = 0;
+		while ($i < 3) {
+			$deamon_info = self::deamon_info();
+			if ($deamon_info['state'] == 'ok') {
+				break;
+			}
+			sleep(1);
+			$i++;
+		}
+		if ($i >= 3) {
+			log::add('RaspBEE', 'error', 'Impossible de lancer le démon RaspBEE, relancer le démon en debug et vérifiez les log', 'unableStartDeamon');
 			return false;
 		}
 		message::removeAll('RaspBEE', 'unableStartDeamon');
 		log::add('RaspBEE', 'info', 'Démon RaspBEE lancé');
-		return true;		
 	}
 
 	public static function deamon_stop() {
+		
+		
+		$pid_file = '/tmp/openzwaved.pid';
+		if (file_exists($pid_file)) {
+			$pid = intval(trim(file_get_contents($pid_file)));
+			system::kill($pid);
+		}
+		
+		
 		
 		exec('kill $(ps aux | grep "RaspBEE/daemon/daemon.js" | awk \'{print $2}\')');
 		log::add('RaspBEE', 'info', 'Arrêt du service RaspBEE');
@@ -118,7 +125,7 @@ class RaspBEE extends eqLogic {
 			sleep(1);
 			exec('sudo kill -9 $(ps aux | grep "RaspBEE/daemon/daemon.js" | awk \'{print $2}\')');
 		}
-		
+		sleep(1);
 	}
 
 	public static function deamon_changeAutoMode($_mode) {	
@@ -205,7 +212,7 @@ class RaspBEE extends eqLogic {
 	public function postRemove() {
 		
 	}
-	
+
 	
 	public function syncEqLogicWithRaspBEE($_logical_id = null, $_exclusion = 0){
 		return eqLogicOperate::createDevice();

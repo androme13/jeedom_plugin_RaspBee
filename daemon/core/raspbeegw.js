@@ -37,10 +37,6 @@ raspbeegw = module.exports = {
 						catch (err){
 							console.log(err);
 						}
-						//callback(util.inspect(tempMessage.state, false, null));
-						//console.log(util.inspect(tempMessage.state, false, null))
-						//console.log("Received: '" + tempMessage.state.buttonevent + "'");
-					//}
 				}
 			});
 		})
