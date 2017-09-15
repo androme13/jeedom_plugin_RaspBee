@@ -39,18 +39,16 @@ foreach ($eqLogics as $eqLogic) {
 
    <div class="col-lg-10 col-md-9 col-sm-8 eqLogicThumbnailDisplay" style="border-left: solid 1px #EEE; padding-left: 25px;">
     <legend><i class="fa fa-cog"></i>  {{Gestion du plugin}}</legend>
-
-    <div class="eqLogicThumbnailContainer">
-	
+    <div class="eqLogicThumbnailContainer">	
 	<?php
 	$controllerMode=1;
-
+	$status=RaspBEE::deamon_info();
 	// bouton mode inclusion
 	echo '<div class="cursor changeIncludeState card" data-mode="1" data-state="0" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
 	echo '<center>';
 	echo '<i class="fa fa-sign-in fa-rotate-90" style="font-size : 6em;color:#94ca02;"></i>';
 	echo '</center>';
-	echo '<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#94ca02"><center>{{Arrêter inclusion}}</center></span>';
+	echo '<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#94ca02"><center>{{Mode inclusion}}</center></span>';
 	echo '</div>';
 
 	// bouton configuration
@@ -60,7 +58,7 @@ foreach ($eqLogics as $eqLogic) {
 	echo '</center>';
 	echo '<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676"><center>{{Configuration}}</center></span>';
 	echo '</div>';
-	
+	if ($status['launchable']=="ok"){
 	// bouton synchroniser
 	echo '<div class="cursor card disabled" id="bt_syncEqLogic" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
 	echo '<center>';
@@ -84,12 +82,13 @@ foreach ($eqLogics as $eqLogic) {
 	echo '</center>';
 	echo '<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676"><center>{{Santé}}</center></span>';
 	echo '</div>';
+	}
 	// bouton removeall(debug)
 	echo '<div class="cursor card" id="bt_RaspBEERemoveAll" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
 	echo '<center>';
-	echo '<i class="fa fa-times" style="font-size : 6em;color:#94ca02;"></i>';
+	echo '<i class="fa fa-times" style="font-size : 6em;color:#FA5858;"></i>';
 	echo '</center>';
-	echo '<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676"><center>{{Remove ALL}}</center></span>';
+	echo '<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#FA5858"><center>{{Remove ALL}}</center></span>';
 	echo '</div>';
 ?>	 
   </div>
@@ -116,7 +115,9 @@ foreach ($eqLogics as $eqLogic) {
 		case "ZHAPressure" :
 		echo '<i class="meteo meteo-nuage-soleil-pluie" style="font-size : 6em;color:#767676;"></i>';
 		break;
-		
+		case "Extended color light" :
+		echo '<i class="jeedom jeedom-lumiere-off" style="font-size : 6em;color:#767676;"></i>';
+		break;		
 	}
 	//
 	echo '<br>';
@@ -134,7 +135,9 @@ foreach ($eqLogics as $eqLogic) {
 		case "ZHAPressure" :
 		echo '{{Capteur de pression}}';
 		break;
-		
+		case "Extended color light" :
+		echo '{{Eclairage}}';
+		break;
 	}
 	
 	echo '</span>';
@@ -208,7 +211,15 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
     <div class="col-sm-5">
         <form class="form-horizontal">
         <fieldset>
-			                <div class="form-group">
+				<div class="form-group expertModeVisible">
+                    <label class="col-sm-2 control-label">{{Connecté}}</label>
+                    <div class="col-sm-8">
+					<span class="label label-default" style='font-size : 1em;'>
+                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="reachable"></span>
+					</span>				
+                    </div>
+                </div>
+			    <div class="form-group expertModeVisible">
                     <label class="col-sm-2 control-label">{{ID Origine}}</label>
                     <div class="col-sm-8">
 					<span class="label label-default" style='font-size : 1em;'>
@@ -232,7 +243,7 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 					</span>					
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group expertModeVisible">
                     <label class="col-sm-2 control-label">{{Firmware}}</label>
                     <div class="col-sm-8">
 						<span class="label label-default" style='font-size : 1em;'>
@@ -240,7 +251,7 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 					</span>			
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group expertModeVisible">
                     <label class="col-sm-2 control-label">{{Type}}</label>
 				<div class="col-sm-8">
 				  <span class="label label-default" style='font-size : 1em;'>
@@ -249,7 +260,7 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 				</span>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group expertModeVisible">
                 <label class="col-sm-2 control-label">{{UID}}</label>
                 <div class="col-sm-8">
 				  <span class="label label-default" style='font-size : 1em;'>
@@ -267,16 +278,11 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
     <br/><br/>
     <table id="table_cmd" class="table table-bordered table-condensed">
         <thead>
-            <tr>
-                <th style="width: 300px;">{{Nom}}</th>
-                <th style="width: 130px;" class="expertModeVisible">{{Type}}</th>
-                <th class="expertModeVisible">{{Instance}}</th>
-                <th class="expertModeVisible">{{Classe}}</th>
-                <th class="expertModeVisible">{{Index}}</th>
-                <th class="expertModeVisible">{{Commande}}</th>
-                <th style="width: 200px;">{{Paramètres}}</th>
-                <th style="width: 100px;">{{Options}}</th>
-                <th></th>
+            <tr>                
+                <th class="expertModeVisible">{{ID}}</th>
+				<th>{{Nom}}</th>
+                <th>{{Paramètres}}</th>
+                <th>{{Options}}</th>
             </tr>
         </thead>
         <tbody>
@@ -287,8 +293,5 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 </div>
 
 </div>
-
-
-
 <?php include_file('desktop', 'RaspBEE', 'js', 'RaspBEE');?>
 <?php include_file('core', 'plugin.template', 'js');?>

@@ -247,6 +247,14 @@ class RaspBEE extends eqLogic {
 		return $result;
 	}
 	
+	public function getRaspBEELights(){
+		//error_log("getRaspBEESensors pass");
+		$raspbeecom = new RaspBEECom;
+		$result = $raspbeecom->getLights();
+		unset($raspbeecom);
+		return $result;
+	}
+	
 	public function createDevice($device){
 		//error_log("createDevice pass");
 		return eqLogicOperate::createDevice($device);

@@ -10,8 +10,6 @@ ajaxclient = module.exports = {
 	
 	
 sendPOST: function ($DATA,$URL){
-
-var tempapi = "iAVqJ05VEO54rmXDKkRXrYlYMFfRJOa0";	
 		request.post({
 url: global.jurl+"?apikey="+global.apikey,
 data: $DATA,

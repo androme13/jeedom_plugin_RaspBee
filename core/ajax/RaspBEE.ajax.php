@@ -71,8 +71,28 @@ try {
 		}
 	}
 	
-	if (init('action') == 'createDevice') {
+		
+	if (init('action') == 'getRaspBEELights') {
+		$resp=RaspBEE::getRaspBEELights();
+		if ($resp===false){		
+			ajax::error();
+		} else{
+			ajax::success($resp);
+		}
+	}
+	
+	if (init('action') == 'createSensor') {
 		error_log("creation du device demande ajax");
+		$resp=RaspBEE::createDevice(init('device'));
+		if ($resp===false){		
+			ajax::error();
+		} else{
+			ajax::success($resp);
+		}
+	}
+	
+	if (init('action') == 'createLight') {
+		error_log("creation du light demande ajax");
 		$resp=RaspBEE::createDevice(init('device'));
 		if ($resp===false){		
 			ajax::error();

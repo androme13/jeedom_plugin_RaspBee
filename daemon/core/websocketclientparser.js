@@ -10,10 +10,14 @@ websocketclientparser = module.exports = {
 		case 'sensors':
 			return(this.sensorsprocess(jsondata));
 			break;
-			default :
+		case 'lights':
+			return(this.lightsprocess(jsondata));
+			break;
+		default :
 			//console.log("raw: ",jsondata);
-			return jsondata;
-		}				
+		return jsondata;
+		}
+					
 	},
 	
 	sensorsprocess : function (sensorsobj){
@@ -45,6 +49,31 @@ websocketclientparser = module.exports = {
 			//console.log("raw: ",sensorsobj);
 			return "raw: "+sensorsobj;
 			
+		}
+	},
+	
+	lightsprocess : function (lightobj){
+		console.log("raw: ",lightobj);
+		//console.log("websocketclientparser sensorsprocess:");
+		var call = new Object();
+		// on traite les events (t)
+		switch (lightobj.t){
+		case 'event':
+			// si on a une valeur state pour le light
+			if (typeof lightobj.state !== 'undefined') {
+				call.type = lightobj.r;
+				call.id = lightobj.id;
+				call.action = lightobj.state;
+				return call;
+			}else
+			{
+				//console.log("event inconnu: ",lightobj);
+				return "event inconnu: "+lightobj;
+			}
+			break;
+			default :
+			//console.log("raw: ",lightobj);
+			return "raw: "+lightobj;			
 		}
 	}
 }

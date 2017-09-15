@@ -18,7 +18,13 @@ $('#bt_synchronize').on('click', function () {
 	// $logs = $("#textarealog").val();
 	//$logs+= "ok";
 	//$("#textarealog").val($logs);
-	$.ajax({
+	syncSensors();
+	syncLights();
+});
+
+
+function syncSensors(){
+$.ajax({
 type: "POST", 
 url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
 data: {
@@ -35,26 +41,74 @@ success: function (data) {
 			}
 
 			// on parse les sensors
-			let sensors = JSON.parse(data.result);
-			//on verifie si il n'existe pas deja			
-			for (var sensor in sensors) {
-				//console.log(sensor);
-				sensors[sensor].origid=sensor;
-				createDevice(sensors[sensor]);
-				
+			let devices = JSON.parse(data.result);
+			for (var device in devices) {
+				devices[device].origid=device;
+				createSensor(devices[device]);				
 			}
-			//createDevice();
+			
+			//on lance la synchro des lights ensuite		
 } 
 	});
-});
+}
 
-function createDevice(sensor){
+function syncLights(){
 $.ajax({
 type: "POST", 
 url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
 data: {
-action: "createDevice",
+action: "getRaspBEELights",
+		},
+dataType: 'json',
+error: function (request, status, error) {
+			handleAjaxError(request, status, error);
+		},
+success: function (data) { 
+			if (data.state != 'ok') {
+				$('#div_alert').showAlert({message: data.result, level: 'danger'});
+				return;
+			}
+
+			// on parse les lights
+			console.log("lights: ",data.result);
+			let devices = JSON.parse(data.result);
+			for (var device in devices) {
+				devices[device].origid=device;
+				createLight(devices[device]);				
+			}
+} 
+	});	
+}
+
+
+function createSensor(sensor){
+$.ajax({
+type: "POST", 
+url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+data: {
+action: "createSensor",
 device: sensor
+		},
+dataType: 'json',
+error: function (request, status, error) {
+			handleAjaxError(request, status, error);
+		},
+success: function (data) { 
+			if (data.state != 'ok') {
+				$('#div_alert').showAlert({message: data.result, level: 'danger'});
+				return;
+			}
+} 
+	});	
+};
+
+function createLight(light){
+$.ajax({
+type: "POST", 
+url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+data: {
+action: "createLight",
+device: light
 		},
 dataType: 'json',
 error: function (request, status, error) {
@@ -73,71 +127,3 @@ success: function (data) {
 ZHALightLevel ZHAPresence ZHAOpenClose ZHATemperature ZHAHumidity ZHAPressure ZHASwitch
 */
 
-/*$('#bt_createBackup').off().on('click', function (event) {
-	bootbox.confirm('{{Etes-vous sûr de vouloir créer un backup ? Une fois lancée cette opération ne peut être annulée.}}',
-		function (result) {
-			if (result) {
-				jeedom.openzwave.backup.do({
-					error: function (error) {
-						$('#div_backupAlert').showAlert({message: error.message, level: 'danger'});
-					},
-					success: function () {
-						$('#div_backupAlert').showAlert({message: '{{Action réalisée avec succès}}', level: 'success'});
-						updateListBackup();
-					}
-				});
-			}
-		});
-});
-
-$('#bt_removeBackup').off().on('click', function (event) {
-	bootbox.confirm('{{Etes-vous sûr de vouloir supprimer le backup suivant }} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée.}}',
-		function (result) {
-			if (result) {
-			jeedom.openzwave.backup.delete({
-				backup : $('#sel_restoreBackup option:selected').text(),
-				error: function (error) {
-					$('#div_backupAlert').showAlert({message: error.message, level: 'danger'});
-				},
-				success: function () {
-					$('#div_backupAlert').showAlert({message: '{{Action réalisée avec succès}}', level: 'success'});
-					updateListBackup();
-				}
-			});
-		}
-	});
-});
-
-$('#bt_restoreBackup').off().on('click', function (event) {
-	bootbox.confirm('{{Etes-vous sûr de vouloir restaurer Openzwave avec }} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée et redémarrera le moteur OpenZwave.}}',
-		function (result) {
-			if (result) {
-				jeedom.openzwave.backup.restore({
-					backup : $('#sel_restoreBackup option:selected').text(),
-					error: function (error) {
-						$('#div_backupAlert').showAlert({message: error.message, level: 'danger'});
-					},
-					success: function () {
-						$('#div_backupAlert').showAlert({message: '{{Restauration réussie. Redémarrage d\'OpenZwave en cours.}}', level: 'success'});
-					}
-				});
-			}
-		});
-});
-
-function updateListBackup() {
-jeedom.openzwave.backup.list({
-	error: function (error) {
-		$('#div_backupAlert').showAlert({message: error.message, level: 'danger'});
-	},
-	success: function (backups) {
-	var options = '';
-	for (i in backups) {
-		options += '<option value="' + i + '">' + backups[i] + '</option>';
-	}
-	$('#sel_restoreBackup').html(options);
-}
-});
-}
-
-updateListBackup();*/

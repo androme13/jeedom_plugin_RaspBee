@@ -4,22 +4,17 @@ var WebSocketClientParser = require('./websocketclientparser.js');
 var WSclient = new WebSocketClient();
 
 raspbeegw = module.exports = {
-
 	connect : function (host, port, callback) {
 		raspbeegw.setup(callback);
 		WSclient.connect('ws://'+host+':'+port);
 	},
-
 	close : function() {
 		
 	},
-
-	setup : function(callback){
-		
+	setup : function(callback){		
 		WSclient.on('connectFailed', function(error) {
 			console.log('Connect Error: ' + error.toString());
 		});
-
 		WSclient.on('connect', function(connection) {
 			console.log('WebSocket Client Connected to RaspBee');
 			connection.on('error', function(error) {
@@ -39,6 +34,6 @@ raspbeegw = module.exports = {
 						}
 				}
 			});
-		})
-	}
+		});		
+		}
 };
