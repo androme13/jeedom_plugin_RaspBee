@@ -250,8 +250,6 @@ class RaspBEE extends eqLogic {
 	public function createDevice($device){
 		//error_log("createDevice pass");
 		return eqLogicOperate::createDevice($device);
-		//$eql = new eqLogicOperate();
-		//return $eql->createDevice($device);
 	}
 	
 	public function removeAll(){
