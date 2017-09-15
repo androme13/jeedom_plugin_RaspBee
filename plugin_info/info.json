@@ -4,7 +4,7 @@
     "licence" : "AGPL",
     "author" : "Thierry MATHIEU",
     "require" : "3.0",
-    "category" : "communication",
+    "category" : "automation protocol",
 	"mobile" : "RaspBEE",
 	"hasDependency" : true,
 	"hasOwnDeamon" : true
