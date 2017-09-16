@@ -1,5 +1,5 @@
 {
-    "name": "Commande",
+    "name": "Temperature",
     "configuration": {
 		"swversion": "",
 		"type": "",
@@ -11,12 +11,13 @@
     },
     "commands": [
         {
-            "name": "Etat bouton", 
+            "name": "temperature", 
             "type": "info", 
             "isVisible": 1, 
-            "isHistorized": 0,		
+            "isHistorized": 0,
+			"unite": "°C",			
             "configuration": {
-			    "fieldname" : "buttonevent"
+			    "fieldname" : "temperature"
             }, 
             "subtype": "numeric", 
             "display": {

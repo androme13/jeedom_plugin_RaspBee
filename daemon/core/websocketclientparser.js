@@ -21,7 +21,8 @@ websocketclientparser = module.exports = {
 	},
 	
 	sensorsprocess : function (sensorsobj){
-		//console.log("websocketclientparser sensorsprocess:");
+		console.log("websocketclientparser sensorsprocess:");
+		console.log (sensorsobj);
 		var call = new Object();
 		// on traite les events (t)
 		switch (sensorsobj.t){

@@ -1,5 +1,5 @@
 {
-    "name": "Commande",
+    "name": "Humidité",
     "configuration": {
 		"swversion": "",
 		"type": "",
@@ -11,16 +11,19 @@
     },
     "commands": [
         {
-            "name": "Etat bouton", 
+            "name": "Etat humidité", 
             "type": "info", 
             "isVisible": 1, 
-            "isHistorized": 0,		
+            "isHistorized": 0,
+			"unite": "%",			
             "configuration": {
-			    "fieldname" : "buttonevent"
+			    "fieldname" : "humidity",
+				"minValue": 0, 
+				"maxValue": 100		
             }, 
             "subtype": "numeric", 
             "display": {
-                "generic_type": "TEMPERATURE"
+                "generic_type": "HUMIDITY"
             }
         }		
     ]

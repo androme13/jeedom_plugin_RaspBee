@@ -19,7 +19,6 @@ require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 class eqLogicOperate extends eqLogic {
 	
 	public function createDevice($device,$syncType = 0){
-		$dejavu = false;
 		foreach (eqlogic::byType('RaspBEE') as $eqLogic){
 		if ($eqLogic->getConfiguration('origid')==$device[origid] && ($eqLogic->getConfiguration('type')==$device[type])) return false;		
 		}
@@ -57,7 +56,14 @@ class eqLogicOperate extends eqLogic {
 	
 	
 	public function createLight($device){
-		error_log("createLight ".$device[origID]);
+		if (!is_file(dirname(__FILE__) . '/../config/devices/lights.json')){
+		return false;
+		};
+		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/lights.json');
+		if (!is_json($configFile)) {
+			return false;
+		}
+		//error_log("createLight ".$device[origID],0);
 		$eqLogic = new eqLogic();
 		$eqLogic->setEqType_name('RaspBEE');
 		$eqLogic->setName($device[name]." ".$device[origid]);
@@ -65,6 +71,7 @@ class eqLogicOperate extends eqLogic {
 		$_logical_id = null;
 		$eqLogic->setLogicalId($_logical_id);
 		// on fabrique un LIGHT
+		
 		$eqLogic->setConfiguration('origid', $device[origid]);
 		$eqLogic->setConfiguration('hascolor', $device[hascolor]);
 		$eqLogic->setConfiguration('manufacturername', $device[manufacturername]);
@@ -77,172 +84,69 @@ class eqLogicOperate extends eqLogic {
 		$eqLogic->setConfiguration('colormode', $device[state][colormode]);
 		$eqLogic->setIsVisible(1);
 		$eqLogic->save();
-		if (!is_object($RaspBEECmd)) {
+		$model = json_decode($configFile, true);
+		$commands = $model['commands'];
+		foreach ($model['commands'] as $command) {
 			$RaspBEECmd = new RaspBEECmd();
+			$RaspBEECmd->setName($command[name]);
+			$RaspBEECmd->setLogicalId($command[name]);
+			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
+			$RaspBEECmd->setValue($device[state][bri]);
+			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
+			$RaspBEECmd->setType($command[type]);
+			$RaspBEECmd->setSubType($command[subtype]);
+			$RaspBEECmd->save();						
 		}
-		$RaspBEECmd = new RaspBEECmd();
-		$RaspBEECmd->setName('Etat alerte');
-		$RaspBEECmd->setLogicalId('Etat alerte');
-		$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-		$RaspBEECmd->setValue($device[state][bri]);
-		$RaspBEECmd->setConfiguration("origname",'alert');
-		$RaspBEECmd->setType('info');
-		$RaspBEECmd->setSubType('other');
-		$RaspBEECmd->save();
-		
-		$RaspBEECmd = new RaspBEECmd();
-		$RaspBEECmd->setName('Action alert');
-		$RaspBEECmd->setLogicalId('Action alert');
-		$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-		//$RaspBEECmd->setValue($device[state][bri]);
-		$RaspBEECmd->setType('action');
-		$RaspBEECmd->setSubType('other');
-		$RaspBEECmd->save();
-		
-		$RaspBEECmd = new RaspBEECmd();
-		$RaspBEECmd->setName('Etat luminosité');
-		$RaspBEECmd->setLogicalId('Etat luminosité');
-		$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-		$RaspBEECmd->setValue($device[state][bri]);
-		$RaspBEECmd->setConfiguration("origname",'bri');
-		$RaspBEECmd->setType('info');
-		$RaspBEECmd->setSubType('numeric');
-		$RaspBEECmd->save();
-		
-		$RaspBEECmd = new RaspBEECmd();
-		$RaspBEECmd->setName('Action bri');
-		$RaspBEECmd->setLogicalId('Action bri');
-		$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-		//$RaspBEECmd->setValue($device[state][bri]);
-		$RaspBEECmd->setType('action');
-		$RaspBEECmd->setSubType('slider');
-		$RaspBEECmd->save();
-
-		$RaspBEECmd = new RaspBEECmd();
-		$RaspBEECmd->setName('Température Blanc');
-		$RaspBEECmd->setLogicalId('Température Blanc');
-		$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-		$RaspBEECmd->setValue($device[state][ct]);
-		$RaspBEECmd->setConfiguration("origname",'ct');
-		$RaspBEECmd->setType('info');
-		$RaspBEECmd->setSubType('numeric');
-		$RaspBEECmd->save();
-		
-		$RaspBEECmd = new RaspBEECmd();
-		$RaspBEECmd->setName('Action ct');
-		$RaspBEECmd->setLogicalId('Action ct');
-		$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-		//$RaspBEECmd->setValue($device[state][ct]);
-		$RaspBEECmd->setType('action');
-		$RaspBEECmd->setSubType('slider');
-		$RaspBEECmd->save();
-
-		$RaspBEECmd = new RaspBEECmd();
-		$RaspBEECmd->setName('effect');
-		$RaspBEECmd->setLogicalId('effect');
-		$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-		$RaspBEECmd->setValue($device[state][effect]);
-		$RaspBEECmd->setType('info');
-		$RaspBEECmd->setSubType('other');
-		$RaspBEECmd->save();
-		
-		$RaspBEECmd = new RaspBEECmd();
-		$RaspBEECmd->setName('Action effect');
-		$RaspBEECmd->setLogicalId('Action effect');
-		$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-		//$RaspBEECmd->setValue($device[state][effect]);
-		$RaspBEECmd->setType('action');
-		$RaspBEECmd->setSubType('other');
-		$RaspBEECmd->save();
-
-		$RaspBEECmd = new RaspBEECmd();
-		$RaspBEECmd->setName('hue');
-		$RaspBEECmd->setLogicalId('hue');
-		$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-		$RaspBEECmd->setValue($device[state][hue]);
-		$RaspBEECmd->setType('info');
-		$RaspBEECmd->setSubType('numeric');
-		$RaspBEECmd->save();
-		
-		$RaspBEECmd = new RaspBEECmd();
-		$RaspBEECmd->setName('Action hue');
-		$RaspBEECmd->setLogicalId('Action hue');
-		$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-		//$RaspBEECmd->setValue($device[state][hue]);
-		$RaspBEECmd->setType('action');
-		$RaspBEECmd->setSubType('slider');
-		$RaspBEECmd->save();
-		
-		$RaspBEECmd = new RaspBEECmd();
-		$RaspBEECmd->setName('on');
-		$RaspBEECmd->setLogicalId('on');
-		$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-		$RaspBEECmd->setValue($device[state][on]);
-		$RaspBEECmd->setType('info');
-		$RaspBEECmd->setSubType('binary');
-		$RaspBEECmd->save();
-		
-		$RaspBEECmd = new RaspBEECmd();
-		$RaspBEECmd->setName('Action on');
-		$RaspBEECmd->setLogicalId('Action on');
-		$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-		//$RaspBEECmd->setValue($device[state][on]);
-		$RaspBEECmd->setType('action');
-		$RaspBEECmd->setSubType('other');
-		$RaspBEECmd->save();
-		
-		$RaspBEECmd = new RaspBEECmd();
-		$RaspBEECmd->setName('Action off');
-		$RaspBEECmd->setLogicalId('Action off');
-		$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-		//$RaspBEECmd->setValue($device[state][on]);
-		$RaspBEECmd->setType('action');
-		$RaspBEECmd->setSubType('other');
-		$RaspBEECmd->save();
-		
-		$RaspBEECmd = new RaspBEECmd();
-		$RaspBEECmd->setName('sat');
-		$RaspBEECmd->setLogicalId('sat');
-		$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-		$RaspBEECmd->setValue($device[state][sat]);
-		$RaspBEECmd->setType('info');
-		$RaspBEECmd->setSubType('numeric');
-		$RaspBEECmd->save();
-		
-		$RaspBEECmd = new RaspBEECmd();
-		$RaspBEECmd->setName('Action sat');
-		$RaspBEECmd->setLogicalId('Action sat');
-		$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-		//$RaspBEECmd->setValue($device[state][sat]);
-		$RaspBEECmd->setType('action');
-		$RaspBEECmd->setSubType('slider');
-		$RaspBEECmd->save();
-		
-		$RaspBEECmd = new RaspBEECmd();
-		$RaspBEECmd->setName('color');
-		$RaspBEECmd->setLogicalId('color');
-		$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-		$RaspBEECmd->setValue("#ff0000");
-		$RaspBEECmd->setType('info');
-		$RaspBEECmd->setSubType('color');
-		$RaspBEECmd->save();
-		
-		$RaspBEECmd = new RaspBEECmd();
-		$RaspBEECmd->setName('Action color');
-		$RaspBEECmd->setLogicalId('Action color');
-		$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-		//$RaspBEECmd->setValue("#ff0000");
-		$RaspBEECmd->setType('action');
-		$RaspBEECmd->setSubType('color');
-		$RaspBEECmd->save();
-		
-		//$eqLogic->save();
-		//return;
+		return true;
 	}
 	
 	
 	
 	public function createZHASwitch($device){
+		if (!is_file(dirname(__FILE__) . '/../config/devices/ZHASwitch.json')){
+		return false;
+		};
+		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/ZHASwitch.json');
+		if (!is_json($configFile)) {
+			return false;
+		}
+		//error_log("createZHATemperature ".$device[origID]);
+		$eqLogic = new eqLogic();
+		$eqLogic->setEqType_name('RaspBEE');
+		$eqLogic->setName($device[name]." ".$device[origid]);
+		$eqLogic->setIsEnable(1);
+		$eqLogic->setIsVisible(1);
+		$_logical_id = null;
+		$eqLogic->setLogicalId($_logical_id);
+		// on fabrique un sensor ZHASwitch
+		$eqLogic->setConfiguration('origid', $device[origid]);
+		//$eqLogic->setConfiguration('etag', "e6797100e644d32ac0019ea2a8336bcd");
+		$eqLogic->setConfiguration('manufacturername', $device[manufacturername]);
+		//$eqLogic->setConfiguration('mode', $device[mode]);
+		$eqLogic->setConfiguration('modelid', $device[modelid]);
+		$eqLogic->setConfiguration('reachable', $device[config][reachable]);
+		$eqLogic->setConfiguration('swversion', $device[swversion]);
+		$eqLogic->setConfiguration('type', $device[type]);
+		$eqLogic->setConfiguration('uniqueid', $device[uniqueid]);
+
+		$eqLogic->batteryStatus($device[config][battery]);
+		$eqLogic->save();
+
+		$model = json_decode($configFile, true);
+		$commands = $model['commands'];
+		foreach ($model['commands'] as $command) {
+			$RaspBEECmd = new RaspBEECmd();
+			$RaspBEECmd->setName($command[name]);
+			$RaspBEECmd->setLogicalId($command[name]);
+			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
+			$RaspBEECmd->setValue($device[state][buttonevent]);
+			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
+			$RaspBEECmd->setType($command[type]);
+			$RaspBEECmd->setSubType($command[subtype]);
+			$RaspBEECmd->save();						
+		}
+		return true;
+		/*
 		error_log("createZHASwitch ".$device[origID]);
 		$eqLogic = new eqLogic();
 		$eqLogic->setEqType_name('RaspBEE');
@@ -286,11 +190,18 @@ class eqLogicOperate extends eqLogic {
 		return true;	
 		
 		//$eqLogic->save();
-		//return;
+		//return;*/
 	}
 	
 	public function createZHATemperature($device){
-		error_log("createZHATemperature ".$device[origID]);
+		if (!is_file(dirname(__FILE__) . '/../config/devices/ZHATemperature.json')){
+		return false;
+		};
+		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/ZHATemperature.json');
+		if (!is_json($configFile)) {
+			return false;
+		}
+		//error_log("createZHATemperature ".$device[origID]);
 		$eqLogic = new eqLogic();
 		$eqLogic->setEqType_name('RaspBEE');
 		$eqLogic->setName($device[name]." ".$device[origid]);
@@ -311,34 +222,32 @@ class eqLogicOperate extends eqLogic {
 
 		$eqLogic->batteryStatus($device[config][battery]);
 		$eqLogic->save();
-		if (!is_object($RaspBEECmd)) {
-			$RaspBEECmd = new RaspBEECmd();
-		}
-		
-		$RaspBEECmd->setName('temperature');
-		$RaspBEECmd->setLogicalId('temperature');
-		$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-		$RaspBEECmd->setValue($device[state][temperature]/100);
-		$dateInLocal = new DateTime($device[state][lastupdated],new DateTimeZone('UTC'));
-		// il faut connaitre le timezone local
-		$dateInLocal->setTimeZone(new DateTimeZone('Europe/Paris'));
-		//$RaspBEECmd->setValueDate($dateInLocal->format("Y-m-d H:i:s"));				
-		//error_log("setValueDate ".$dateInLocal->format("Y-m-d H:i:s"));
 
-		//$RaspBEECmd->setConfiguration('day', '-1');
-		//$RaspBEECmd->setConfiguration('data', 'temp');
-		$RaspBEECmd->setUnite('°C');
-		$RaspBEECmd->setType('info');
-		$RaspBEECmd->setSubType('numeric');
-		$RaspBEECmd->save();
+		$model = json_decode($configFile, true);
+		$commands = $model['commands'];
+		foreach ($model['commands'] as $command) {
+			$RaspBEECmd = new RaspBEECmd();
+			$RaspBEECmd->setName($command[name]);
+			$RaspBEECmd->setLogicalId($command[name]);
+			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
+			$RaspBEECmd->setValue($device[state][temperature]/100);
+			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
+			$RaspBEECmd->setType($command[type]);
+			$RaspBEECmd->setSubType($command[subtype]);
+			$RaspBEECmd->save();						
+		}
 		return true;	
-		
-		//$eqLogic->save();
-		//return;
 	}
 	
-	public function createZHAHumidity($device){
-		error_log("createZHAHumidity ".$device[origID]);
+	public function createZHAHumidity($device){		
+		if (!is_file(dirname(__FILE__) . '/../config/devices/ZHAHumidity.json')){
+		return false;
+		};
+		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/ZHAHumidity.json');
+		if (!is_json($configFile)) {
+			return false;
+		}
+		//error_log("createZHATemperature ".$device[origID]);
 		$eqLogic = new eqLogic();
 		$eqLogic->setEqType_name('RaspBEE');
 		$eqLogic->setName($device[name]." ".$device[origid]);
@@ -346,11 +255,9 @@ class eqLogicOperate extends eqLogic {
 		$eqLogic->setIsVisible(1);
 		$_logical_id = null;
 		$eqLogic->setLogicalId($_logical_id);
-		// on fabrique un sensor ZHATemperature
+		// on fabrique un sensor ZHAHumidity
 		$eqLogic->setConfiguration('origid', $device[origid]);
-		//$eqLogic->setConfiguration('etag', "e6797100e644d32ac0019ea2a8336bcd");
 		$eqLogic->setConfiguration('manufacturername', $device[manufacturername]);
-		//$eqLogic->setConfiguration('mode', $device[mode]);
 		$eqLogic->setConfiguration('modelid', $device[modelid]);
 		$eqLogic->setConfiguration('reachable', $device[config][reachable]);
 		$eqLogic->setConfiguration('swversion', $device[swversion]);
@@ -359,33 +266,71 @@ class eqLogicOperate extends eqLogic {
 
 		$eqLogic->batteryStatus($device[config][battery]);
 		$eqLogic->save();
-		if (!is_object($RaspBEECmd)) {
+		
+		
+		
+		$model = json_decode($configFile, true);
+		$commands = $model['commands'];
+		foreach ($model['commands'] as $command) {
 			$RaspBEECmd = new RaspBEECmd();
+			$RaspBEECmd->setName($command[name]);
+			$RaspBEECmd->setLogicalId($command[name]);
+			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
+			$RaspBEECmd->setValue($device[state][humidity]/100);
+			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
+			$RaspBEECmd->setType($command[type]);
+			$RaspBEECmd->setSubType($command[subtype]);
+			$RaspBEECmd->save();						
 		}
-		
-		$RaspBEECmd->setName('humidity');
-		$RaspBEECmd->setLogicalId('humidity');
-		$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-		$RaspBEECmd->setValue($device[state][humidity]/100);
-		$dateInLocal = new DateTime($device[state][lastupdated],new DateTimeZone('UTC'));
-		// il faut connaitre le timezone local
-		$dateInLocal->setTimeZone(new DateTimeZone('Europe/Paris'));
-		//$RaspBEECmd->setValueDate($dateInLocal->format("Y-m-d H:i:s"));				
-		//error_log("setValueDate ".$dateInLocal->format("Y-m-d H:i:s"));
-
-		//$RaspBEECmd->setConfiguration('day', '-1');
-		//$RaspBEECmd->setConfiguration('data', 'temp');
-		$RaspBEECmd->setUnite('%');
-		$RaspBEECmd->setType('info');
-		$RaspBEECmd->setSubType('numeric');
-		$RaspBEECmd->save();
 		return true;	
-		
-		//$eqLogic->save();
-		//return;
 	}
 	
-	public function createZHAPressure($device){
+	public function createZHAPressure($device){		
+		if (!is_file(dirname(__FILE__) . '/../config/devices/ZHAPressure.json')){
+		return false;
+		};
+		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/ZHAPressure.json');
+		if (!is_json($configFile)) {
+			return false;
+		}
+		//error_log("createZHATemperature ".$device[origID]);
+		$eqLogic = new eqLogic();
+		$eqLogic->setEqType_name('RaspBEE');
+		$eqLogic->setName($device[name]." ".$device[origid]);
+		$eqLogic->setIsEnable(1);
+		$eqLogic->setIsVisible(1);
+		$_logical_id = null;
+		$eqLogic->setLogicalId($_logical_id);
+		// on fabrique un sensor ZHAHumidity
+		$eqLogic->setConfiguration('origid', $device[origid]);
+		$eqLogic->setConfiguration('manufacturername', $device[manufacturername]);
+		$eqLogic->setConfiguration('modelid', $device[modelid]);
+		$eqLogic->setConfiguration('reachable', $device[config][reachable]);
+		$eqLogic->setConfiguration('swversion', $device[swversion]);
+		$eqLogic->setConfiguration('type', $device[type]);
+		$eqLogic->setConfiguration('uniqueid', $device[uniqueid]);
+
+		$eqLogic->batteryStatus($device[config][battery]);
+		$eqLogic->save();
+		
+		
+		
+		$model = json_decode($configFile, true);
+		$commands = $model['commands'];
+		foreach ($model['commands'] as $command) {
+			$RaspBEECmd = new RaspBEECmd();
+			$RaspBEECmd->setName($command[name]);
+			$RaspBEECmd->setLogicalId($command[name]);
+			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
+			$RaspBEECmd->setValue($device[state][humidity]/100);
+			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
+			$RaspBEECmd->setType($command[type]);
+			$RaspBEECmd->setSubType($command[subtype]);
+			$RaspBEECmd->save();						
+		}
+		return true;	
+		
+		/*
 		error_log("createZHAPressure ".$device[origID]);
 		$eqLogic = new eqLogic();
 		$eqLogic->setEqType_name('RaspBEE');
@@ -430,7 +375,7 @@ class eqLogicOperate extends eqLogic {
 		return true;	
 		
 		//$eqLogic->save();
-		//return;
+		//return;*/
 	}
 }
 

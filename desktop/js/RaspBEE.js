@@ -69,7 +69,7 @@ success: function (data) {
 
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 /*
- * Fonction pour l'ajout de commande, appellé automatiquement par plugin.deconz
+ * Fonction de listage des commandes
  */
 function addCmdToTable(_cmd) {
     if (!isset(_cmd)) {
@@ -94,6 +94,7 @@ function addCmdToTable(_cmd) {
         tr += '<a class="btn btn-default btn-xs cmdAction expertModeVisible" data-action="configure"><i class="fa fa-cogs"></i></a> ';
         tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fa fa-rss"></i> {{Tester}}</a>';
     }
+	//tr +=_cmd.configuration.fieldname;
     tr += '</td>';
     $('#table_cmd tbody').append(tr);
     $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');

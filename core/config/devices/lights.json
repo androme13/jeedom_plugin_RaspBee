@@ -1,0 +1,255 @@
+{
+		"name": "Eclairage",
+		"configuration": {
+			"colormode": "",
+			"hascolor": false,
+			"manufacturername": "",
+			"modelid": "",
+			"origID": 0,		
+			"swversion": "",
+			"type": "",
+			"uniqueid": ""
+		},
+		"commands": [
+			{
+				"name": "Alerte on", 
+				"type": "action", 
+				"isVisible": 1, 
+				"isHistorized": 0, 
+				"configuration": {
+					"fieldname" : "alert"
+				}, 
+				"subtype": "other", 
+				"display": {
+					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
+					"generic_type": "FLAP_UP"
+				}
+			},
+			{
+				"name": "Alerte off", 
+				"type": "action", 
+				"isVisible": true, 
+				"isHistorized": false, 
+				"configuration": {
+					"fieldname" : "alert"
+				}, 
+				"subtype": "other", 
+				"display": {
+					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
+					"generic_type": "FLAP_UP"
+				}
+			},
+			{
+				"name": "Etat alerte", 
+				"type": "info", 
+				"isVisible": true, 
+				"isHistorized": false, 
+				"configuration" :{
+					"fieldname" : "alert"
+				}, 
+				"subtype": "other", 
+				"display": {
+					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
+					"generic_type": "FLAP_UP"
+				}
+			},	
+			{
+				"name": "On", 
+				"type": "action", 
+				"isVisible": true, 
+				"isHistorized": false, 
+				"configuration": {
+					"fieldname" : "on"
+				}, 
+				"subtype": "other", 
+				"display": {
+					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
+					"generic_type": "FLAP_UP"
+				}
+			},
+			{
+				"name": "Off", 
+				"type": "action", 
+				"isVisible": true, 
+				"isHistorized": false, 
+				"configuration": {
+				"fieldname" : "on"
+				}, 
+				"subtype": "other", 
+				"display": {
+					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
+					"generic_type": "FLAP_UP"
+				}
+			},
+			{
+				"name": "Etat On", 
+				"type": "info", 
+				"isVisible": true, 
+				"isHistorized": false, 
+				"configuration" :{
+					"fieldname" : "on"
+				}, 
+				"subtype": "binary", 
+				"display": {
+					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
+					"generic_type": "FLAP_UP"
+				}
+			},
+			{
+				"name": "Luminosité", 
+				"type": "action", 
+				"isVisible": true, 
+				"isHistorized": false, 
+				"configuration": {
+				"fieldname" : "bri",
+				"minValue": 0, 
+				"maxValue": 255
+				}, 
+				"subtype": "slider", 
+				"display": {
+					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
+					"generic_type": "FLAP_UP"
+				}
+			},
+			{
+				"name": "Etat luminosité", 
+				"type": "info", 
+				"isVisible": true, 
+				"isHistorized": false, 
+				"configuration" :{
+					"fieldname" : "bri",
+					"minValue": 0, 
+					"maxValue": 255
+				}, 
+				"subtype": "numeric", 
+				"display": {
+					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
+					"generic_type": "FLAP_UP"
+				}
+			},
+			{
+				"name": "Température Blanc", 
+				"type": "action", 
+				"isVisible": true, 
+				"isHistorized": false, 
+				"configuration": {
+				"fieldname" : "bri",
+					"minValue": 153, 
+					"maxValue": 500	
+				}, 
+				"subtype": "slider", 
+				"display": {
+					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
+					"generic_type": "FLAP_UP"
+				}
+			},
+			{
+				"name": "Etat Temperature Blanc", 
+				"type": "info", 
+				"isVisible": true, 
+				"isHistorized": false, 
+				"configuration" :{
+					"fieldname" : "tc",
+					"minValue": 153, 
+					"maxValue": 500					
+				}, 
+				"subtype": "numeric", 
+				"display": {
+					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
+					"generic_type": "FLAP_UP"
+				}
+			},
+			{
+				"name": "Hue", 
+				"type": "action", 
+				"isVisible": true, 
+				"isHistorized": false, 
+				"configuration": {
+				"fieldname" : "hue",
+					"minValue": 0, 
+					"maxValue": 65535	
+				}, 
+				"subtype": "slider", 
+				"display": {
+					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
+					"generic_type": "FLAP_UP"
+				}
+			},
+			{
+				"name": "Etat Hue", 
+				"type": "info", 
+				"isVisible": true, 
+				"isHistorized": false, 
+				"configuration" :{
+					"fieldname" : "hue",
+					"minValue": 0, 
+					"maxValue": 65535					
+				}, 
+				"subtype": "numeric", 
+				"display": {
+					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
+					"generic_type": "FLAP_UP"
+				}
+			},
+			{
+				"name": "Saturation", 
+				"type": "action", 
+				"isVisible": true, 
+				"isHistorized": false, 
+				"configuration": {
+				"fieldname" : "sat",
+					"minValue": 0, 
+					"maxValue": 255	
+				}, 
+				"subtype": "slider", 
+				"display": {
+					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
+					"generic_type": "FLAP_UP"
+				}
+			},
+			{
+				"name": "Etat saturation", 
+				"type": "info", 
+				"isVisible": true, 
+				"isHistorized": false, 
+				"configuration" :{
+					"fieldname" : "sat",
+					"minValue": 0, 
+					"maxValue": 255					
+				}, 
+				"subtype": "numeric", 
+				"display": {
+					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
+					"generic_type": "FLAP_UP"
+				}
+			},
+			{
+				"name": "Couleur", 
+				"type": "action", 
+				"isVisible": true, 
+				"isHistorized": false, 
+				"configuration": {
+				"fieldname" : "color"
+				}, 
+				"subtype": "color", 
+				"display": {
+					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
+					"generic_type": "FLAP_UP"
+				}
+			},
+			{
+				"name": "Etat couleur", 
+				"type": "info", 
+				"isVisible": true, 
+				"isHistorized": false, 
+				"configuration" :{
+					"fieldname" : "sat"				
+				}, 
+				"subtype": "color", 
+				"display": {
+					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
+					"generic_type": "FLAP_UP"
+				}
+			}					
+		]
+}

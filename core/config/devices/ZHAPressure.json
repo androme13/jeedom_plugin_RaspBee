@@ -1,5 +1,5 @@
 {
-    "name": "Commande",
+    "name": "Pression",
     "configuration": {
 		"swversion": "",
 		"type": "",
@@ -11,16 +11,16 @@
     },
     "commands": [
         {
-            "name": "Etat bouton", 
+            "name": "Pression", 
             "type": "info", 
             "isVisible": 1, 
-            "isHistorized": 0,		
+            "isHistorized": 0,			
             "configuration": {
-			    "fieldname" : "buttonevent"
+			    "fieldname" : "pressure"
             }, 
             "subtype": "numeric", 
             "display": {
-                "generic_type": "TEMPERATURE"
+                "generic_type": "PRESSURE"
             }
         }		
     ]
