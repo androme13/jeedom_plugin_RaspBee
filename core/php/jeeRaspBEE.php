@@ -42,8 +42,7 @@ if ($results->type == "sensors"){
 				$equipement->batteryStatus($results->info->battery);
 			}			
 		}
-	}
-	else
+	}else
 	if (is_object($results->action)){
 		foreach (eqLogic::byType('RaspBEE') as $equipement) {
 			if ($equipement->getConfiguration('origid')==$results->id)			
@@ -59,7 +58,23 @@ if ($results->type == "sensors"){
 			
 		}
 	}
-}
+}else
+	if($results->type == "lights"){
+		
+		foreach (eqLogic::byType('RaspBEE') as $equipement) {
+			if ($equipement->getConfiguration('origid')==$results->id)			
+			foreach ($equipement->getCmd('info') as $cmd){
+				foreach ($results->action as $actioncmd => $key){
+					if ($cmd->getConfiguration('fieldname')==$actioncmd){
+						$cmd->setValue($key);
+						$cmd->event($key);
+						$cmd->save();					
+					}
+				}
+			}
+			
+		}
+	}
 else
 echo json_encode($results->params);
 

@@ -15,84 +15,88 @@
 				"name": "Alerte on", 
 				"type": "action", 
 				"isVisible": 1, 
-				"isHistorized": 0, 
+				"isHistorized": 0,
+				"logicalId": "alert_on",				
 				"configuration": {
 					"fieldname" : "alert"
-				}, 
+				},
+				"value" : "Etat alerte",								
 				"subtype": "other", 
 				"display": {
-					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
-					"generic_type": "FLAP_UP"
+					"generic_type": "LIGHT_MODE"
 				}
 			},
 			{
 				"name": "Alerte off", 
 				"type": "action", 
 				"isVisible": true, 
-				"isHistorized": false, 
+				"isHistorized": false,
+				"logicalId": "alert_off",				
 				"configuration": {
 					"fieldname" : "alert"
-				}, 
+				},
+				"value" : "Etat alerte",
 				"subtype": "other", 
 				"display": {
-					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
-					"generic_type": "FLAP_UP"
+					"generic_type": "LIGHT_MODE"
 				}
 			},
 			{
 				"name": "Etat alerte", 
 				"type": "info", 
 				"isVisible": true, 
-				"isHistorized": false, 
+				"isHistorized": false,
+				"logicalId": "alert_state",				
 				"configuration" :{
 					"fieldname" : "alert"
 				}, 
 				"subtype": "other", 
 				"display": {
-					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
-					"generic_type": "FLAP_UP"
+					"generic_type": "DONT"
 				}
 			},	
 			{
 				"name": "On", 
 				"type": "action", 
 				"isVisible": true, 
-				"isHistorized": false, 
+				"isHistorized": false,
+				"logicalId": "on",				
 				"configuration": {
 					"fieldname" : "on"
-				}, 
+				},
+				"value" : "Etat On",				
 				"subtype": "other", 
 				"display": {
-					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
-					"generic_type": "FLAP_UP"
+					"generic_type": "LIGHT_ON"
 				}
 			},
 			{
 				"name": "Off", 
 				"type": "action", 
 				"isVisible": true, 
-				"isHistorized": false, 
+				"isHistorized": false,
+				"logicalId": "off",				
 				"configuration": {
 				"fieldname" : "on"
-				}, 
+				},
+				"value" : "Etat On",				
 				"subtype": "other", 
 				"display": {
-					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
-					"generic_type": "FLAP_UP"
+					"generic_type": "LIGHT_OFF"
 				}
 			},
 			{
 				"name": "Etat On", 
 				"type": "info", 
 				"isVisible": true, 
-				"isHistorized": false, 
+				"isHistorized": false,
+				"logicalId": "on_state",				
 				"configuration" :{
 					"fieldname" : "on"
 				}, 
 				"subtype": "binary", 
 				"display": {
-					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
-					"generic_type": "FLAP_UP"
+					"generic_type": "LIGHT_STATE"
 				}
 			},
 			{
@@ -101,30 +105,35 @@
 				"isVisible": true, 
 				"isHistorized": false, 
 				"configuration": {
-				"fieldname" : "bri",
-				"minValue": 0, 
-				"maxValue": 255
-				}, 
+					"fieldname" : "bri",
+					"minValue": 0, 
+					"maxValue": 255
+				},
+				"logicalId": "luminosity",
+				"value" : "Etat Luminosité",				
 				"subtype": "slider", 
 				"display": {
-					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
-					"generic_type": "FLAP_UP"
-				}
+					"generic_type": "LIGHT_SLIDER"
+				},
+				"template":{
+                    "dashboard" : "light",
+                    "mobile" : "light"
+                }
 			},
 			{
 				"name": "Etat luminosité", 
 				"type": "info", 
 				"isVisible": true, 
-				"isHistorized": false, 
+				"isHistorized": false,			
 				"configuration" :{
 					"fieldname" : "bri",
 					"minValue": 0, 
 					"maxValue": 255
-				}, 
+				},
+				"logicalId": "luminosity_state",				
 				"subtype": "numeric", 
 				"display": {
-					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
-					"generic_type": "FLAP_UP"
+					"generic_type": "LIGHT_STATE"
 				}
 			},
 			{
@@ -133,14 +142,15 @@
 				"isVisible": true, 
 				"isHistorized": false, 
 				"configuration": {
-				"fieldname" : "bri",
+					"fieldname" : "ct",
 					"minValue": 153, 
 					"maxValue": 500	
-				}, 
+				},
+				"logicalId": "tc",
+				"value" : "Etat Temperature Blanc",				
 				"subtype": "slider", 
 				"display": {
-					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
-					"generic_type": "FLAP_UP"
+					"generic_type": "DONT"
 				}
 			},
 			{
@@ -149,14 +159,14 @@
 				"isVisible": true, 
 				"isHistorized": false, 
 				"configuration" :{
-					"fieldname" : "tc",
+					"fieldname" : "ct",
 					"minValue": 153, 
 					"maxValue": 500					
-				}, 
+				},
+				"logicalId": "tc_state",				
 				"subtype": "numeric", 
 				"display": {
-					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
-					"generic_type": "FLAP_UP"
+					"generic_type": "DONT"
 				}
 			},
 			{
@@ -168,11 +178,12 @@
 				"fieldname" : "hue",
 					"minValue": 0, 
 					"maxValue": 65535	
-				}, 
+				},
+				"logicalId": "hue",
+				"value" : "Etat Hue",					
 				"subtype": "slider", 
 				"display": {
-					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
-					"generic_type": "FLAP_UP"
+					"generic_type": "DONT"
 				}
 			},
 			{
@@ -184,11 +195,11 @@
 					"fieldname" : "hue",
 					"minValue": 0, 
 					"maxValue": 65535					
-				}, 
+				},
+				"logicalId": "hue_state",				
 				"subtype": "numeric", 
 				"display": {
-					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
-					"generic_type": "FLAP_UP"
+					"generic_type": "DONT"
 				}
 			},
 			{
@@ -200,11 +211,12 @@
 				"fieldname" : "sat",
 					"minValue": 0, 
 					"maxValue": 255	
-				}, 
+				},
+				"logicalId": "saturation",
+				"value" : "Etat saturation",				
 				"subtype": "slider", 
 				"display": {
-					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
-					"generic_type": "FLAP_UP"
+					"generic_type": "DONT"
 				}
 			},
 			{
@@ -216,11 +228,11 @@
 					"fieldname" : "sat",
 					"minValue": 0, 
 					"maxValue": 255					
-				}, 
+				},
+				"logicalId": "saturation_state",				
 				"subtype": "numeric", 
 				"display": {
-					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
-					"generic_type": "FLAP_UP"
+					"generic_type": "DONT"
 				}
 			},
 			{
@@ -230,11 +242,12 @@
 				"isHistorized": false, 
 				"configuration": {
 				"fieldname" : "color"
-				}, 
+				},
+				"logicalId": "color",
+				"value" : "Etat couleur",								
 				"subtype": "color", 
 				"display": {
-					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
-					"generic_type": "FLAP_UP"
+					"generic_type": "LIGHT_SET_COLOR"
 				}
 			},
 			{
@@ -244,11 +257,11 @@
 				"isHistorized": false, 
 				"configuration" :{
 					"fieldname" : "sat"				
-				}, 
-				"subtype": "color", 
+				},
+				"logicalId": "color_state",				
+				"subtype": "string", 
 				"display": {
-					"icon": "<i class=\"fa fa-arrow-up\"></i>", 
-					"generic_type": "FLAP_UP"
+					"generic_type": "LIGHT_COLOR"
 				}
 			}					
 		]

@@ -3,7 +3,9 @@ websocketclientparser = module.exports = {
 
 
 	process : function (jsondata) {
-		//console.log("jsondata",jsondata);
+		console.log("--------------------------------");
+		console.log("beginprocess",jsondata);
+		console.log("--------------------------------");
 		//console.log("websocketclientparser process:");
 		// on traite le type (r)
 		switch (jsondata.r){
@@ -21,8 +23,10 @@ websocketclientparser = module.exports = {
 	},
 	
 	sensorsprocess : function (sensorsobj){
+		console.log("--------------------------------");
 		console.log("websocketclientparser sensorsprocess:");
-		console.log (sensorsobj);
+		console.log ("raw sensor object:", sensorsobj);
+		console.log("--------------------------------");
 		var call = new Object();
 		// on traite les events (t)
 		switch (sensorsobj.t){
@@ -54,7 +58,8 @@ websocketclientparser = module.exports = {
 	},
 	
 	lightsprocess : function (lightobj){
-		console.log("raw: ",lightobj);
+		console.log("websocketclientparserlightsprocess:");
+		console.log("raw lightobject: ",lightobj);
 		//console.log("websocketclientparser sensorsprocess:");
 		var call = new Object();
 		// on traite les events (t)
@@ -69,7 +74,7 @@ websocketclientparser = module.exports = {
 			}else
 			{
 				//console.log("event inconnu: ",lightobj);
-				return "event inconnu: "+lightobj;
+				return "event inconnu: "+JSON.stringify(lightobj);
 			}
 			break;
 			default :

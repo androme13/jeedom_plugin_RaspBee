@@ -16,7 +16,7 @@ data: $DATA,
 headers: {}
 		},function(err, res, body){
 			try{
-				console.log(body);
+				console.log("ajax client jeedom return body:",body);
 				//console.log(res);
 				//console.log(res.statusCode);
 				//console.log(res.statusMessage);

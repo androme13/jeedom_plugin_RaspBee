@@ -72,6 +72,10 @@ class eqLogicOperate extends eqLogic {
 		$eqLogic->setLogicalId($_logical_id);
 		// on fabrique un LIGHT
 		
+		/*foreach ($device[] as $actioncmd => $key){
+			
+		}*/
+		
 		$eqLogic->setConfiguration('origid', $device[origid]);
 		$eqLogic->setConfiguration('hascolor', $device[hascolor]);
 		$eqLogic->setConfiguration('manufacturername', $device[manufacturername]);
@@ -89,9 +93,9 @@ class eqLogicOperate extends eqLogic {
 		foreach ($model['commands'] as $command) {
 			$RaspBEECmd = new RaspBEECmd();
 			$RaspBEECmd->setName($command[name]);
-			$RaspBEECmd->setLogicalId($command[name]);
+			$RaspBEECmd->setLogicalId($command[logicalId]);
 			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-			$RaspBEECmd->setValue($device[state][bri]);
+			$RaspBEECmd->setValue($command[value]);
 			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
 			$RaspBEECmd->setType($command[type]);
 			$RaspBEECmd->setSubType($command[subtype]);
@@ -139,58 +143,13 @@ class eqLogicOperate extends eqLogic {
 			$RaspBEECmd->setName($command[name]);
 			$RaspBEECmd->setLogicalId($command[name]);
 			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-			$RaspBEECmd->setValue($device[state][buttonevent]);
+			//$RaspBEECmd->setValue($device[state][buttonevent]);
 			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
 			$RaspBEECmd->setType($command[type]);
 			$RaspBEECmd->setSubType($command[subtype]);
 			$RaspBEECmd->save();						
 		}
 		return true;
-		/*
-		error_log("createZHASwitch ".$device[origID]);
-		$eqLogic = new eqLogic();
-		$eqLogic->setEqType_name('RaspBEE');
-		$eqLogic->setName($device[name]." ".$device[origid]);
-		$eqLogic->setIsEnable(1);
-		$_logical_id = null;
-		$eqLogic->setLogicalId($_logical_id);
-		// on fabrique un sensor ZHASwitch (avec bouton)
-		$eqLogic->setConfiguration('origid', $device[origid]);
-		//$eqLogic->setConfiguration('etag', "e6797100e644d32ac0019ea2a8336bcd");
-		$eqLogic->setConfiguration('manufacturername', $device[manufacturername]);
-		$eqLogic->setConfiguration('reachable', $device[config][reachable]);
-		$eqLogic->setConfiguration('modelid', $device[modelid]);
-		$eqLogic->setConfiguration('reachable', $device[reachable]);
-		$eqLogic->setConfiguration('swversion', $device[swversion]);
-		$eqLogic->setConfiguration('type', $device[type]);
-		$eqLogic->setConfiguration('uniqueid', $device[uniqueid]);
-		$eqLogic->setIsVisible(1);
-		$eqLogic->batteryStatus($device[config][battery]);
-		$eqLogic->save();
-		if (!is_object($RaspBEECmd)) {
-			$RaspBEECmd = new RaspBEECmd();
-		}
-		
-		$RaspBEECmd->setName('buttonevent');
-		$RaspBEECmd->setLogicalId('buttonevent');
-		$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-		$RaspBEECmd->setValue($device[state][buttonevent]);
-		$dateInLocal = new DateTime($device[state][lastupdated],new DateTimeZone('UTC'));
-		// il faut connaitre le timezone local
-		$dateInLocal->setTimeZone(new DateTimeZone('Europe/Paris'));
-		//$RaspBEECmd->setValueDate($dateInLocal->format("Y-m-d H:i:s"));				
-		//error_log("setValueDate ".$dateInLocal->format("Y-m-d H:i:s"));
-
-		//$RaspBEECmd->setConfiguration('day', '-1');
-		//$RaspBEECmd->setConfiguration('data', 'temp');
-		//$RaspBEECmd->setUnite('°C');
-		$RaspBEECmd->setType('info');
-		$RaspBEECmd->setSubType('numeric');
-		$RaspBEECmd->save();
-		return true;	
-		
-		//$eqLogic->save();
-		//return;*/
 	}
 	
 	public function createZHATemperature($device){
@@ -230,7 +189,7 @@ class eqLogicOperate extends eqLogic {
 			$RaspBEECmd->setName($command[name]);
 			$RaspBEECmd->setLogicalId($command[name]);
 			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-			$RaspBEECmd->setValue($device[state][temperature]/100);
+			//$RaspBEECmd->setValue($device[state][temperature]/100);
 			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
 			$RaspBEECmd->setType($command[type]);
 			$RaspBEECmd->setSubType($command[subtype]);
@@ -276,7 +235,7 @@ class eqLogicOperate extends eqLogic {
 			$RaspBEECmd->setName($command[name]);
 			$RaspBEECmd->setLogicalId($command[name]);
 			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-			$RaspBEECmd->setValue($device[state][humidity]/100);
+			//$RaspBEECmd->setValue($device[state][humidity]/100);
 			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
 			$RaspBEECmd->setType($command[type]);
 			$RaspBEECmd->setSubType($command[subtype]);
@@ -322,60 +281,13 @@ class eqLogicOperate extends eqLogic {
 			$RaspBEECmd->setName($command[name]);
 			$RaspBEECmd->setLogicalId($command[name]);
 			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-			$RaspBEECmd->setValue($device[state][humidity]/100);
+			//$RaspBEECmd->setValue($device[state][humidity]/100);
 			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
 			$RaspBEECmd->setType($command[type]);
 			$RaspBEECmd->setSubType($command[subtype]);
 			$RaspBEECmd->save();						
 		}
 		return true;	
-		
-		/*
-		error_log("createZHAPressure ".$device[origID]);
-		$eqLogic = new eqLogic();
-		$eqLogic->setEqType_name('RaspBEE');
-		$eqLogic->setName($device[name]." ".$device[origid]);
-		$eqLogic->setIsEnable(1);
-		$eqLogic->setIsVisible(1);
-		$_logical_id = null;
-		$eqLogic->setLogicalId($_logical_id);
-		// on fabrique un sensor ZHATemperature
-		$eqLogic->setConfiguration('origid', $device[origid]);
-		//$eqLogic->setConfiguration('etag', "e6797100e644d32ac0019ea2a8336bcd");
-		$eqLogic->setConfiguration('manufacturername', $device[manufacturername]);
-		//$eqLogic->setConfiguration('mode', $device[mode]);
-		$eqLogic->setConfiguration('modelid', $device[modelid]);
-		$eqLogic->setConfiguration('reachable', $device[config][reachable]);
-		
-		$eqLogic->setConfiguration('swversion', $device[swversion]);
-		$eqLogic->setConfiguration('type', $device[type]);
-		$eqLogic->setConfiguration('uniqueid', $device[uniqueid]);
-
-		$eqLogic->batteryStatus($device[config][battery]);
-		$eqLogic->save();
-		if (!is_object($RaspBEECmd)) {
-			$RaspBEECmd = new RaspBEECmd();
-		}
-		
-		$RaspBEECmd->setName('pressure');
-		$RaspBEECmd->setLogicalId('pressure');
-		$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-		$RaspBEECmd->setValue($device[state][pressure]);
-		$dateInLocal = new DateTime($device[state][lastupdated],new DateTimeZone('UTC'));
-		// il faut connaitre le timezone local
-		$dateInLocal->setTimeZone(new DateTimeZone('Europe/Paris'));
-		//$RaspBEECmd->setValueDate($dateInLocal->format("Y-m-d H:i:s"));				
-		//error_log("setValueDate ".$dateInLocal->format("Y-m-d H:i:s"));
-
-		//$RaspBEECmd->setConfiguration('day', '-1');
-		//$RaspBEECmd->setConfiguration('data', 'temp');
-		$RaspBEECmd->setType('info');
-		$RaspBEECmd->setSubType('numeric');
-		$RaspBEECmd->save();
-		return true;	
-		
-		//$eqLogic->save();
-		//return;*/
 	}
 }
 
