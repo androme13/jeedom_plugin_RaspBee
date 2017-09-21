@@ -20,7 +20,7 @@ class eqLogicOperate extends eqLogic {
 	
 	public function createDevice($device,$syncType = 0){
 		foreach (eqlogic::byType('RaspBEE') as $eqLogic){
-		if ($eqLogic->getConfiguration('origid')==$device[origid] && ($eqLogic->getConfiguration('type')==$device[type])) return false;		
+		if ($eqLogic->getConfiguration('origid')==$device[origid] && $eqLogic->getConfiguration('type')==$device[type]) return false;		
 		}
 		switch ($device[type]){
 		case "ZHASwitch" :{
@@ -71,15 +71,9 @@ class eqLogicOperate extends eqLogic {
 		$_logical_id = null;
 		$eqLogic->setLogicalId($_logical_id);
 		// on fabrique un LIGHT
-		
-		/*foreach ($device[] as $actioncmd => $key){
-			
-		}*/
-		
 		$eqLogic->setConfiguration('origid', $device[origid]);
 		$eqLogic->setConfiguration('hascolor', $device[hascolor]);
 		$eqLogic->setConfiguration('manufacturername', $device[manufacturername]);
-
 		$eqLogic->setConfiguration('reachable', $device[state][reachable]);
 		$eqLogic->setConfiguration('modelid', $device[modelid]);
 		$eqLogic->setConfiguration('swversion', $device[swversion]);
@@ -97,6 +91,8 @@ class eqLogicOperate extends eqLogic {
 			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
 			$RaspBEECmd->setValue($command[value]);
 			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
+			$RaspBEECmd->setConfiguration("minValue",$command[configuration][minValue]);
+			$RaspBEECmd->setConfiguration("maxValue",$command[configuration][maxValue]);
 			$RaspBEECmd->setType($command[type]);
 			$RaspBEECmd->setSubType($command[subtype]);
 			$RaspBEECmd->save();						
@@ -143,7 +139,6 @@ class eqLogicOperate extends eqLogic {
 			$RaspBEECmd->setName($command[name]);
 			$RaspBEECmd->setLogicalId($command[name]);
 			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-			//$RaspBEECmd->setValue($device[state][buttonevent]);
 			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
 			$RaspBEECmd->setType($command[type]);
 			$RaspBEECmd->setSubType($command[subtype]);
@@ -189,7 +184,6 @@ class eqLogicOperate extends eqLogic {
 			$RaspBEECmd->setName($command[name]);
 			$RaspBEECmd->setLogicalId($command[name]);
 			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-			//$RaspBEECmd->setValue($device[state][temperature]/100);
 			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
 			$RaspBEECmd->setType($command[type]);
 			$RaspBEECmd->setSubType($command[subtype]);
@@ -235,7 +229,6 @@ class eqLogicOperate extends eqLogic {
 			$RaspBEECmd->setName($command[name]);
 			$RaspBEECmd->setLogicalId($command[name]);
 			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-			//$RaspBEECmd->setValue($device[state][humidity]/100);
 			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
 			$RaspBEECmd->setType($command[type]);
 			$RaspBEECmd->setSubType($command[subtype]);
@@ -281,7 +274,6 @@ class eqLogicOperate extends eqLogic {
 			$RaspBEECmd->setName($command[name]);
 			$RaspBEECmd->setLogicalId($command[name]);
 			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-			//$RaspBEECmd->setValue($device[state][humidity]/100);
 			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
 			$RaspBEECmd->setType($command[type]);
 			$RaspBEECmd->setSubType($command[subtype]);

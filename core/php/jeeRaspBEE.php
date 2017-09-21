@@ -46,12 +46,12 @@ if ($results->type == "sensors"){
 	if (is_object($results->action)){
 		foreach (eqLogic::byType('RaspBEE') as $equipement) {
 			if ($equipement->getConfiguration('origid')==$results->id)			
-			foreach ($equipement->getCmd('info') as $cmd){
+			foreach ($equipement->getCmd('action') as $cmd){
 				foreach ($results->action as $actioncmd => $key){
 					if ($cmd->getConfiguration('fieldname')==$actioncmd){
-						$cmd->setValue($key);
-						$cmd->event($key);
-						$cmd->save();					
+						//$cmd->setValue($key);
+						//$cmd->event($key);
+						//$cmd->save();					
 					}
 				}
 			}
@@ -59,16 +59,31 @@ if ($results->type == "sensors"){
 		}
 	}
 }else
-	if($results->type == "lights"){
-		
+	if($results->type == "lights"){		
 		foreach (eqLogic::byType('RaspBEE') as $equipement) {
 			if ($equipement->getConfiguration('origid')==$results->id)			
 			foreach ($equipement->getCmd('info') as $cmd){
 				foreach ($results->action as $actioncmd => $key){
 					if ($cmd->getConfiguration('fieldname')==$actioncmd){
-						$cmd->setValue($key);
-						$cmd->event($key);
-						$cmd->save();					
+						$cmd->setConfiguration('lastCmdValue',$key);
+						$cmd->save();
+						//$cmd->event($key);
+						foreach ($equipement->getCmd('action') as $cmd2){
+										foreach ($results->action as $actioncmd2 => $key2){
+											if ($cmd2->getConfiguration('fieldname')==$actioncmd2){
+												
+												error_log("trouve :",3,"/tmp/prob.txt");
+												error_log($cmd2->getName(),3,"/tmp/prob.txt");
+												error_log($cmd2->getId()."|",3,"/tmp/prob.txt");
+												$cmd2->setConfiguration('lastCmdValue',$key);
+												$cmd2->save();
+												$cmd2->getEqLogic()->refreshWidget();
+					
+											}
+										}
+									}
+
+						
 					}
 				}
 			}

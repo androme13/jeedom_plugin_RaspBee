@@ -292,40 +292,23 @@ class RaspBEECmd extends cmd {
 	*/
 
 	public function execute($_options = array()) {
-		//echo "commande:".$cmd->getValue();
-		//echo "type:".$this->getType();
-		if ($this->getType() != 'action') {
-			//echo "info:".this;
-			//$result = 200;
-			$eqLogic = $this->getEqLogic();
-			$cmd = $eqLogic->getCmd('info', 'Bouton');
-			/*if (is_object($cmd)) {
-				$eqLogic->checkAndUpdateCmd($cmd, 1002);
-			}*/
-		//	$this->setValue(200);
-			//$this->save();
-			return 1002;
-			
-			//echo "typ:".$this->getType();
-			//echo "info:".$valueinfo.$this->getConfiguration('value');
-			//echo "info:".$valueinfo.$this->getValue();
-			//return 
-		}
 		if ($this->getType() == 'action'){
 			
 			$eqLogic = $this->getEqLogic();
-			$cmd=$eqLogic->getCmd('Button');
-			//$config=$this->>getConfiguration(  $_key = '',   $_default = '') 
-			//$value = $eqLogic->getCmd(null, 'Button');
-			//$this->setValue(1002);
-			//$this->save();
-			//$cmd->setValue(1000);
-			echo "type:".$this->getName();
-			echo "id:".$this->getId();
-			echo "gellogicazlid:".$this->getLogicalId();
-			//print_r ($cmd);
-			//echo "action:".$this->getValue();
-			return 200;
+			error_log("execute action",3,"/tmp/prob.txt");
+			error_log(json_encode($_options),3,"/tmp/prob.txt");
+
+			return;
+
+
+		}
+		
+		if ($this->getType() == 'info'){
+			error_log("execute info",3,"/tmp/prob.txt");
+			error_log(json_encode($_options),3,"/tmp/prob.txt");
+
+			return;
+
 
 		}
 
