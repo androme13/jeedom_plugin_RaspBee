@@ -44,7 +44,7 @@
 			{
 				"name": "Etat alerte", 
 				"type": "info", 
-				"isVisible": true, 
+				"isVisible": false, 
 				"isHistorized": false,
 				"logicalId": "alert_state",				
 				"configuration" :{
@@ -88,7 +88,7 @@
 			{
 				"name": "Etat On", 
 				"type": "info", 
-				"isVisible": true, 
+				"isVisible": false, 
 				"isHistorized": false,
 				"logicalId": "on_state",				
 				"configuration" :{
@@ -123,7 +123,7 @@
 			{
 				"name": "Etat luminosité", 
 				"type": "info", 
-				"isVisible": true, 
+				"isVisible": false, 
 				"isHistorized": false,			
 				"configuration" :{
 					"fieldname" : "bri",
@@ -156,7 +156,7 @@
 			{
 				"name": "Etat Temperature Blanc", 
 				"type": "info", 
-				"isVisible": true, 
+				"isVisible": false, 
 				"isHistorized": false, 
 				"configuration" :{
 					"fieldname" : "ct",
@@ -170,7 +170,7 @@
 				}
 			},
 			{
-				"name": "Hue", 
+				"name": "Teinte", 
 				"type": "action", 
 				"isVisible": true, 
 				"isHistorized": false, 
@@ -180,16 +180,16 @@
 					"maxValue": 65535	
 				},
 				"logicalId": "hue",
-				"value" : "Etat Hue",					
+				"value" : "Etat Teinte",					
 				"subtype": "slider", 
 				"display": {
 					"generic_type": "DONT"
 				}
 			},
 			{
-				"name": "Etat Hue", 
+				"name": "Etat Teinte", 
 				"type": "info", 
-				"isVisible": true, 
+				"isVisible": false, 
 				"isHistorized": false, 
 				"configuration" :{
 					"fieldname" : "hue",
@@ -222,7 +222,7 @@
 			{
 				"name": "Etat saturation", 
 				"type": "info", 
-				"isVisible": true, 
+				"isVisible": false, 
 				"isHistorized": false, 
 				"configuration" :{
 					"fieldname" : "sat",
@@ -253,10 +253,10 @@
 			{
 				"name": "Etat couleur", 
 				"type": "info", 
-				"isVisible": true, 
+				"isVisible": false, 
 				"isHistorized": false, 
 				"configuration" :{
-					"fieldname" : "sat"				
+					"fieldname" : "color"				
 				},
 				"logicalId": "color_state",				
 				"subtype": "string", 

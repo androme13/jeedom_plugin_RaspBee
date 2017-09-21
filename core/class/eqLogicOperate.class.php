@@ -1,7 +1,7 @@
 <?php
 /* This file is part of Plugin RaspBEE for jeedom.
 *
-* Plugin openzwave for jeedom is free software: you can redistribute it and/or modify
+* Plugin RaspBEE for jeedom is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
@@ -50,11 +50,6 @@ class eqLogicOperate extends eqLogic {
 		return true;
 	}
 	
-	private function isDeviceExist($device){
-		
-	}
-	
-	
 	public function createLight($device){
 		if (!is_file(dirname(__FILE__) . '/../config/devices/lights.json')){
 		return false;
@@ -93,6 +88,7 @@ class eqLogicOperate extends eqLogic {
 			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
 			$RaspBEECmd->setConfiguration("minValue",$command[configuration][minValue]);
 			$RaspBEECmd->setConfiguration("maxValue",$command[configuration][maxValue]);
+			$RaspBEECmd->setIsVisible($command[isVisible]);
 			$RaspBEECmd->setType($command[type]);
 			$RaspBEECmd->setSubType($command[subtype]);
 			$RaspBEECmd->save();						
@@ -140,6 +136,8 @@ class eqLogicOperate extends eqLogic {
 			$RaspBEECmd->setLogicalId($command[name]);
 			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
 			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
+			$RaspBEECmd->setConfiguration("minValue",$command[configuration][minValue]);
+			$RaspBEECmd->setConfiguration("maxValue",$command[configuration][maxValue]);
 			$RaspBEECmd->setType($command[type]);
 			$RaspBEECmd->setSubType($command[subtype]);
 			$RaspBEECmd->save();						
@@ -185,6 +183,8 @@ class eqLogicOperate extends eqLogic {
 			$RaspBEECmd->setLogicalId($command[name]);
 			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
 			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
+			$RaspBEECmd->setConfiguration("minValue",$command[configuration][minValue]);
+			$RaspBEECmd->setConfiguration("maxValue",$command[configuration][maxValue]);
 			$RaspBEECmd->setType($command[type]);
 			$RaspBEECmd->setSubType($command[subtype]);
 			$RaspBEECmd->save();						
@@ -230,6 +230,8 @@ class eqLogicOperate extends eqLogic {
 			$RaspBEECmd->setLogicalId($command[name]);
 			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
 			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
+			$RaspBEECmd->setConfiguration("minValue",$command[configuration][minValue]);
+			$RaspBEECmd->setConfiguration("maxValue",$command[configuration][maxValue]);
 			$RaspBEECmd->setType($command[type]);
 			$RaspBEECmd->setSubType($command[subtype]);
 			$RaspBEECmd->save();						
@@ -261,7 +263,6 @@ class eqLogicOperate extends eqLogic {
 		$eqLogic->setConfiguration('swversion', $device[swversion]);
 		$eqLogic->setConfiguration('type', $device[type]);
 		$eqLogic->setConfiguration('uniqueid', $device[uniqueid]);
-
 		$eqLogic->batteryStatus($device[config][battery]);
 		$eqLogic->save();
 		
@@ -275,6 +276,8 @@ class eqLogicOperate extends eqLogic {
 			$RaspBEECmd->setLogicalId($command[name]);
 			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
 			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
+			$RaspBEECmd->setConfiguration("minValue",$command[configuration][minValue]);
+			$RaspBEECmd->setConfiguration("maxValue",$command[configuration][maxValue]);
 			$RaspBEECmd->setType($command[type]);
 			$RaspBEECmd->setSubType($command[subtype]);
 			$RaspBEECmd->save();						

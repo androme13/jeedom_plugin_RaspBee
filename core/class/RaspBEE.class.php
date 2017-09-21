@@ -1,25 +1,24 @@
 <?php
 
-/* This file is part of Jeedom.
+/* This file is part of Plugin RaspBEE for jeedom.
 *
-* Jeedom is free software: you can redistribute it and/or modify
+* Plugin RaspBEE for jeedom is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
-* Jeedom is distributed in the hope that it will be useful,
+* Plugin RaspBEE for jeedom is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
 *
 * You should have received a copy of the GNU General Public License
-* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+* along with Plugin RaspBEE for jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 
 /* * ***************************Includes********************************* */
 
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
-
 require_once dirname(__FILE__) . '/../php/RaspBEECom.php';
 require_once dirname(__FILE__) . '/eqLogicOperate.class.php';
 
@@ -295,23 +294,46 @@ class RaspBEECmd extends cmd {
 		if ($this->getType() == 'action'){
 			
 			$eqLogic = $this->getEqLogic();
-			error_log("execute action",3,"/tmp/prob.txt");
+			error_log("execute action : ".$this->getConfiguration('fieldname')." ".$this->getName(),3,"/tmp/prob.txt");
 			error_log(json_encode($_options),3,"/tmp/prob.txt");
-
+			
+			switch ($this->getConfiguration('fieldname'))
+			{
+				case "on":
+				if ($this->getName()=='On')
+					$commandtosend='{"on" : true}';
+				else
+					$commandtosend='{"on" : false}';
+					break;
+				
+				default :
+					$commandtosend='{"'.$this->getConfiguration('fieldname').'" : '.$_options[slider].'}';
+					
+				
+			}
+			self::sendCommand($this->getEqlogic()->getConfiguration('origid'),$commandtosend);
+			error_log("commande : ".$commandtosend,3,"/tmp/prob.txt");
 			return;
-
-
 		}
 		
 		if ($this->getType() == 'info'){
 			error_log("execute info",3,"/tmp/prob.txt");
 			error_log(json_encode($_options),3,"/tmp/prob.txt");
-
+			
+			error_log(json_encode($_options),3,"/tmp/prob.txt");
 			return;
+		}	
+	}
+	
+	private function sendCommand($id=null,$command=null){
+		//error_log("sendCommand",3,"/tmp/prob.txt");
 
-
-		}
-
+		if ($command==null) return false;
+		//error_log("getRaspBEESensors pass");
+		$raspbeecom = new RaspBEECom;
+		$result = $raspbeecom->sendLightCommand($id,$command);
+		unset($raspbeecom);
+		return $result;
 		
 	}
 

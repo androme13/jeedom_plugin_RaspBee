@@ -1,29 +1,29 @@
 <?php
-/* This file is part of Jeedom.
+/* This file is part of Plugin RaspBEE for jeedom.
 *
-* Jeedom is free software: you can redistribute it and/or modify
+* Plugin RaspBEE for jeedom is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
-* Jeedom is distributed in the hope that it will be useful,
+* Plugin RaspBEE for jeedom is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
 *
 * You should have received a copy of the GNU General Public License
-* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+* along with Plugin RaspBEE for jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 
 // c'est ici que le daemon transmet ses infos
 
 require_once dirname(__FILE__) . "/../../../../core/php/core.inc.php";
+require_once dirname(__FILE__) . '/../php/RaspBEECom.php';
 
 if (!jeedom::apiAccess(init('apikey'), 'RaspBEE')) {
 	echo __('Vous n\'etes pas autorisé à effectuer cette action', __FILE__);	
 	die();
 }
-//php_error('sensorspass',3,'/tmp/mes-erreurs.log');
 $results = json_decode(file_get_contents("php://input"));
 print_r($results);
 
@@ -46,50 +46,43 @@ if ($results->type == "sensors"){
 	if (is_object($results->action)){
 		foreach (eqLogic::byType('RaspBEE') as $equipement) {
 			if ($equipement->getConfiguration('origid')==$results->id)			
-			foreach ($equipement->getCmd('action') as $cmd){
-				foreach ($results->action as $actioncmd => $key){
-					if ($cmd->getConfiguration('fieldname')==$actioncmd){
-						//$cmd->setValue($key);
-						//$cmd->event($key);
-						//$cmd->save();					
-					}
-				}
-			}
-			
-		}
-	}
-}else
-	if($results->type == "lights"){		
-		foreach (eqLogic::byType('RaspBEE') as $equipement) {
-			if ($equipement->getConfiguration('origid')==$results->id)			
 			foreach ($equipement->getCmd('info') as $cmd){
 				foreach ($results->action as $actioncmd => $key){
 					if ($cmd->getConfiguration('fieldname')==$actioncmd){
-						$cmd->setConfiguration('lastCmdValue',$key);
-						$cmd->save();
-						//$cmd->event($key);
-						foreach ($equipement->getCmd('action') as $cmd2){
-										foreach ($results->action as $actioncmd2 => $key2){
-											if ($cmd2->getConfiguration('fieldname')==$actioncmd2){
-												
-												error_log("trouve :",3,"/tmp/prob.txt");
-												error_log($cmd2->getName(),3,"/tmp/prob.txt");
-												error_log($cmd2->getId()."|",3,"/tmp/prob.txt");
-												$cmd2->setConfiguration('lastCmdValue',$key);
-												$cmd2->save();
-												$cmd2->getEqLogic()->refreshWidget();
-					
-											}
-										}
-									}
-
-						
+						$cmd->event($key);
 					}
 				}
 			}
 			
 		}
 	}
+}
+
+if($results->type == "lights"){		
+	foreach (eqLogic::byType('RaspBEE') as $equipement) {
+		if ($equipement->getConfiguration('origid')==$results->id)			
+		foreach ($equipement->getCmd('info') as $cmd){
+			foreach ($results->action as $actioncmd => $key){
+				if ($cmd->getConfiguration('fieldname')==$actioncmd){
+					$cmd->event($key);
+					foreach ($equipement->getCmd('action') as $cmd2){
+						foreach ($results->action as $actioncmd2 => $key2){
+							if ($cmd2->getConfiguration('fieldname')==$actioncmd2){
+								if ($cmd2->getConfiguration('lastCmdValue')!=$key){
+								$cmd2->setConfiguration('lastCmdValue',$key);
+								$cmd2->save();
+								$cmd2->getEqLogic()->refreshWidget();
+								}
+								
+							}
+						}
+					}						
+				}
+			}
+		}
+		
+	}
+}
 else
 echo json_encode($results->params);
 
