@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var AjaxClient = require('./core/ajaxclient.js');
+//var AjaxClient = require('./core/ajaxclient.js');
 var fs = require("fs");
 var path = require('path')
 var process = require('process');
@@ -9,6 +9,7 @@ var server;
 var url = require('url');
 global.apikey;
 global.jurl;
+global.rurl;
 
 process.on('uncaughtException', function(err) {
 	console.log(JSON.stringify(process.memoryUsage()));
@@ -66,17 +67,23 @@ console.log("Lancement du daemon (pid :"+process.pid+")");
 if (pidfile.createpidfile()==1){
 	global.apikey=findlaunchparam("apikey");
 	global.jurl=findlaunchparam("jurl");
+	global.rurl=findlaunchparam("rurl");
+	console.log(process.argv);
 	var start = true;
 	if (global.apikey==null){
 		console.log('Le paramètre "apikey" est manquant');
 		start = false;
 	} 
 	if (global.jurl==null){
-		console.log('Le paramètre "jurl" est manquant');
+		console.log('Le paramètre "jurl" (adresse de jeedom) est manquant');
 		start = false;
-	} 
+	}
+	if (global.rurl==null){
+		console.log('Le paramètre "rurl" (adresse de RaspBEE) est manquant');
+		start = false;
+	} 	
 	if (start==true){
-		raspbee.connect("10.0.0.19","443",websocketCallBack);
+		raspbee.connect(rurl,"443",websocketCallBack);
 	} 
 }
 else

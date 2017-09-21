@@ -42,7 +42,7 @@ class RaspBEE extends eqLogic {
 	public static function dependancy_install() {
 		log::add('RaspBEE','info','Installation des dépendances nodejs');
 		//$resource_path = realpath(dirname(__FILE__) . '/../../resources');
-		//passthru('/bin/bash ' . $resource_path . '/nodejs.sh ' . $resource_path . ' > ' . //log::getPathToLog('JeeOrangeTv_dep') . ' 2>&1 &');
+		//passthru('/bin/bash ' . $resource_path . '/deps.sh ' . $resource_path . ' > ' . //log::getPathToLog('RaspBEE_dep') . ' 2>&1 &');
 	}
 	
 	public static function deamon_info() {	
@@ -80,8 +80,10 @@ class RaspBEE extends eqLogic {
 		}
 		$daemon_path = realpath(dirname(__FILE__) . '/../../daemon');
 		$jurl = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]"."/plugins/RaspBEE/core/php/jeeRaspBEE.php";
-		$japikey=jeedom::getApiKey('RaspBEE');;
-		$cmd = 'nice -n 19 nodejs ' . $daemon_path . '/daemon.js ' .'apikey='.$japikey . ' jurl='.$jurl;
+		$rurlRAW=config::byKey('raspbeeIP','RaspBEE');
+		$rurl = explode(":",config::byKey('raspbeeIP','RaspBEE'));
+		$japikey = jeedom::getApiKey('RaspBEE');
+		$cmd = 'nice -n 19 nodejs ' . $daemon_path . '/daemon.js ' .'apikey='.$japikey . ' jurl='.$jurl . ' rurl='.$rurl[0];
 		log::add('RaspBEE', 'info', 'Lancement du démon RAspBEE : ' . $cmd);
 		exec('nohup ' . $cmd . ' >> ' . log::getPathToLog('RaspBEE_node') . ' 2>&1 &');
 		$i = 0;

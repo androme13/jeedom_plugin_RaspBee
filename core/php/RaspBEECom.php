@@ -20,7 +20,7 @@
 // interactions vers le RASPBEE
 
 class RaspBEECom{
-	//private $apikey = 
+	
 	//public $TIMEOUT = 30;
 	//public $CONNECTTIMEOUT = 30;
 
@@ -71,37 +71,21 @@ class RaspBEECom{
 	}
 	
 	public function getConf(){
-		$ch = curl_init();
-		$opts = [
-		CURLOPT_SSL_VERIFYPEER => false,
-		CURLOPT_FORBID_REUSE   => true,
-		//CURLOPT_POSTFIELDS     => "{\"devicetype\":\"jeedomPlugin\"}",
-		CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
-		CURLOPT_URL            => "http://10.0.0.19/api/C2FFE38AE7/config",
-		//CURLOPT_POST		   => true,
-		CURLOPT_RETURNTRANSFER => true,
-		CURLOPT_TIMEOUT        => 30,
-		CURLOPT_CONNECTTIMEOUT => 30
-		];
-		curl_setopt_array($ch, $opts);
-		$result=curl_exec ($ch);
-		curl_close($ch);
-		if ($result===false){
-		return false;	
-		}else{
-		return $result;//substr($result,1,-1);
-		}
+		return self::genericGet("http://10.0.0.19/api/C2FFE38AE7/config");
 	}
 	
 	public function getSensors(){
+		return self::genericGet("http://10.0.0.19/api/C2FFE38AE7/sensors");
+	}
+	
+	private function genericGet($url=null){
+		if ($url==null) return false;
 		$ch = curl_init();
 		$opts = [
 		CURLOPT_SSL_VERIFYPEER => false,
 		CURLOPT_FORBID_REUSE   => true,
-		//CURLOPT_POSTFIELDS     => "{\"devicetype\":\"jeedomPlugin\"}",
 		CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
-		//http://10.0.0.19/api/1C947DD461/config
-		CURLOPT_URL            => "http://10.0.0.19/api/C2FFE38AE7/sensors",
+		CURLOPT_URL            => $url,
 		//CURLOPT_POST		   => true,
 		CURLOPT_RETURNTRANSFER => true,
 		CURLOPT_TIMEOUT        => 30,
@@ -118,28 +102,10 @@ class RaspBEECom{
 	}
 	
 	public function getLights(){
-		$ch = curl_init();
-		$opts = [
-		CURLOPT_SSL_VERIFYPEER => false,
-		CURLOPT_FORBID_REUSE   => true,
-		//CURLOPT_POSTFIELDS     => "{\"devicetype\":\"jeedomPlugin\"}",
-		CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
-		//http://10.0.0.19/api/1C947DD461/config
-		CURLOPT_URL            => "http://10.0.0.19/api/C2FFE38AE7/lights",
-		//CURLOPT_POST		   => true,
-		CURLOPT_RETURNTRANSFER => true,
-		CURLOPT_TIMEOUT        => 30,
-		CURLOPT_CONNECTTIMEOUT => 30
-		];
-		curl_setopt_array($ch, $opts);
-		$result=curl_exec ($ch);
-		curl_close($ch);
-		if ($result===false){
-		return false;	
-		}else{
-		return $result;//substr($result,1,-1);
-		}
+		return self::genericGet("http://10.0.0.19/api/C2FFE38AE7/lights");
 	}
+	
+	
 	
 	public function sendLightCommand($id=null,$command=null){
 		//error_log("sendLightCommand(".$id.":".$command.")",3,"/tmp/prob.txt");
