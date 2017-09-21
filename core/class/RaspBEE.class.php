@@ -28,21 +28,21 @@ class RaspBEE extends eqLogic {
 	public static function dependancy_info() {
 		$return = array();
 		$return['log'] = 'RaspBEE_dep';
-		$return['progress_file'] = '/tmp/raspbee_dep';
-		$backresp = array();
-		$backcode = -1;
-		exec("node -v",$backresp,$backcode);		
-		if ($backcode==0)
-			$return['state'] = 'ok';
-		else
-			$return['state'] = 'nok';
+		$websocket = realpath(dirname(__FILE__) . '/../../daemon/node_modules/websocket');
+		$return['progress_file'] = '/tmp/RaspBEE_dep';
+		if (is_dir($websocket)) {
+		  $return['state'] = 'ok';
+		} else {
+		  $return['state'] = 'nok';
+		}
 		return $return;
 	}
 	
 	public static function dependancy_install() {
 		log::add('RaspBEE','info','Installation des dépendances nodejs');
-		//$resource_path = realpath(dirname(__FILE__) . '/../../resources');
-		//passthru('/bin/bash ' . $resource_path . '/deps.sh ' . $resource_path . ' > ' . //log::getPathToLog('RaspBEE_dep') . ' 2>&1 &');
+		$resource_path = realpath(dirname(__FILE__) . '/../../resources');
+		$daemon_path = realpath(dirname(__FILE__) . '/../../daemon');
+		passthru('/bin/bash ' . $resource_path . '/deps.sh ' . $daemon_path . ' > ' . log::getPathToLog('RaspBEE_dep') . ' 2>&1 &');
 	}
 	
 	public static function deamon_info() {	
