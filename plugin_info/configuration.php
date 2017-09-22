@@ -21,7 +21,7 @@ if (!isConnect()) {
 	include_file('desktop', '404', 'php');
 	die();
 }
-require_once dirname(__FILE__).'/../core/php/RaspBEECom.php';
+require_once dirname(__FILE__).'/../core/class/RaspBEECom.class.php';
 
 
 //$com = new RaspBEECom;

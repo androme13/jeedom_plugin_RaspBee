@@ -21,14 +21,7 @@ if (!isConnect('admin')) {
 	throw new Exception('401 Unauthorized');
 }
 
-/*function addZHASwitch($sensor){
-	//echo json_encode($sensor)."|";
-	//echo $RaspBEE;
-//print_r($sensor);	
-}*/
-
-
-require_once dirname(__FILE__) . '/../../core/php/RaspBEECom.php';
+require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
 $raspbeecom = new RaspBEECom;
 		$lights = json_decode($raspbeecom->getLights());
 		print_r($lights);

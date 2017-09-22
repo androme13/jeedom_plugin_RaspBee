@@ -1,6 +1,5 @@
 try{
 	var request = require('ajax-request');
-	//const util = require('util');
 }
 catch (err){
 	Console.log(err);

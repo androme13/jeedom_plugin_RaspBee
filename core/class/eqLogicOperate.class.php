@@ -40,7 +40,11 @@ class eqLogicOperate extends eqLogic {
 				break;
 			}
 		case "Extended color light" :{
-				eqLogicOperate::createLight($device);
+				eqLogicOperate::createExtendedColorLight($device);
+				break;
+			}
+		case "Dimmable light" :{
+				eqLogicOperate::createDimmableLight($device);
 				break;
 			}
 		default : {
@@ -50,11 +54,55 @@ class eqLogicOperate extends eqLogic {
 		return true;
 	}
 	
-	public function createLight($device){
-		if (!is_file(dirname(__FILE__) . '/../config/devices/lights.json')){
+	public function createDimmableLight($device){
+		if (!is_file(dirname(__FILE__) . '/../config/devices/DimmableLight.json')) return false;
+	
+		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/DimmableLight.json');
+		if (!is_json($configFile)) {
+			return false;
+		}
+		$eqLogic = new eqLogic();
+		$eqLogic->setEqType_name('RaspBEE');
+		$eqLogic->setName($device[name]." ".$device[origid]);
+		$eqLogic->setIsEnable(1);
+		$_logical_id = null;
+		$eqLogic->setLogicalId($_logical_id);
+		// on fabrique un DIMMABLE LIGHT
+		$eqLogic->setConfiguration('origid', $device[origid]);
+		$eqLogic->setConfiguration('hascolor', $device[hascolor]);
+		$eqLogic->setConfiguration('manufacturername', $device[manufacturername]);
+		$eqLogic->setConfiguration('reachable', $device[state][reachable]);
+		$eqLogic->setConfiguration('modelid', $device[modelid]);
+		$eqLogic->setConfiguration('swversion', $device[swversion]);
+		$eqLogic->setConfiguration('type', $device[type]);
+		$eqLogic->setConfiguration('uniqueid', $device[uniqueid]);
+		$eqLogic->setConfiguration('colormode', $device[state][colormode]);
+		$eqLogic->setIsVisible(1);
+		$eqLogic->save();
+		$model = json_decode($configFile, true);
+		$commands = $model['commands'];
+		foreach ($model['commands'] as $command) {
+			$RaspBEECmd = new RaspBEECmd();
+			$RaspBEECmd->setName($command[name]);
+			$RaspBEECmd->setLogicalId($command[logicalId]);
+			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
+			$RaspBEECmd->setValue($command[value]);
+			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
+			$RaspBEECmd->setConfiguration("minValue",$command[configuration][minValue]);
+			$RaspBEECmd->setConfiguration("maxValue",$command[configuration][maxValue]);
+			$RaspBEECmd->setIsVisible($command[isVisible]);
+			$RaspBEECmd->setType($command[type]);
+			$RaspBEECmd->setSubType($command[subtype]);
+			$RaspBEECmd->save();						
+		}
+		return true;
+	}
+	
+	public function createExtendedColorLight($device){
+		if (!is_file(dirname(__FILE__) . '/../config/devices/ExtendedColorLight.json')){
 		return false;
 		};
-		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/lights.json');
+		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/ExtendedColorLight.json');
 		if (!is_json($configFile)) {
 			return false;
 		}

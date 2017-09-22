@@ -16,7 +16,7 @@ raspbeegw = module.exports = {
 			console.log('Connect Error: ' + error.toString());
 		});
 		WSclient.on('connect', function(connection) {
-			console.log('WebSocket Client Connected to RaspBee');
+			console.log('Client WebSocket connecté à la passerelle RaspBee');
 			connection.on('error', function(error) {
 				console.log("Connection Error}}: " + error.toString());
 			});
@@ -24,10 +24,9 @@ raspbeegw = module.exports = {
 				console.log('Connection Closed');
 			});
 			connection.on('message', function(message) {
-				if (message.type === 'utf8') {
-					var tempMessage = JSON.parse(message.utf8Data);						
+				if (message.type === 'utf8') {					
 						try{
-						callback(WebSocketClientParser.process(tempMessage));
+						callback(WebSocketClientParser.process(JSON.parse(message.utf8Data)));
 						}
 						catch (err){
 							console.log(err);

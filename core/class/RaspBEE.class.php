@@ -19,7 +19,7 @@
 /* * ***************************Includes********************************* */
 
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
-require_once dirname(__FILE__) . '/../php/RaspBEECom.php';
+require_once dirname(__FILE__) . '/../class/RaspBEECom.class.php';
 require_once dirname(__FILE__) . '/eqLogicOperate.class.php';
 
 class RaspBEE extends eqLogic {

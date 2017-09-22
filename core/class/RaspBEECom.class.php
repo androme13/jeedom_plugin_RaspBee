@@ -19,11 +19,16 @@
  
 // interactions vers le RASPBEE
 
-class RaspBEECom{
+class RaspBEECom {
 	
-	//public $TIMEOUT = 30;
-	//public $CONNECTTIMEOUT = 30;
-
+	private $apikey = null;
+	private $ip = null;
+	
+	public function __construct() {
+       	$this->ip = config::byKey('raspbeeIP','RaspBEE');
+		$this->apikey = config::byKey('raspbeeAPIKEY','RaspBEE');		
+    }
+	
 	public function findRaspBEE(){
 		$ch = curl_init();
 		$opts = [
@@ -52,9 +57,9 @@ class RaspBEECom{
 		$opts = [
 		CURLOPT_SSL_VERIFYPEER => false,
 		CURLOPT_FORBID_REUSE   => true,
-		CURLOPT_POSTFIELDS     => "{\"devicetype\":\"jeedomPlugin\"}",
+		CURLOPT_POSTFIELDS     => "{\"devicetype\":\"jeedomRaspBEEPlugin\"}",
 		CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
-		CURLOPT_URL            => "http://10.0.0.19/api",
+		CURLOPT_URL            => "http://".$this->ip."/api",
 		CURLOPT_POST		   => true,
 		CURLOPT_RETURNTRANSFER => true,
 		CURLOPT_TIMEOUT        => 30,
@@ -71,11 +76,11 @@ class RaspBEECom{
 	}
 	
 	public function getConf(){
-		return self::genericGet("http://10.0.0.19/api/C2FFE38AE7/config");
+		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/config");
 	}
 	
 	public function getSensors(){
-		return self::genericGet("http://10.0.0.19/api/C2FFE38AE7/sensors");
+		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/sensors");
 	}
 	
 	private function genericGet($url=null){
@@ -102,7 +107,9 @@ class RaspBEECom{
 	}
 	
 	public function getLights(){
-		return self::genericGet("http://10.0.0.19/api/C2FFE38AE7/lights");
+		//$ip = config::byKey('raspbeeIP','RaspBEE');
+		//$apikey = config::byKey('raspbeeAPIKEY','RaspBEE');
+		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/lights");
 	}
 	
 	
@@ -117,7 +124,7 @@ class RaspBEECom{
 		CURLOPT_POSTFIELDS     => $command,
 		CURLOPT_CUSTOMREQUEST =>  "PUT",
 		CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
-		CURLOPT_URL            => "http://10.0.0.19/api/C2FFE38AE7/lights/".$id."/state",
+		CURLOPT_URL            => "http://".$this->ip."/api/".$this->apikey."/lights/".$id."/state",
 		//CURLOPT_POST		   => true,
 		CURLOPT_RETURNTRANSFER => true,
 		CURLOPT_TIMEOUT        => 30,

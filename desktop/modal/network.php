@@ -18,7 +18,7 @@
 if (!isConnect('admin')) {
 	throw new Exception('401 Unauthorized');
 }
-require_once dirname(__FILE__) . '/../../core/php/RaspBEECom.php';
+require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
 $raspbeecom = new RaspBEECom;
 		$RaspBEEConfJson = json_decode($raspbeecom->getConf());
 		//print_r(get_object_vars($RaspBEEConfJson));
@@ -79,9 +79,6 @@ $raspbeecom = new RaspBEECom;
         <div id="content">
             <ul id="tabs_network" class="nav nav-tabs" data-tabs="tabs">
                 <li class="active"><a href="#summary_network" data-toggle="tab"><i class="fa fa-info-circle"></i> {{Informations}}</a></li>
-                <li><a href="#actions_network" data-toggle="tab"><i class="fa fa-sliders"></i> {{Actions}}</a></li>
-                <li><a href="#statistics_network" data-toggle="tab"><i class="fa fa-bar-chart"></i> {{Statistiques}}</a></li>
-                <li id="tab_graph"><a href="#graph_network" data-toggle="tab"><i class="fa fa-picture-o"></i> {{Graphique du réseau}}</a></li>
                 <li id="tab_users"><a href="#api_users" data-toggle="tab"><i class="fa fa-user"></i> {{Utilisateurs}}</a></li>
             </ul>
             <div id="network-tab-content" class="tab-content">
@@ -208,38 +205,6 @@ $raspbeecom = new RaspBEECom;
                         </div>
                     </div>
                 </div>
-                <div id="graph_network" class="tab-pane">
-                    <table class="table table-bordered table-condensed" style="width: 350px;position:fixed;margin-top : 25px;">
-                        <thead><tr><th colspan="2">{{Légende}}</th></tr></thead>
-                        <tbody>
-                            <tr>
-                                <td class="node-primary-controller-color" style="width: 35px"><i class="fa fa-square fa-2x"></i></td>
-                                <td>{{Contrôleur Primaire}}</td>
-                            </tr>
-                            <tr>
-                                <td class="node-direct-link-color" style="width: 35px"><i class="fa fa-square fa-2x"></i></td>
-                                <td>{{Communication directe}}</td>
-                            </tr>
-                            <tr>
-                                <td class="node-remote-control-color"><i class="fa fa-square fa-2x"></i></td>
-                                <td>{{Virtuellement associé au contrôleur primaire}}</td>
-                            </tr>
-                            <tr>
-                                <td class="node-more-of-one-up-color"><i class="fa fa-square fa-2x"></i></td>
-                                <td>{{Toutes les routes ont plus d'un saut}}</td>
-                            </tr>
-                            <tr>
-                                <td class="node-interview-not-completed-color"><i class="fa fa-square fa-2x"></i></td>
-                                <td>{{Interview non completé}}</td>
-                            </tr>
-                            <tr>
-                                <td class="node-no-neighbourhood-color"><i class="fa fa-square fa-2x"></i></td>
-                                <td>{{Présumé mort ou Pas de voisin}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div id="graph-node-name"></div>
-                </div>
                 <div id="api_users" class="tab-pane">
                     <br/>
 					<table class="table table-bordered table-condensed" style="width:100%">
@@ -258,77 +223,13 @@ $raspbeecom = new RaspBEECom;
 						echo "<td>".$value->name."</td>";
 						echo "<td>".$value->{"create date"}."</td>";
 						echo "<td>".$value->{"last use date"}."</td>";
-						echo "<td>Supprimer</td>";
+						echo '<td><a id="removeDevice" class="btn btn-danger"><i class="fa fa-minus-circle"></i> {{Supprimer l\'utilisateur}}</a></td>';
 						echo "</tr>";
 					}
 					?>
 					</tbody>
 					</table>
-                </div>
-                <div class="tab-pane" id="actions_network">
-                    <table class="table">
-                        <tr>
-                            <td><a class="btn btn-success bt_addDevice" data-secure="0"><i class="fa fa-plus-circle"></i> {{Ajouter module (inclusion)}}</a></td>
-                            <td>{{Ajouter un nouveau module au réseau Z-Wave.}}</td>
-                        </tr>
-                        <tr>
-                            <td><a class="btn btn-warning bt_addDevice" data-secure="1"><i class="fa fa-plus-circle"></i> {{Ajouter module en mode sécurisé (inclusion)}}</a></td>
-                            <td>{{Ajouter un nouveau module au réseau Z-Wave en mode sécurisé (peut ne pas marcher si le module ne le supporte pas bien).}}</td>
-                        </tr>
-                        <tr>
-                            <td><a id="removeDevice" class="btn btn-danger"><i class="fa fa-minus-circle"></i> {{Supprimer module (Exclusion)}}</a></td>
-                            <td>{{Supprimer un module du réseau Z-Wave.}}</td>
-                        </tr>
-                        <tr>
-                            <td><a data-action="cancelCommand" class="btn btn-warning controller_action"><i class="fa fa-times"></i> {{Annuler commande}}</a></td>
-                            <td>{{Annule toutes les commandes en cours sur le contrôleur.}}</td>
-                        </tr>
-                        <tr>
-                            <td><a data-action="testNetwork" class="btn btn-primary controller_action"><i class="fa fa-check-square-o"></i> {{Test du réseau}}</a></td>
-                            <td>{{Envoie une série de messages sur le réseau pour le tester.}}</td>
-                        </tr>
-                        <tr>
-                            <td><a data-action="healNetwork" class="btn btn-success controller_action"><i class="fa fa-medkit"></i> {{Soigner le réseau}}</a></td>
-                            <td>{{Soigner le réseau Z-Wave noeud par noeud.}}<br>{{Essaie de soigner tous les noeuds (un par un) en mettant à jour la liste des voisins et les routes optionnelles.}}</td>
-                        </tr>
-                        <tr>
-                            <td><a data-action="createNewPrimary" class="btn btn-danger controller_action"><i class="fa fa-file"></i> {{Créer un nouveau noeud primaire}}</a></td>
-                            <td>{{Mettez le contrôleur cible en mode de réception de configuration.}}<br>{{Le contrôleur cible doit être moins de 2m du contrôleur primaire. Nécessite SUC.}}</td>
-                        </tr>
-                        <tr>
-                            <td><a data-action="receiveConfiguration" class="btn btn-danger controller_action"><i class="fa fa-file"></i> {{Receive Configuration}}</a></td>
-                            <td>{{Transfert de la configuration réseau à partir d'un autre contrôleur.}}<br><i>{{Approcher l'autre contrôleur à moins de 2m du contrôleur primaire .}}</i></td>
-                        </tr>
-                        <tr>
-                            <td><a data-action="transferPrimaryRole" class="btn btn-primary controller_action"><i class="fa fa-external-link"></i> {{Transférer le rôle primaire}}</a></td>
-                            <td>{{Changer de contrôleur primaire. Le contrôleur primaire existant devient contrôleur secondaire.}}<br><i>{{Approcher l'autre contrôleur à moins de 2m du contrôleur primaire.}}</i></td>
-                        </tr>
-                        <tr>
-                            <td><a data-action="writeZWConfig" class="btn btn-info controller_action"><i class="fa fa-pencil"></i> {{Ecrire le fichier de configuration}}</a></td>
-                            <td>{{Ecrit le fichier de configuration OpenZwave.}}</td>
-                        </tr>
-                        <tr>
-                            <td><a data-action="removeUnknownsDevices" class="btn btn-info controller_action"><i class="fa fa-repeat"></i> {{Régénérer la détection des noeuds inconnus}}</a></td>
-                            <td>{{Supprime les informations des noeuds inconnus dans le fichier de config afin qu'il soit régénéré.}}<br><i>{{(Attention : Relance du réseau)}}</i></td>
-                        </tr>
-                        <tr>
-                            <td><a data-action="softReset" class="btn btn-warning controller_action"><i class="fa fa-times"></i>{{Redémarrage}}</a></td>
-                            <td>{{Redémarre le contrôleur sans effacer les paramètres de sa configuration réseau.}}</td>
-                        </tr>
-                        <tr>
-                            <td><a data-action="hardReset" class="btn btn-danger controller_action"><i class="fa fa-eraser"></i>{{Remise à zéro}}</a></td>
-                            <td>{{Remise à zéro du contrôleur.}} <b>{{Remet à zéro un contrôleur et efface ses paramètres de configuration réseau.}}</b><br>{{Le contrôleur devient un contrôleur primaire, prêt pour ajouter de nouveaux modules à un nouveau réseau.}}</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="tab-pane" id="statistics_network">
-                    <table class="table table-condensed table-striped">
-                        <tr>
-                            <td><b>{{Nombre d'émissions lues :}}</b></td>
-                            <td><span class="zwaveNetworkAttr" data-l1key="controllerStatistics" data-l2key="broadcastReadCnt"></span></td>
-                        </tr>
-                    </table>
-                </div>
+                </div>                
             </div>
         </div>
     </div>

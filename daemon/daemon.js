@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-//var AjaxClient = require('./core/ajaxclient.js');
+var AjaxClient = require('./core/ajaxclient.js');
 var fs = require("fs");
 var path = require('path')
 var process = require('process');
@@ -13,7 +13,7 @@ global.rurl;
 
 process.on('uncaughtException', function(err) {
 	console.log(JSON.stringify(process.memoryUsage()));
-	console.error("An uncaughtException was found, the program will end. " + err + ", stacktrace: " + err.stack);
+	console.error("Erreur inattendue, arrêt du daemon. " + err + ", stacktrace: " + err.stack);
 	return process.exit(1);
 });
 
