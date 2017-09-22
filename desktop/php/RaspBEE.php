@@ -117,7 +117,15 @@ foreach ($eqLogics as $eqLogic) {
 		break;
 		case "Extended color light" :
 		echo '<i class="jeedom jeedom-lumiere-off" style="font-size : 6em;color:#767676;"></i>';
-		break;		
+		break;
+		case "Dimmable light" :
+		echo '<i class="jeedom jeedom-lumiere-off" style="font-size : 6em;color:#767676;"></i>';
+		break;
+		case "LightGroup" :
+		echo '<i class="fa fa-list-alt" style="font-size : 6em;color:#767676;"></i>';
+		break;	
+		default:
+		echo '<i class="jeedom jeedom-lumiere-off" style="font-size : 6em;color:#767676;"></i>';
 	}
 	//
 	echo '<br>';
@@ -138,6 +146,14 @@ foreach ($eqLogics as $eqLogic) {
 		case "Extended color light" :
 		echo '{{Eclairage}}';
 		break;
+		case "Dimmable light" :
+		echo '{{Eclairage}}';
+		break;
+		case "LightGroup" :
+		echo '{{Groupe}}';
+		break;
+		default :
+		echo '{{Inconnu}}';
 	}
 	
 	echo '</span>';

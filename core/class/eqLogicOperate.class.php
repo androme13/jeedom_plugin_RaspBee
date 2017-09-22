@@ -19,6 +19,8 @@ require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 class eqLogicOperate extends eqLogic {
 	
 	public function createDevice($device,$syncType = 0){
+		error_log("|eqlogic create device|".$device[type]."|",3,"/tmp/rasbee.err");
+
 		foreach (eqlogic::byType('RaspBEE') as $eqLogic){
 		if ($eqLogic->getConfiguration('origid')==$device[origid] && $eqLogic->getConfiguration('type')==$device[type]) return false;		
 		}
@@ -45,6 +47,10 @@ class eqLogicOperate extends eqLogic {
 			}
 		case "Dimmable light" :{
 				eqLogicOperate::createDimmableLight($device);
+				break;
+			}
+		case "LightGroup" :{
+				eqLogicOperate::createLightGroup($device);
 				break;
 			}
 		default : {
@@ -95,6 +101,53 @@ class eqLogicOperate extends eqLogic {
 			$RaspBEECmd->setSubType($command[subtype]);
 			$RaspBEECmd->save();						
 		}
+		return true;
+	}
+	
+	public function createLightGroup($device){
+		error_log("|eqlogic create2|",3,"/tmp/rasbee.err");
+
+		if (!is_file(dirname(__FILE__) . '/../config/devices/Group.json')){
+		return false;
+		};
+		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/Group.json');
+		if (!is_json($configFile)) {
+					error_log("Fichier json invalide",3,"/tmp/rasbee.err");
+
+			return false;
+		}
+		//error_log("|group create2|".json_encode($device),3,"/tmp/rasbee.err");
+		//$test = json_decode($device);
+		error_log("|group create2|".$device[type],3,"/tmp/rasbee.err");
+		$eqLogic = new eqLogic();
+		$eqLogic->setEqType_name('RaspBEE');
+		$eqLogic->setName($device[name]." ".$device[origid]);
+		$eqLogic->setIsEnable(1);
+		$_logical_id = null;
+		$eqLogic->setLogicalId($_logical_id);
+		// on fabrique un LIGHT
+		$eqLogic->setConfiguration('origid', $device[origid]);
+		$eqLogic->setConfiguration('lights', $device[lights]);				$eqLogic->setConfiguration('devicemembership', $device[devicemembership]);
+		$eqLogic->setConfiguration('type', $device[type]);
+		$eqLogic->setIsVisible(1);
+		$eqLogic->save();
+		$model = json_decode($configFile, true);
+		$commands = $model['commands'];
+		foreach ($model['commands'] as $command) {
+			$RaspBEECmd = new RaspBEECmd();
+			$RaspBEECmd->setName($command[name]);
+			$RaspBEECmd->setLogicalId($command[logicalId]);
+			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
+			$RaspBEECmd->setValue($command[value]);
+			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
+			$RaspBEECmd->setConfiguration("minValue",$command[configuration][minValue]);
+			$RaspBEECmd->setConfiguration("maxValue",$command[configuration][maxValue]);
+			$RaspBEECmd->setIsVisible($command[isVisible]);
+			$RaspBEECmd->setType($command[type]);
+			$RaspBEECmd->setSubType($command[subtype]);
+			$RaspBEECmd->save();						
+		}
+		error_log("|fin de eqlogic group create2|",3,"/tmp/rasbee.err");
 		return true;
 	}
 	

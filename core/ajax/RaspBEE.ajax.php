@@ -62,6 +62,15 @@ try {
 		}
 	}
 	
+	if (init('action') == 'getRaspBEEGroups') {
+		$resp=RaspBEE::getRaspBEEGroups();
+		if ($resp===false){		
+			ajax::error();
+		} else{
+			ajax::success($resp);
+		}
+	}
+	
 	if (init('action') == 'getRaspBEESensors') {
 		$resp=RaspBEE::getRaspBEESensors();
 		if ($resp===false){		
@@ -74,6 +83,16 @@ try {
 		
 	if (init('action') == 'getRaspBEELights') {
 		$resp=RaspBEE::getRaspBEELights();
+		if ($resp===false){		
+			ajax::error();
+		} else{
+			ajax::success($resp);
+		}
+	}
+	
+	if (init('action') == 'createGroup') {
+		//error_log("|creation du groupe demande ajax|".json_encode(init('device'),true),3,"/tmp/rasbee.err");
+		$resp=RaspBEE::createDevice(init('device'));
 		if ($resp===false){		
 			ajax::error();
 		} else{

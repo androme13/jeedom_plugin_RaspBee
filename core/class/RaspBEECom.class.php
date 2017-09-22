@@ -80,7 +80,13 @@ class RaspBEECom {
 	}
 	
 	public function getSensors(){
-		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/sensors");
+		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/sensors");		
+	}
+	
+	public function getGroups(){
+		//error_log("|synchro groupes|",3,"/tmp/rasbee.err");
+		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/groups");
+		
 	}
 	
 	private function genericGet($url=null){
@@ -107,8 +113,6 @@ class RaspBEECom {
 	}
 	
 	public function getLights(){
-		//$ip = config::byKey('raspbeeIP','RaspBEE');
-		//$apikey = config::byKey('raspbeeAPIKEY','RaspBEE');
 		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/lights");
 	}
 	

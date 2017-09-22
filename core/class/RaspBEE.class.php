@@ -219,6 +219,11 @@ class RaspBEE extends eqLogic {
 		return eqLogicOperate::createDevice();
 	}
 	
+	/*public function createGroup($group){
+	error_log("|group create raspbee.class|".$group,3,"/tmp/rasbee.err");
+	return eqLogicOperate::createGroup($group);
+	}*/
+	
 	public function findRaspBEE(){
 		$raspbeecom = new RaspBEECom;
 		$result = $raspbeecom->findRaspBEE();
@@ -236,6 +241,14 @@ class RaspBEE extends eqLogic {
 	public function getRaspBEEConf(){
 		$raspbeecom = new RaspBEECom;
 		$result = $raspbeecom->getConf();
+		unset($raspbeecom);
+		return $result;
+	}
+	
+	public function getRaspBEEGroups(){
+		//error_log("|getRaspBEEGroups|".$result,3,"/tmp/rasbee.err");
+		$raspbeecom = new RaspBEECom;
+		$result = $raspbeecom->getGroups();		
 		unset($raspbeecom);
 		return $result;
 	}

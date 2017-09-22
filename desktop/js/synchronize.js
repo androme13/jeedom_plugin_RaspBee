@@ -15,12 +15,47 @@
 */
 //$('#textarealog').value("coucou");
 $('#bt_synchronize').on('click', function () {
+	//error_log("|bt_synchronize click|",3,"/tmp/rasbee.err");
+
 	// $logs = $("#textarealog").val();
 	//$logs+= "ok";
 	//$("#textarealog").val($logs);
 	syncSensors();
 	syncLights();
+	syncGroups();
 });
+
+function syncGroups(){
+//error_log("|synchronize syncgroups|",3,"/tmp/rasbee.err");
+$.ajax({
+type: "POST", 
+url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+data: {
+action: "getRaspBEEGroups",
+		},
+dataType: 'json',
+error: function (request, status, error) {
+			handleAjaxError(request, status, error);
+			error_log("|synchronize syncgroups error|",3,"/tmp/rasbee.err");
+		},
+success: function (data) { 
+			if (data.state != 'ok') {
+				$('#div_alert').showAlert({message: data.result, level: 'danger'});
+				return;
+			}
+
+			// on parse les sensors
+			console.log("group: ",data.result);
+			let devices = JSON.parse(data.result);
+			for (var device in devices) {
+				devices[device].origid=device;
+				createGroup(devices[device]);				
+			}
+			
+			//on lance la synchro des lights ensuite		
+} 
+	});
+}
 
 
 function syncSensors(){
@@ -80,6 +115,26 @@ success: function (data) {
 	});	
 }
 
+function createGroup(group){
+$.ajax({
+type: "POST", 
+url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+data: {
+action: "createGroup",
+device: group
+		},
+dataType: 'json',
+error: function (request, status, error) {
+			handleAjaxError(request, status, error);
+		},
+success: function (data) { 
+			if (data.state != 'ok') {
+				$('#div_alert').showAlert({message: data.result, level: 'danger'});
+				return;
+			}
+} 
+	});	
+};
 
 function createSensor(sensor){
 $.ajax({
