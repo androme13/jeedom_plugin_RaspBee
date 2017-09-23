@@ -215,6 +215,11 @@ class RaspBEE extends eqLogic {
 	}
 
 	
+	
+	public function test(){
+		return "test ok";
+	}
+	
 	public function syncEqLogicWithRaspBEE($_logical_id = null, $_exclusion = 0){
 		return eqLogicOperate::createDevice();
 	}

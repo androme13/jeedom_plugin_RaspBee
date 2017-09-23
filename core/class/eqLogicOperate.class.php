@@ -127,7 +127,7 @@ class eqLogicOperate extends eqLogic {
 		$eqLogic->setLogicalId($_logical_id);
 		// on fabrique un LIGHT
 		$eqLogic->setConfiguration('origid', $device[origid]);
-		$eqLogic->setConfiguration('lights', $device[lights]);				$eqLogic->setConfiguration('devicemembership', $device[devicemembership]);
+		$eqLogic->setConfiguration('lights', json_encode($device[lights]));		$eqLogic->setConfiguration('devicemembership', json_encode($device[devicemembership]));
 		$eqLogic->setConfiguration('type', $device[type]);
 		$eqLogic->setIsVisible(1);
 		$eqLogic->save();
