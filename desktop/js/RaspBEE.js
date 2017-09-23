@@ -113,21 +113,42 @@ function printEqLogic(_eqlogic) {
 		_eqlogic.configuration = {};
 	}
 	$('#table_infoseqlogic tbody').empty();
-	printEqLogicHelper("Connecté","reachable",_eqlogic);
-	printEqLogicHelper("Id origine","origid",_eqlogic);	
-	printEqLogicHelper("Marque","manufacturername",_eqlogic);
-	printEqLogicHelper("Modèle","modelid",_eqlogic);	
-	printEqLogicHelper("Firmware","swversion",_eqlogic);	
-	printEqLogicHelper("Type","type",_eqlogic);	
-	printEqLogicHelper("UID","uniqueid",_eqlogic);		
-	printEqLogicHelper("Devicemembership","devicemembership",_eqlogic);
-	printEqLogicHelper("Lights","lights",_eqlogic);		
+	var subst = { true : '<span title="Le périphérique est online"><i class="fa fa-check-circle" style="color:#007600;"></i></span', false: '<span title="Le périphérique est offline"><i class="fa fa-times-circle" style="color:#760000;"></i></span>'};
+	printEqLogicHelper(false,"{{Connecté}}","reachable",_eqlogic,subst);
+	printEqLogicHelper(true,"{{Id origine}}","origid",_eqlogic);	
+	printEqLogicHelper(false,"{{Marque}}","manufacturername",_eqlogic);
+	printEqLogicHelper(false,"{{Modèle}}","modelid",_eqlogic);	
+	printEqLogicHelper(true,"{{Firmware}}","swversion",_eqlogic);	
+	printEqLogicHelper(true,"{{Type}}","type",_eqlogic);	
+	printEqLogicHelper(true,"{{UID}}","uniqueid",_eqlogic);		
+	printEqLogicHelper(true,"{{Devicemembership}}","devicemembership",_eqlogic);
+	printEqLogicHelper(true,"{{Lights}}","lights",_eqlogic);		
 }
- function printEqLogicHelper(label,name,_eqlogic){
-		var trm = '<tr class="eqLogic"><td class="col-sm-2"><span class="label control-label" style="font-size : 1em;">'+label+'</span></td><td><span class="label label-default" style="font-size : 1em;"> <span class="eqLogicAttr" data-l1key="configuration" data-l2key="'+name+'"></span></span></td></tr>';
+ function printEqLogicHelper(expertMode,label,name,_eqLogic,_subst){
+	 var expertModeVal="";
+	 if (expertMode==true) expertModeVal = "expertModeVisible";
+ // (expertmodevisible,nom du champ,eqlogic en cours,tableau de substitution des valeurs)
+		if (_eqLogic.configuration[name]==undefined) return;
+		if (_subst!=null && _subst!=undefined){
+			name = _subst[_eqLogic.configuration[name]];
+			var trm = '<tr class="eqLogic '+expertModeVal+'"><td class="col-sm-2"><span class="label control-label" style="font-size : 1em;">'+label+'</span></td><td><span class="label label-default" style="font-size : 1em;">'+name+'</span></td></tr>';
+		}
+		else
+		var trm = '<tr class="eqLogic '+expertModeVal+'"><td class="col-sm-2"><span class="label control-label" style="font-size : 1em;">'+label+'</span></td><td><span class="label label-default" style="font-size : 1em;"> <span class="eqLogicAttr" data-l1key="configuration" data-l2key="'+name+'"></span></span></td></tr>';
 		$('#table_infoseqlogic tbody').append(trm);
-		$('#table_infoseqlogic tbody tr:last').setValues(_eqlogic, '.eqLogicAttr');		
+		$('#table_infoseqlogic tbody tr:last').setValues(_eqLogic, '.eqLogicAttr');		
  }
+ 
+ 
+
+function arraySearch(arr,val) {
+    for (var i=0; i<arr.length; i++)
+        if (arr[i] === val)                    
+            return i;
+    return false;
+  }
+
+
 
 
 
