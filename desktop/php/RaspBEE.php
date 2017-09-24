@@ -222,16 +222,18 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 		</form>
 	</div>
 	<div class="col-sm-5">
-		<form class="form-horizontal">
-				
+		<form class="form-horizontal">				
 			<table id="table_infoseqlogic" class="table table-condensed">
 				<thead>
 				</thead>
 				<tbody>
 				</tbody>
 			</table>
-			</form>
-</div>
+		</form>
+	</div>
+	<div class="col-sm-5">
+		<div id="masterEqLogic"></div>		
+	</div>
 </div>
 </div>
 <div role="tabpanel" class="tab-pane" id="commandtab">

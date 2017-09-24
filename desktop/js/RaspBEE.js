@@ -21,7 +21,7 @@ title: "{{Synchronisation}}",
 dialogClass: "no-close",
 buttons: [
 		{
-text: "Fermer",
+text: "{{Fermer}}",
 click: function() {
 				window.location.reload();
 				//$( this ).dialog( "close" );
@@ -68,7 +68,7 @@ success: function (data) {
 });
 
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
-/*$("#table_cmd2").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});*/
+
 /*
 * Fonction de listage des commandes
 */
@@ -105,6 +105,7 @@ function addCmdToTable(_cmd) {
 	jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
 }
 
+// fonction executée par jeedom lors de l'affichage des details d'un eqlogic
 function printEqLogic(_eqlogic) {
 	if (!isset(_eqlogic)) {
 		var _eqlogic = {configuration: {}};
@@ -122,7 +123,9 @@ function printEqLogic(_eqlogic) {
 	printEqLogicHelper(true,"{{Type}}","type",_eqlogic);	
 	printEqLogicHelper(true,"{{UID}}","uniqueid",_eqlogic);		
 	printEqLogicHelper(true,"{{Devicemembership}}","devicemembership",_eqlogic);
-	printEqLogicHelper(true,"{{Lights}}","lights",_eqlogic);		
+	printEqLogicHelper(true,"{{Lights}}","lights",_eqlogic);
+	if (("devicemembership" in _eqlogic.configuration)) printMasterEqLogic(_eqlogic);
+	else $('#masterEqLogic').empty();
 }
  function printEqLogicHelper(expertMode,label,name,_eqLogic,_subst){
 	 var expertModeVal="";
@@ -139,14 +142,32 @@ function printEqLogic(_eqlogic) {
 		$('#table_infoseqlogic tbody tr:last').setValues(_eqLogic, '.eqLogicAttr');		
  }
  
- 
+function printMasterEqLogic(_eqLogic){
+	var humanname='<center><span class="label label-default" style="text-shadow : none;">Aucun</span><br><strong> '+_eqLogic.name+'</strong></center>';
+	var master ="";
+	master+='<table id="table_masterEqLogic" class="table table-condensed" style="margin:auto;text-align:center;"><tr><th style="margin:auto;"class="expertModeVisible">{{Contrôleur maître}}</th></tr><tr><td>';
+	master+='<div class="eqLogicDisplayCard cursor" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
+	master+= "<center>";
+	master+= '<i class="fa fa-th-large" style="font-size : 6em;color:#767676;"></i>';
+	master+= '<br>';
+	master+= '<span style="font-size : 0.8em;">';
+	master+= '{{Commande}}';
+	master+= '</span>';
 
-function arraySearch(arr,val) {
+	master+= "<span style='font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;'><center>"+humanname+"</center></span>";
+	master+='</td></tr><tbody></tbody></table>';
+	master+='</div';
+	$('#masterEqLogic').append(master);
+	//$('#masterEqLogic').setValues(_eqLogic, '.eqLogicAttr');	
+	console.dir(_eqLogic);
+}
+
+/*function arraySearch(arr,val) {
     for (var i=0; i<arr.length; i++)
         if (arr[i] === val)                    
             return i;
     return false;
-  }
+  }*/
 
 
 
