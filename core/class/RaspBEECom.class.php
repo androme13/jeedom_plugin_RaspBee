@@ -118,9 +118,13 @@ class RaspBEECom {
 	
 	
 	
-	public function sendLightCommand($id=null,$command=null){
+	public function sendCommand($type=null,$id=null,$command=null){
 		//error_log("sendLightCommand(".$id.":".$command.")",3,"/tmp/prob.txt");
-		if ($id==null || $command==null) return false;
+		$url= 'http://'.$this->ip.'/api/'.$this->apikey.'/'.$type.'/'.$id;
+		if ($type=="groups") $url=$url."/action";
+		if ($type!="groups") $url=$url."/state";
+		error_log("url :".$url,3,"/tmp/prob.txt");
+		if ($id===null || $command===null || $type===null)return false;
 		$ch = curl_init();
 		$opts = [
 		CURLOPT_SSL_VERIFYPEER => false,
@@ -128,7 +132,7 @@ class RaspBEECom {
 		CURLOPT_POSTFIELDS     => $command,
 		CURLOPT_CUSTOMREQUEST =>  "PUT",
 		CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
-		CURLOPT_URL            => "http://".$this->ip."/api/".$this->apikey."/lights/".$id."/state",
+		CURLOPT_URL            => $url,
 		//CURLOPT_POST		   => true,
 		CURLOPT_RETURNTRANSFER => true,
 		CURLOPT_TIMEOUT        => 30,

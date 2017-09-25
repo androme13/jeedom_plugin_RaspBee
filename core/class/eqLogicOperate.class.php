@@ -85,23 +85,7 @@ class eqLogicOperate extends eqLogic {
 		$eqLogic->setConfiguration('colormode', $device[state][colormode]);
 		$eqLogic->setIsVisible(1);
 		$eqLogic->save();
-		$model = json_decode($configFile, true);
-		$commands = $model['commands'];
-		foreach ($model['commands'] as $command) {
-			$RaspBEECmd = new RaspBEECmd();
-			$RaspBEECmd->setName($command[name]);
-			$RaspBEECmd->setLogicalId($command[logicalId]);
-			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-			$RaspBEECmd->setValue($command[value]);
-			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
-			$RaspBEECmd->setConfiguration("minValue",$command[configuration][minValue]);
-			$RaspBEECmd->setConfiguration("maxValue",$command[configuration][maxValue]);
-			$RaspBEECmd->setIsVisible($command[isVisible]);
-			$RaspBEECmd->setType($command[type]);
-			$RaspBEECmd->setSubType($command[subtype]);
-			$RaspBEECmd->save();						
-		}
-		return true;
+		return self::setGenericCmdList("DimmableLight.json",$eqLogic);
 	}
 	
 	public function createLightGroup($device){
@@ -131,24 +115,7 @@ class eqLogicOperate extends eqLogic {
 		$eqLogic->setConfiguration('type', $device[type]);
 		$eqLogic->setIsVisible(1);
 		$eqLogic->save();
-		$model = json_decode($configFile, true);
-		$commands = $model['commands'];
-		foreach ($model['commands'] as $command) {
-			$RaspBEECmd = new RaspBEECmd();
-			$RaspBEECmd->setName($command[name]);
-			$RaspBEECmd->setLogicalId($command[logicalId]);
-			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-			$RaspBEECmd->setValue($command[value]);
-			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
-			$RaspBEECmd->setConfiguration("minValue",$command[configuration][minValue]);
-			$RaspBEECmd->setConfiguration("maxValue",$command[configuration][maxValue]);
-			$RaspBEECmd->setIsVisible($command[isVisible]);
-			$RaspBEECmd->setType($command[type]);
-			$RaspBEECmd->setSubType($command[subtype]);
-			$RaspBEECmd->save();						
-		}
-		error_log("|fin de eqlogic group create2|",3,"/tmp/rasbee.err");
-		return true;
+		return self::setGenericCmdList("Group.json",$eqLogic);
 	}
 	
 	public function createExtendedColorLight($device){
@@ -178,23 +145,9 @@ class eqLogicOperate extends eqLogic {
 		$eqLogic->setConfiguration('colormode', $device[state][colormode]);
 		$eqLogic->setIsVisible(1);
 		$eqLogic->save();
-		$model = json_decode($configFile, true);
-		$commands = $model['commands'];
-		foreach ($model['commands'] as $command) {
-			$RaspBEECmd = new RaspBEECmd();
-			$RaspBEECmd->setName($command[name]);
-			$RaspBEECmd->setLogicalId($command[logicalId]);
-			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-			$RaspBEECmd->setValue($command[value]);
-			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
-			$RaspBEECmd->setConfiguration("minValue",$command[configuration][minValue]);
-			$RaspBEECmd->setConfiguration("maxValue",$command[configuration][maxValue]);
-			$RaspBEECmd->setIsVisible($command[isVisible]);
-			$RaspBEECmd->setType($command[type]);
-			$RaspBEECmd->setSubType($command[subtype]);
-			$RaspBEECmd->save();						
-		}
-		return true;
+		
+		
+		return self::setGenericCmdList("ExtendedColorLight.json",$eqLogic);
 	}
 	
 	
@@ -207,43 +160,8 @@ class eqLogicOperate extends eqLogic {
 		if (!is_json($configFile)) {
 			return false;
 		}
-		//error_log("createZHATemperature ".$device[origID]);
-		$eqLogic = new eqLogic();
-		$eqLogic->setEqType_name('RaspBEE');
-		$eqLogic->setName($device[name]." ".$device[origid]);
-		$eqLogic->setIsEnable(1);
-		$eqLogic->setIsVisible(1);
-		$_logical_id = null;
-		$eqLogic->setLogicalId($_logical_id);
-		// on fabrique un sensor ZHASwitch
-		$eqLogic->setConfiguration('origid', $device[origid]);
-		//$eqLogic->setConfiguration('etag', "e6797100e644d32ac0019ea2a8336bcd");
-		$eqLogic->setConfiguration('manufacturername', $device[manufacturername]);
-		//$eqLogic->setConfiguration('mode', $device[mode]);
-		$eqLogic->setConfiguration('modelid', $device[modelid]);
-		$eqLogic->setConfiguration('reachable', $device[config][reachable]);
-		$eqLogic->setConfiguration('swversion', $device[swversion]);
-		$eqLogic->setConfiguration('type', $device[type]);
-		$eqLogic->setConfiguration('uniqueid', $device[uniqueid]);
-
-		$eqLogic->batteryStatus($device[config][battery]);
-		$eqLogic->save();
-
-		$model = json_decode($configFile, true);
-		$commands = $model['commands'];
-		foreach ($model['commands'] as $command) {
-			$RaspBEECmd = new RaspBEECmd();
-			$RaspBEECmd->setName($command[name]);
-			$RaspBEECmd->setLogicalId($command[name]);
-			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
-			$RaspBEECmd->setConfiguration("minValue",$command[configuration][minValue]);
-			$RaspBEECmd->setConfiguration("maxValue",$command[configuration][maxValue]);
-			$RaspBEECmd->setType($command[type]);
-			$RaspBEECmd->setSubType($command[subtype]);
-			$RaspBEECmd->save();						
-		}
-		return true;
+		$eqLogic = self::setGenericEqLogic($device);
+		return self::setGenericCmdList("ZHASwitch.json",$eqLogic);
 	}
 	
 	public function createZHATemperature($device){
@@ -254,43 +172,8 @@ class eqLogicOperate extends eqLogic {
 		if (!is_json($configFile)) {
 			return false;
 		}
-		//error_log("createZHATemperature ".$device[origID]);
-		$eqLogic = new eqLogic();
-		$eqLogic->setEqType_name('RaspBEE');
-		$eqLogic->setName($device[name]." ".$device[origid]);
-		$eqLogic->setIsEnable(1);
-		$eqLogic->setIsVisible(1);
-		$_logical_id = null;
-		$eqLogic->setLogicalId($_logical_id);
-		// on fabrique un sensor ZHATemperature
-		$eqLogic->setConfiguration('origid', $device[origid]);
-		//$eqLogic->setConfiguration('etag', "e6797100e644d32ac0019ea2a8336bcd");
-		$eqLogic->setConfiguration('manufacturername', $device[manufacturername]);
-		//$eqLogic->setConfiguration('mode', $device[mode]);
-		$eqLogic->setConfiguration('modelid', $device[modelid]);
-		$eqLogic->setConfiguration('reachable', $device[config][reachable]);
-		$eqLogic->setConfiguration('swversion', $device[swversion]);
-		$eqLogic->setConfiguration('type', $device[type]);
-		$eqLogic->setConfiguration('uniqueid', $device[uniqueid]);
-
-		$eqLogic->batteryStatus($device[config][battery]);
-		$eqLogic->save();
-
-		$model = json_decode($configFile, true);
-		$commands = $model['commands'];
-		foreach ($model['commands'] as $command) {
-			$RaspBEECmd = new RaspBEECmd();
-			$RaspBEECmd->setName($command[name]);
-			$RaspBEECmd->setLogicalId($command[name]);
-			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
-			$RaspBEECmd->setConfiguration("minValue",$command[configuration][minValue]);
-			$RaspBEECmd->setConfiguration("maxValue",$command[configuration][maxValue]);
-			$RaspBEECmd->setType($command[type]);
-			$RaspBEECmd->setSubType($command[subtype]);
-			$RaspBEECmd->save();						
-		}
-		return true;	
+		$eqLogic = self::setGenericEqLogic($device);	
+		return self::setGenericCmdList("ZHATemperature.json",$eqLogic);
 	}
 	
 	public function createZHAHumidity($device){		
@@ -301,43 +184,8 @@ class eqLogicOperate extends eqLogic {
 		if (!is_json($configFile)) {
 			return false;
 		}
-		//error_log("createZHATemperature ".$device[origID]);
-		$eqLogic = new eqLogic();
-		$eqLogic->setEqType_name('RaspBEE');
-		$eqLogic->setName($device[name]." ".$device[origid]);
-		$eqLogic->setIsEnable(1);
-		$eqLogic->setIsVisible(1);
-		$_logical_id = null;
-		$eqLogic->setLogicalId($_logical_id);
-		// on fabrique un sensor ZHAHumidity
-		$eqLogic->setConfiguration('origid', $device[origid]);
-		$eqLogic->setConfiguration('manufacturername', $device[manufacturername]);
-		$eqLogic->setConfiguration('modelid', $device[modelid]);
-		$eqLogic->setConfiguration('reachable', $device[config][reachable]);
-		$eqLogic->setConfiguration('swversion', $device[swversion]);
-		$eqLogic->setConfiguration('type', $device[type]);
-		$eqLogic->setConfiguration('uniqueid', $device[uniqueid]);
-
-		$eqLogic->batteryStatus($device[config][battery]);
-		$eqLogic->save();
-		
-		
-		
-		$model = json_decode($configFile, true);
-		$commands = $model['commands'];
-		foreach ($model['commands'] as $command) {
-			$RaspBEECmd = new RaspBEECmd();
-			$RaspBEECmd->setName($command[name]);
-			$RaspBEECmd->setLogicalId($command[name]);
-			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
-			$RaspBEECmd->setConfiguration("minValue",$command[configuration][minValue]);
-			$RaspBEECmd->setConfiguration("maxValue",$command[configuration][maxValue]);
-			$RaspBEECmd->setType($command[type]);
-			$RaspBEECmd->setSubType($command[subtype]);
-			$RaspBEECmd->save();						
-		}
-		return true;	
+		$eqLogic = self::setGenericEqLogic($device);
+		return self::setGenericCmdList("ZHAHumidity.json",$eqLogic);
 	}
 	
 	public function createZHAPressure($device){		
@@ -348,7 +196,12 @@ class eqLogicOperate extends eqLogic {
 		if (!is_json($configFile)) {
 			return false;
 		}
-		//error_log("createZHATemperature ".$device[origID]);
+		$eqLogic = self::setGenericEqLogic($device);
+		return self::setGenericCmdList("ZHAPressure.json",$eqLogic);		
+	}
+	
+	
+	function setGenericEqLogic($device){
 		$eqLogic = new eqLogic();
 		$eqLogic->setEqType_name('RaspBEE');
 		$eqLogic->setName($device[name]." ".$device[origid]);
@@ -356,7 +209,6 @@ class eqLogicOperate extends eqLogic {
 		$eqLogic->setIsVisible(1);
 		$_logical_id = null;
 		$eqLogic->setLogicalId($_logical_id);
-		// on fabrique un sensor ZHAHumidity
 		$eqLogic->setConfiguration('origid', $device[origid]);
 		$eqLogic->setConfiguration('manufacturername', $device[manufacturername]);
 		$eqLogic->setConfiguration('modelid', $device[modelid]);
@@ -366,9 +218,13 @@ class eqLogicOperate extends eqLogic {
 		$eqLogic->setConfiguration('uniqueid', $device[uniqueid]);
 		$eqLogic->batteryStatus($device[config][battery]);
 		$eqLogic->save();
-		
-		
-		
+		return $eqLogic;		
+	}
+	
+	function setGenericCmdList($file=null,$eqLogic=null){
+		if ($file == null ||$eqLogic==null) return false;
+		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/'.$file);
+		if (!is_json($configFile)) return false;
 		$model = json_decode($configFile, true);
 		$commands = $model['commands'];
 		foreach ($model['commands'] as $command) {
@@ -379,11 +235,12 @@ class eqLogicOperate extends eqLogic {
 			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
 			$RaspBEECmd->setConfiguration("minValue",$command[configuration][minValue]);
 			$RaspBEECmd->setConfiguration("maxValue",$command[configuration][maxValue]);
+			$RaspBEECmd->setDisplay('generic_type',$command[display][generic_type]);
 			$RaspBEECmd->setType($command[type]);
 			$RaspBEECmd->setSubType($command[subtype]);
 			$RaspBEECmd->save();						
 		}
-		return true;	
+		return true;		
 	}
 }
 

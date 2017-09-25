@@ -47,7 +47,7 @@
 				"configuration" :{
 					"fieldname" : "effect"
 				}, 
-				"subtype": "other", 
+				"subtype": "string", 
 				"display": {
 					"generic_type": "DONT"
 				}

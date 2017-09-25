@@ -315,6 +315,7 @@ class RaspBEECmd extends cmd {
 			
 			$eqLogic = $this->getEqLogic();
 			error_log("execute action : ".$this->getConfiguration('fieldname')." ".$this->getName(),3,"/tmp/prob.txt");
+			error_log("execute action : ".$eqLogic->getConfiguration('type')." ".$this->getName(),3,"/tmp/prob.txt");
 			error_log(json_encode($_options),3,"/tmp/prob.txt");
 			
 			switch ($this->getConfiguration('fieldname'))
@@ -331,7 +332,16 @@ class RaspBEECmd extends cmd {
 					
 				
 			}
-			self::sendCommand($this->getEqlogic()->getConfiguration('origid'),$commandtosend);
+			switch ($eqLogic->getConfiguration('type')){
+				case "Extended color light":
+				case "Dimmable light":
+				self::sendCommand("lights",$this->getEqlogic()->getConfiguration('origid'),$commandtosend);
+				break;
+				case "LightGroup":
+				self::sendCommand("groups",$this->getEqlogic()->getConfiguration('origid'),$commandtosend);
+				break;				
+			}
+			
 			error_log("commande : ".$commandtosend,3,"/tmp/prob.txt");
 			return;
 		}
@@ -345,14 +355,17 @@ class RaspBEECmd extends cmd {
 		}	
 	}
 	
-	private function sendCommand($id=null,$command=null){
-		//error_log("sendCommand",3,"/tmp/prob.txt");
+	private function sendCommand($type=null,$id=null,$command=null){
+		error_log("sendCommand",3,"/tmp/prob.txt");
 
-		if ($command==null) return false;
+		if ($id===null || $command===null || $type===null)return false;
 		//error_log("getRaspBEESensors pass");
 		$raspbeecom = new RaspBEECom;
-		$result = $raspbeecom->sendLightCommand($id,$command);
+		$result = $raspbeecom->sendCommand($type,$id,$command);
 		unset($raspbeecom);
+		error_log("error :".$result,3,"/tmp/prob.txt");
+				error_log("commande :".$command,3,"/tmp/prob.txt");
+
 		return $result;
 		
 	}
