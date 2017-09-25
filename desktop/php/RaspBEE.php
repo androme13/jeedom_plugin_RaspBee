@@ -31,6 +31,7 @@ echo '<div id="div_inclusionAlert"></div>';
 foreach ($eqLogics as $eqLogic) {
 	$opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
 	echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $eqLogic->getId() . '" style="' . $opacity . '"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
+
 }
 ?>
 </ul>
@@ -223,7 +224,7 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 	</div>
 	<div class="col-sm-5">
 		<form class="form-horizontal">				
-			<table id="table_infoseqlogic" class="table table-condensed">
+			<table id="table_infoseqlogic" class="table table-condensed" style="border-radius: 10px;">
 				<thead>
 				</thead>
 				<tbody>
