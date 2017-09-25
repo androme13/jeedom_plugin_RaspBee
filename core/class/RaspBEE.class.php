@@ -316,7 +316,7 @@ class RaspBEECmd extends cmd {
 			$eqLogic = $this->getEqLogic();
 			//error_log("execute action : ".$this->getConfiguration('fieldname')." ".$this->getName(),3,"/tmp/prob.txt");
 			//error_log("execute action : ".$eqLogic->getConfiguration('type')." ".$this->getName(),3,"/tmp/prob.txt");
-			//error_log(json_encode($_options),3,"/tmp/prob.txt");
+			error_log("options :".json_encode($_options),3,"/tmp/prob.txt");
 			
 			switch ($this->getConfiguration('fieldname'))
 			{
@@ -325,8 +325,15 @@ class RaspBEECmd extends cmd {
 					$commandtosend='{"on" : true}';
 				else
 					$commandtosend='{"on" : false}';
-					break;
-				
+				break;
+				case "color":
+					$temp = hex2rgb($_options[color]);
+					$xy = self::RGBtoXY($temp[0],$temp[1],$temp[2],false);
+					//error_log("the color RED".$temp[0],3,"/tmp/prob.txt");
+					error_log("the color".$xy[x],3,"/tmp/prob.txt");
+					
+					$commandtosend='{"xy" :['.$xy[x].','.$xy[y].']}';
+				break;
 				default :
 					$commandtosend='{"'.$this->getConfiguration('fieldname').'" : '.$_options[slider].'}';
 					
@@ -342,18 +349,58 @@ class RaspBEECmd extends cmd {
 				break;				
 			}
 			
-			error_log("commande : ".$commandtosend,3,"/tmp/prob.txt");
+			//error_log("commande : ".$commandtosend,3,"/tmp/prob.txt");
 			return;
 		}
 		
 		if ($this->getType() == 'info'){
 			error_log("execute info",3,"/tmp/prob.txt");
 			error_log(json_encode($_options),3,"/tmp/prob.txt");
-			
-			error_log(json_encode($_options),3,"/tmp/prob.txt");
 			return;
 		}	
 	}
+	// RGB color specs to the CIE color space
+	// valeur entre 0.1 et 1 pour R G B;
+	function RGBtoXY($R,$G,$B,$isFloat=false){
+	//error_log("RGBtoXY:",3,"/tmp/prob.txt");		
+
+		if ($isFloat==false){
+			$R=$R/256;
+			$G=$G/256;
+			$B=$B/256;
+		}
+		$X = 0.4124*$R + 0.3576*$G + 0.1805*$B;
+		$Y = 0.2126*$R + 0.7152*$G + 0.0722*$B;
+		$Z = 0.0193*$R + 0.1192*$G + 0.9505*$B;
+		$x = $X / ($X + $Y + $Z);
+		$y = $Y / ($X + $Y + $Z);
+	return 	array('x' => $x,'y' => $y);
+	}
+	
+	/**
+	 * #rrggbb or #rgb to [r, g, b]
+	 */
+	function hex2rgb(string $hex)
+	{
+		$hex = ltrim($hex, '#');
+		if(strlen($hex) == 3)
+			return array ('r' => hexdec($hex[0].$hex[0]),'g' => hexdec($hex[1].$hex[1]),'b' => hexdec($hex[2].$hex[2]));			
+		else
+			return array ('r' => hexdec($hex[0].$hex[1]),'g' => hexdec($hex[2].$hex[3]),'b' => hexdec($hex[4].$hex[5]));
+	}
+
+
+	/**
+	 * [r, g, b] to #rrggbb
+	 */
+	function rgb2hex(array $rgb)
+	{
+		return '#'
+			. sprintf('%02x', $rgb[0])
+			. sprintf('%02x', $rgb[1])
+			. sprintf('%02x', $rgb[2]);
+	}
+	
 	
 	private function sendCommand($type=null,$id=null,$command=null){
 		error_log("sendCommand",3,"/tmp/prob.txt");

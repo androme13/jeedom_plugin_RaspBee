@@ -15,6 +15,9 @@ websocketclientparser = module.exports = {
 		case 'lights':
 			return(this.lightsprocess(jsondata));
 			break;
+		case 'groups':
+			return(this.groupsprocess(jsondata));
+			break;
 		default :
 			//console.log("raw: ",jsondata);
 		return jsondata;
@@ -31,7 +34,7 @@ websocketclientparser = module.exports = {
 		// on traite les events (t)
 		switch (sensorsobj.t){
 		case 'event':
-			// si on a une valeur state pour le sensor (bouton)
+			// si on a une valeur state pour le sensor
 			if (typeof sensorsobj.state !== 'undefined') {
 				call.type = sensorsobj.r;
 				call.id = sensorsobj.id;
@@ -80,6 +83,40 @@ websocketclientparser = module.exports = {
 			default :
 			//console.log("raw: ",lightobj);
 			return "raw: "+lightobj;			
+		}
+	},
+	groupsprocess : function (groupsobj){
+		console.log("--------------------------------");
+		console.log("websocketclientparser groupsprocess:");
+		console.log (groupsobj);
+		console.log("--------------------------------");
+		var call = new Object();
+		// on traite les events (t)
+		switch (groupsobj.t){
+		case 'event':
+			// si on a une valeur state pour le groupe
+			if (typeof groupsobj.state !== 'undefined') {
+				call.type = groupsobj.r;
+				call.id = groupsobj.id;
+				call.action = groupsobj.state;
+				return call;
+			}else
+			// si on a une valeur config pour le groupe
+			if (typeof groupsobj.config !== 'undefined') {
+				call.type = groupsobj.r;
+				call.id = groupsobj.id;
+				call.info = groupsobj.config;
+				return call;
+			}else
+			{
+				//console.log("event inconnu: ",groupsobj);
+				return "event inconnu: "+groupsobj;
+			}
+			break;
+			default :
+			//console.log("raw: ",sensorsobj);
+			return "raw: "+groupsobj;
+			
 		}
 	}
 }

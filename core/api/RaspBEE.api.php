@@ -21,10 +21,6 @@ if (!is_object($jsonrpc)) {
 }
 $params = $jsonrpc->getParams();
 
-if ($jsonrpc->getMethod() == 'syncconfOpenzwave') {
-    $jsonrpc->makeSuccess(openzwave::syncconfOpenzwave());
-}
-
 if ($jsonrpc->getMethod() == 'test') {
     $jsonrpc->makeSuccess();
 }

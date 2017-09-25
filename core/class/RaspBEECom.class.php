@@ -119,7 +119,7 @@ class RaspBEECom {
 	
 	
 	public function sendCommand($type=null,$id=null,$command=null){
-		//error_log("sendLightCommand(".$id.":".$command.")",3,"/tmp/prob.txt");
+		error_log("sendLightCommand(".$id.":".$command.")",3,"/tmp/prob.txt");
 		$url= 'http://'.$this->ip.'/api/'.$this->apikey.'/'.$type.'/'.$id;
 		if ($type=="groups") $url=$url."/action";
 		if ($type!="groups") $url=$url."/state";

@@ -2,7 +2,7 @@
     "name": "Group",	
     "configuration": {
 		"state": 0,
-		"hidden": false,
+		"hidden": 0,
 		"origID": 0,
 		"type": "LightGroup" 	
     },

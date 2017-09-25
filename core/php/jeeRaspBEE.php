@@ -84,6 +84,26 @@ if($results->type == "lights"){
 		}		
 	}
 }
+
+if($results->type == "groups"){
+	error_log("gestion groupes",3,"/tmp/prob.txt")
+	// on traite l'info d'un device
+		foreach (eqLogic::byType('RaspBEE') as $equipement) {
+			if ($equipement->getConfiguration('origid')==$results->id)			
+			foreach ($equipement->getCmd('info') as $cmd){
+				foreach ($results->action as $actioncmd => $key){	
+				error_log($result->action,3,"/tmp/prob.txt")
+					if ($cmd->getConfiguration('fieldname')==$actioncmd){
+							
+							//$cmd->event($key);							
+					}
+				}
+			}			
+		}
+}
+
+
+
 else
 echo json_encode($results->params);
 
