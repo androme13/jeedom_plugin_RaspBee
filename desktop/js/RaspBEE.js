@@ -32,7 +32,6 @@ click: function() {
 	});
 	$('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=synchronize').dialog('open');
 	
-	//syncEqLogicWithRaspBEE();
 });
 
 
@@ -145,7 +144,8 @@ function printEqLogic(_eqlogic) {
 function printMasterEqLogic(_eqLogic){
 	var humanname='<center><span class="label label-default" style="text-shadow : none;">Aucun</span><br><strong> '+_eqLogic.name+'</strong></center>';
 	var master ="";
-	master+='<table id="table_masterEqLogic" class="table table-condensed" style="margin:auto;text-align:center;"><tr><th style="margin:auto;"class="expertModeVisible">{{Contrôleur maître}}</th></tr><tr><td>';
+	//master+='<table id="table_masterEqLogic" class="table table-condensed expertModeVisible" ><th style="text-align: center">{{Contrôleur maître}}</th><tr><td>';
+	master+='<span class="label control-label" style="font-size : 1em;">Contôleur Maître</span>'
 	master+='<div class="eqLogicDisplayCard cursor" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
 	master+= "<center>";
 	master+= '<i class="fa fa-th-large" style="font-size : 6em;color:#767676;"></i>';
@@ -153,11 +153,10 @@ function printMasterEqLogic(_eqLogic){
 	master+= '<span style="font-size : 0.8em;">';
 	master+= '{{Commande}}';
 	master+= '</span>';
-
 	master+= "<span style='font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;'><center>"+humanname+"</center></span>";
-	master+='</td></tr><tbody></tbody></table>';
+	//master+='</td></tr><tbody></tbody></table>';
 	master+='</div';
-	$('#masterEqLogic').append(master);
+	$('#masterEqLogic').html(master);
 	//$('#masterEqLogic').setValues(_eqLogic, '.eqLogicAttr');	
 	console.dir(_eqLogic);
 }
