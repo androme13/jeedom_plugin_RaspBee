@@ -2,7 +2,7 @@
 		"name": "Eclairage",
 		"configuration": {
 			"colormode": "",
-			"hascolor": false,
+			"hascolor": 0,
 			"manufacturername": "",
 			"modelid": "",
 			"origID": 0,		
@@ -29,8 +29,8 @@
 			{
 				"name": "Alerte off", 
 				"type": "action", 
-				"isVisible": true, 
-				"isHistorized": false,
+				"isVisible": 1, 
+				"isHistorized": 0,
 				"logicalId": "alert_off",				
 				"configuration": {
 					"fieldname" : "alert"
@@ -44,22 +44,22 @@
 			{
 				"name": "Etat alerte", 
 				"type": "info", 
-				"isVisible": false, 
-				"isHistorized": false,
+				"isVisible": 0, 
+				"isHistorized": 0,
 				"logicalId": "alert_state",				
 				"configuration" :{
 					"fieldname" : "alert"
 				}, 
 				"subtype": "other", 
 				"display": {
-					"generic_type": "DONT"
+					"generic_type": "LIGHT_STATE"
 				}
 			},	
 			{
 				"name": "On", 
 				"type": "action", 
-				"isVisible": true, 
-				"isHistorized": false,
+				"isVisible": 1, 
+				"isHistorized": 0,
 				"logicalId": "on",				
 				"configuration": {
 					"fieldname" : "on"
@@ -73,8 +73,8 @@
 			{
 				"name": "Off", 
 				"type": "action", 
-				"isVisible": true, 
-				"isHistorized": false,
+				"isVisible": 1, 
+				"isHistorized": 0,
 				"logicalId": "off",				
 				"configuration": {
 				"fieldname" : "on"
@@ -88,8 +88,8 @@
 			{
 				"name": "Etat On", 
 				"type": "info", 
-				"isVisible": false, 
-				"isHistorized": false,
+				"isVisible": 0, 
+				"isHistorized": 0,
 				"logicalId": "on_state",				
 				"configuration" :{
 					"fieldname" : "on"
@@ -102,8 +102,8 @@
 			{
 				"name": "Luminosité", 
 				"type": "action", 
-				"isVisible": true, 
-				"isHistorized": false, 
+				"isVisible": 1, 
+				"isHistorized": 0, 
 				"configuration": {
 					"fieldname" : "bri",
 					"minValue": 0, 
@@ -123,8 +123,8 @@
 			{
 				"name": "Etat luminosité", 
 				"type": "info", 
-				"isVisible": false, 
-				"isHistorized": false,			
+				"isVisible": 0, 
+				"isHistorized": 0,			
 				"configuration" :{
 					"fieldname" : "bri",
 					"minValue": 0, 

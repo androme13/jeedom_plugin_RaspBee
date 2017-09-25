@@ -18,6 +18,17 @@ require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
 class eqLogicOperate extends eqLogic {
 	
+	
+	function checkConfigFile(){
+		if (!is_file(dirname(__FILE__) . '/../config/devices/ZHASwitch.json')){
+		return false;
+		};
+		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/ZHASwitch.json');
+		if (!is_json($configFile)) {
+			return false;
+		}
+	}
+	
 	public function createDevice($device,$syncType = 0){
 		error_log("|eqlogic create device|".$device[type]."|",3,"/tmp/rasbee.err");
 
@@ -144,9 +155,7 @@ class eqLogicOperate extends eqLogic {
 		$eqLogic->setConfiguration('uniqueid', $device[uniqueid]);
 		$eqLogic->setConfiguration('colormode', $device[state][colormode]);
 		$eqLogic->setIsVisible(1);
-		$eqLogic->save();
-		
-		
+		$eqLogic->save();			
 		return self::setGenericCmdList("ExtendedColorLight.json",$eqLogic);
 	}
 	
@@ -227,17 +236,22 @@ class eqLogicOperate extends eqLogic {
 		if (!is_json($configFile)) return false;
 		$model = json_decode($configFile, true);
 		$commands = $model['commands'];
+		error_log("|setGenericCmdList|",3,"/tmp/rasbee.err");
 		foreach ($model['commands'] as $command) {
 			$RaspBEECmd = new RaspBEECmd();
 			$RaspBEECmd->setName($command[name]);
 			$RaspBEECmd->setLogicalId($command[name]);
 			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-			$RaspBEECmd->setConfiguration("fieldname",$command[configuration][fieldname]);
-			$RaspBEECmd->setConfiguration("minValue",$command[configuration][minValue]);
-			$RaspBEECmd->setConfiguration("maxValue",$command[configuration][maxValue]);
-			$RaspBEECmd->setDisplay('generic_type',$command[display][generic_type]);
-			$RaspBEECmd->setType($command[type]);
-			$RaspBEECmd->setSubType($command[subtype]);
+			error_log("|isvisible|".$command[isVisible],3,"/tmp/rasbee.err");
+			//if ($command[isVisible])$RaspBEECmd->setIsVisible($command[isVisible]);
+			//if ($command[isHistorized])$RaspBEECmd->setIsHistorized($command[isHistorized]);
+			if ($command[display])$RaspBEECmd->setDisplay('generic_type',$command[display][generic_type]);
+			if ($command[unite])$RaspBEECmd->setUnite($command[unite]);
+			if ($command[type]) $RaspBEECmd->setType($command[type]);
+			if ($command[subtype])$RaspBEECmd->setSubType($command[subtype]);
+			foreach ($command[configuration] as $command => $key){
+				$RaspBEECmd->setConfiguration($command,$key);				
+			}				
 			$RaspBEECmd->save();						
 		}
 		return true;		

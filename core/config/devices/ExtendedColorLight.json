@@ -2,7 +2,7 @@
 		"name": "Eclairage",
 		"configuration": {
 			"colormode": "",
-			"hascolor": false,
+			"hascolor": 1,
 			"manufacturername": "",
 			"modelid": "",
 			"origID": 0,		
@@ -29,8 +29,8 @@
 			{
 				"name": "Alerte off", 
 				"type": "action", 
-				"isVisible": true, 
-				"isHistorized": false,
+				"isVisible": 1, 
+				"isHistorized": 0,
 				"logicalId": "alert_off",				
 				"configuration": {
 					"fieldname" : "alert"
@@ -44,8 +44,8 @@
 			{
 				"name": "Etat alerte", 
 				"type": "info", 
-				"isVisible": false, 
-				"isHistorized": false,
+				"isVisible": 0, 
+				"isHistorized": 0,
 				"logicalId": "alert_state",				
 				"configuration" :{
 					"fieldname" : "alert"
@@ -58,8 +58,8 @@
 			{
 				"name": "On", 
 				"type": "action", 
-				"isVisible": true, 
-				"isHistorized": false,
+				"isVisible": 1, 
+				"isHistorized": 0,
 				"logicalId": "on",				
 				"configuration": {
 					"fieldname" : "on"
@@ -73,8 +73,8 @@
 			{
 				"name": "Off", 
 				"type": "action", 
-				"isVisible": true, 
-				"isHistorized": false,
+				"isVisible": 1, 
+				"isHistorized": 0,
 				"logicalId": "off",				
 				"configuration": {
 				"fieldname" : "on"
@@ -88,8 +88,8 @@
 			{
 				"name": "Etat On", 
 				"type": "info", 
-				"isVisible": false, 
-				"isHistorized": false,
+				"isVisible": 0, 
+				"isHistorized": 0,
 				"logicalId": "on_state",				
 				"configuration" :{
 					"fieldname" : "on"
@@ -102,8 +102,8 @@
 			{
 				"name": "Luminosité", 
 				"type": "action", 
-				"isVisible": true, 
-				"isHistorized": false, 
+				"isVisible": 1, 
+				"isHistorized": 0, 
 				"configuration": {
 					"fieldname" : "bri",
 					"minValue": 0, 
@@ -123,8 +123,8 @@
 			{
 				"name": "Etat luminosité", 
 				"type": "info", 
-				"isVisible": false, 
-				"isHistorized": false,			
+				"isVisible": 0, 
+				"isHistorized": 0,			
 				"configuration" :{
 					"fieldname" : "bri",
 					"minValue": 0, 
@@ -139,8 +139,8 @@
 			{
 				"name": "Température Blanc", 
 				"type": "action", 
-				"isVisible": true, 
-				"isHistorized": false, 
+				"isVisible": 1, 
+				"isHistorized": 0, 
 				"configuration": {
 					"fieldname" : "ct",
 					"minValue": 153, 
@@ -150,14 +150,14 @@
 				"value" : "Etat Temperature Blanc",				
 				"subtype": "slider", 
 				"display": {
-					"generic_type": "DONT"
+					"generic_type": "LIGHT_SLIDER"
 				}
 			},
 			{
 				"name": "Etat Temperature Blanc", 
 				"type": "info", 
-				"isVisible": false, 
-				"isHistorized": false, 
+				"isVisible": 0, 
+				"isHistorized": 0, 
 				"configuration" :{
 					"fieldname" : "ct",
 					"minValue": 153, 
@@ -166,14 +166,14 @@
 				"logicalId": "tc_state",				
 				"subtype": "numeric", 
 				"display": {
-					"generic_type": "DONT"
+					"generic_type": "LIGHT_STATE"
 				}
 			},
 			{
 				"name": "Teinte", 
 				"type": "action", 
-				"isVisible": true, 
-				"isHistorized": false, 
+				"isVisible": 1, 
+				"isHistorized": 0, 
 				"configuration": {
 				"fieldname" : "hue",
 					"minValue": 0, 
@@ -183,14 +183,14 @@
 				"value" : "Etat Teinte",					
 				"subtype": "slider", 
 				"display": {
-					"generic_type": "DONT"
+					"generic_type": "LIGHT_SLIDER"
 				}
 			},
 			{
 				"name": "Etat Teinte", 
 				"type": "info", 
-				"isVisible": false, 
-				"isHistorized": false, 
+				"isVisible": 0, 
+				"isHistorized": 0, 
 				"configuration" :{
 					"fieldname" : "hue",
 					"minValue": 0, 
@@ -199,14 +199,14 @@
 				"logicalId": "hue_state",				
 				"subtype": "numeric", 
 				"display": {
-					"generic_type": "DONT"
+					"generic_type": "LIGHT_STATE"
 				}
 			},
 			{
 				"name": "Saturation", 
 				"type": "action", 
-				"isVisible": true, 
-				"isHistorized": false, 
+				"isVisible": 1, 
+				"isHistorized": 0, 
 				"configuration": {
 				"fieldname" : "sat",
 					"minValue": 0, 
@@ -216,14 +216,14 @@
 				"value" : "Etat saturation",				
 				"subtype": "slider", 
 				"display": {
-					"generic_type": "DONT"
+					"generic_type": "LIGHT_SLIDER"
 				}
 			},
 			{
 				"name": "Etat saturation", 
 				"type": "info", 
-				"isVisible": false, 
-				"isHistorized": false, 
+				"isVisible": 0, 
+				"isHistorized": 0, 
 				"configuration" :{
 					"fieldname" : "sat",
 					"minValue": 0, 
@@ -232,14 +232,14 @@
 				"logicalId": "saturation_state",				
 				"subtype": "numeric", 
 				"display": {
-					"generic_type": "DONT"
+					"generic_type": "LIGHT_STATE"
 				}
 			},
 			{
 				"name": "Couleur", 
 				"type": "action", 
-				"isVisible": true, 
-				"isHistorized": false, 
+				"isVisible": 1, 
+				"isHistorized": 0, 
 				"configuration": {
 				"fieldname" : "color"
 				},
@@ -253,13 +253,13 @@
 			{
 				"name": "Etat couleur", 
 				"type": "info", 
-				"isVisible": false, 
-				"isHistorized": false, 
+				"isVisible": 0, 
+				"isHistorized": 0, 
 				"configuration" :{
 					"fieldname" : "color"				
 				},
 				"logicalId": "color_state",				
-				"subtype": "string", 
+				"subtype": "other", 
 				"display": {
 					"generic_type": "LIGHT_COLOR"
 				}

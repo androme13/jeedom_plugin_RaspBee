@@ -314,9 +314,9 @@ class RaspBEECmd extends cmd {
 		if ($this->getType() == 'action'){
 			
 			$eqLogic = $this->getEqLogic();
-			error_log("execute action : ".$this->getConfiguration('fieldname')." ".$this->getName(),3,"/tmp/prob.txt");
-			error_log("execute action : ".$eqLogic->getConfiguration('type')." ".$this->getName(),3,"/tmp/prob.txt");
-			error_log(json_encode($_options),3,"/tmp/prob.txt");
+			//error_log("execute action : ".$this->getConfiguration('fieldname')." ".$this->getName(),3,"/tmp/prob.txt");
+			//error_log("execute action : ".$eqLogic->getConfiguration('type')." ".$this->getName(),3,"/tmp/prob.txt");
+			//error_log(json_encode($_options),3,"/tmp/prob.txt");
 			
 			switch ($this->getConfiguration('fieldname'))
 			{

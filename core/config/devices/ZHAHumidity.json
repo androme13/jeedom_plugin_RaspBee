@@ -13,8 +13,8 @@
         {
             "name": "Etat humidité", 
             "type": "info", 
-            "isVisible": 1, 
-            "isHistorized": 0,
+            "isVisible": 0, 
+            "isHistorized": 1,
 			"unite": "%",			
             "configuration": {
 			    "fieldname" : "humidity",

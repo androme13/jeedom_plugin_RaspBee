@@ -12,8 +12,8 @@
 			{
 				"name": "Mode couleur", 
 				"type": "info", 
-				"isVisible": false, 
-				"isHistorized": false,
+				"isVisible": 0, 
+				"isHistorized": 0,
 				"logicalId": "alert_state",				
 				"configuration" :{
 					"fieldname" : "colormode"
@@ -41,8 +41,8 @@
 			{
 				"name": "Etat effet", 
 				"type": "info", 
-				"isVisible": false, 
-				"isHistorized": false,
+				"isVisible": 0, 
+				"isHistorized": 0,
 				"logicalId": "alert_state",				
 				"configuration" :{
 					"fieldname" : "effect"
@@ -55,8 +55,8 @@
 			{
 				"name": "On", 
 				"type": "action", 
-				"isVisible": true, 
-				"isHistorized": false,
+				"isVisible": 1, 
+				"isHistorized": 0,
 				"logicalId": "on",				
 				"configuration": {
 					"fieldname" : "on"
@@ -70,8 +70,8 @@
 			{
 				"name": "Off", 
 				"type": "action", 
-				"isVisible": true, 
-				"isHistorized": false,
+				"isVisible": 1, 
+				"isHistorized": 0,
 				"logicalId": "off",				
 				"configuration": {
 				"fieldname" : "on"
@@ -85,8 +85,8 @@
 			{
 				"name": "Etat On", 
 				"type": "info", 
-				"isVisible": false, 
-				"isHistorized": false,
+				"isVisible": 0, 
+				"isHistorized": 0,
 				"logicalId": "on_state",				
 				"configuration" :{
 					"fieldname" : "on"
@@ -99,8 +99,8 @@
 			{
 				"name": "Luminosité", 
 				"type": "action", 
-				"isVisible": true, 
-				"isHistorized": false, 
+				"isVisible": 1, 
+				"isHistorized": 0, 
 				"configuration": {
 					"fieldname" : "bri",
 					"minValue": 0, 
@@ -120,8 +120,8 @@
 			{
 				"name": "Etat luminosité", 
 				"type": "info", 
-				"isVisible": false, 
-				"isHistorized": false,			
+				"isVisible": 0, 
+				"isHistorized": 0,			
 				"configuration" :{
 					"fieldname" : "bri",
 					"minValue": 0, 
@@ -136,8 +136,8 @@
 			{
 				"name": "Température Blanc", 
 				"type": "action", 
-				"isVisible": true, 
-				"isHistorized": false, 
+				"isVisible": 1, 
+				"isHistorized": 0, 
 				"configuration": {
 					"fieldname" : "ct",
 					"minValue": 153, 
@@ -153,8 +153,8 @@
 			{
 				"name": "Etat Temperature Blanc", 
 				"type": "info", 
-				"isVisible": false, 
-				"isHistorized": false, 
+				"isVisible": 0, 
+				"isHistorized": 0, 
 				"configuration" :{
 					"fieldname" : "ct",
 					"minValue": 153, 
@@ -169,8 +169,8 @@
 			{
 				"name": "Teinte", 
 				"type": "action", 
-				"isVisible": true, 
-				"isHistorized": false, 
+				"isVisible": 1, 
+				"isHistorized": 0, 
 				"configuration": {
 				"fieldname" : "hue",
 					"minValue": 0, 
@@ -186,8 +186,8 @@
 			{
 				"name": "Etat Teinte", 
 				"type": "info", 
-				"isVisible": false, 
-				"isHistorized": false, 
+				"isVisible": 0, 
+				"isHistorized": 0, 
 				"configuration" :{
 					"fieldname" : "hue",
 					"minValue": 0, 
@@ -202,8 +202,8 @@
 			{
 				"name": "Saturation", 
 				"type": "action", 
-				"isVisible": true, 
-				"isHistorized": false, 
+				"isVisible": 1, 
+				"isHistorized": 0, 
 				"configuration": {
 				"fieldname" : "sat",
 					"minValue": 0, 
@@ -219,8 +219,8 @@
 			{
 				"name": "Etat saturation", 
 				"type": "info", 
-				"isVisible": false, 
-				"isHistorized": false, 
+				"isVisible": 0, 
+				"isHistorized": 0, 
 				"configuration" :{
 					"fieldname" : "sat",
 					"minValue": 0, 
