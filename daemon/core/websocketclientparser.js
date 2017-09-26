@@ -61,7 +61,7 @@ websocketclientparser = module.exports = {
 	},
 	
 	lightsprocess : function (lightobj){
-		console.log("websocketclientparserlightsprocess:");
+		console.log("websocketclientparser lightsprocess:");
 		console.log("raw lightobject: ",lightobj);
 		//console.log("websocketclientparser sensorsprocess:");
 		var call = new Object();

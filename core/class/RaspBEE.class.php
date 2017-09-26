@@ -316,7 +316,7 @@ class RaspBEECmd extends cmd {
 			$eqLogic = $this->getEqLogic();
 			//error_log("execute action : ".$this->getConfiguration('fieldname')." ".$this->getName(),3,"/tmp/prob.txt");
 			//error_log("execute action : ".$eqLogic->getConfiguration('type')." ".$this->getName(),3,"/tmp/prob.txt");
-			error_log("options :".json_encode($_options),3,"/tmp/prob.txt");
+			//error_log("options :".json_encode($_options),3,"/tmp/prob.txt");
 			
 			switch ($this->getConfiguration('fieldname'))
 			{
@@ -328,10 +328,7 @@ class RaspBEECmd extends cmd {
 				break;
 				case "color":
 					$temp = hex2rgb($_options[color]);
-					$xy = self::RGBtoXY($temp[0],$temp[1],$temp[2],false);
-					//error_log("the color RED".$temp[0],3,"/tmp/prob.txt");
-					error_log("the color".$xy[x],3,"/tmp/prob.txt");
-					
+					$xy = self::RGBtoXY($temp[0],$temp[1],$temp[2],false);				
 					$commandtosend='{"xy" :['.$xy[x].','.$xy[y].']}';
 				break;
 				default :
@@ -355,7 +352,7 @@ class RaspBEECmd extends cmd {
 		
 		if ($this->getType() == 'info'){
 			error_log("execute info",3,"/tmp/prob.txt");
-			error_log(json_encode($_options),3,"/tmp/prob.txt");
+			//error_log(json_encode($_options),3,"/tmp/prob.txt");
 			return;
 		}	
 	}
@@ -375,6 +372,13 @@ class RaspBEECmd extends cmd {
 		$x = $X / ($X + $Y + $Z);
 		$y = $Y / ($X + $Y + $Z);
 	return 	array('x' => $x,'y' => $y);
+	}
+	
+	function XYtoRGB($x,$y){		
+		$R = 3.240479*(($x*$y)/$y) + -1.537150*$y + -0.498535*(((1-$x-$y)*$y)/$y);
+		$G = -0.969256*(($x*$y)/$y) + 1.875992*$y + 0.041556*(((1-$x-$y)*$y)/$y);
+		$B = 0.055648*(($x*$y)/$y) + -0.204043*$y + 1.057311*(((1-$x-$y)*$y)/$y);
+		return array('r' => $R,'g' => $G,'b' => $B);
 	}
 	
 	/**
@@ -401,17 +405,21 @@ class RaspBEECmd extends cmd {
 			. sprintf('%02x', $rgb[2]);
 	}
 	
+	public static function convert(){
+	error_log("convert :",3,"/tmp/prob.txt");	
+	}
+	
 	
 	private function sendCommand($type=null,$id=null,$command=null){
-		error_log("sendCommand",3,"/tmp/prob.txt");
+		//error_log("sendCommand",3,"/tmp/prob.txt");
 
 		if ($id===null || $command===null || $type===null)return false;
 		//error_log("getRaspBEESensors pass");
 		$raspbeecom = new RaspBEECom;
 		$result = $raspbeecom->sendCommand($type,$id,$command);
 		unset($raspbeecom);
-		error_log("error :".$result,3,"/tmp/prob.txt");
-				error_log("commande :".$command,3,"/tmp/prob.txt");
+		//error_log("error :".$result,3,"/tmp/prob.txt");
+				//error_log("commande :".$command,3,"/tmp/prob.txt");
 
 		return $result;
 		
