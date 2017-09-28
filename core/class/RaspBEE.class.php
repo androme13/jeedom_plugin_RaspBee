@@ -21,6 +21,7 @@
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 require_once dirname(__FILE__) . '/../class/RaspBEECom.class.php';
 require_once dirname(__FILE__) . '/eqLogicOperate.class.php';
+require_once dirname(__FILE__) . '/colorHelper.class.php';
 
 class RaspBEE extends eqLogic {
 	//private $raspbeecom = null; // attention les variables déclarées ici s'enregistrent dans la base sql lors du save
@@ -106,7 +107,7 @@ class RaspBEE extends eqLogic {
 	public static function deamon_stop() {
 		
 		
-		$pid_file = '/tmp/openzwaved.pid';
+		$pid_file = '/tmp/raspbee.pid';
 		if (file_exists($pid_file)) {
 			$pid = intval(trim(file_get_contents($pid_file)));
 			system::kill($pid);
@@ -327,8 +328,9 @@ class RaspBEECmd extends cmd {
 					$commandtosend='{"on" : false}';
 				break;
 				case "color":
-					$temp = hex2rgb($_options[color]);
-					$xy = self::RGBtoXY($temp[0],$temp[1],$temp[2],false);				
+				$color = $_options[color];
+					$temp = HEX2RGB($color);
+					$xy = colorHelper::RGB2XY($temp[0],$temp[1],$temp[2],false);				
 					$commandtosend='{"xy" :['.$xy[x].','.$xy[y].']}';
 				break;
 				default :
@@ -356,54 +358,16 @@ class RaspBEECmd extends cmd {
 			return;
 		}	
 	}
-	// RGB color specs to the CIE color space
-	// valeur entre 0.1 et 1 pour R G B;
-	function RGBtoXY($R,$G,$B,$isFloat=false){
-	//error_log("RGBtoXY:",3,"/tmp/prob.txt");		
 
-		if ($isFloat==false){
-			$R=$R/256;
-			$G=$G/256;
-			$B=$B/256;
-		}
-		$X = 0.4124*$R + 0.3576*$G + 0.1805*$B;
-		$Y = 0.2126*$R + 0.7152*$G + 0.0722*$B;
-		$Z = 0.0193*$R + 0.1192*$G + 0.9505*$B;
-		$x = $X / ($X + $Y + $Z);
-		$y = $Y / ($X + $Y + $Z);
-	return 	array('x' => $x,'y' => $y);
-	}
-	
-	function XYtoRGB($x,$y){		
-		$R = 3.240479*(($x*$y)/$y) + -1.537150*$y + -0.498535*(((1-$x-$y)*$y)/$y);
-		$G = -0.969256*(($x*$y)/$y) + 1.875992*$y + 0.041556*(((1-$x-$y)*$y)/$y);
-		$B = 0.055648*(($x*$y)/$y) + -0.204043*$y + 1.057311*(((1-$x-$y)*$y)/$y);
-		return array('r' => $R,'g' => $G,'b' => $B);
-	}
 	
 	/**
 	 * #rrggbb or #rgb to [r, g, b]
 	 */
-	function hex2rgb(string $hex)
+	function HEX2RGB(string $hex)
 	{
-		$hex = ltrim($hex, '#');
-		if(strlen($hex) == 3)
-			return array ('r' => hexdec($hex[0].$hex[0]),'g' => hexdec($hex[1].$hex[1]),'b' => hexdec($hex[2].$hex[2]));			
-		else
-			return array ('r' => hexdec($hex[0].$hex[1]),'g' => hexdec($hex[2].$hex[3]),'b' => hexdec($hex[4].$hex[5]));
+		return colorHelper::HEX2RGB($hex);
 	}
 
-
-	/**
-	 * [r, g, b] to #rrggbb
-	 */
-	function rgb2hex(array $rgb)
-	{
-		return '#'
-			. sprintf('%02x', $rgb[0])
-			. sprintf('%02x', $rgb[1])
-			. sprintf('%02x', $rgb[2]);
-	}
 	
 	public static function convert(){
 	error_log("convert :",3,"/tmp/prob.txt");	
