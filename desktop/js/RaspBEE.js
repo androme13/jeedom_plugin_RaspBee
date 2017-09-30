@@ -1,19 +1,20 @@
 
-/* This file is part of Jeedom.
+/* This file is part of Plugin RaspBEE for jeedom.
 *
-* Jeedom is free software: you can redistribute it and/or modify
+* Plugin RaspBEE for jeedom is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
-* Jeedom is distributed in the hope that it will be useful,
+* Plugin RaspBEE for jeedom is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
 *
 * You should have received a copy of the GNU General Public License
-* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+* along with Plugin RaspBEE for jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
+
 $('#bt_syncEqLogic').on('click', function () {
 	//syncEqLogicWithRaspBEE();
 	$('#md_modal').dialog({
@@ -125,6 +126,8 @@ function printEqLogic(_eqlogic) {
 	printEqLogicHelper(true,"{{Lights}}","lights",_eqlogic);
 	if (("devicemembership" in _eqlogic.configuration)) printMasterEqLogic(_eqlogic);
 	else $('#masterEqLogic').empty();
+	if (("lights" in _eqlogic.configuration)) printMembersEqLogic(_eqlogic);
+	else $('#membersEqLogic').empty();
 }
  function printEqLogicHelper(expertMode,label,name,_eqLogic,_subst){
 	 var expertModeVal="";
@@ -142,19 +145,63 @@ function printEqLogic(_eqlogic) {
  }
  
 function printMasterEqLogic(_eqLogic){
-	
-			/*jeedom.cmd.getSelectModal({cmd: {type: 'info'},eqLogic: {eqType_name : 'eibd'}}, function (result) {
-			$(_this).closest('.cmd').find('.cmdAttr[data-l1key=value]').val(result.human);
+	$('#masterEqLogic').empty();
+			/*jeedom.eqLogic.byType({eqType_name : 'RaspBEE'}, function (result) {
+			//$(_this).closest('.cmd').find('.cmdAttr[data-l1key=value]').val(result.human);
 			alert(result.human);
 			});*/
-	
-	
-	var humanname='<center><span class="label label-default" style="text-shadow : none;">Aucun</span><br><strong> '+_eqLogic.name+'</strong></center>';
+			 var test = jeedom.eqLogic.byId({id : _eqLogic.id},function(result){
+				// console.dir(result);
+			 });
+			 //var test2 = jeedom.eqLogic.byType({type : "RaspBEE"},function(result){
+			var test2 = jeedom;
+				//console.dir(test2);
+			
+			//			jeedom.RaspBEE({name: 'info'}, function (result) {
+			//$(_this).closest('.cmd').find('.cmdAttr[data-l1key=value]').val(result.human);
+			//alert(result.human);
+			jeedom.raspbee.eqLogic.byOriginId({originId:_eqLogic.configuration.originid},function(result){
+				console.dir(result);
+			});
+			
+			//});
+			 
+
+	var lights=JSON.parse(_eqLogic.configuration.devicemembership);
 	var master ="";
-	master+='<div class="col-sm-2" style="padding:0px;">';
-	//master+='<table id="table_masterEqLogic" class="table table-condensed expertModeVisible" ><th style="text-align: center">{{Contrôleur maître}}</th><tr><td>';
-	master+='<table class="table table-condensed" style="border-radius: 10px;"><th style="text-align: center;"><span class="label control-label" style="font-size : 1em;">{{Contôleur Maître}}</span></th><tr><td align="center" style="margin: 0px;">';
-	master+='<div class="eqLogicDisplayCard cursor" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;border-radius: 2px;width : 160px;">';
+	master+='<legend><i class="fa fa-th-large"></i> {{Contrôleur maître}}</legend>'
+	master+='<div style="display: flex;">';
+	for(var i= 0; i < lights.length; i++){
+	var humanname='<center><span class="label label-default" style="text-shadow : none;">Aucun</span><br><strong> '+_eqLogic.name+'</strong></center>';
+	master+='<div class="eqLogicDisplayCard cursor" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
+	master+= "<center>";
+	master+= '<i class="fa fa-th-large" style="font-size : 6em;color:#767676;"></i>';
+	master+= '<br>';
+	master+= '<span style="font-size : 0.8em;">';
+	master+= '{{Commande}}';
+	master+= '</span>';
+	master+= "<span style='font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;'><center>"+humanname+"</center></span>";
+	master+='</div>';
+	}
+	master+="</div>";
+	$('#masterEqLogic').append(master);
+	//$('#masterEqLogic').setValues(_eqLogic, '.eqLogicAttr');	
+	//console.dir(_eqLogic);
+}
+
+function printMembersEqLogic(_eqLogic){
+	$('#membersEqLogic').empty();
+
+	
+	var lights=JSON.parse(_eqLogic.configuration.lights);
+	var master ="";
+	master+='<legend><i class="fa fa-table"></i> {{Membres du groupe}}</legend>'
+	master+='<div style="display: flex;">';
+
+	for(var i= 0; i < lights.length; i++){
+	//console.dir (lights);
+	var humanname='<center><span class="label label-default" style="text-shadow : none;">Aucun</span><br><strong> '+_eqLogic.name+'</strong></center>';
+	master+='<div class="eqLogicDisplayCard cursor" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
 	master+= "<center>";
 	master+= '<i class="fa fa-th-large" style="font-size : 6em;color:#767676;"></i>';
 	master+= '<br>';
@@ -164,11 +211,13 @@ function printMasterEqLogic(_eqLogic){
 	master+= "<span style='font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;'><center>"+humanname+"</center></span>";
 	//master+='</td></tr><tbody></tbody></table>';
 	master+='</div>';
-	master+='</tr></td><table></div>';
-	$('#masterEqLogic').html(master);
+	}
+	master+="</div>";
+	$('#membersEqLogic').append(master);
 	//$('#masterEqLogic').setValues(_eqLogic, '.eqLogicAttr');	
-	console.dir(_eqLogic);
+	//console.dir(_eqLogic);
 }
+
 
 /*function arraySearch(arr,val) {
     for (var i=0; i<arr.length; i++)

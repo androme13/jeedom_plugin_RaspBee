@@ -25,6 +25,15 @@ require_once dirname(__FILE__) . '/colorHelper.class.php';
 
 class RaspBEE extends eqLogic {
 	//private $raspbeecom = null; // attention les variables déclarées ici s'enregistrent dans la base sql lors du save
+	
+	public static function RaspBEECall($_url) {
+	
+	}
+	
+	
+	public static function test(){
+		return "test ok";
+	}
 		
 	public static function dependancy_info() {
 		$return = array();
@@ -104,9 +113,7 @@ class RaspBEE extends eqLogic {
 		log::add('RaspBEE', 'info', 'Démon RaspBEE lancé');
 	}
 
-	public static function deamon_stop() {
-		
-		
+	public static function deamon_stop() {			
 		$pid_file = '/tmp/raspbee.pid';
 		if (file_exists($pid_file)) {
 			$pid = intval(trim(file_get_contents($pid_file)));
@@ -215,11 +222,6 @@ class RaspBEE extends eqLogic {
 		
 	}
 
-	
-	
-	public function test(){
-		return "test ok";
-	}
 	
 	public function syncEqLogicWithRaspBEE($_logical_id = null, $_exclusion = 0){
 		return eqLogicOperate::createDevice();

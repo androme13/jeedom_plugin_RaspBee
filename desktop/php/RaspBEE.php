@@ -27,11 +27,12 @@ echo '<div id="div_inclusionAlert"></div>';
 <div class="col-lg-2 col-md-3 col-sm-4">
 <div class="bs-sidebar">
 <ul id="ul_eqLogic" class="nav nav-list bs-sidenav">
+<li class="filter" style="margin-bottom: 5px;"><input class="filter form-control input-sm" placeholder="Rechercher" style="width: 100%"/>
+</li>
 <?php
 foreach ($eqLogics as $eqLogic) {
 	$opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
 	echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $eqLogic->getId() . '" style="' . $opacity . '"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
-
 }
 ?>
 </ul>
@@ -156,7 +157,6 @@ foreach ($eqLogics as $eqLogic) {
 	
 	echo '</span>';
 	echo '</center>';
-	
 	echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
 	echo '</div>';
 }
@@ -232,11 +232,15 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 			</table>
 		</form>
 	</div>
-	<div class="col-sm-5">
-		<div id="masterEqLogic"></div>		
-	</div>
 </div>
+
+<div id="masterEqLogic" ></div>
+<div id="membersEqLogic"></div>
+
+
+
 </div>
+
 <div role="tabpanel" class="tab-pane" id="commandtab">
 	<a class="btn btn-success btn-sm cmdAction expertModeVisible pull-right" data-action="add" style="margin-top:5px;"> <i class="fa fa-plus-circle"></i> {{Commandes}}</a>
 	<br/><br/>
@@ -257,5 +261,6 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 </div>
 
 </div>
+<?php include_file('core', 'RaspBEE', 'class.js', 'RaspBEE');?>
 <?php include_file('desktop', 'RaspBEE', 'js', 'RaspBEE');?>
 <?php include_file('core', 'plugin.template', 'js');?>
