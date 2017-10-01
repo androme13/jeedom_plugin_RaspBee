@@ -23,7 +23,9 @@ if (!isConnect('admin')) {
 }
 ajax::init();
 try {
-	echo json_encode(openzwave::callOpenzwave(str_replace('//', '/', init('request'))));
+	$resp = RaspBEE::test(init('request'));
+	//error_log(json_encode($resp),3,"/tmp/prob.txt");
+	ajax::success($resp);
 } catch (Exception $e) {
 	http_response_code(500);
 	die($e->getMessage());

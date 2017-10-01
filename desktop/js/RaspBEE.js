@@ -145,77 +145,73 @@ function printEqLogic(_eqlogic) {
  }
  
 function printMasterEqLogic(_eqLogic){
-	$('#masterEqLogic').empty();
-			/*jeedom.eqLogic.byType({eqType_name : 'RaspBEE'}, function (result) {
-			//$(_this).closest('.cmd').find('.cmdAttr[data-l1key=value]').val(result.human);
-			alert(result.human);
-			});*/
-			 var test = jeedom.eqLogic.byId({id : _eqLogic.id},function(result){
-				// console.dir(result);
-			 });
-			 //var test2 = jeedom.eqLogic.byType({type : "RaspBEE"},function(result){
-			var test2 = jeedom;
-				//console.dir(test2);
-			
-			//			jeedom.RaspBEE({name: 'info'}, function (result) {
-			//$(_this).closest('.cmd').find('.cmdAttr[data-l1key=value]').val(result.human);
-			//alert(result.human);
-			jeedom.raspbee.eqLogic.byOriginId({originId:_eqLogic.configuration.originid},function(result){
-				console.dir(result);
-			});
-			
-			//});
-			 
-
-	var lights=JSON.parse(_eqLogic.configuration.devicemembership);
+	$('#masterEqLogic').empty();	 
+	var devicemembership=JSON.parse(_eqLogic.configuration.devicemembership);
+	if (!is_null(devicemembership)){
 	var master ="";
 	master+='<legend><i class="fa fa-th-large"></i> {{Contrôleur maître}}</legend>'
-	master+='<div style="display: flex;">';
-	for(var i= 0; i < lights.length; i++){
-	var humanname='<center><span class="label label-default" style="text-shadow : none;">Aucun</span><br><strong> '+_eqLogic.name+'</strong></center>';
-	master+='<div class="eqLogicDisplayCard cursor" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
-	master+= "<center>";
-	master+= '<i class="fa fa-th-large" style="font-size : 6em;color:#767676;"></i>';
-	master+= '<br>';
-	master+= '<span style="font-size : 0.8em;">';
-	master+= '{{Commande}}';
-	master+= '</span>';
-	master+= "<span style='font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;'><center>"+humanname+"</center></span>";
-	master+='</div>';
+	master+='<div class="mastersCard" style="display: flex;">';	
+	for(var i= 0; i < devicemembership.length; i++){
+		jeedom.raspbee.eqLogic.byOriginId({
+		origId:devicemembership[i],
+		error: function(error){
+			
+		},
+		success:function (result){			
+			var card = "";
+			card+='<div class="eqLogicDisplayCard cursor" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
+			card+= "<center>";
+			card+= '<i class="fa fa-th-large" style="font-size : 6em;color:#767676;"></i>';
+			card+= '<br>';
+			card+= '<span style="font-size : 0.8em;">';
+			card+= '{{Commande}}';
+			card+= '</span>';
+			card+= "<span style='font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;'><center>"+result+"</center></span>";
+			card+='</div>';				
+			$('.mastersCard').append(card);	
+		}
+	})
 	}
-	master+="</div>";
-	$('#masterEqLogic').append(master);
-	//$('#masterEqLogic').setValues(_eqLogic, '.eqLogicAttr');	
-	//console.dir(_eqLogic);
-}
+	master+="</div>";	
+	$('#masterEqLogic').append(master);	
+}}
 
 function printMembersEqLogic(_eqLogic){
 	$('#membersEqLogic').empty();
 
 	
 	var lights=JSON.parse(_eqLogic.configuration.lights);
+	if (!is_null(lights)){
+
 	var master ="";
 	master+='<legend><i class="fa fa-table"></i> {{Membres du groupe}}</legend>'
-	master+='<div style="display: flex;">';
+	master+='<div class="membersCard" style="display: flex;">';
 
 	for(var i= 0; i < lights.length; i++){
-	//console.dir (lights);
-	var humanname='<center><span class="label label-default" style="text-shadow : none;">Aucun</span><br><strong> '+_eqLogic.name+'</strong></center>';
-	master+='<div class="eqLogicDisplayCard cursor" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
-	master+= "<center>";
-	master+= '<i class="fa fa-th-large" style="font-size : 6em;color:#767676;"></i>';
-	master+= '<br>';
-	master+= '<span style="font-size : 0.8em;">';
-	master+= '{{Commande}}';
-	master+= '</span>';
-	master+= "<span style='font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;'><center>"+humanname+"</center></span>";
-	//master+='</td></tr><tbody></tbody></table>';
-	master+='</div>';
+	jeedom.raspbee.eqLogic.byOriginId({
+		origId:lights[i],
+		error: function(error){
+			console.log("error");
+		},
+		success:function (result){	
+			console.log("success");		
+			var card = "";
+			card+='<div class="eqLogicDisplayCard cursor" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
+			card+= "<center>";
+			card+= '<i class="jeedom jeedom-lumiere-off" style="font-size : 6em;color:#767676;"></i>';
+			card+= '<br>';
+			card+= '<span style="font-size : 0.8em;">';
+			card+= '{{Commande}}';
+			card+= '</span>';
+			card+= "<span style='font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;'><center>"+result+"</center></span>";
+			card+='</div>';				
+			$('.membersCard').append(card);
+		}			
+		});
 	}
 	master+="</div>";
 	$('#membersEqLogic').append(master);
-	//$('#masterEqLogic').setValues(_eqLogic, '.eqLogicAttr');	
-	//console.dir(_eqLogic);
+	}
 }
 
 

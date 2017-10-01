@@ -31,8 +31,31 @@ class RaspBEE extends eqLogic {
 	}
 	
 	
-	public static function test(){
-		return "test ok";
+	public function test($data){
+		//$response = "ok";
+		//$response.$data = $test;
+		
+		//$response = array('message' => array ('data' => 38));
+		//return "ok";
+		//error_log("data test: ".json_encode($data),3,"/tmp/prob.txt");
+		//error_log("data test: ".$data,3,"/tmp/prob.txt");
+		foreach (eqLogic::byType('RaspBEE') as $equipement) {
+				$decode = str_replace('\"', '"',$equipement->configuration);
+				$obj = json_decode($decode);
+				//error_log("data :".$data."|",3,"/tmp/prob.txt");
+				//error_log("equipement :".$equipement->name."|",3,"/tmp/prob.txt");
+				//error_log("origid :".$obj->origid."|",3,"/tmp/prob.txt");
+				if ($obj->origid==$data) {
+					error_log("TROUVE :".$obj->origid."|".$data." ",3,"/tmp/prob.txt");
+					//$name = $equipement->name;
+					return $equipement->getHumanName(true,true);	
+					//break;
+				}
+				else
+					error_log("pas trouvé :".$obj->origid."|".$data." ",3,"/tmp/prob.txt");
+				
+		}			
+			
 	}
 		
 	public static function dependancy_info() {

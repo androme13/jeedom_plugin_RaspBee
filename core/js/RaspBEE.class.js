@@ -20,8 +20,8 @@
    jeedom.raspbee.eqLogic = function() {
  };
  
- 	jeedom.raspbee.eqLogic.byOriginId = function (_params) {
- 	var paramsRequired = ['originId'];
+ 	jeedom.raspbee.eqLogic.byOriginId = function (_params,callback) {
+ 	var paramsRequired = ['origId'];
  	var paramsSpecifics = {};
  	try {
  		jeedom.private.checkParamsRequired(_params || {}, paramsRequired);
@@ -31,9 +31,9 @@
  	}
  	var params = $.extend({}, jeedom.private.default_params, paramsSpecifics, _params || {});
  	var paramsAJAX = jeedom.private.getParamsAJAX(params);
- 	paramsAJAX.url = 'plugins/RaspBEE/core/php/jeeRaspBEE.php';
+ 	paramsAJAX.url = 'plugins/RaspBEE/core/php/jeeRaspBEEProxy.php';
  	paramsAJAX.data = {
- 		request: 'originId='+_params.originid,
+	request: _params.origId,
  	};
  	$.ajax(paramsAJAX);
  }
