@@ -21,7 +21,7 @@
  };
  
  	jeedom.raspbee.eqLogic.byOriginId = function (_params,callback) {
- 	var paramsRequired = ['origId'];
+ 	var paramsRequired = ['origId','type'];
  	var paramsSpecifics = {};
  	try {
  		jeedom.private.checkParamsRequired(_params || {}, paramsRequired);
@@ -33,7 +33,7 @@
  	var paramsAJAX = jeedom.private.getParamsAJAX(params);
  	paramsAJAX.url = 'plugins/RaspBEE/core/php/jeeRaspBEEProxy.php';
  	paramsAJAX.data = {
-	request: _params.origId,
+	request: _params,
  	};
  	$.ajax(paramsAJAX);
  }

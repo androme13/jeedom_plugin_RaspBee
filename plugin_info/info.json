@@ -3,7 +3,7 @@
     "name" : "RaspBEE",
     "licence" : "AGPL",
     "author" : "Thierry MATHIEU",
-    "require" : "3.0",
+    "require" : "3.1",
     "category" : "automation protocol",
 	"mobile" : "RaspBEE",
 	"hasDependency" : true,

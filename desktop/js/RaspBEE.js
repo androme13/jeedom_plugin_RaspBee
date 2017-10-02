@@ -154,6 +154,7 @@ function printMasterEqLogic(_eqLogic){
 	for(var i= 0; i < devicemembership.length; i++){
 		jeedom.raspbee.eqLogic.byOriginId({
 		origId:devicemembership[i],
+		type:'switch',
 		error: function(error){
 			
 		},
@@ -190,6 +191,7 @@ function printMembersEqLogic(_eqLogic){
 	for(var i= 0; i < lights.length; i++){
 	jeedom.raspbee.eqLogic.byOriginId({
 		origId:lights[i],
+		type: "light",
 		error: function(error){
 			console.log("error");
 		},
@@ -201,7 +203,7 @@ function printMembersEqLogic(_eqLogic){
 			card+= '<i class="jeedom jeedom-lumiere-off" style="font-size : 6em;color:#767676;"></i>';
 			card+= '<br>';
 			card+= '<span style="font-size : 0.8em;">';
-			card+= '{{Commande}}';
+			card+= '{{Eclairage}}';
 			card+= '</span>';
 			card+= "<span style='font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;'><center>"+result+"</center></span>";
 			card+='</div>';				
