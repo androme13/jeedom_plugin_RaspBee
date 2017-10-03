@@ -128,7 +128,7 @@ foreach ($eqLogics as $eqLogic) {
 		echo '<i class="jeedom2 jeedom2-plante_eau2" style="font-size : 6em;color:#767676;"></i>';
 		break;
 	case "ZHAPressure" :
-		echo '<i class="meteo meteo-nuage-soleil-pluie" style="font-size : 6em;color:#767676;"></i>';
+		echo '<i class="meteo meteo-nuage-soleil-pluie" style="font-size :6em;color:#767676;"></i>';
 		break;
 	case "Extended color light" :
 		echo '<i class="jeedom jeedom-lumiere-off" style="font-size : 6em;color:#767676;"></i>';
@@ -167,15 +167,13 @@ foreach ($eqLogics as $eqLogic) {
 	case "LightGroup" :
 		echo '{{Groupe}}';
 		break;
-		default :
+	default :
 		echo '{{Inconnu}}';
-	}
-	
+	}	
 	echo '</span>';
 	echo '</center>';
-	echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">
-<center>' . $eqLogic->getHumanName(true, true) . '</center>
-</span>';
+	echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center>
+	</span>';
 	echo '</div>';
 }
 ?>

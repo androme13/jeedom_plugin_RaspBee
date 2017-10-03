@@ -119,8 +119,8 @@ function printEqLogic(_eqlogic) {
 	printEqLogicHelper(true,"{{Firmware}}","swversion",_eqlogic);	
 	printEqLogicHelper(true,"{{Type}}","type",_eqlogic);	
 	printEqLogicHelper(true,"{{UID}}","uniqueid",_eqlogic);		
-	printEqLogicHelper(true,"{{Devicemembership}}","devicemembership",_eqlogic);
-	printEqLogicHelper(true,"{{Lights}}","lights",_eqlogic);
+	//printEqLogicHelper(true,"{{Devicemembership}}","devicemembership",_eqlogic);
+	//printEqLogicHelper(true,"{{Lights}}","lights",_eqlogic);
 	if (("devicemembership" in _eqlogic.configuration))
 		printMasterEqLogic(_eqlogic);
 	else
