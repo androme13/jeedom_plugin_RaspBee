@@ -242,9 +242,9 @@ class eqLogicOperate extends eqLogic {
 			$RaspBEECmd->setName($command[name]);
 			$RaspBEECmd->setLogicalId($command[name]);
 			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-			error_log("|isvisible|".$command[isVisible],3,"/tmp/rasbee.err");
-			//if ($command[isVisible])$RaspBEECmd->setIsVisible($command[isVisible]);
-			//if ($command[isHistorized])$RaspBEECmd->setIsHistorized($command[isHistorized]);
+			error_log("|isvisible|".$command[isVisible],3,"/tmp/prob.txt");
+			if ($command[isVisible]==1)$RaspBEECmd->setIsVisible(1);
+			if ($command[isHistorized]==1)$RaspBEECmd->setIsHistorized(1);
 			if ($command[display])$RaspBEECmd->setDisplay('generic_type',$command[display][generic_type]);
 			if ($command[unite])$RaspBEECmd->setUnite($command[unite]);
 			if ($command[type]) $RaspBEECmd->setType($command[type]);

@@ -20,7 +20,7 @@
    jeedom.raspbee.eqLogic = function() {
  };
  
- 	jeedom.raspbee.eqLogic.byOriginId = function (_params,callback) {
+ 	jeedom.raspbee.eqLogic.byOriginId = function (_params) {
  	var paramsRequired = ['origId','type'];
  	var paramsSpecifics = {};
  	try {

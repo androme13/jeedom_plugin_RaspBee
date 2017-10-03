@@ -16,21 +16,18 @@
 */
 
 $('#bt_syncEqLogic').on('click', function () {
-	//syncEqLogicWithRaspBEE();
 	$('#md_modal').dialog({
-title: "{{Synchronisation}}",
-dialogClass: "no-close",
-buttons: [
-		{
-text: "{{Fermer}}",
-click: function() {
-				window.location.reload();
-				//$( this ).dialog( "close" );
+	title: "{{Synchronisation}}",
+	dialogClass: "no-close",
+	buttons: [
+			{
+	text: "{{Fermer}}",
+	click: function() {
+					window.location.reload();
+				}
 			}
-		}
-		],
-		//width: 400
-	});
+			],
+		});
 	$('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=synchronize').dialog('open');
 	
 });
@@ -124,10 +121,14 @@ function printEqLogic(_eqlogic) {
 	printEqLogicHelper(true,"{{UID}}","uniqueid",_eqlogic);		
 	printEqLogicHelper(true,"{{Devicemembership}}","devicemembership",_eqlogic);
 	printEqLogicHelper(true,"{{Lights}}","lights",_eqlogic);
-	if (("devicemembership" in _eqlogic.configuration)) printMasterEqLogic(_eqlogic);
-	else $('#masterEqLogic').empty();
-	if (("lights" in _eqlogic.configuration)) printMembersEqLogic(_eqlogic);
-	else $('#membersEqLogic').empty();
+	if (("devicemembership" in _eqlogic.configuration))
+		printMasterEqLogic(_eqlogic);
+	else
+		$('#masterEqLogic').empty();
+	if (("lights" in _eqlogic.configuration))
+		printMembersEqLogic(_eqlogic);
+	else
+		$('#membersEqLogic').empty();
 }
  function printEqLogicHelper(expertMode,label,name,_eqLogic,_subst){
 	 var expertModeVal="";
@@ -154,22 +155,28 @@ function printMasterEqLogic(_eqLogic){
 	for(var i= 0; i < devicemembership.length; i++){
 		jeedom.raspbee.eqLogic.byOriginId({
 		origId:devicemembership[i],
+		//action:'humanNameByOrigIdAndType',
 		type:'switch',
 		error: function(error){
-			
+		console.log("THE error printMasterEqLogic "+_eqLogic.name);	
+		console.log("THE error printMasterEqLogic devicemembership[i] "+devicemembership[i]);
 		},
-		success:function (result){			
+		success:function (result){
+			if (result!=undefined){
+			console.log("THE result: "+result+"|");
 			var card = "";
-			card+='<div class="eqLogicDisplayCard cursor" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
+			card+='<div class="eqLogicDisplayCard cursor eql'+result.id+'" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
 			card+= "<center>";
 			card+= '<i class="fa fa-th-large" style="font-size : 6em;color:#767676;"></i>';
 			card+= '<br>';
 			card+= '<span style="font-size : 0.8em;">';
 			card+= '{{Commande}}';
 			card+= '</span>';
-			card+= "<span style='font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;'><center>"+result+"</center></span>";
+			card+= "<span style='font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;'><center>"+result.humanName+"</center></span>";
 			card+='</div>';				
-			$('.mastersCard').append(card);	
+			$('.mastersCard').append(card);
+			$('.eql'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
+			}			
 		}
 	})
 	}
@@ -193,26 +200,32 @@ function printMembersEqLogic(_eqLogic){
 		origId:lights[i],
 		type: "light",
 		error: function(error){
-			console.log("error");
+			console.log("THE error printMemberEqLogic "+_eqLogic.name);	
+			console.log("THE error printMemberEqLogic light[i] "+lights[i]);
+
 		},
-		success:function (result){	
-			console.log("success");		
+		success:function (result){
+			if (result!=undefined){			
+			//console.log("success");		
 			var card = "";
-			card+='<div class="eqLogicDisplayCard cursor" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
+			card+='<div class="eqLogicDisplayCard cursor eql'+result.id+'" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
 			card+= "<center>";
 			card+= '<i class="jeedom jeedom-lumiere-off" style="font-size : 6em;color:#767676;"></i>';
 			card+= '<br>';
 			card+= '<span style="font-size : 0.8em;">';
 			card+= '{{Eclairage}}';
 			card+= '</span>';
-			card+= "<span style='font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;'><center>"+result+"</center></span>";
+			card+= "<span style='font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;'><center>"+result.humanName+"</center></span>";
 			card+='</div>';				
 			$('.membersCard').append(card);
-		}			
+			$('.eql'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
+		}
+		}		
 		});
 	}
 	master+="</div>";
 	$('#membersEqLogic').append(master);
+
 	}
 }
 

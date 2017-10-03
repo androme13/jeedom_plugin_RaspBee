@@ -14,7 +14,7 @@
             "name": "temperature", 
             "type": "info", 
             "isVisible": 1, 
-            "isHistorized": 0,
+            "isHistorized": 1,
 			"unite": "°C",			
             "configuration": {
 			    "fieldname" : "temperature"

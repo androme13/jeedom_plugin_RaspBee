@@ -30,15 +30,24 @@ class RaspBEE extends eqLogic {
 	
 	}
 	
-	
-	public function test($data){	
-		error_log("data: ".$data['type']."|",3,"/tmp/prob.txt");
+	// recupere un humaname et un id par l'originid et le type (ex : switch ou light)
+	// return array(id,humanName)
+	public function humanNameByOrigIdAndType($data){	
+		//error_log("data: ".$data['type']."|",3,"/tmp/prob.txt");
 		foreach (eqLogic::byType('RaspBEE') as $equipement) {
 				$decode = str_replace('\"', '"',$equipement->configuration);
 				$obj = json_decode($decode);				
 				if ($obj->origid==$data[origId] && strstr(strtolower($obj->type), strtolower($data[type]))!=false) {
-					return $equipement->getHumanName(true,true);	
+					$id = $equipement->id;
+					$humanName = $equipement->getHumanName(true,true);
+					//$str = json_encode(array('id' => $id, 'humanName' => $humanName));
+					//		error_log("json: ".$str."|",3,"/tmp/prob.txt");
+					//return $humanName;
+					return array('id' => $id,'humanName' => $humanName);
+					//return '{"id":1391,"humanName":"toto"}';
+					//return $str;	
 				}
+				//return "probleme humanNameByOrigIdAndType";
 		}			
 			
 	}

@@ -23,10 +23,11 @@ if (!isConnect('admin')) {
 }
 ajax::init();
 try {
-	$resp = RaspBEE::test(init('request'));
+	$resp = RaspBEE::humanNameByOrigIdAndType(init('request'));
 	//error_log(json_encode($resp),3,"/tmp/prob.txt");
 	ajax::success($resp);
 } catch (Exception $e) {
+	//ajax::error($e->getMessage());
 	http_response_code(500);
 	die($e->getMessage());
 }
