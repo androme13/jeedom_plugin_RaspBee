@@ -33,13 +33,17 @@ if (!is_object($results)) {
 
 if ($results->type == "sensors"){	
 	// on traite l'info batterie d'un device
+	error_log("traitement batterie: ".$results->info,3,"/tmp/prob.txt");
 	if (is_object($results->info->battery))
-	{		
+	{	
+		error_log("traitement batterie: ".$results->info->battery,3,"/tmp/prob.txt");
 		foreach (eqLogic::byType('RaspBEE') as $equipement) {		
 			foreach ($equipement->getCmd('info') as $cmd){
 				// on set le niveau de batterie de l'eqlogic
-				if ($equipement->getConfiguration('origid')==$results->id)
+				if ($equipement->getConfiguration('origid')==$results->id){
 				$equipement->batteryStatus($results->info->battery);
+				erro_log("batterie: ".$results->info->battery,3,"/tmp/prob.txt");
+				}
 			}			
 		}
 	}else

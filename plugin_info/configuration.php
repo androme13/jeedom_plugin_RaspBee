@@ -118,7 +118,8 @@ success: function (resp) {
 			else{
 				
 				//window.location.reload();
-				$('#div_alert').showAlert({message: data.result, level: 'danger'});
+				error_log(resp,3,'/tmp/prob.txt');
+				$('#div_alert').showAlert({message: resp.result, level: 'danger'});
 			}
 		}
 	});
