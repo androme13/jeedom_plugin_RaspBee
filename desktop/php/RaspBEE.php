@@ -172,7 +172,7 @@ foreach ($eqLogics as $eqLogic) {
 	}	
 	echo '</span>';
 	echo '</center>';
-	echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center>
+	echo '<span style="font-size : 1.1em;position:relative; top : 15px;white-space: pre-wrap;word-wrap: normal;"><center>' . $eqLogic->getHumanName(true, true) . '</center>
 	</span>';
 	echo '</div>';
 }

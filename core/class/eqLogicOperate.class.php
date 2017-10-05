@@ -236,7 +236,7 @@ class eqLogicOperate extends eqLogic {
 		if (!is_json($configFile)) return false;
 		$model = json_decode($configFile, true);
 		$commands = $model['commands'];
-		error_log("|setGenericCmdList|",3,"/tmp/rasbee.err");
+		//error_log("|setGenericCmdList|",3,"/tmp/rasbee.err");
 		foreach ($model['commands'] as $command) {
 			$RaspBEECmd = new RaspBEECmd();
 			$RaspBEECmd->setName($command[name]);

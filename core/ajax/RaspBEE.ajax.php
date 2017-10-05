@@ -101,7 +101,7 @@ try {
 	}
 	
 	if (init('action') == 'createSensor') {
-		error_log("creation du device demande ajax");
+		//error_log("creation du device demande ajax");
 		$resp=RaspBEE::createDevice(init('device'));
 		if ($resp===false){		
 			ajax::error();
@@ -111,7 +111,7 @@ try {
 	}
 	
 	if (init('action') == 'createLight') {
-		error_log("creation du light demande ajax");
+		//error_log("creation du light demande ajax");
 		$resp=RaspBEE::createDevice(init('device'));
 		if ($resp===false){		
 			ajax::error();
@@ -121,7 +121,7 @@ try {
 	}
 	
 	if (init('action') == 'removeAll') {
-		error_log("removeall");
+		//error_log("removeall");
 		$resp=RaspBEE::removeAll();
 		if ($resp===false){		
 			ajax::error();
