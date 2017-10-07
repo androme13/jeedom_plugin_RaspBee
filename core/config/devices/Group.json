@@ -83,9 +83,9 @@
 				}
 			},
 			{
-				"name": "Etat On", 
+				"name": "Etat", 
 				"type": "info", 
-				"isVisible": 0, 
+				"isVisible": 1, 
 				"isHistorized": 0,
 				"logicalId": "on_state",				
 				"configuration" :{
@@ -94,7 +94,11 @@
 				"subtype": "binary", 
 				"display": {
 					"generic_type": "LIGHT_STATE"
-				}
+				},
+				"template":{
+                    "dashboard" : "light",
+                    "mobile" : "light"
+                }
 			},
 			{
 				"name": "Luminosité", 
@@ -111,11 +115,7 @@
 				"subtype": "slider", 
 				"display": {
 					"generic_type": "LIGHT_SLIDER"
-				},
-				"template":{
-                    "dashboard" : "light",
-                    "mobile" : "light"
-                }
+				}
 			},
 			{
 				"name": "Etat luminosité", 

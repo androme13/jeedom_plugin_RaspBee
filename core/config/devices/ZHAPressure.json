@@ -21,7 +21,11 @@
             "subtype": "numeric", 
             "display": {
                 "generic_type": "PRESSURE"
-            }
+            },
+			"template":{
+				"dashboard" : "badge",
+				"mobile" : "badge"
+			}
         }		
     ]
 }

@@ -20,8 +20,12 @@
             }, 
             "subtype": "numeric", 
             "display": {
-                "generic_type": "TEMPERATURE"
-            }
+                "generic_type": "GENERIC_INFO"
+            },
+			"template":{
+				"dashboard" : "badge",
+				"mobile" : "badge"
+			}
         }		
     ]
 }
