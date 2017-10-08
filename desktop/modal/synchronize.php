@@ -22,29 +22,39 @@ if (!isConnect('admin')) {
 }
 
 require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
-$raspbeecom = new RaspBEECom;
+/*$raspbeecom = new RaspBEECom;
 		$lights = json_decode($raspbeecom->getLights());
-		$groups = json_decode($raspbeecom->getGroups());
-		print_r($lights);
-		print_r("------");
-		print_r($groups);
-		
+		$groups = json_decode($raspbeecom->getGroups());*/		
 ?>
-<span class="pull-left alert" id="span_state" style="background-color : #dff0d8;color : #3c763d;height:35px;border-color:#d6e9c6;display:none;margin-bottom:0px;"><span style="position:relative; top : -7px;">{{Demande envoyée}}</span></span>
-<br/><br/>
-
-<div id='div_backupAlert' style="display: none;"></div>
+<div id='div_syncAlert' style="display: none;"></div>
 <form class="form-horizontal">
-    <fieldset>
-        <div class="form-group">
-            <label class="col-sm-4 col-xs-6 control-label">{{Lancer une synchronisation}}</label>
-            <div class="col-sm-4 col-xs-6">
-                <a class="btn btn-success" id="bt_synchronize"><i class="fa fa-refresh"></i> {{Synchroniser}}</a>
-            </div>
-        </div>        
-        </fieldset>
-		 <textarea rows="10" cols="100" id="textarealog">
-		 </textarea> 
-    </form>
-</div>
+	<fieldset>
+		<div class="panel-group">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a data-toggle="collapse" href="#collapse1">Options</a>
+					</h4>
+				</div>
+				<div id="collapse1" class="panel-collapse collapse">
+					<ul class="list-group">
+						<li class="list-group-item">One</li>
+					</ul>
+					<div class="panel-footer">Résumé</div>
+				</div>
+			</div>
+		</div> 	
+	</fieldset>
+	<fieldset>
+		<div class="form-group">			
+			<div class="col-sm-4 col-xs-6">
+				<a class="btn btn-success" id="bt_synchronize">
+					<i class="fa fa-refresh"> {{Synchroniser}}</i></a>
+			</div>
+		</div>        
+	</fieldset>
+	<div class="col-sm-4 col-xs-6">
+		<ul id="treeSync"></ul>
+	</div>
+</form>
 <?php include_file('desktop', 'synchronize', 'js', 'RaspBEE');?>

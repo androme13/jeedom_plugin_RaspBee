@@ -33,7 +33,7 @@ class eqLogicOperate extends eqLogic {
 		error_log("|eqlogic create device|".$device[type]."|",3,"/tmp/rasbee.err");
 
 		foreach (eqlogic::byType('RaspBEE') as $eqLogic){
-		if ($eqLogic->getConfiguration('origid')==$device[origid] && $eqLogic->getConfiguration('type')==$device[type]) return false;		
+		if ($eqLogic->getConfiguration('origid')==$device[origid] && $eqLogic->getConfiguration('type')==$device[type]) return array("state"=> "nok", "message" => "Equipement deja existant");		
 		}
 		switch ($device[type]){
 		case "ZHASwitch" :{
@@ -246,41 +246,32 @@ class eqLogicOperate extends eqLogic {
 			if (array_key_exists('isVisible', $command)) {
 				$RaspBEECmd->setIsVisible($command[isVisible]);
 			}
-			//if ($command[isVisible]==1)$RaspBEECmd->setIsVisible(1);
 			if (array_key_exists('isHistorized', $command)) {
 				$RaspBEECmd->setIsHistorized($command[isHistorized]);
 			}
-			//if ($command[isHistorized]==1)$RaspBEECmd->setIsHistorized(1);
 			if (array_key_exists('display', $command)) {
 				$RaspBEECmd->setDisplay('generic_type',$command[display][generic_type]);
 			}			
-			//if ($command[display])$RaspBEECmd->setDisplay('generic_type',$command[display][generic_type]);
+
 			if (array_key_exists('template', $command)) {
-				if ($command[template][dashboard])
-				$RaspBEECmd->setTemplate('dashboard',$command[template][dashboard]);
-				if ($command[template][mobile])
-				$RaspBEECmd->setTemplate('mobile',$command[template][mobile]);
+				if (array_key_exists('dashboard',$command[template])){
+					$RaspBEECmd->setTemplate('dashboard',$command[template][dashboard]);
+				}
+				//if ($command[template][mobile])
+				if (array_key_exists('mobile',$command[template])){
+					$RaspBEECmd->setTemplate('mobile',$command[template][mobile]);
+				}
 			}						
-			/*if ($command[template]){
-				//error_log("|isvisible|".$command[template][dashboard],3,"/tmp/prob.txt");
-				if ($command[template][dashboard])
-				$RaspBEECmd->setTemplate('dashboard',$command[template][dashboard]);
-				if ($command[template][mobile])
-				$RaspBEECmd->setTemplate('mobile',$command[template][mobile]);
-			}*/
+
 			if (array_key_exists('unite', $command)) {
 				$RaspBEECmd->setUnite($command[unite]);
 			}	
-			//if ($command[unite])$RaspBEECmd->setUnite($command[unite]);
 			if (array_key_exists('type', $command)) {
 				 $RaspBEECmd->setType($command[type]);
 			}				
-			//if ($command[type]) $RaspBEECmd->setType($command[type]);
 			if (array_key_exists('subtype', $command)) {
 				 $RaspBEECmd->setSubType($command[subtype]);
-			}			
-			//if ($command[subtype])$RaspBEECmd->setSubType($command[subtype]);
-			
+			}						
 			foreach ($command[configuration] as $command => $key){
 				$RaspBEECmd->setConfiguration($command,$key);				
 			}				

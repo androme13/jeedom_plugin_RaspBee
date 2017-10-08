@@ -19,6 +19,8 @@ $('#bt_syncEqLogic').on('click', function () {
 	$('#md_modal').dialog({
 	title: "{{Synchronisation}}",
 	dialogClass: "no-close",
+	// on cache le bouton fermer
+	open: function(event, ui) { jQuery('.ui-dialog-titlebar-close').hide(); },
 	buttons: [
 			{
 	text: "{{Fermer}}",

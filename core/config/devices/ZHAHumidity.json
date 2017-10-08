@@ -13,7 +13,7 @@
         {
             "name": "Etat humidité", 
             "type": "info", 
-            "isVisible": 0, 
+            "isVisible": 1, 
             "isHistorized": 1,
 			"unite": "%",			
             "configuration": {
@@ -24,7 +24,11 @@
             "subtype": "numeric", 
             "display": {
                 "generic_type": "HUMIDITY"
-            }
+            },
+			"template":{
+				"dashboard" : "tile",
+				"mobile" : "tile"
+			}
         }		
     ]
 }

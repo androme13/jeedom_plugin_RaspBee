@@ -93,8 +93,8 @@ try {
 	if (init('action') == 'createGroup') {
 		//error_log("|creation du groupe demande ajax|".json_encode(init('device'),true),3,"/tmp/rasbee.err");
 		$resp=RaspBEE::createDevice(init('device'));
-		if ($resp===false){		
-			ajax::error();
+		if ($resp[state]=="nok"){		
+			ajax::error($resp);
 		} else{
 			ajax::success($resp);
 		}
@@ -103,8 +103,8 @@ try {
 	if (init('action') == 'createSensor') {
 		//error_log("creation du device demande ajax");
 		$resp=RaspBEE::createDevice(init('device'));
-		if ($resp===false){		
-			ajax::error();
+		if ($resp[state]=="nok"){		
+			ajax::error($resp);
 		} else{
 			ajax::success($resp);
 		}
