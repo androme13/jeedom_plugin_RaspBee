@@ -30,10 +30,11 @@ class eqLogicOperate extends eqLogic {
 	}
 	
 	public function createDevice($device,$syncType = 0){
-		error_log("|eqlogic create device|".$device[type]."|",3,"/tmp/rasbee.err");
+		//error_log("|eqlogic create device|".$device[type]."|",3,"/tmp/rasbee.err");
 
 		foreach (eqlogic::byType('RaspBEE') as $eqLogic){
-		if ($eqLogic->getConfiguration('origid')==$device[origid] && $eqLogic->getConfiguration('type')==$device[type]) return array("state"=> "nok", "message" => "Equipement deja existant");		
+		if ($eqLogic->getConfiguration('origid')==$device[origid] && $eqLogic->getConfiguration('type')==$device[type]) return array("state"=> "nok", "message" => "Equipement deja existant : <strong>".$eqLogic->name."</strong>");
+		
 		}
 		switch ($device[type]){
 		case "ZHASwitch" :{

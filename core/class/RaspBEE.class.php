@@ -249,6 +249,13 @@ class RaspBEE extends eqLogic {
 	return eqLogicOperate::createGroup($group);
 	}*/
 	
+	public function deleteRaspBEEUser($user){
+		$raspbeecom = new RaspBEECom;
+		$result = $raspbeecom->deleteRaspBEEUser($user);
+		unset($raspbeecom);
+		return $result;
+	}
+	
 	public function findRaspBEE(){
 		$raspbeecom = new RaspBEECom;
 		$result = $raspbeecom->findRaspBEE();

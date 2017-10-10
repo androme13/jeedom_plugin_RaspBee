@@ -33,14 +33,29 @@ require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h4 class="panel-title">
-						<a data-toggle="collapse" href="#collapse1">Options</a>
+						<a data-toggle="collapse" href="#collapseOptions">Options</a>
 					</h4>
 				</div>
-				<div id="collapse1" class="panel-collapse collapse">
+				<div id="collapseOptions" class="panel-collapse collapse in">
 					<ul class="list-group">
-						<li class="list-group-item">One</li>
+						<li class="list-group-item">
+							<div>
+								<h4 class="panel-title">
+									Types de Synchronisation
+								</h4>
+								<input type="radio" id="optionType1" name="optionType" value="basic">
+								<label for="optionType1">Normale</label><br>
+
+								<input type="radio" id="optionType2" name="optionType" value="renew">
+								<label for="optionType2">renouvellement total</label><br>
+								
+								<input type="radio" id="optionType3" name="optionType" value="renewbutid">
+								<label for="optionType3">renouvellement partiel</label><br>
+
+							</div>
+						</li>
 					</ul>
-					<div class="panel-footer">Résumé</div>
+					<div id="syncOptionsHelp" class="panel-footer"></div>
 				</div>
 			</div>
 		</div> 	
@@ -53,7 +68,7 @@ require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
 			</div>
 		</div>        
 	</fieldset>
-	<div class="col-sm-4 col-xs-6">
+	<div class="col-sm-7 ">
 		<ul id="treeSync"></ul>
 	</div>
 </form>

@@ -35,6 +35,15 @@ try {
 		}
 	}
 	
+	if (init('action') == 'deleteRaspBEEUser') {
+		$resp=RaspBEE::findRaspBEE();
+		if ($resp===false){		
+			ajax::error();
+		} else{
+			ajax::success($resp);
+		}
+	}
+	
 	if (init('action') == 'findRaspBEE') {
 		$resp=RaspBEE::findRaspBEE();
 		if ($resp===false){		

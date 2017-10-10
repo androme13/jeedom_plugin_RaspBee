@@ -28,12 +28,30 @@
 		this.value--;
 	}
 }*/
+$('input[type=radio][name=optionType][value=basic]').attr('checked', true);
+$('input[type=radio][name=optionType]').on( "click", function() {
+	var help ="";
+	switch ($( "input[type=radio][name=optionType]:checked" ).val()){
+		case 'basic' : help = "{{Normale: Type de synchronisation par défaut, elle conserve les équipements existants et ajoute les nouveaux équipements ainsi que les nouvelles commandes sur les équipements existants.}}"; break;
+		case 'renew' : help = "{{Renouvellement total: Tous les équipements sont supprimés, et une nouvelle synchronisation débute.}}"; break;
+		case 'renewbutid' : help = "{{Renouvellement partiel avec conservation des id : Tous les équipements sont supprimés, et une nouvelle synchronisation débute, mais les id sont conservés.}}"; break;
+		
+	};
+  $( "#syncOptionsHelp" ).html(help);
+});
+$('input[type=radio][name=optionType][value=basic]').click();
 
 $('#bt_synchronize').on('click', function () {
+	$('#treeSync').empty();
 	syncDevices('Capteurs','getRaspBEESensors');	
 	syncDevices('Eclairages','getRaspBEELights');	
 	syncDevices('Groupes','getRaspBEEGroups');
 });
+
+var displayHelp = function() {
+  var n = $( "input:checked" ).length;
+  $( "div" ).text( n + (n === 1 ? " is" : " are") + " checked!" );
+};
 
 function syncDevices(type,action){
 	var treechild =   '<li><input type="checkbox" id="'+type+'"><i class="fa fa-angle-double-right"></i><i class="fa fa-angle-double-down"></i><strong><label id="'+type+'Label" for="'+type+'"> '+type+'</label></strong><ul id="'+type+'childs"></ul></li>';
@@ -67,6 +85,9 @@ success: function (data) {
 	});
 }
 
+
+//code css
+//https://makina-corpus.com/blog/metier/2014/construire-un-tree-view-en-css-pur
 
 function createDevice(device,type){
 	console.dir(device);
@@ -102,8 +123,7 @@ success: function (data) {
 				$('#'+deviceName+'Icon').attr("class", "fa fa-check");
 				$('#'+deviceName+'Icon').css("color", "green");
 				$('#'+deviceName).append(' <span style="font-size:80%">(Equipement ajouté)</span>');		
-			}
-			
+			}			
 		} 
 	});	
 };

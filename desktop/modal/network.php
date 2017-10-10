@@ -27,53 +27,9 @@ $raspbeecom = new RaspBEECom;
 ?>
 <script type="text/javascript" src="plugins/openzwave/3rdparty/vivagraph/vivagraph.min.js"></script>
 <style>
-    #graph_network {
-        height: 80%;
-        width: 90%;
-        position: absolute;
-    }
-    #graph_network > svg {
-        height: 100%;
-        width: 100%
-    }
-    .node-item {
-        border: 1px solid;
-    }
-    .node-primary-controller-color{
-        color: #a65ba6;
-    }
-    .node-direct-link-color {
-        color: #7BCC7B;
-    }
-    .node-remote-control-color {
-        color: #00a2e8;
-    }
-    .node-more-of-one-up-color {
-        color: #E5E500;
-    }
-    .node-more-of-two-up-color {
-        color: #FFAA00;
-    }
-    .node-interview-not-completed-color {
-        color: #979797;
-    }
-    .node-no-neighbourhood-color {
-        color: #d20606;
-    }
-    .node-na-color {
-        color: white;
-    }
-    .greeniconcolor {
-        color: green;
-    }
-    .yellowiconcolor {
-        color: #FFD700;
-    }
-    .rediconcolor {
-        color: red;
-    }
+
 </style>
-<div id='div_networkOpenzwaveAlert' style="display: none;"></div>
+<div id='div_networkRaspBEEAlert' style="display: none;"></div>
 <div class='network' nid='' id="div_templateNetwork">
     <div class="container-fluid">
         <div id="content">
@@ -223,7 +179,7 @@ $raspbeecom = new RaspBEECom;
 						echo "<td>".$value->name."</td>";
 						echo "<td>".$value->{"create date"}."</td>";
 						echo "<td>".$value->{"last use date"}."</td>";
-						echo '<td><a id="removeDevice" class="btn btn-danger"><i class="fa fa-minus-circle"></i> {{Supprimer l\'utilisateur}}</a></td>';
+						echo '<td><a id='.$user.' name='.$value->name.' class="btn btn-danger  deleteRaspBeeUser"><i class="fa fa-minus-circle"></i> {{Supprimer l\'utilisateur}}</a></td>';
 						echo "</tr>";
 					}
 					?>

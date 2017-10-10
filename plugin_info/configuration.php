@@ -83,7 +83,6 @@ success: function (resp,statut) {
 				var value= obj.internalipaddress+":"+obj.internalport;
 				$('#raspbeeGWIP').val(value);
 				fieldValidate(value);
-				//window.location.reload();
 			} else{
 				$('#raspbeeGWIP').val("erreur");
 			}
@@ -106,18 +105,12 @@ success: function (resp) {
 			if (resp.state == 'ok') {
 				var jsonval = JSON.parse(resp.result);
 				if (typeof(jsonval.error)==='object'){
-					//console.dir(jsonval.error.description);
-					//$('#raspbeeAPIKEY').val(resp.result);
 					alert('Error : '+jsonval.error.description);
 				}else{
 					$('#raspbeeAPIKEY').val(jsonval.success.username);
-				}
-				
-				//$('#raspbeeAPIKEY').val(jsonval.success.username);
+				}				
 			}
 			else{
-				
-				//window.location.reload();
 				error_log(resp,3,'/tmp/prob.txt');
 				$('#div_alert').showAlert({message: resp.result, level: 'danger'});
 			}

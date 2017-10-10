@@ -29,6 +29,35 @@ class RaspBEECom {
 		$this->apikey = config::byKey('raspbeeAPIKEY','RaspBEE');		
     }
 	
+	public function deleteRaspBEEUser($user){
+		if ($user==null) return false;
+		//error_log("sendLightCommand(".$id.":".$command.")",3,"/tmp/prob.txt");
+		$url= 'http://'.$this->ip.'/api/'.$this->apikey.'/config/whitelist/'.$user;		
+		error_log("deleteRaspBEEUser :".$url,3,"/tmp/prob.txt");
+		//if ($id===null || $command===null || $type===null)return false;
+		$ch = curl_init();
+		$opts = [
+		CURLOPT_SSL_VERIFYPEER => false,
+		CURLOPT_FORBID_REUSE   => true,
+		//CURLOPT_POSTFIELDS     => $command,
+		CURLOPT_CUSTOMREQUEST =>  "DELETE",
+		CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
+		CURLOPT_URL            => $url,
+		//CURLOPT_POST		   => true,
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_TIMEOUT        => 30,
+		CURLOPT_CONNECTTIMEOUT => 30
+		];
+		curl_setopt_array($ch, $opts);
+		$result=curl_exec ($ch);
+		curl_close($ch);
+		if ($result===false){
+		return false;	
+		}else{
+		return $result;//substr($result,1,-1);
+		}					
+	}
+	
 	public function findRaspBEE(){
 		$ch = curl_init();
 		$opts = [
@@ -46,9 +75,7 @@ class RaspBEECom {
 		return false;	
 		}else{
 		return substr($result,1,-1);	
-		}
-			
-		
+		}		
 		//return json_encode(substr($result,1,-1));
 	}
 
@@ -119,7 +146,7 @@ class RaspBEECom {
 	
 	
 	public function sendCommand($type=null,$id=null,$command=null){
-		error_log("sendLightCommand(".$id.":".$command.")",3,"/tmp/prob.txt");
+		//error_log("sendLightCommand(".$id.":".$command.")",3,"/tmp/prob.txt");
 		$url= 'http://'.$this->ip.'/api/'.$this->apikey.'/'.$type.'/'.$id;
 		if ($type=="groups") $url=$url."/action";
 		if ($type!="groups") $url=$url."/state";
