@@ -15,68 +15,53 @@
 */
 
 $('.deleteRaspBeeUser').on( "click", function(e) {
-	console.log(e);
-	//parent.find('modal').prop("disabled",true);
-//	deleteUser("ok");
+	//console.log(e);
+	var row = $(this).closest("tr")[0].id;
+	deleteUser(e,$(this).closest("tr")[0].id);
 });
 
 
-function deleteUser($user){	
+function deleteUser(item,row){	
 	var dialog_title = '{{Confirmation de suppression utilisateur RaspBEE}}';
    var dialog_message = '<form class="form-horizontal onsubmit="return false;"> ';
-   //dialog_title = '{{Démarrer l\'inclusion}}';
-   dialog_message += '<label class="control-label" > {{Veuillez confirmer la suppression de l\'utilisateur}} </label> ' + '<br>' + '<label class="lbl lbl-warning" for="name">{{Attention, une fois supprimé, il le sera définitvement.}}</label> ';
+   dialog_message += '<label class="control-label" > {{Veuillez confirmer la suppression de l\'utilisateur suivant}} :</label><br><br>{{Nom}} : '+item.currentTarget['name']+'<br>{{Clé}} : ('+item.currentTarget['id']+')'+' ' + '<br><br>' + '<label class="lbl lbl-warning" for="name">{{Attention, une fois supprimé, il le sera définitivement.}}</label> ';
    dialog_message += '</form>';
-   var user ="test";
    bootbox.dialog({
 	   title: dialog_title,
 	   message: dialog_message,
-	   //modal: false,
 	   buttons: {
 		   "{{Annuler}}": {
-			  // className: "btn-success",
 			   callback: function () {
 			   }
 		   },
 		   success: {
 			   label: "{{Supprimer}}",
 			   className: "btn-danger",
-			   callback: function () {
-				   
+			   callback: function () {		   
 				   	$.ajax({
 					type: "POST", 
 					url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
 					data: {
 						action: "deleteRaspBEEUser",
-						user: user,
+						user: item.currentTarget['id'],
 					},
 					dataType: 'json',
 					error: function (request, status, error) {
 								$('#div_networkRaspBEEAlert').showAlert({message: error.message, level: 'danger'});
 								handleAjaxError(request, status, error);
-								
-								
 							},
-					success: function (data) {								
+					success: function (data) {
+						console.dir("réponse:",data);
 								if (data.state != 'ok') {
-									$('#div_networkRaspBEEAlert').showAlert({message: data.result, level: 'info'});
-									return;
+									$('#div_networkRaspBEEAlert').showAlert({message: data.message, level: 'danger'});
+								} else
+								{									
+									$('#div_networkRaspBEEAlert').showAlert({message: "{{Utilisateur supprimé}} ("+data.result[0].success+")", level: 'success'});
+									$('#'+row).remove();
 								}
-	
 							} 
 						});
-				   
-				   
-				//   parent.find('modal').prop("disabled",false);
-				/*jeedom.openzwave.controller.addNodeToNetwork({
-					secure : $("input[name='secure']:checked").val(),
-					error: function (error) {
-						$('#div_alert').showAlert({message: error.message, level: 'danger'});
-					},
-					success: function (data) {
-						$('#div_alert').showAlert({message: '{{Action réalisée avec succès}}', level: 'success'});
-					}
-				});*/
+				
 			}
 		},
 	}

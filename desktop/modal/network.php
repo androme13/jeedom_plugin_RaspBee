@@ -174,7 +174,7 @@ $raspbeecom = new RaspBEECom;
 					<tbody>
 					<?php
 					foreach ($RaspBEEConfJson->whitelist as $user => $value) {
-						echo "<tr>";
+						echo '<tr id="'.$user.'">';
 						echo "<td>".$user."</td>";
 						echo "<td>".$value->name."</td>";
 						echo "<td>".$value->{"create date"}."</td>";

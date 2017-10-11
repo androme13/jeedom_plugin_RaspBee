@@ -29,8 +29,18 @@ class RaspBEECom {
 		$this->apikey = config::byKey('raspbeeAPIKEY','RaspBEE');		
     }
 	
+	//try {
+	//	ajax::init();
 	public function deleteRaspBEEUser($user){
-		if ($user==null) return false;
+		error_log("user : ".$user,3,"/tmp/prob.txt");
+
+		if ($user===null){
+			$return="Utilisateur à supprimer non defini";
+			$return->state="error";
+			//throw new Exception('Utilisateur à supprimer non defini');
+			return $return;
+			//return array('message' => 'Utilisateur à supprimer non defini', 'code' => 0, 'state' => 'error');
+		}
 		//error_log("sendLightCommand(".$id.":".$command.")",3,"/tmp/prob.txt");
 		$url= 'http://'.$this->ip.'/api/'.$this->apikey.'/config/whitelist/'.$user;		
 		error_log("deleteRaspBEEUser :".$url,3,"/tmp/prob.txt");
@@ -50,12 +60,27 @@ class RaspBEECom {
 		];
 		curl_setopt_array($ch, $opts);
 		$result=curl_exec ($ch);
+		error_log("deleteRaspBEEUser result : ".$result,3,"/tmp/prob.txt");
+
+		if (curl_errno($ch)) {
+			$curl_error = curl_error($ch);
+			curl_close($ch);
+			throw new Exception(__('Echec de la requête http : ', __FILE__) . $url . ' Curl error : ' . $curl_error, 404);
+		}
 		curl_close($ch);
+		return (is_json($result)) ? json_decode($result, true) : $result;
+		
+		
+		
+		
+		
+		
+		/*curl_close($ch);
 		if ($result===false){
 		return false;	
 		}else{
 		return $result;//substr($result,1,-1);
-		}					
+		}		*/			
 	}
 	
 	public function findRaspBEE(){
@@ -175,4 +200,5 @@ class RaspBEECom {
 		}
 	}
 }
+
 ?>

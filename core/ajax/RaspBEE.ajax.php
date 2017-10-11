@@ -36,9 +36,10 @@ try {
 	}
 	
 	if (init('action') == 'deleteRaspBEEUser') {
-		$resp=RaspBEE::findRaspBEE();
-		if ($resp===false){		
-			ajax::error();
+		$resp=RaspBEE::deleteRaspBEEUser(init('user'));
+		error_log("|deleteRaspBEEUser raspbee.ajax.php|".$resp->state,3,"/tmp/prob.txt");
+		if ($resp->state=="error"){		
+			ajax::error($resp);
 		} else{
 			ajax::success($resp);
 		}

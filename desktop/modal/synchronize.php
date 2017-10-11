@@ -46,10 +46,10 @@ require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
 								<input type="radio" id="optionType1" name="optionType" value="basic">
 								<label for="optionType1">Normale</label><br>
 
-								<input type="radio" id="optionType2" name="optionType" value="renew">
+								<input type="radio" id="optionType2" name="optionType" value="renew" disabled>
 								<label for="optionType2">renouvellement total</label><br>
 								
-								<input type="radio" id="optionType3" name="optionType" value="renewbutid">
+								<input type="radio" id="optionType3" name="optionType" value="renewbutid" disabled>
 								<label for="optionType3">renouvellement partiel</label><br>
 
 							</div>
