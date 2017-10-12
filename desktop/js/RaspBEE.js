@@ -17,19 +17,19 @@
 
 $('#bt_syncEqLogic').on('click', function () {
 	$('#md_modal').dialog({
-	title: "{{Synchronisation}}",
-	dialogClass: "no-close",
-	// on cache le bouton fermer
-	open: function(event, ui) { jQuery('.ui-dialog-titlebar-close').hide(); },
-	buttons: [
-			{
-	text: "{{Fermer}}",
-	click: function() {
-					window.location.reload();
-				}
+title: "{{Synchronisation}}",
+dialogClass: "no-close",
+		// on cache le bouton fermer
+open: function(event, ui) { jQuery('.ui-dialog-titlebar-close').hide(); },
+buttons: [
+		{
+text: "{{Fermer}}",
+click: function() {
+				window.location.reload();
 			}
-			],
-		});
+		}
+		],
+	});
 	$('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=synchronize').dialog('open');
 	
 });
@@ -45,23 +45,50 @@ $('#bt_RaspBEENetwork').on('click', function () {
 	$('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=network').dialog('open');
 });
 
-$('#bt_RaspBEERemoveAll').on('click', function () {
-	$.ajax({
-type: "POST", 
-url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
-data: {
-action: "removeAll",
+$('#bt_RaspBEERemoveAll').on('click', function () {	
+	var dialog_title = '{{Confirmation de suppression de tous les équipements RaspBEE}}';
+	var dialog_message = '<form class="form-horizontal onsubmit="return false;"> ';
+	dialog_message += '<label class="control-label" > {{Veuillez confirmer la suppression de tous les équipements RaspBEE}}</label><br><label class="lbl lbl-warning" for="name">{{Attention, une fois supprimés, ils le seront définitivement.}}</label>';
+	dialog_message += '</form>';
+	bootbox.dialog({
+		title: dialog_title,
+		message: dialog_message,
+		buttons: {
+			"{{Annuler}}": {
+				callback: function () {
+				}
 		},
-dataType: 'json',
-error: function (request, status, error) {
-			handleAjaxError(request, status, error);
+		success: {
+			label: "{{Supprimer}}",
+			className: "btn-danger",
+			callback: function () {		   
+				$.ajax({
+					type: "POST", 
+					url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+					data: {
+						action: "removeAll",
+					},
+					dataType: 'json',
+					error: function (request, status, error) {
+						console.dir(error);
+						$('#div_alert').showAlert({message: error.message, level: 'danger'});
+						handleAjaxError(request, status, error);
+					},
+					success: function (data) { 
+						if (data.state != 'ok') {
+							console.dir(data);
+							$('#div_alert').showAlert({message: data.result, level: 'danger'});
+						}else
+						{									
+							$('#div_alert').showAlert({message: "{{Tous les équipements ont été supprimés}}", level: 'success'});
+								
+						}
+						window.location.reload();	
+						}
+					});
+								
+				}
 		},
-success: function (data) { 
-			if (data.state != 'ok') {
-				$('#div_alert').showAlert({message: data.result, level: 'danger'});
-				return;
-			}
-			window.location.reload();	
 		}
 	});
 });
@@ -124,67 +151,67 @@ function printEqLogic(_eqlogic) {
 	//printEqLogicHelper(true,"{{Devicemembership}}","devicemembership",_eqlogic);
 	//printEqLogicHelper(true,"{{Lights}}","lights",_eqlogic);
 	if (("devicemembership" in _eqlogic.configuration))
-		printMasterEqLogic(_eqlogic);
+	printMasterEqLogic(_eqlogic);
 	else
-		$('#masterEqLogic').empty();
+	$('#masterEqLogic').empty();
 	if (("lights" in _eqlogic.configuration))
-		printMembersEqLogic(_eqlogic);
+	printMembersEqLogic(_eqlogic);
 	else
-		$('#membersEqLogic').empty();
+	$('#membersEqLogic').empty();
 }
- function printEqLogicHelper(expertMode,label,name,_eqLogic,_subst){
-	 var expertModeVal="";
-	 if (expertMode==true) expertModeVal = "expertModeVisible";
- // (expertmodevisible,nom du champ,eqlogic en cours,tableau de substitution des valeurs)
-		if (_eqLogic.configuration[name]==undefined) return;
-		if (_subst!=null && _subst!=undefined){
-			name = _subst[_eqLogic.configuration[name]];
-			var trm = '<tr class="eqLogic '+expertModeVal+'"><td class="col-sm-2"><span class="label control-label" style="font-size : 1em;">'+label+'</span></td><td><span class="label label-default" style="font-size : 1em;">'+name+'</span></td></tr>';
-		}
-		else
-		var trm = '<tr class="eqLogic '+expertModeVal+'"><td class="col-sm-2"><span class="label control-label" style="font-size : 1em;">'+label+'</span></td><td><span class="label label-default" style="font-size : 1em;"> <span class="eqLogicAttr" data-l1key="configuration" data-l2key="'+name+'"></span></span></td></tr>';
-		$('#table_infoseqlogic tbody').append(trm);
-		$('#table_infoseqlogic tbody tr:last').setValues(_eqLogic, '.eqLogicAttr');		
- }
- 
+function printEqLogicHelper(expertMode,label,name,_eqLogic,_subst){
+	var expertModeVal="";
+	if (expertMode==true) expertModeVal = "expertModeVisible";
+	// (expertmodevisible,nom du champ,eqlogic en cours,tableau de substitution des valeurs)
+	if (_eqLogic.configuration[name]==undefined) return;
+	if (_subst!=null && _subst!=undefined){
+		name = _subst[_eqLogic.configuration[name]];
+		var trm = '<tr class="eqLogic '+expertModeVal+'"><td class="col-sm-2"><span class="label control-label" style="font-size : 1em;">'+label+'</span></td><td><span class="label label-default" style="font-size : 1em;">'+name+'</span></td></tr>';
+	}
+	else
+	var trm = '<tr class="eqLogic '+expertModeVal+'"><td class="col-sm-2"><span class="label control-label" style="font-size : 1em;">'+label+'</span></td><td><span class="label label-default" style="font-size : 1em;"> <span class="eqLogicAttr" data-l1key="configuration" data-l2key="'+name+'"></span></span></td></tr>';
+	$('#table_infoseqlogic tbody').append(trm);
+	$('#table_infoseqlogic tbody tr:last').setValues(_eqLogic, '.eqLogicAttr');		
+}
+
 function printMasterEqLogic(_eqLogic){
 	$('#masterEqLogic').empty();	 
 	var devicemembership=JSON.parse(_eqLogic.configuration.devicemembership);
 	if (!is_null(devicemembership)){
-	var master ="";
-	master+='<legend><i class="fa fa-th-large"></i> {{Contrôleur maître}}</legend>'
-	master+='<div class="mastersCard" style="display: flex;">';	
-	for(var i= 0; i < devicemembership.length; i++){
-		jeedom.raspbee.eqLogic.byOriginId({
-		origId:devicemembership[i],
-		//action:'humanNameByOrigIdAndType',
-		type:'switch',
-		error: function(error){
-		console.log("THE error printMasterEqLogic "+_eqLogic.name);	
-		console.log("THE error printMasterEqLogic devicemembership[i] "+devicemembership[i]);
-		},
-		success:function (result){
-			if (result!=undefined){
-			console.log("THE result: "+result+"|");
-			var card = "";
-			card+='<div class="eqLogicDisplayCard cursor eql'+result.id+'" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
-			card+= "<center>";
-			card+= '<i class="fa fa-th-large" style="font-size : 6em;color:#767676;"></i>';
-			card+= '<br>';
-			card+= '<span style="font-size : 0.8em;">';
-			card+= '{{Commande}}';
-			card+= '</span>';
-			card+= "<span style='font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;'><center>"+result.humanName+"</center></span>";
-			card+='</div>';				
-			$('.mastersCard').append(card);
-			$('.eql'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
-			}			
+		var master ="";
+		master+='<legend><i class="fa fa-th-large"></i> {{Contrôleur maître}}</legend>'
+		master+='<div class="mastersCard" style="display: flex;">';	
+		for(var i= 0; i < devicemembership.length; i++){
+			jeedom.raspbee.eqLogic.byOriginId({
+origId:devicemembership[i],
+				//action:'humanNameByOrigIdAndType',
+type:'switch',
+error: function(error){
+					console.log("THE error printMasterEqLogic "+_eqLogic.name);	
+					console.log("THE error printMasterEqLogic devicemembership[i] "+devicemembership[i]);
+				},
+success:function (result){
+					if (result!=undefined){
+						console.log("THE result: "+result+"|");
+						var card = "";
+						card+='<div class="eqLogicDisplayCard cursor eql'+result.id+'" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
+						card+= "<center>";
+						card+= '<i class="fa fa-th-large" style="font-size : 6em;color:#767676;"></i>';
+						card+= '<br>';
+						card+= '<span style="font-size : 0.8em;">';
+						card+= '{{Commande}}';
+						card+= '</span>';
+						card+= "<span style='font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;'><center>"+result.humanName+"</center></span>";
+						card+='</div>';				
+						$('.mastersCard').append(card);
+						$('.eql'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
+					}			
+				}
+			})
 		}
-	})
-	}
-	master+="</div>";	
-	$('#masterEqLogic').append(master);	
-}}
+		master+="</div>";	
+		$('#masterEqLogic').append(master);	
+	}}
 
 function printMembersEqLogic(_eqLogic){
 	$('#membersEqLogic').empty();
@@ -193,51 +220,51 @@ function printMembersEqLogic(_eqLogic){
 	var lights=JSON.parse(_eqLogic.configuration.lights);
 	if (!is_null(lights)){
 
-	var master ="";
-	master+='<legend><i class="fa fa-table"></i> {{Membres du groupe}}</legend>'
-	master+='<div class="membersCard" style="display: flex;">';
+		var master ="";
+		master+='<legend><i class="fa fa-table"></i> {{Membres du groupe}}</legend>'
+		master+='<div class="membersCard" style="display: flex;">';
 
-	for(var i= 0; i < lights.length; i++){
-	jeedom.raspbee.eqLogic.byOriginId({
-		origId:lights[i],
-		type: "light",
-		error: function(error){
-			console.log("THE error printMemberEqLogic "+_eqLogic.name);	
-			console.log("THE error printMemberEqLogic light[i] "+lights[i]);
+		for(var i= 0; i < lights.length; i++){
+			jeedom.raspbee.eqLogic.byOriginId({
+origId:lights[i],
+type: "light",
+error: function(error){
+					console.log("THE error printMemberEqLogic "+_eqLogic.name);	
+					console.log("THE error printMemberEqLogic light[i] "+lights[i]);
 
-		},
-		success:function (result){
-			if (result!=undefined){			
-			//console.log("success");		
-			var card = "";
-			card+='<div class="eqLogicDisplayCard cursor eql'+result.id+'" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
-			card+= "<center>";
-			card+= '<i class="jeedom jeedom-lumiere-off" style="font-size : 6em;color:#767676;"></i>';
-			card+= '<br>';
-			card+= '<span style="font-size : 0.8em;">';
-			card+= '{{Eclairage}}';
-			card+= '</span>';
-			card+= "<span style='font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;'><center>"+result.humanName+"</center></span>";
-			card+='</div>';				
-			$('.membersCard').append(card);
-			$('.eql'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
+				},
+success:function (result){
+					if (result!=undefined){			
+						//console.log("success");		
+						var card = "";
+						card+='<div class="eqLogicDisplayCard cursor eql'+result.id+'" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
+						card+= "<center>";
+						card+= '<i class="jeedom jeedom-lumiere-off" style="font-size : 6em;color:#767676;"></i>';
+						card+= '<br>';
+						card+= '<span style="font-size : 0.8em;">';
+						card+= '{{Eclairage}}';
+						card+= '</span>';
+						card+= "<span style='font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;'><center>"+result.humanName+"</center></span>";
+						card+='</div>';				
+						$('.membersCard').append(card);
+						$('.eql'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
+					}
+				}		
+			});
 		}
-		}		
-		});
-	}
-	master+="</div>";
-	$('#membersEqLogic').append(master);
+		master+="</div>";
+		$('#membersEqLogic').append(master);
 
 	}
 }
 
 
 /*function arraySearch(arr,val) {
-    for (var i=0; i<arr.length; i++)
-        if (arr[i] === val)                    
-            return i;
-    return false;
-  }*/
+	for (var i=0; i<arr.length; i++)
+		if (arr[i] === val)                    
+			return i;
+	return false;
+}*/
 
 
 

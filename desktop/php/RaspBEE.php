@@ -104,7 +104,7 @@ echo '<center>';
 echo '<i class="fa fa-times" style="font-size : 6em;color:#FA5858;"></i>';
 echo '</center>';
 echo '<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#FA5858">
-<center>{{Remove ALL}}</center>
+<center>{{Tout supprimer}}</center>
 </span>';
 echo '</div>';
 ?>	 
