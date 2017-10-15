@@ -32,9 +32,9 @@ $('input[type=radio][name=optionType][value=basic]').attr('checked', true);
 $('input[type=radio][name=optionType]').on( "click", function() {
 	var help ="";
 	switch ($( "input[type=radio][name=optionType]:checked" ).val()){
-		case 'basic' : help = "{{Normale: Type de synchronisation par défaut, elle conserve les équipements existants et ajoute les nouveaux équipements ainsi que les nouvelles commandes sur les équipements existants.}}"; break;
-		case 'renew' : help = "{{Renouvellement total: Tous les équipements sont supprimés, et une nouvelle synchronisation débute.}}"; break;
-		case 'renewbutid' : help = "{{Renouvellement partiel avec conservation des id : Tous les équipements sont supprimés, et une nouvelle synchronisation débute, mais les id sont conservés.}}"; break;
+		case 'basic' : help = "{{Normale}} : {{Type de synchronisation par défaut, elle conserve les équipements existants et ajoute les nouveaux équipements ainsi que les nouvelles commandes sur les équipements existants}}."; break;
+		case 'renew' : help = "{{Resynchronisation totale}} : {{Tous les équipements sont supprimés, et une nouvelle synchronisation débute}}."; break;
+		case 'renewbutid' : help = "{{Resynchronisation partielle}} : {{Tous les équipements sont supprimés, et une nouvelle synchronisation débute, mais les id sont conservés}}."; break;
 		
 	};
   $( "#syncOptionsHelp" ).html(help);
@@ -43,9 +43,11 @@ $('input[type=radio][name=optionType][value=basic]').click();
 
 $('#bt_synchronize').on('click', function () {
 	$('#treeSync').empty();
+	$('#div_syncAlert').showAlert({message: "{{Synchronisation en cours}}...", level: 'info'});
 	syncDevices('Capteurs','getRaspBEESensors');	
 	syncDevices('Eclairages','getRaspBEELights');	
 	syncDevices('Groupes','getRaspBEEGroups');
+	$('#div_syncAlert').showAlert({message: "{{Synchronisation Terminée}}", level: 'success'});
 });
 
 var displayHelp = function() {

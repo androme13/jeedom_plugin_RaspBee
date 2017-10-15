@@ -27,13 +27,13 @@ require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
 		$groups = json_decode($raspbeecom->getGroups());*/		
 ?>
 <div id='div_syncAlert' style="display: none;"></div>
-<form class="form-horizontal">
-	<fieldset>
-		<div class="panel-group">
+<div class="col-sm-4" style="overflow: hidden;height:inherit;">
+<form class="form-vertical" >
+		<div class="panel-group" >
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h4 class="panel-title">
-						<a data-toggle="collapse" href="#collapseOptions">Options</a>
+						<a data-toggle="collapse" href="#collapseOptions">{{Options}}</a>
 					</h4>
 				</div>
 				<div id="collapseOptions" class="panel-collapse collapse in">
@@ -41,16 +41,16 @@ require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
 						<li class="list-group-item">
 							<div>
 								<h4 class="panel-title">
-									Types de Synchronisation
+								{{Types de Synchronisation}}
 								</h4>
 								<input type="radio" id="optionType1" name="optionType" value="basic">
-								<label for="optionType1">Normale</label><br>
+								<label for="optionType1">{{Normale}} ({{recommandée}}).</label><br>
 
 								<input type="radio" id="optionType2" name="optionType" value="renew" disabled>
-								<label for="optionType2">renouvellement total</label><br>
+								<label for="optionType2">{{Resynchronisation totale}}.</label><br>
 								
 								<input type="radio" id="optionType3" name="optionType" value="renewbutid" disabled>
-								<label for="optionType3">renouvellement partiel</label><br>
+								<label for="optionType3">{{Resynchronisation partielle}}.</label><br>
 
 							</div>
 						</li>
@@ -58,18 +58,30 @@ require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
 					<div id="syncOptionsHelp" class="panel-footer"></div>
 				</div>
 			</div>
-		</div> 	
-	</fieldset>
-	<fieldset>
-		<div class="form-group">			
-			<div class="col-sm-4 col-xs-6">
+
+		<div class="panel panel-footer">			
 				<a class="btn btn-success" id="bt_synchronize">
 					<i class="fa fa-refresh"> {{Synchroniser}}</i></a>
-			</div>
 		</div>        
-	</fieldset>
-	<div class="col-sm-7 ">
+		</div> 	
+	</form>
+	</div>
+	<div class="panel-group col-sm-8" >
+	<div class="panel panel-default">
+		<div class="  panel-heading">
+		<h4 class=" panel-title">
+			<a">{{Résumé de la synchronisation}}</a>
+		</h4>
+	</div>
+	<div class="  panel-default">
+
+	<div class=" panel-body" style="">
 		<ul id="treeSync"></ul>
 	</div>
-</form>
+	</div>
+	</div>
+	</div>
+
+
+
 <?php include_file('desktop', 'synchronize', 'js', 'RaspBEE');?>
