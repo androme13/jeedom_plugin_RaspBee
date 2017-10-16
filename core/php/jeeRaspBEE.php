@@ -31,21 +31,31 @@ if (!is_object($results)) {
 	die();
 }
 
-if ($results->type == "sensors"){	
+if ($results->type == "sensors"){
+	
 	// on traite l'info batterie d'un device
-	//error_log("|results : ".json_encode($results),3,"/tmp/prob.txt");
+	//error_log("|action sensor : ".json_encode($results),3,"/tmp/prob.txt");
 	//error_log("|traitement batterie type : ".$results->info->battery,3,"/tmp/prob.txt");
 	//error_log("|fin traitement batterie: ",3,"/tmp/prob.txt");
 	if (is_int($results->info->battery))
 	{	
-		error_log("traitement batterie: ".$results->info->battery,3,"/tmp/prob.txt");
-		foreach (eqLogic::byType('RaspBEE') as $equipement) {		
-			foreach ($equipement->getCmd('info') as $cmd){
-				// on set le niveau de batterie de l'eqlogic
+		//error_log("traitement batterie: ".json_encode($results),3,"/tmp/prob.txt");
+		foreach (eqLogic::byType('RaspBEE') as $equipement) {
+			
+			$type = $equipement->getConfiguration('type');
+			if (strpos(strtolower($type),"light")===false){
+			//if ($type!="LightGroup" && $type!="Extended color light"){
+				error_log("traitement batterie type eq: ".$equipement->getConfiguration('type'),3,"/tmp/prob.txt");
 				if ($equipement->getConfiguration('origid')==$results->id){
-				$equipement->batteryStatus($results->info->battery);
+					$equipement->batteryStatus($results->info->battery);
+					break;
+			//foreach ($equipement->getCmd('info') as $cmd){
+				// on set le niveau de batterie de l'eqlogic
+				
+
 				//erro_log("batterie: ".$results->info->battery,3,"/tmp/prob.txt");
-				}
+				//}
+			}
 			}			
 		}
 	}else
