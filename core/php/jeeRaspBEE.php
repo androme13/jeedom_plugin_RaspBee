@@ -44,7 +44,7 @@ if ($results->type == "sensors"){
 				// on set le niveau de batterie de l'eqlogic
 				if ($equipement->getConfiguration('origid')==$results->id){
 				$equipement->batteryStatus($results->info->battery);
-				erro_log("batterie: ".$results->info->battery,3,"/tmp/prob.txt");
+				//erro_log("batterie: ".$results->info->battery,3,"/tmp/prob.txt");
 				}
 			}			
 		}
