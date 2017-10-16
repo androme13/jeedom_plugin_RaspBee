@@ -243,12 +243,7 @@ class RaspBEE extends eqLogic {
 	public function syncEqLogicWithRaspBEE($_logical_id = null, $_exclusion = 0){
 		return eqLogicOperate::createDevice();
 	}
-	
-	/*public function createGroup($group){
-	error_log("|group create raspbee.class|".$group,3,"/tmp/rasbee.err");
-	return eqLogicOperate::createGroup($group);
-	}*/
-	
+		
 	public function deleteRaspBEEUser($user){
 		$raspbeecom = new RaspBEECom;
 		$result = $raspbeecom->deleteRaspBEEUser($user);
@@ -341,9 +336,6 @@ class RaspBEECmd extends cmd {
 		if ($this->getType() == 'action'){
 			
 			$eqLogic = $this->getEqLogic();
-			//error_log("execute action : ".$this->getConfiguration('fieldname')." ".$this->getName(),3,"/tmp/prob.txt");
-			//error_log("execute action : ".$eqLogic->getConfiguration('type')." ".$this->getName(),3,"/tmp/prob.txt");
-			//error_log("options :".json_encode($_options),3,"/tmp/prob.txt");
 			
 			switch ($this->getConfiguration('fieldname'))
 			{

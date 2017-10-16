@@ -76,12 +76,57 @@ require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
 	<div class="  panel-default">
 
 	<div class=" panel-body" style="">
-		<ul id="treeSync"></ul>
+		<ul id="treeSync" class="tree"></ul>
 	</div>
 	</div>
 	</div>
 	</div>
+<style>
+input.tree {
+  display: none;
+}
+input.tree ~ ul {
+ display: none;
+}
+input.tree:checked ~ ul {
+ display: block;
+}
+input.tree ~ .fa-angle-double-down {
+  display: none;
+}
+input.tree:checked ~ .fa-angle-double-right {
+  display: none;
+}
+input.tree:checked ~ .fa-angle-double-down {
+  display: inline;
+}
 
+/* habillage */
+li.tree {
+  display: block;
+  font-family: 'Arial';
+  font-size: 15px;
+  padding: 0.2em;
+  border: 1px solid transparent;
+}
+li.tree:hover {
+  border-radius: 3px;
+  background-color: SlateGray;
+}
+li.treeblock {
+  display: block;
+  font-family: 'Arial';
+  font-size: 15px;
+  padding: 0.2em;
+  border: 1px solid transparent;
+}
+
+li.treeblock:hover, input.tree:checked {
+  border-radius: 3px;
+  background-color: black;
+}
+
+</style>
 
 
 <?php include_file('desktop', 'synchronize', 'js', 'RaspBEE');?>

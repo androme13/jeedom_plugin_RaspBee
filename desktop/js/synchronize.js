@@ -56,7 +56,7 @@ var displayHelp = function() {
 };
 
 function syncDevices(type,action){
-	var treechild =   '<li><input type="checkbox" id="'+type+'"><i class="fa fa-angle-double-right"></i><i class="fa fa-angle-double-down"></i><strong><label id="'+type+'Label" for="'+type+'"> '+type+'</label></strong><ul id="'+type+'childs"></ul></li>';
+	var treechild =   '<li class="treeblock"><input type="checkbox" id="'+type+'" class="tree"><i class="fa fa-angle-double-right"></i><i class="fa fa-angle-double-down"></i><strong><label id="'+type+'Label" for="'+type+'"> '+type+'</label></strong><ul id="'+type+'childs"></ul></li>';
 	$('#treeSync').append(treechild);
 	$.ajax({
 type: "POST", 
@@ -94,7 +94,7 @@ success: function (data) {
 function createDevice(device,type){
 	console.dir(device);
 	var deviceName=device.name.replace(/ /g,'')+device.etag;
-	var treechild =   '<li style="list-style:none;" id="'+deviceName+'"><div id="'+deviceName+'Icon" class="fa fa-refresh"></div> '+device.name+'</li>';
+	var treechild =   '<li class="tree" style="list-style:none;" id="'+deviceName+'"><div id="'+deviceName+'Icon" class="fa fa-refresh"></div> '+device.name+'</li>';
 	$('#'+type+'childs').append(treechild);
 	$.ajax({
 type: "POST", 
