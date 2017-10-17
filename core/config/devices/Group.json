@@ -231,6 +231,35 @@
 				"display": {
 					"generic_type": "DONT"
 				}
-			}
+			},
+			{
+				"name": "Couleur", 
+				"type": "action", 
+				"isVisible": 1, 
+				"isHistorized": 0, 
+				"configuration": {
+				"fieldname" : "color"
+				},
+				"logicalId": "color",
+				"value" : "Etat couleur",								
+				"subtype": "color", 
+				"display": {
+					"generic_type": "LIGHT_SET_COLOR"
+				}
+			},
+			{
+				"name": "Etat couleur", 
+				"type": "info", 
+				"isVisible": 0, 
+				"isHistorized": 0, 
+				"configuration" :{
+					"fieldname" : "color"				
+				},
+				"logicalId": "color_state",				
+				"subtype": "other", 
+				"display": {
+					"generic_type": "LIGHT_COLOR"
+				}
+			}					
     ]
 }

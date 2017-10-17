@@ -352,16 +352,21 @@ class RaspBEECmd extends cmd {
 					$commandtosend='{"xy" :['.$xy[x].','.$xy[y].']}';
 				break;
 				default :
+				
 					$commandtosend='{"'.$this->getConfiguration('fieldname').'" : '.$_options[slider].'}';
+					
+					
 					
 				
 			}
+			//error_log("action group".$commandtosend,3,"/tmp/prob.txt");
 			switch ($eqLogic->getConfiguration('type')){
 				case "Extended color light":
 				case "Dimmable light":
 				self::sendCommand("lights",$this->getEqlogic()->getConfiguration('origid'),$commandtosend);
 				break;
 				case "LightGroup":
+				//error_log("action group".$commandtosend,3,"/tmp/prob.txt");
 				self::sendCommand("groups",$this->getEqlogic()->getConfiguration('origid'),$commandtosend);
 				break;				
 			}

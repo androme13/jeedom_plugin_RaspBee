@@ -43,9 +43,9 @@ if ($results->type == "sensors"){
 		foreach (eqLogic::byType('RaspBEE') as $equipement) {
 			
 			$type = $equipement->getConfiguration('type');
+			// le type ne doit pas comporter le mot light (eviter de se melanger dans le originid qui peuvent être identiques entre les light et le reste, donc on teste)
 			if (strpos(strtolower($type),"light")===false){
-			//if ($type!="LightGroup" && $type!="Extended color light"){
-				error_log("traitement batterie type eq: ".$equipement->getConfiguration('type'),3,"/tmp/prob.txt");
+				//error_log("traitement batterie type eq: ".$equipement->getConfiguration('type'),3,"/tmp/prob.txt");
 				if ($equipement->getConfiguration('origid')==$results->id){
 					$equipement->batteryStatus($results->info->battery);
 					break;
