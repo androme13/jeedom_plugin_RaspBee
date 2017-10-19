@@ -174,12 +174,19 @@ $raspbeecom = new RaspBEECom;
 					<tbody>
 					<?php
 					foreach ($RaspBEEConfJson->whitelist as $user => $value) {
-						echo '<tr id="'.$user.'">';
+						if (config::byKey('raspbeeAPIKEY','RaspBEE')==$user)
+							echo '<tr id="'.$user.'" bgcolor="DarkCyan" style="color: white;">';
+						else
+							echo '<tr id="'.$user.'">';
 						echo "<td>".$user."</td>";
 						echo "<td>".$value->name."</td>";
 						echo "<td>".$value->{"create date"}."</td>";
 						echo "<td>".$value->{"last use date"}."</td>";
-						echo '<td><a id='.$user.' name='.$value->name.' class="btn btn-danger  deleteRaspBeeUser"><i class="fa fa-minus-circle"></i> {{Supprimer l\'utilisateur}}</a></td>';
+						if (config::byKey('raspbeeAPIKEY','RaspBEE')==$user)
+							
+							echo '<td><span class="label control-label" style="font-size : 1.1em;">{{Clé utilisée par le plugin}}.</span></td>';
+						else
+							echo '<td><a id='.$user.' name='.$value->name.' class="btn btn-danger  deleteRaspBeeUser"><i class="fa fa-minus-circle"></i> {{Supprimer l\'utilisateur}}</a></td>';
 						echo "</tr>";
 					}
 					?>

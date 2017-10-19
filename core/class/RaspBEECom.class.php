@@ -68,19 +68,7 @@ class RaspBEECom {
 			throw new Exception(__('Echec de la requête http : ', __FILE__) . $url . ' Curl error : ' . $curl_error, 404);
 		}
 		curl_close($ch);
-		return (is_json($result)) ? json_decode($result, true) : $result;
-		
-		
-		
-		
-		
-		
-		/*curl_close($ch);
-		if ($result===false){
-		return false;	
-		}else{
-		return $result;//substr($result,1,-1);
-		}		*/			
+		return (is_json($result)) ? json_decode($result, true) : $result;			
 	}
 	
 	public function findRaspBEE(){
