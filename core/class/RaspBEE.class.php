@@ -366,6 +366,9 @@ class RaspBEECmd extends cmd {
 			
 			switch ($this->getConfiguration('fieldname'))
 			{
+				case "effect":
+					$commandtosend='{"effect" : "colorloop"}';
+				break;
 				case "on":
 				if ($this->getName()=='On')
 					$commandtosend='{"on" : true}';
@@ -378,8 +381,7 @@ class RaspBEECmd extends cmd {
 					$xy = colorHelper::RGB2XY($temp[0],$temp[1],$temp[2],false);				
 					$commandtosend='{"xy" :['.$xy[x].','.$xy[y].']}';
 				break;
-				default :
-				
+				default :				
 					$commandtosend='{"'.$this->getConfiguration('fieldname').'" : '.$_options[slider].'}';
 					
 					
@@ -393,7 +395,7 @@ class RaspBEECmd extends cmd {
 				self::sendCommand("lights",$this->getEqlogic()->getConfiguration('origid'),$commandtosend);
 				break;
 				case "LightGroup":
-				//error_log("action group".$commandtosend,3,"/tmp/prob.txt");
+				error_log("action group".$commandtosend,3,"/tmp/prob.txt");
 				self::sendCommand("groups",$this->getEqlogic()->getConfiguration('origid'),$commandtosend);
 				break;				
 			}
