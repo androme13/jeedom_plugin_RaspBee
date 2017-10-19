@@ -20,7 +20,7 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 function RaspBEE_install() {
 	if (config::byKey('api::raspbee::mode') == '') {
-		config::save('api::raspbee::mode', 'localhost');
+		config::save('api::raspbee::mode', 'activé');
 	}
 	/*$cron = cron::byClassAndFunction('RaspBEE', 'pull');
     if (!is_object($cron)) {
@@ -36,7 +36,7 @@ function RaspBEE_install() {
 
 function RaspBEE_update() {
 	if (config::byKey('api::raspbee::mode') == '') {
-		config::save('api::raspbee::mode', 'localhost');
+		config::save('api::raspbee::mode', 'activé');
 	}
    /* $cron = cron::byClassAndFunction('RaspBEE', 'pull');
     if (!is_object($cron)) {

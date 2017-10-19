@@ -29,7 +29,7 @@ try {
    	if (init('action') == 'syncEqLogicWithRaspBEE') {
 		$resp=RaspBEE::syncEqLogicWithRaspBEE();		
 		if ($resp===false){
-			ajax::error();
+			ajax::error($resp);
 		}else{
 			ajax::success($resp);
 		}
@@ -48,7 +48,7 @@ try {
 	if (init('action') == 'findRaspBEE') {
 		$resp=RaspBEE::findRaspBEE();
 		if ($resp===false){		
-			ajax::error();
+			ajax::error($resp);
 		} else{
 			ajax::success($resp);
 		}
@@ -57,7 +57,7 @@ try {
 	if (init('action') == 'getAPIAccess') {
 		$resp=RaspBEE::getApiKey();
 		if ($resp===false){		
-			ajax::error();
+			ajax::error($resp);
 		} else{
 			ajax::success($resp);
 		}
@@ -66,7 +66,7 @@ try {
 	if (init('action') == 'getRaspBEEConf') {
 		$resp=RaspBEE::getRaspBEEConf();
 		if ($resp===false){		
-			ajax::error();
+			ajax::error($resp);
 		} else{
 			ajax::success($resp);
 		}
@@ -75,7 +75,7 @@ try {
 	if (init('action') == 'getRaspBEEGroups') {
 		$resp=RaspBEE::getRaspBEEGroups();
 		if ($resp===false){		
-			ajax::error();
+			ajax::error($resp);
 		} else{
 			ajax::success($resp);
 		}
@@ -84,7 +84,7 @@ try {
 	if (init('action') == 'getRaspBEESensors') {
 		$resp=RaspBEE::getRaspBEESensors();
 		if ($resp===false){		
-			ajax::error();
+			ajax::error($resp);
 		} else{
 			ajax::success($resp);
 		}
@@ -94,7 +94,7 @@ try {
 	if (init('action') == 'getRaspBEELights') {
 		$resp=RaspBEE::getRaspBEELights();
 		if ($resp===false){		
-			ajax::error();
+			ajax::error($resp);
 		} else{
 			ajax::success($resp);
 		}
@@ -124,7 +124,7 @@ try {
 		//error_log("creation du light demande ajax");
 		$resp=RaspBEE::createDevice(init('device'));
 		if ($resp===false){		
-			ajax::error();
+			ajax::error($resp);
 		} else{
 			ajax::success($resp);
 		}
@@ -134,7 +134,7 @@ try {
 		//error_log("removeall");
 		$resp=RaspBEE::removeAll();
 		if ($resp===false){		
-			ajax::error();
+			ajax::error($resp);
 		} else{
 			ajax::success($resp);
 		}

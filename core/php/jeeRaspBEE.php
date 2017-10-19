@@ -101,7 +101,7 @@ if($results->type == "lights"){
 						foreach ($results->action as $actioncmd2 => $key2){
 							// si la clé correspond au fieldname (bri, sat etc ..)
 							if ($cmd2->getConfiguration('fieldname')==$actioncmd2){
-								error_log("|INFO ".$actioncmd.'('.$key.') => ACTION '.$actioncmd2.":".$key2."|",3,'/tmp/prob.txt');
+								//error_log("|INFO ".$actioncmd.'('.$key.') => ACTION '.$actioncmd2.":".$key2."|",3,'/tmp/prob.txt');
 								// si la valeur est differente de la valeur stockée
 								if ($cmd2->getConfiguration('lastCmdValue')!=$key){
 									$cmd2->setConfiguration('lastCmdValue',$key);
@@ -109,6 +109,7 @@ if($results->type == "lights"){
 									
 									// on traite le changement de couleur du widget
 									// on recuperes aussi toutes les valeurs hue sat et bri (hsl) afin d'envoyer un hexrgb au widget;
+									// enlever (|| $actioncmd=='bri') pour eviter variations sur action couleur.
 									if ($actioncmd=='hue' || $actioncmd=='sat' || $actioncmd=='bri'){
 										error_log("changement couleur recquis",3,'/tmp/prob.txt');
 										$hue=0;

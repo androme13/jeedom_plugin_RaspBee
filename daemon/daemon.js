@@ -10,6 +10,7 @@ var url = require('url');
 global.apikey;
 global.jurl;
 global.rurl;
+global.wsp;
 
 process.on('uncaughtException', function(err) {
 	console.log(JSON.stringify(process.memoryUsage()));
@@ -68,6 +69,7 @@ if (pidfile.createpidfile()==1){
 	global.apikey=findlaunchparam("apikey");
 	global.jurl=findlaunchparam("jurl");
 	global.rurl=findlaunchparam("rurl");
+	global.wsp=findlaunchparam("wsp");
 	console.log(process.argv);
 	var start = true;
 	if (global.apikey==null){
@@ -81,9 +83,13 @@ if (pidfile.createpidfile()==1){
 	if (global.rurl==null){
 		console.log('Le paramètre "rurl" (adresse de RaspBEE) est manquant');
 		start = false;
-	} 	
+	}
+	if (global.wsp==null){
+		console.log('Le paramètre "wsp" (port websocket) est manquant');
+		start = false;
+	} 	 	
 	if (start==true){
-		raspbee.connect(rurl,"443",websocketCallBack);
+		raspbee.connect(rurl,wsp,websocketCallBack);
 	} 
 }
 else

@@ -19,7 +19,7 @@ require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 class eqLogicOperate extends eqLogic {
 	
 	
-	function checkConfigFile(){
+	/*function checkConfigFile(){
 		if (!is_file(dirname(__FILE__) . '/../config/devices/ZHASwitch.json')){
 		return false;
 		};
@@ -27,7 +27,7 @@ class eqLogicOperate extends eqLogic {
 		if (!is_json($configFile)) {
 			return false;
 		}
-	}
+	}*/
 	
 	public function createDevice($device,$syncType = 0){
 		//error_log("|eqlogic create device|".$device[type]."|",3,"/tmp/rasbee.err");
@@ -101,7 +101,7 @@ class eqLogicOperate extends eqLogic {
 	}
 	
 	public function createLightGroup($device){
-		error_log("|eqlogic create2|",3,"/tmp/rasbee.err");
+		//error_log("|eqlogic create2|",3,"/tmp/rasbee.err");
 
 		if (!is_file(dirname(__FILE__) . '/../config/devices/Group.json')){
 		return false;

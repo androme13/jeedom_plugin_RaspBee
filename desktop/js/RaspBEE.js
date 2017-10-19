@@ -14,6 +14,7 @@
 * You should have received a copy of the GNU General Public License
 * along with Plugin RaspBEE for jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
+refreshEqlogicsList();
 
 $('#bt_syncEqLogic').on('click', function () {
 	$('#md_modal').dialog({
@@ -148,8 +149,6 @@ function printEqLogic(_eqlogic) {
 	printEqLogicHelper(true,"{{Firmware}}","swversion",_eqlogic);	
 	printEqLogicHelper(true,"{{Type}}","type",_eqlogic);	
 	printEqLogicHelper(true,"{{UID}}","uniqueid",_eqlogic);		
-	//printEqLogicHelper(true,"{{Devicemembership}}","devicemembership",_eqlogic);
-	//printEqLogicHelper(true,"{{Lights}}","lights",_eqlogic);
 	if (("devicemembership" in _eqlogic.configuration))
 	printMasterEqLogic(_eqlogic);
 	else
@@ -182,9 +181,9 @@ function printMasterEqLogic(_eqLogic){
 		master+='<legend><i class="fa fa-th-large"></i> {{Contrôleur maître}}</legend>'
 		master+='<div class="mastersCard" style="display: flex;">';	
 		for(var i= 0; i < devicemembership.length; i++){
-			jeedom.raspbee.eqLogic.byOriginId({
+			jeedom.raspbee.eqLogic.humanNameByOrigIdAndType({
 origId:devicemembership[i],
-				//action:'humanNameByOrigIdAndType',
+				//action:'humanNameByOrigId',
 type:'switch',
 error: function(error){
 					console.log("THE error printMasterEqLogic "+_eqLogic.name);	
@@ -225,7 +224,7 @@ function printMembersEqLogic(_eqLogic){
 		master+='<div class="membersCard" style="display: flex;">';
 
 		for(var i= 0; i < lights.length; i++){
-			jeedom.raspbee.eqLogic.byOriginId({
+			jeedom.raspbee.eqLogic.humanNameByOrigIdAndType({
 origId:lights[i],
 type: "light",
 error: function(error){
@@ -259,6 +258,26 @@ success:function (result){
 }
 
 
+function refreshEqlogicsList(){
+	console.log("refreshEqlogicsList2");
+	//console.dir(jeedom.raspbee);
+				jeedom.raspbee.eqLogic.getAll({
+error: function(error){
+					console.log("THE error refreshEqlogicsList "+error);	
+					
+
+				},
+success:function (result){
+	console.log("result eqlogics",result.getHumanName(true,true));	
+					if (result!=undefined){			
+						//console.log("result eqlogics",result);		
+						
+					}
+				}		
+			});
+}
+
+
 /*function arraySearch(arr,val) {
 	for (var i=0; i<arr.length; i++)
 		if (arr[i] === val)                    
@@ -286,6 +305,7 @@ success: function (data) {
 				$('#div_alert').showAlert({message: data.result, level: 'danger'});
 				return;
 			}
+			//$('#div_alert').showAlert({message: "{{Synchronisation effectuée avec succès}}", level: 'success'});
 			//window.location.reload();
 		}
 	});

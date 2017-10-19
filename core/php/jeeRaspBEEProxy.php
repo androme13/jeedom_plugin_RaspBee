@@ -23,7 +23,17 @@ if (!isConnect('admin')) {
 }
 ajax::init();
 try {
-	$resp = RaspBEE::humanNameByOrigIdAndType(init('request'));
+	switch(init('action')){
+		case 'humanNameByOrigIdAndType' :
+		$resp = RaspBEE::humanNameByOrigIdAndType(init('request'));		
+		break;
+		case 'getAllEqLogics' :
+		$resp = RaspBEE::getAllEqLogics();
+		break;
+	}
+	
+	
+	//$resp = RaspBEE::humanNameByOrigIdAndType(init('request'));
 	//error_log(json_encode($resp),3,"/tmp/prob.txt");
 	ajax::success($resp);
 } catch (Exception $e) {
