@@ -35,6 +35,7 @@ $raspbeecom = new RaspBEECom;
         <div id="content">
             <ul id="tabs_network" class="nav nav-tabs" data-tabs="tabs">
                 <li class="active"><a href="#summary_network" data-toggle="tab"><i class="fa fa-info-circle"></i> {{Informations}}</a></li>
+				<li id="tab_actions"><a href="#api_actions" data-toggle="tab"><i class="fa fa-cog"></i> {{Actions}}</a></li>
                 <li id="tab_users"><a href="#api_users" data-toggle="tab"><i class="fa fa-user"></i> {{Utilisateurs}}</a></li>
             </ul>
             <div id="network-tab-content" class="tab-content">
@@ -173,8 +174,19 @@ $raspbeecom = new RaspBEECom;
                         </div>
                     </div>
                 </div>
+				<div id="api_actions" class="tab-pane">
+					<br>
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"><h4 class="panel-title">{{Debug}}</h4></div>
+                        <div class="panel-body">
+						<a id="showdebugsensors" name='.$value->name.' class="btn btn-info showDebugInfoBTN"><i class="fa fa-info-circle"></i> {{Afficher les capteurs}}</a>
+						<a id="showdebuglights" name='.$value->name.' class="btn btn-info  showDebugInfoBTN"><i class="fa fa-info-circle"></i> {{Afficher les éclairages}}</a>
+						<a id="showdebuggroups" name='.$value->name.' class="btn btn-info showDebugInfoBTN"><i class="fa fa-info-circle"></i> {{Afficher les groupes}}</a>
+                        </div>
+                    </div>
+				</div>
                 <div id="api_users" class="tab-pane">
-                    <br/>
+                    <br>
 					<table class="table table-bordered table-condensed" style="width:100%">
 					<tr>
 						<th>{{Clé}}</th>
