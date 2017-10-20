@@ -54,10 +54,22 @@ $raspbeecom = new RaspBEECom;
 							?>
 							</span></p>
                             <p>{{Version}} <span class="label label-default" style="font-size : 1em;">
-							<?php
-							echo $RaspBEEConfJson->swversion;
+							<?php							
+							echo $RaspBEEConfJson->swversion;							
+							echo'</span>';
+							$versionDetail = explode(".", $RaspBEEConfJson->swversion);
+							// version mini de deconz 2.4.70
+							$minVersion = array(2,4,70);
+							$error = '';							
+							if (($versionDetail===false || count($versionDetail)<3))
+							$error=' <span class="label label-warning" style="font-size : 1em;">{{Version obsolète de deconz, veuillez mettre à jour deconz (mini 2.04.70)}}</span>';
+							else
+							if (($versionDetail[0]<$minVersion[0] || ($versionDetail[0]>=$minVersion[0] && $versionDetail[1]<$minVersion[1]) || ($versionDetail[0]>=$minVersion[0] && $versionDetail[1]>=$minVersion[1] && $versionDetail[2]<$minVersion[2]) ))
+							$error=' <span class="label label-warning" style="font-size : 1em;">{{Version obsolète de deconz, veuillez mettre à jour deconz }}({{mini}} '.$minVersion[0].'.'.$minVersion[1].'.'.$minVersion[2].')</span>';
+						
+							echo $error;		
 							?>
-							</span></p>								
+							</p>								
                             <p>{{UUID}} <span class="label label-default" style="font-size : 1em;">
 							<?php
 							echo $RaspBEEConfJson->uuid;
