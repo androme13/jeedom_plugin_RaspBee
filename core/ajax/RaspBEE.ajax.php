@@ -112,7 +112,7 @@ try {
 	
 	if (init('action') == 'createSensor') {
 		//error_log("creation du device demande ajax");
-		$resp=RaspBEE::createDevice(init('device'));
+		$resp=RaspBEE::createDevice(init('device'),init('syncType'));
 		if ($resp[state]=="nok"){		
 			ajax::error($resp);
 		} else{

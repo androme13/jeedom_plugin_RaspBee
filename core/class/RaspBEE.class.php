@@ -323,9 +323,9 @@ class RaspBEE extends eqLogic {
 		return $result;
 	}
 	
-	public function createDevice($device){
+	public function createDevice($device,$syncType){
 		//error_log("createDevice pass");
-		return eqLogicOperate::createDevice($device);
+		return eqLogicOperate::createDevice($device,$syncType);
 	}
 	
 	public function removeAll(){

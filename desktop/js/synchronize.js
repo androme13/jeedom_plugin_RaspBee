@@ -32,7 +32,8 @@ $('input[type=radio][name=optionType][value=basic]').attr('checked', true);
 $('input[type=radio][name=optionType]').on( "click", function() {
 	var help ="";
 	switch ($( "input[type=radio][name=optionType]:checked" ).val()){
-		case 'basic' : help = "{{Normale}} : {{Type de synchronisation par défaut, elle conserve les équipements existants et ajoute les nouveaux équipements ainsi que les nouvelles commandes sur les équipements existants}}."; break;
+		case 'limited' : help = "{{Limitée}} : {{Conserve les équipements existants et ajoute les nouveaux équipements ainsi que les nouvelles commandes sur les équipements existants}}."; break;
+		case 'basic' : help = "{{Normale}} : {{Type de synchronisation par défaut, conserve les équipements existants et ajoute les nouveaux équipements ainsi que l\'ajout/suppression des nouvelles/anciennes commandes sur les équipements existants}}."; break;
 		case 'renew' : help = "{{Resynchronisation totale}} : {{Tous les équipements sont supprimés, et une nouvelle synchronisation débute}}."; break;
 		case 'renewbutid' : help = "{{Resynchronisation partielle}} : {{Tous les équipements sont supprimés, et une nouvelle synchronisation débute, mais les id sont conservés}}."; break;
 		
@@ -44,9 +45,9 @@ $('input[type=radio][name=optionType][value=basic]').click();
 $('#bt_synchronize').on('click', function () {
 	$('#treeSync').empty();
 	$('#div_syncAlert').showAlert({message: "{{Synchronisation en cours}}...", level: 'info'});
-	syncDevices('Capteurs','getRaspBEESensors');	
-	syncDevices('Eclairages','getRaspBEELights');	
-	syncDevices('Groupes','getRaspBEEGroups');
+	syncDevices('Capteurs','getRaspBEESensors',0);	
+	syncDevices('Eclairages','getRaspBEELights',0);	
+	syncDevices('Groupes','getRaspBEEGroups',0);
 	$('#div_syncAlert').showAlert({message: "{{Synchronisation Terminée}}", level: 'success'});
 });
 
@@ -55,22 +56,21 @@ var displayHelp = function() {
   $( "div" ).text( n + (n === 1 ? " is" : " are") + " checked!" );
 };
 
-function syncDevices(type,action){
+function syncDevices(type,action,syncType){
 	var treechild =   '<li class="treeblock"><input type="checkbox" id="'+type+'" class="tree"><i class="fa fa-angle-double-right"></i><i class="fa fa-angle-double-down"></i><strong><label id="'+type+'Label" for="'+type+'"> '+type+'</label></strong><ul id="'+type+'childs"></ul></li>';
 	$('#treeSync').append(treechild);
 	$.ajax({
-type: "POST", 
-url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
-data: {
-action: action,
+		type: "POST", 
+		url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+		data: {
+			action: action
 		},
-dataType: 'json',
-error: function (request, status, error) {
+		dataType: 'json',
+		error: function (request, status, error) {
 			handleAjaxError(request, status, error);
 			
 		},
-success: function (data) {
-			
+		success: function (data) {			
 			if (data.state != 'ok') {
 				$('#div_alert').showAlert({message: data.result, level: 'info'});
 				return;
@@ -80,7 +80,7 @@ success: function (data) {
 				$('#'+type+'Label').append(' ('+Object.keys(devices).length+')');
 				for (var device in devices) {
 					devices[device].origid=device;
-					createDevice(devices[device],type);										
+					createDevice(devices[device],type,syncType);										
 				}
 			}	
 		} 
@@ -91,7 +91,7 @@ success: function (data) {
 //code css
 //https://makina-corpus.com/blog/metier/2014/construire-un-tree-view-en-css-pur
 
-function createDevice(device,type){
+function createDevice(device,type,syncType){
 	console.dir(device);
 	var deviceName=device.name.replace(/ /g,'')+device.etag;
 	var treechild =   '<li class="tree" style="list-style:none;" id="'+deviceName+'"><div id="'+deviceName+'Icon" class="fa fa-refresh"></div> '+device.name+'</li>';
@@ -101,7 +101,8 @@ type: "POST",
 url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
 data: {
 action: "createSensor",
-device: device
+device: device,
+syncType: syncType
 		},
 dataType: 'json',
 error: function (request, status, error) {

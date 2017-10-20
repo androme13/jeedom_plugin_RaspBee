@@ -29,7 +29,7 @@ class eqLogicOperate extends eqLogic {
 		}
 	}*/
 	
-	public function createDevice($device,$syncType = 0){
+	public function createDevice($device,$syncType = ''){
 		//error_log("|eqlogic create device|".$device[type]."|",3,"/tmp/rasbee.err");
 
 		foreach (eqlogic::byType('RaspBEE') as $eqLogic){
@@ -38,31 +38,35 @@ class eqLogicOperate extends eqLogic {
 		}
 		switch ($device[type]){
 		case "ZHASwitch" :{
-				eqLogicOperate::createZHASwitch($device);
+				eqLogicOperate::createZHASwitch($device,$syncType);
 				break;
 			}
 		case "ZHATemperature" :{
-				eqLogicOperate::createZHATemperature($device);
+				eqLogicOperate::createZHATemperature($device,$syncType);
 				break;
 			}
 		case "ZHAHumidity" :{
-				eqLogicOperate::createZHAHumidity($device);
+				eqLogicOperate::createZHAHumidity($device,$syncType);
 				break;
 			}
 		case "ZHAPressure" :{
-				eqLogicOperate::createZHAPressure($device);
+				eqLogicOperate::createZHAPressure($device,$syncType);
 				break;
 			}
+		case "Color light" :{
+			eqLogicOperate::createColorLight($device,$syncType);
+			break;
+		}
 		case "Extended color light" :{
-				eqLogicOperate::createExtendedColorLight($device);
+				eqLogicOperate::createExtendedColorLight($device,$syncType);
 				break;
 			}
 		case "Dimmable light" :{
-				eqLogicOperate::createDimmableLight($device);
+				eqLogicOperate::createDimmableLight($device,$syncType);
 				break;
 			}
 		case "LightGroup" :{
-				eqLogicOperate::createLightGroup($device);
+				eqLogicOperate::createLightGroup($device,$syncType);
 				break;
 			}
 		default : {
@@ -72,7 +76,7 @@ class eqLogicOperate extends eqLogic {
 		return true;
 	}
 	
-	public function createDimmableLight($device){
+	public function createDimmableLight($device,$syncType){
 		if (!is_file(dirname(__FILE__) . '/../config/devices/DimmableLight.json')) return false;
 	
 		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/DimmableLight.json');
@@ -97,10 +101,10 @@ class eqLogicOperate extends eqLogic {
 		$eqLogic->setConfiguration('colormode', $device[state][colormode]);
 		$eqLogic->setIsVisible(1);
 		$eqLogic->save();
-		return self::setGenericCmdList("DimmableLight.json",$eqLogic);
+		return self::setGenericCmdList("DimmableLight.json",$eqLogic,$syncType);
 	}
 	
-	public function createLightGroup($device){
+	public function createLightGroup($device,$syncType){
 		//error_log("|eqlogic create2|",3,"/tmp/rasbee.err");
 
 		if (!is_file(dirname(__FILE__) . '/../config/devices/Group.json')){
@@ -127,10 +131,41 @@ class eqLogicOperate extends eqLogic {
 		$eqLogic->setConfiguration('type', $device[type]);
 		$eqLogic->setIsVisible(1);
 		$eqLogic->save();
-		return self::setGenericCmdList("Group.json",$eqLogic);
+		return self::setGenericCmdList("Group.json",$eqLogic,$syncType);
 	}
 	
-	public function createExtendedColorLight($device){
+	
+	public function createColorLight($device,$syncType){
+		if (!is_file(dirname(__FILE__) . '/../config/devices/ColorLight.json')){
+		return false;
+		};
+		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/ColorLight.json');
+		if (!is_json($configFile)) {
+			return false;
+		}
+		//error_log("createLight ".$device[origID],0);
+		$eqLogic = new eqLogic();
+		$eqLogic->setEqType_name('RaspBEE');
+		$eqLogic->setName($device[name]." ".$device[origid]);
+		$eqLogic->setIsEnable(1);
+		$_logical_id = null;
+		$eqLogic->setLogicalId($_logical_id);
+		// on fabrique un LIGHT
+		$eqLogic->setConfiguration('origid', $device[origid]);
+		$eqLogic->setConfiguration('hascolor', $device[hascolor]);
+		$eqLogic->setConfiguration('manufacturername', $device[manufacturername]);
+		$eqLogic->setConfiguration('reachable', $device[state][reachable]);
+		$eqLogic->setConfiguration('modelid', $device[modelid]);
+		$eqLogic->setConfiguration('swversion', $device[swversion]);
+		$eqLogic->setConfiguration('type', $device[type]);
+		$eqLogic->setConfiguration('uniqueid', $device[uniqueid]);
+		$eqLogic->setConfiguration('colormode', $device[state][colormode]);
+		$eqLogic->setIsVisible(1);
+		$eqLogic->save();			
+		return self::setGenericCmdList("ColorLight.json",$eqLogic,$syncType);
+	}	
+	
+	public function createExtendedColorLight($device,$syncType){
 		if (!is_file(dirname(__FILE__) . '/../config/devices/ExtendedColorLight.json')){
 		return false;
 		};
@@ -157,12 +192,12 @@ class eqLogicOperate extends eqLogic {
 		$eqLogic->setConfiguration('colormode', $device[state][colormode]);
 		$eqLogic->setIsVisible(1);
 		$eqLogic->save();			
-		return self::setGenericCmdList("ExtendedColorLight.json",$eqLogic);
+		return self::setGenericCmdList("ExtendedColorLight.json",$eqLogic,$syncType);
 	}
 	
 	
 	
-	public function createZHASwitch($device){
+	public function createZHASwitch($device,$syncType){
 		if (!is_file(dirname(__FILE__) . '/../config/devices/ZHASwitch.json')){
 		return false;
 		};
@@ -170,11 +205,11 @@ class eqLogicOperate extends eqLogic {
 		if (!is_json($configFile)) {
 			return false;
 		}
-		$eqLogic = self::setGenericEqLogic($device);
-		return self::setGenericCmdList("ZHASwitch.json",$eqLogic);
+		$eqLogic = self::setGenericEqLogic($device,$syncType);
+		return self::setGenericCmdList("ZHASwitch.json",$eqLogic,$syncType);
 	}
 	
-	public function createZHATemperature($device){
+	public function createZHATemperature($device,$syncType){
 		if (!is_file(dirname(__FILE__) . '/../config/devices/ZHATemperature.json')){
 		return false;
 		};
@@ -182,11 +217,11 @@ class eqLogicOperate extends eqLogic {
 		if (!is_json($configFile)) {
 			return false;
 		}
-		$eqLogic = self::setGenericEqLogic($device);	
-		return self::setGenericCmdList("ZHATemperature.json",$eqLogic);
+		$eqLogic = self::setGenericEqLogic($device,$syncType);	
+		return self::setGenericCmdList("ZHATemperature.json",$eqLogic,$syncType);
 	}
 	
-	public function createZHAHumidity($device){		
+	public function createZHAHumidity($device,$syncType){		
 		if (!is_file(dirname(__FILE__) . '/../config/devices/ZHAHumidity.json')){
 		return false;
 		};
@@ -194,11 +229,11 @@ class eqLogicOperate extends eqLogic {
 		if (!is_json($configFile)) {
 			return false;
 		}
-		$eqLogic = self::setGenericEqLogic($device);
-		return self::setGenericCmdList("ZHAHumidity.json",$eqLogic);
+		$eqLogic = self::setGenericEqLogic($device,$syncType);
+		return self::setGenericCmdList("ZHAHumidity.json",$eqLogic,$syncType);
 	}
 	
-	public function createZHAPressure($device){		
+	public function createZHAPressure($device,$syncType){		
 		if (!is_file(dirname(__FILE__) . '/../config/devices/ZHAPressure.json')){
 		return false;
 		};
@@ -206,78 +241,98 @@ class eqLogicOperate extends eqLogic {
 		if (!is_json($configFile)) {
 			return false;
 		}
-		$eqLogic = self::setGenericEqLogic($device);
-		return self::setGenericCmdList("ZHAPressure.json",$eqLogic);		
+		$eqLogic = self::setGenericEqLogic($device,$syncType);
+		return self::setGenericCmdList("ZHAPressure.json",$eqLogic,$syncType);		
 	}
 	
 	
-	function setGenericEqLogic($device){
-		$eqLogic = new eqLogic();
-		$eqLogic->setEqType_name('RaspBEE');
-		$eqLogic->setName($device[name]." ".$device[origid]);
-		$eqLogic->setIsEnable(1);
-		$eqLogic->setIsVisible(1);
-		$_logical_id = null;
-		$eqLogic->setLogicalId($_logical_id);
-		$eqLogic->setConfiguration('origid', $device[origid]);
-		$eqLogic->setConfiguration('manufacturername', $device[manufacturername]);
-		$eqLogic->setConfiguration('modelid', $device[modelid]);
-		$eqLogic->setConfiguration('reachable', $device[config][reachable]);
-		$eqLogic->setConfiguration('swversion', $device[swversion]);
-		$eqLogic->setConfiguration('type', $device[type]);
-		$eqLogic->setConfiguration('uniqueid', $device[uniqueid]);
-		$eqLogic->batteryStatus($device[config][battery]);
-		$eqLogic->save();
+	function setGenericEqLogic($device,$syncType=0){
+		switch ($syncType){
+			case 0:
+				$eqLogic = new eqLogic();
+				$eqLogic->setEqType_name('RaspBEE');
+				$eqLogic->setName($device[name]." ".$device[origid]);
+				$eqLogic->setIsEnable(1);
+				$eqLogic->setIsVisible(1);
+				$_logical_id = null;
+				$eqLogic->setLogicalId($_logical_id);
+				$eqLogic->setConfiguration('origid', $device[origid]);
+				$eqLogic->setConfiguration('manufacturername', $device[manufacturername]);
+				$eqLogic->setConfiguration('modelid', $device[modelid]);
+				$eqLogic->setConfiguration('reachable', $device[config][reachable]);
+				$eqLogic->setConfiguration('swversion', $device[swversion]);
+				$eqLogic->setConfiguration('type', $device[type]);
+				$eqLogic->setConfiguration('uniqueid', $device[uniqueid]);
+				$eqLogic->batteryStatus($device[config][battery]);
+				$eqLogic->save();
+			break;
+			case 1:
+			break;
+			case 2:
+			break;
+			
+		}
+		
 		return $eqLogic;		
 	}
 	
-	function setGenericCmdList($file=null,$eqLogic=null){
+	function setGenericCmdList($file=null,$eqLogic=null,$syncType=0){
+		
 		if ($file == null ||$eqLogic==null) return false;
 		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/'.$file);
 		if (!is_json($configFile)) return false;
 		$model = json_decode($configFile, true);
 		$commands = $model['commands'];
-		//error_log("|setGenericCmdList|",3,"/tmp/rasbee.err");
-		foreach ($model['commands'] as $command) {
-			$RaspBEECmd = new RaspBEECmd();
-			$RaspBEECmd->setName($command[name]);
-			$RaspBEECmd->setLogicalId($command[name]);
-			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-			//error_log("|isvisible|".$command[isVisible],3,"/tmp/prob.txt");
-			if (array_key_exists('isVisible', $command)) {
-				$RaspBEECmd->setIsVisible($command[isVisible]);
-			}
-			if (array_key_exists('isHistorized', $command)) {
-				$RaspBEECmd->setIsHistorized($command[isHistorized]);
-			}
-			if (array_key_exists('display', $command)) {
-				$RaspBEECmd->setDisplay('generic_type',$command[display][generic_type]);
-			}			
+		
+		switch ($syncType){			
+			case 0:
+				foreach ($model['commands'] as $command) {
+					$RaspBEECmd = new RaspBEECmd();
+					$RaspBEECmd->setName($command[name]);
+					$RaspBEECmd->setLogicalId($command[name]);
+					$RaspBEECmd->setEqLogic_id($eqLogic->getId());
+					//error_log("|isvisible|".$command[isVisible],3,"/tmp/prob.txt");
+					if (array_key_exists('isVisible', $command)) {
+						$RaspBEECmd->setIsVisible($command[isVisible]);
+					}
+					if (array_key_exists('isHistorized', $command)) {
+						$RaspBEECmd->setIsHistorized($command[isHistorized]);
+					}
+					if (array_key_exists('display', $command)) {
+						$RaspBEECmd->setDisplay('generic_type',$command[display][generic_type]);
+					}			
 
-			if (array_key_exists('template', $command)) {
-				if (array_key_exists('dashboard',$command[template])){
-					$RaspBEECmd->setTemplate('dashboard',$command[template][dashboard]);
-				}
-				//if ($command[template][mobile])
-				if (array_key_exists('mobile',$command[template])){
-					$RaspBEECmd->setTemplate('mobile',$command[template][mobile]);
-				}
-			}						
+					if (array_key_exists('template', $command)) {
+						if (array_key_exists('dashboard',$command[template])){
+							$RaspBEECmd->setTemplate('dashboard',$command[template][dashboard]);
+						}
+						//if ($command[template][mobile])
+						if (array_key_exists('mobile',$command[template])){
+							$RaspBEECmd->setTemplate('mobile',$command[template][mobile]);
+						}
+					}						
 
-			if (array_key_exists('unite', $command)) {
-				$RaspBEECmd->setUnite($command[unite]);
-			}	
-			if (array_key_exists('type', $command)) {
-				 $RaspBEECmd->setType($command[type]);
-			}				
-			if (array_key_exists('subtype', $command)) {
-				 $RaspBEECmd->setSubType($command[subtype]);
-			}						
-			foreach ($command[configuration] as $command => $key){
-				$RaspBEECmd->setConfiguration($command,$key);				
-			}				
-			$RaspBEECmd->save();						
+					if (array_key_exists('unite', $command)) {
+						$RaspBEECmd->setUnite($command[unite]);
+					}	
+					if (array_key_exists('type', $command)) {
+						 $RaspBEECmd->setType($command[type]);
+					}				
+					if (array_key_exists('subtype', $command)) {
+						 $RaspBEECmd->setSubType($command[subtype]);
+					}						
+					foreach ($command[configuration] as $command => $key){
+						$RaspBEECmd->setConfiguration($command,$key);				
+					}				
+					$RaspBEECmd->save();						
+				}
+			break;
 		}
+		
+		
+
+		//error_log("|setGenericCmdList|",3,"/tmp/rasbee.err");
+
 		return true;		
 	}
 }
