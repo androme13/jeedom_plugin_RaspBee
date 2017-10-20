@@ -390,12 +390,13 @@ class RaspBEECmd extends cmd {
 			}
 			//error_log("action group".$commandtosend,3,"/tmp/prob.txt");
 			switch ($eqLogic->getConfiguration('type')){
+				case "Color light":
 				case "Extended color light":
 				case "Dimmable light":
 				self::sendCommand("lights",$this->getEqlogic()->getConfiguration('origid'),$commandtosend);
 				break;
 				case "LightGroup":
-				error_log("action group".$commandtosend,3,"/tmp/prob.txt");
+				//error_log("action group".$commandtosend,3,"/tmp/prob.txt");
 				self::sendCommand("groups",$this->getEqlogic()->getConfiguration('origid'),$commandtosend);
 				break;				
 			}

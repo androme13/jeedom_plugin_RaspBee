@@ -13,7 +13,6 @@
 * You should have received a copy of the GNU General Public License
 * along with Plugin RaspBEE for jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
-//$('#textarealog').value("coucou");
 
 /*var syncStatus = {
 	value: 0,
@@ -34,8 +33,8 @@ $('input[type=radio][name=optionType]').on( "click", function() {
 	switch ($( "input[type=radio][name=optionType]:checked" ).val()){
 		case 'limited' : help = "{{Limitée}} : {{Conserve les équipements existants et ajoute les nouveaux équipements ainsi que les nouvelles commandes sur les équipements existants}}."; break;
 		case 'basic' : help = "{{Normale}} : {{Type de synchronisation par défaut, conserve les équipements existants et ajoute les nouveaux équipements ainsi que l\'ajout/suppression des nouvelles/anciennes commandes sur les équipements existants}}."; break;
-		case 'renew' : help = "{{Resynchronisation totale}} : {{Tous les équipements sont supprimés, et une nouvelle synchronisation débute}}."; break;
-		case 'renewbutid' : help = "{{Resynchronisation partielle}} : {{Tous les équipements sont supprimés, et une nouvelle synchronisation débute, mais les id sont conservés}}."; break;
+		case 'renew' : help = "{{Totale}} : {{Tous les équipements sont supprimés, et une nouvelle synchronisation débute}}."; break;
+		case 'renewbutid' : help = "{{Partielle}} : {{Tous les équipements sont supprimés, et une nouvelle synchronisation débute, mais les id et les noms sont conservés}}."; break;
 		
 	};
   $( "#syncOptionsHelp" ).html(help);
@@ -45,9 +44,11 @@ $('input[type=radio][name=optionType][value=basic]').click();
 $('#bt_synchronize').on('click', function () {
 	$('#treeSync').empty();
 	$('#div_syncAlert').showAlert({message: "{{Synchronisation en cours}}...", level: 'info'});
-	syncDevices('Capteurs','getRaspBEESensors',0);	
-	syncDevices('Eclairages','getRaspBEELights',0);	
-	syncDevices('Groupes','getRaspBEEGroups',0);
+	syncType=$('input[name=optionType]:checked').val();
+	console.log('synctype: ',syncType);
+	syncDevices('Capteurs','getRaspBEESensors',syncType);	
+	syncDevices('Eclairages','getRaspBEELights',syncType);	
+	syncDevices('Groupes','getRaspBEEGroups',syncType);
 	$('#div_syncAlert').showAlert({message: "{{Synchronisation Terminée}}", level: 'success'});
 });
 
@@ -94,25 +95,25 @@ function syncDevices(type,action,syncType){
 function createDevice(device,type,syncType){
 	console.dir(device);
 	var deviceName=device.name.replace(/ /g,'')+device.etag;
-	var treechild =   '<li class="tree" style="list-style:none;" id="'+deviceName+'"><div id="'+deviceName+'Icon" class="fa fa-refresh"></div> '+device.name+'</li>';
+	var treechild = '<li class="tree" style="list-style:none;" id="'+deviceName+'"><div id="'+deviceName+'Icon" class="fa fa-refresh"></div> '+device.name+'</li>';
 	$('#'+type+'childs').append(treechild);
 	$.ajax({
-type: "POST", 
-url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
-data: {
-action: "createSensor",
-device: device,
-syncType: syncType
+		type: "POST", 
+		url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+		data: {
+			action: "createDevice",
+			device: device,
+			syncType: syncType
 		},
-dataType: 'json',
-error: function (request, status, error) {
+		dataType: 'json',
+		error: function (request, status, error) {
 			handleAjaxError(request, status, error);
 			console.log("create error",error);
 			$('#'+deviceName+'Icon').attr("class", "fa fa-times");
 			$('#'+deviceName+'Icon').css("color", "red");
 			$('#'+deviceName).append('( erreur :'+error+')');		
 		},
-success: function (data) {
+		success: function (data) {
 			//console.dir ("data",data);
 			if (data.state == 'error') {
 				//$('#div_syncAlert').showAlert({message: "erreur sync capteur " + data.result.message, level: 'danger'});
@@ -125,7 +126,7 @@ success: function (data) {
 			{
 				$('#'+deviceName+'Icon').attr("class", "fa fa-check");
 				$('#'+deviceName+'Icon').css("color", "green");
-				$('#'+deviceName).append(' <span style="font-size:80%">(Equipement ajouté)</span>');		
+				$('#'+deviceName).append(' <span style="font-size:80%">(Equipement ajouté)</span>');	
 			}			
 		} 
 	});	

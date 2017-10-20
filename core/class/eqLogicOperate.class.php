@@ -38,19 +38,19 @@ class eqLogicOperate extends eqLogic {
 		}
 		switch ($device[type]){
 		case "ZHASwitch" :{
-				eqLogicOperate::createZHASwitch($device,$syncType);
+				eqLogicOperate::createGenericDevice('/../config/devices/ZHASwitch.json',$device,$syncType);
 				break;
 			}
 		case "ZHATemperature" :{
-				eqLogicOperate::createZHATemperature($device,$syncType);
+				eqLogicOperate::createGenericDevice('/../config/devices/ZHATemperature.json',$device,$syncType);
 				break;
 			}
 		case "ZHAHumidity" :{
-				eqLogicOperate::createZHAHumidity($device,$syncType);
+				eqLogicOperate::createGenericDevice('/../config/devices/ZHAHumidity.json',$device,$syncType);
 				break;
 			}
 		case "ZHAPressure" :{
-				eqLogicOperate::createZHAPressure($device,$syncType);
+				eqLogicOperate::createGenericDevice('/../config/devices/ZHAPressure.json',$device,$syncType);
 				break;
 			}
 		case "Color light" :{
@@ -105,7 +105,7 @@ class eqLogicOperate extends eqLogic {
 	}
 	
 	public function createLightGroup($device,$syncType){
-		//error_log("|eqlogic create2|",3,"/tmp/rasbee.err");
+		error_log("|createLightGroup syncType| ".$syncType,3,"/tmp/prob.txt");
 
 		if (!is_file(dirname(__FILE__) . '/../config/devices/Group.json')){
 		return false;
@@ -119,6 +119,17 @@ class eqLogicOperate extends eqLogic {
 		//error_log("|group create2|".json_encode($device),3,"/tmp/rasbee.err");
 		//$test = json_decode($device);
 		error_log("|group create2|".$device[type],3,"/tmp/rasbee.err");
+		// on traite le type de synchro
+		/*switch ($syncType){
+			case "limited" :
+			break;
+			case "basic" :
+			break;
+			case "renew" :
+			break;
+			case "renewbutidandname"
+			break;
+		}*/
 		$eqLogic = new eqLogic();
 		$eqLogic->setEqType_name('RaspBEE');
 		$eqLogic->setName($device[name]." ".$device[origid]);
@@ -195,58 +206,21 @@ class eqLogicOperate extends eqLogic {
 		return self::setGenericCmdList("ExtendedColorLight.json",$eqLogic,$syncType);
 	}
 	
-	
-	
-	public function createZHASwitch($device,$syncType){
-		if (!is_file(dirname(__FILE__) . '/../config/devices/ZHASwitch.json')){
+	public function createGenericDevice($path,$device,$syncType){
+		if (!is_file(dirname(__FILE__) . $path)){
 		return false;
 		};
-		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/ZHASwitch.json');
+		$configFile = file_get_contents(dirname(__FILE__) . $path);
 		if (!is_json($configFile)) {
 			return false;
 		}
 		$eqLogic = self::setGenericEqLogic($device,$syncType);
-		return self::setGenericCmdList("ZHASwitch.json",$eqLogic,$syncType);
+		return self::setGenericCmdList(basename($path),$eqLogic,$syncType);
 	}
-	
-	public function createZHATemperature($device,$syncType){
-		if (!is_file(dirname(__FILE__) . '/../config/devices/ZHATemperature.json')){
-		return false;
-		};
-		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/ZHATemperature.json');
-		if (!is_json($configFile)) {
-			return false;
-		}
-		$eqLogic = self::setGenericEqLogic($device,$syncType);	
-		return self::setGenericCmdList("ZHATemperature.json",$eqLogic,$syncType);
-	}
-	
-	public function createZHAHumidity($device,$syncType){		
-		if (!is_file(dirname(__FILE__) . '/../config/devices/ZHAHumidity.json')){
-		return false;
-		};
-		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/ZHAHumidity.json');
-		if (!is_json($configFile)) {
-			return false;
-		}
-		$eqLogic = self::setGenericEqLogic($device,$syncType);
-		return self::setGenericCmdList("ZHAHumidity.json",$eqLogic,$syncType);
-	}
-	
-	public function createZHAPressure($device,$syncType){		
-		if (!is_file(dirname(__FILE__) . '/../config/devices/ZHAPressure.json')){
-		return false;
-		};
-		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/ZHAPressure.json');
-		if (!is_json($configFile)) {
-			return false;
-		}
-		$eqLogic = self::setGenericEqLogic($device,$syncType);
-		return self::setGenericCmdList("ZHAPressure.json",$eqLogic,$syncType);		
-	}
-	
-	
-	function setGenericEqLogic($device,$syncType=0){
+		
+	function setGenericEqLogic($device,$syncType){
+		error_log("synctype: ".$syncType,3,"/tmp/prob.text");
+		$syncType=0;
 		switch ($syncType){
 			case 0:
 				$eqLogic = new eqLogic();

@@ -100,30 +100,11 @@ try {
 		}
 	}
 	
-	if (init('action') == 'createGroup') {
-		//error_log("|creation du groupe demande ajax|".json_encode(init('device'),true),3,"/tmp/rasbee.err");
-		$resp=RaspBEE::createDevice(init('device'));
-		if ($resp[state]=="nok"){		
-			ajax::error($resp);
-		} else{
-			ajax::success($resp);
-		}
-	}
 	
-	if (init('action') == 'createSensor') {
+	if (init('action') == 'createDevice') {
 		//error_log("creation du device demande ajax");
 		$resp=RaspBEE::createDevice(init('device'),init('syncType'));
 		if ($resp[state]=="nok"){		
-			ajax::error($resp);
-		} else{
-			ajax::success($resp);
-		}
-	}
-	
-	if (init('action') == 'createLight') {
-		//error_log("creation du light demande ajax");
-		$resp=RaspBEE::createDevice(init('device'));
-		if ($resp===false){		
 			ajax::error($resp);
 		} else{
 			ajax::success($resp);
