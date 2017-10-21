@@ -58,10 +58,10 @@ try {
 	
 	if (init('action') == 'getAPIAccess') {
 		$resp=RaspBEE::getApiKey();
-		if ($resp===false){		
-			ajax::error($resp);
+		if ($resp->state=="nok"){		
+			ajax::error($resp->message);
 		} else{
-			ajax::success($resp);
+			ajax::success($resp->message);
 		}
 	}
 	
