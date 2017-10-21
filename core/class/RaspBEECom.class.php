@@ -69,85 +69,15 @@ class RaspBEECom {
 	}
 	
 	public function findRaspBEE(){
-		$ch = curl_init();
 		$opts = [
-		CURLOPT_SSL_VERIFYPEER => false,
-		CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
-		CURLOPT_URL            => "https://dresden-light.appspot.com/discover",
-		CURLOPT_RETURNTRANSFER => true,
-		CURLOPT_TIMEOUT        => 30,
-		CURLOPT_CONNECTTIMEOUT => 30
-		];
-		curl_setopt_array($ch, $opts);
-		$result=curl_exec ($ch);
-		$error=curl_error($ch);
-		$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		curl_close($ch);
-		$response = $responseHelper;
-		if ($result===false){
-			$response->state="nok";
-			$response->error=$httpcode;
-			$response->message=$error;
-			return $response;
-		}else{		
-			$response->state="ok";
-			$response->error=$httpcode;
-			if ($response->error!='200')$response->state="nok";
-			$response->message=$result;
-			if ($response->message=='')
-			$response->message=strval($response->error);			
-			return $response;
-		}		
-	}
-
-	public function getAPIAccess(){
-		$ch = curl_init();
-		$opts = [
-		CURLOPT_SSL_VERIFYPEER => false,
-		CURLOPT_FORBID_REUSE   => true,
-		CURLOPT_POSTFIELDS     => "{\"devicetype\":\"jeedomRaspBEEPlugin\"}",
-		CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
-		CURLOPT_URL            => "http://".$this->ip."/api",
-		CURLOPT_POST		   => true,
-		CURLOPT_RETURNTRANSFER => true,
-		CURLOPT_TIMEOUT        => 30,
-		CURLOPT_CONNECTTIMEOUT => 30
-		];
-		curl_setopt_array($ch, $opts);
-		$result=curl_exec ($ch);
-		$error=curl_error($ch);
-		$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		curl_close($ch);
-		$response = $responseHelper;
-		if ($result===false){
-			$response->state="nok";
-			$response->error=$httpcode;
-			$response->message=$error;
-			return $response;
-		}else{		
-			$response->state="ok";
-			$response->error=$httpcode;
-			if ($response->error!='200')$response->state="nok";			
-			$response->message=$result;
-			if ($response->message=='')
-			$response->message=strval($response->error);			
-			return $response;
-		}		
-	}
-	
-	
-	public function getConf(){
-		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/config");
-	}
-	
-	public function getSensors(){
-		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/sensors");		
-	}
-	
-	public function getGroups(){
-		//error_log("|synchro groupes|",3,"/tmp/rasbee.err");
-		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/groups");
-		
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
+			CURLOPT_URL            => "https://dresden-light.appspot.com/discover",
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_TIMEOUT        => 30,
+			CURLOPT_CONNECTTIMEOUT => 30
+		];		
+		return self::genericResponseProcess($ch,$opts);
 	}
 	
 	private function genericGet($url=null){
@@ -172,6 +102,60 @@ class RaspBEECom {
 		return $result;//substr($result,1,-1);
 		}
 	}
+	
+	private function genericResponseProcess($ch,$opts){
+		$ch = curl_init();
+		curl_setopt_array($ch, $opts);
+		$result=curl_exec ($ch);
+		$error=curl_error($ch);
+		$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);
+		$response = $responseHelper;
+		if ($result===false){
+			$response->state="nok";
+			$response->error=$httpcode;
+			$response->message=$error;
+			return $response;
+		}else{		
+			$response->state="ok";
+			$response->error=$httpcode;
+			if ($response->error!='200')$response->state="nok";
+			$response->message=$result;
+			if ($response->message=='')
+			$response->message=strval($response->error);			
+			return $response;
+		}		
+	}
+
+	public function getAPIAccess(){
+		$opts = [
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_FORBID_REUSE   => true,
+			CURLOPT_POSTFIELDS     => "{\"devicetype\":\"jeedomRaspBEEPlugin\"}",
+			CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
+			CURLOPT_URL            => "http://".$this->ip."/api",
+			CURLOPT_POST		   => true,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_TIMEOUT        => 30,
+			CURLOPT_CONNECTTIMEOUT => 30
+		];
+		return self::genericResponseProcess($ch,$opts);
+	}
+	
+	public function getConf(){
+		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/config");
+	}
+	
+	public function getSensors(){
+		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/sensors");		
+	}
+	
+	public function getGroups(){
+		//error_log("|synchro groupes|",3,"/tmp/rasbee.err");
+		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/groups");
+		
+	}
+	
 	
 	public function getLights(){
 		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/lights");
