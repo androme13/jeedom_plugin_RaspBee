@@ -23,12 +23,6 @@ if (!isConnect()) {
 }
 require_once dirname(__FILE__).'/../core/class/RaspBEECom.class.php';
 
-
-//$com = new RaspBEECom;
-//$test = $com->findRaspBEE();
-//echo($test);
-//echo $com->getAPIAccess();
-
 ?>
 <div id='div_configAlert' style="display: none;"></div>
 <form class="form-horizontal">

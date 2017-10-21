@@ -225,7 +225,8 @@ class eqLogicOperate extends eqLogic {
 			case 0:
 				$eqLogic = new eqLogic();
 				$eqLogic->setEqType_name('RaspBEE');
-				$eqLogic->setName($device[name]." ".$device[origid]);
+				$eqLogic->setName($device[name]);
+				//$eqLogic->setName($device[name]." ".$device[origid]);
 				$eqLogic->setIsEnable(1);
 				$eqLogic->setIsVisible(1);
 				$_logical_id = null;

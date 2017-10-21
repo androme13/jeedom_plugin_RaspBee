@@ -37,13 +37,10 @@ class RaspBEECom {
 		if ($user===null){
 			$return="Utilisateur à supprimer non defini";
 			$return->state="error";
-			//throw new Exception('Utilisateur à supprimer non defini');
 			return $return;
 			//return array('message' => 'Utilisateur à supprimer non defini', 'code' => 0, 'state' => 'error');
 		}
-		//error_log("sendLightCommand(".$id.":".$command.")",3,"/tmp/prob.txt");
 		$url= 'http://'.$this->ip.'/api/'.$this->apikey.'/config/whitelist/'.$user;		
-		error_log("deleteRaspBEEUser :".$url,3,"/tmp/prob.txt");
 		//if ($id===null || $command===null || $type===null)return false;
 		$ch = curl_init();
 		$opts = [
@@ -78,8 +75,8 @@ class RaspBEECom {
 		CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
 		CURLOPT_URL            => "https://dresden-light.appspot.com/discover",
 		CURLOPT_RETURNTRANSFER => true,
-		//CURLOPT_TIMEOUT        => 30,
-		//CURLOPT_CONNECTTIMEOUT => 30
+		CURLOPT_TIMEOUT        => 30,
+		CURLOPT_CONNECTTIMEOUT => 30
 		];
 		curl_setopt_array($ch, $opts);
 		$result=curl_exec ($ch);
@@ -87,14 +84,10 @@ class RaspBEECom {
 		$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 		$response = $responseHelper;
-		//error_log("findRaspBEE result : ".$obresult[0]['macaddress'],3,"/tmp/prob.txt");
 		if ($result===false){
-			//error_log("findRaspBEE debut : ",3,"/tmp/prob.txt");
 			$response->state="nok";
 			$response->error=$httpcode;
 			$response->message=$error;
-			//error_log("findRaspBEE error : ".json_encode($response),3,"/tmp/prob.txt");
-			//error_log("findRaspBEE fin : ",3,"/tmp/prob.txt");
 			return $response;
 		}else{		
 			$response->state="ok";
@@ -102,10 +95,7 @@ class RaspBEECom {
 			if ($response->error!='200')$response->state="nok";
 			$response->message=$result;
 			if ($response->message=='')
-			$response->message=strval($response->error);
-			
-			//error_log("findRaspBEE success error: ".$response->error,3,"/tmp/prob.txt");
-			//error_log("findRaspBEE success : ".$response->message,3,"/tmp/prob.txt");
+			$response->message=strval($response->error);			
 			return $response;
 		}		
 	}
@@ -130,12 +120,9 @@ class RaspBEECom {
 		curl_close($ch);
 		$response = $responseHelper;
 		if ($result===false){
-			//error_log("findRaspBEE debut : ",3,"/tmp/prob.txt");
 			$response->state="nok";
 			$response->error=$httpcode;
 			$response->message=$error;
-			//error_log("findRaspBEE error : ".json_encode($response),3,"/tmp/prob.txt");
-			//error_log("findRaspBEE fin : ",3,"/tmp/prob.txt");
 			return $response;
 		}else{		
 			$response->state="ok";
@@ -143,23 +130,11 @@ class RaspBEECom {
 			if ($response->error!='200')$response->state="nok";			
 			$response->message=$result;
 			if ($response->message=='')
-			$response->message=strval($response->error);
-			
-			error_log("getAPIAccess success error: ".$response->error,3,"/tmp/prob.txt");
-			error_log("getAPIAccess success : ".$response->message,3,"/tmp/prob.txt");
+			$response->message=strval($response->error);			
 			return $response;
 		}		
-		
-		
-		
-		
-		
-		/*if ($result===false){
-		return false;	
-		}else{
-		return substr($result,1,-1);
-		}*/
 	}
+	
 	
 	public function getConf(){
 		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/config");
