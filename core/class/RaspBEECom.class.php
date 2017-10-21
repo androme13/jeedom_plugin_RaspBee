@@ -19,6 +19,7 @@
  
 // interactions vers le RASPBEE
 
+
 class RaspBEECom {
 	
 	private $apikey = null;
@@ -29,8 +30,17 @@ class RaspBEECom {
 		$this->apikey = config::byKey('raspbeeAPIKEY','RaspBEE');		
     }
 	
+	private $responseHelper = array("error" => 0, "message" => "", "state" => "");
+	
+	/*private function responseHelper(){
+		$obj = array("error" => 0, "message" => "", "state" => "");
+		return $obj;
+	}*/
 	//try {
 	//	ajax::init();
+	
+
+	
 	public function deleteRaspBEEUser($user){
 		error_log("user : ".$user,3,"/tmp/prob.txt");
 
@@ -83,13 +93,29 @@ class RaspBEECom {
 		];
 		curl_setopt_array($ch, $opts);
 		$result=curl_exec ($ch);
+		$error=curl_error($ch);
+		$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
+		$response = $responseHelper;
+		//error_log("findRaspBEE result : ".$obresult[0]['macaddress'],3,"/tmp/prob.txt");
 		if ($result===false){
-		return false;	
-		}else{
-		return substr($result,1,-1);	
+			error_log("findRaspBEE debut : ",3,"/tmp/prob.txt");
+			$response->state="nok";
+			$response->error=$httpcode;
+			$response->message=$error;
+			//error_log("findRaspBEE error : ".json_encode($response),3,"/tmp/prob.txt");
+			//error_log("findRaspBEE fin : ",3,"/tmp/prob.txt");
+			return $response;
+		}else{		
+			$response->state="ok";
+			$response->error=$httpcode;
+			if ($response->error!='200')$response->state="nok";
+			$response->message=$result;
+			
+			//error_log("findRaspBEE success error: ".$response->error,3,"/tmp/prob.txt");
+			//error_log("findRaspBEE success : ".$response->message,3,"/tmp/prob.txt");
+			return $response;
 		}		
-		//return json_encode(substr($result,1,-1));
 	}
 
 	public function getAPIAccess(){

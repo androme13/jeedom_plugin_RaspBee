@@ -111,7 +111,7 @@ if($results->type == "lights"){
 									// on recuperes aussi toutes les valeurs hue sat et bri (hsl) afin d'envoyer un hexrgb au widget;
 									// enlever (|| $actioncmd=='bri') pour eviter variations sur action couleur.
 									if ($actioncmd=='hue' || $actioncmd=='sat' || $actioncmd=='bri'){
-										error_log("changement couleur recquis",3,'/tmp/prob.txt');
+										//error_log("changement couleur recquis",3,'/tmp/prob.txt');
 										$hue=0;
 										$sat=0;
 										$bri=0;

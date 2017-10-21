@@ -26,14 +26,14 @@ try {
 	
 	ajax::init();
 	  
-   	if (init('action') == 'syncEqLogicWithRaspBEE') {
+   /*	if (init('action') == 'syncEqLogicWithRaspBEE') {
 		$resp=RaspBEE::syncEqLogicWithRaspBEE();		
 		if ($resp===false){
 			ajax::error($resp);
 		}else{
 			ajax::success($resp);
 		}
-	}
+	}*/
 	
 	if (init('action') == 'deleteRaspBEEUser') {
 		$resp=RaspBEE::deleteRaspBEEUser(init('user'));
@@ -46,11 +46,13 @@ try {
 	}
 	
 	if (init('action') == 'findRaspBEE') {
-		$resp=RaspBEE::findRaspBEE();
-		if ($resp===false){		
-			ajax::error($resp);
+		//error_log("findRaspBEE ajax debut ",3,"/tmp/prob.txt");
+		$resp=RaspBEE::findRaspBEE();		
+		//error_log("findRaspBEE ajax resp : ".$resp->message,3,"/tmp/prob.txt");
+		if ($resp->state=="nok"){		
+			ajax::error($resp->message);
 		} else{
-			ajax::success($resp);
+			ajax::success($resp->message);
 		}
 	}
 	
@@ -127,5 +129,15 @@ try {
 	/*     * *********Catch exeption*************** */
 } catch (Exception $e) {
 	ajax::error(displayExeption($e), $e->getCode());
+}
+
+function genericSendResponse($resp){
+	if ($resp->state=="error"){
+		ajax::error($resp);
+		}
+		else
+		{
+			ajax::success($resp);
+		}	
 }
 ?>

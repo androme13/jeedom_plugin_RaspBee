@@ -30,6 +30,7 @@ require_once dirname(__FILE__).'/../core/class/RaspBEECom.class.php';
 //echo $com->getAPIAccess();
 
 ?>
+<div id='div_configAlert' style="display: none;"></div>
 <form class="form-horizontal">
 <fieldset>
 <legend><i class="fa fa-list-alt"></i> {{Passerelle}}</legend>
@@ -72,21 +73,31 @@ data: {
 action: "findRaspBEE",
 		},
 dataType: 'json',
-error: function (resp, statut, erreur) {
-			$('#md_modal2').dialog({title: "{{Erreur RaspBEE}}"});
-			$('#md_modal2').html('Aucune passerelle RaspBEE ne peut être trouvée<br>'+resp+"|"+erreur).dialog('open');	
-			handleAjaxError(request, status, error);
-			return;	
+error: function (resp, status, erreur) {
+			$('#div_configAlert').showAlert({message: '{{Erreur}} : '+erreur+' ('+resp.status+')', level: 'danger'});
+			//handleAjaxError(resp, statut, erreur);
 		},
-success: function (resp,statut) {
+success: function (resp,status) {
 			console.dir(resp);
+			try
+			{
+			   var cleanResp = JSON.parse(resp.result.replace('\"', '"'));
+			}
+			catch(e)
+			{
+			   var cleanResp='invalid json';
+			}
+			
+			
+			
+			
+			
 			if (resp.state == 'ok') {
-				var obj = JSON.parse(resp.result);
-				var value= obj.internalipaddress+":"+obj.internalport;
-				$('#raspbeeGWIP').val(value);
-				fieldValidate(value);
+				$('#raspbeeGWIP').val(cleanResp[0].internalipaddress+":"+cleanResp[0].internalport);
+				fieldValidate($('#raspbeeGWIP').val());
+				$('#div_configAlert').showAlert({message: '{{Passerelle trouvée}} : '+cleanResp[0].name+' ( {{Id}}='+cleanResp[0].id+', {{Mac}}='+cleanResp[0].macaddress+')', level: 'success'});
 			} else{
-				$('#raspbeeGWIP').val("erreur");
+				$('#div_configAlert').showAlert({message: '{{Passerelle introuvable}} : '+resp.result, level: 'danger'});
 			}
 		}
 	});
