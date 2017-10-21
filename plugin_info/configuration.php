@@ -72,7 +72,6 @@ error: function (resp, status, erreur) {
 			//handleAjaxError(resp, statut, erreur);
 		},
 success: function (resp,status) {
-			//console.dir(resp);
 			try
 			{
 			   var cleanResp = JSON.parse(resp.result.replace('\"', '"'));
@@ -94,18 +93,17 @@ success: function (resp,status) {
 
 $('#bt_raspbeeGETNEWKEY').on('click', function () {
 	$.ajax({
-type: "POST", 
-url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
-data: {
-action: "getAPIAccess",
-		},
-dataType: 'json',
-error: function (request, status, error) {
-			$('#div_configAlert').showAlert({message: '{{Erreur}} : '+erreur+' ('+resp.status+')', level: 'danger'});
-			//handleAjaxError(request, status, error);
-		},
-success: function (resp) {
-
+		type: "POST", 
+		url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+		data: {
+		action: "getAPIAccess",
+				},
+		dataType: 'json',
+		error: function (resp, status, error) {
+					$('#div_configAlert').showAlert({message: '{{Erreur}} : '+error+' ('+resp.status+')', level: 'danger'});
+					//handleAjaxError(request, status, error);
+				},
+		success: function (resp) {
 			try
 			{
 			   var cleanResp = JSON.parse(resp.result.replace('\"', '"'));
@@ -115,30 +113,12 @@ success: function (resp) {
 			   var cleanResp='invalid json';
 			}							
 			if (resp.state == 'ok') {
-				////$('#raspbeeGWIP').val(cleanResp[0].internalipaddress+":"+cleanResp[0].internalport);
-				//$('#raspbeeAPIKEY').val(jsonval.success.username);
-				//console.dir("cleanresp",cleanResp[0]);
 				$('#div_configAlert').showAlert({message: '{{Clé récupérée}}: '+cleanResp[0].success.username, level: 'success'});
 				$('#raspbeeAPIKEY').val(cleanResp[0].success.username);
 			} else{
 				console.dir("cleanresp",resp);
 				$('#div_configAlert').showAlert({message: '{{Impossible de récupérer une clé}} : '+HTMLClean(resp.result), level: 'danger'});
 			}
-
-
-	
-			/*if (resp.state == 'ok') {
-				var jsonval = JSON.parse(resp.result);
-				if (typeof(jsonval.error)==='object'){
-					alert('Error : '+jsonval.error.description);
-				}else{
-					$('#raspbeeAPIKEY').val(jsonval.success.username);
-				}				
-			}
-			else{
-				error_log(resp,3,'/tmp/prob.txt');
-				$('#div_alert').showAlert({message: resp.result, level: 'danger'});
-			}*/
 		}
 	});
 });

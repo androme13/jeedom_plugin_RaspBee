@@ -31,41 +31,19 @@ class RaspBEECom {
 		$this->apikey = config::byKey('raspbeeAPIKEY','RaspBEE');		
     }	
 	
-	public function deleteRaspBEEUser($user){
-		error_log("user : ".$user,3,"/tmp/prob.txt");
-
-		if ($user===null){
-			$return="Utilisateur à supprimer non defini";
-			$return->state="error";
-			return $return;
-			//return array('message' => 'Utilisateur à supprimer non defini', 'code' => 0, 'state' => 'error');
-		}
-		$url= 'http://'.$this->ip.'/api/'.$this->apikey.'/config/whitelist/'.$user;		
-		//if ($id===null || $command===null || $type===null)return false;
+	public function deleteRaspBEEUser($user=''){
 		$ch = curl_init();
 		$opts = [
-		CURLOPT_SSL_VERIFYPEER => false,
-		CURLOPT_FORBID_REUSE   => true,
-		//CURLOPT_POSTFIELDS     => $command,
-		CURLOPT_CUSTOMREQUEST =>  "DELETE",
-		CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
-		CURLOPT_URL            => $url,
-		//CURLOPT_POST		   => true,
-		CURLOPT_RETURNTRANSFER => true,
-		CURLOPT_TIMEOUT        => 30,
-		CURLOPT_CONNECTTIMEOUT => 30
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_FORBID_REUSE   => true,
+			CURLOPT_CUSTOMREQUEST =>  "DELETE",
+			CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
+			CURLOPT_URL            => 'http://'.$this->ip.'/api/'.$this->apikey.'/config/whitelist/'.$user,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_TIMEOUT        => 30,
+			CURLOPT_CONNECTTIMEOUT => 30
 		];
-		curl_setopt_array($ch, $opts);
-		$result=curl_exec ($ch);
-		error_log("deleteRaspBEEUser result : ".$result,3,"/tmp/prob.txt");
-
-		if (curl_errno($ch)) {
-			$curl_error = curl_error($ch);
-			curl_close($ch);
-			throw new Exception(__('Echec de la requête http : ', __FILE__) . $url . ' Curl error : ' . $curl_error, 404);
-		}
-		curl_close($ch);
-		return (is_json($result)) ? json_decode($result, true) : $result;			
+		return self::genericResponseProcess($ch,$opts);
 	}
 	
 	public function findRaspBEE(){
@@ -84,14 +62,14 @@ class RaspBEECom {
 		if ($url==null) return false;
 		$ch = curl_init();
 		$opts = [
-		CURLOPT_SSL_VERIFYPEER => false,
-		CURLOPT_FORBID_REUSE   => true,
-		CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
-		CURLOPT_URL            => $url,
-		//CURLOPT_POST		   => true,
-		CURLOPT_RETURNTRANSFER => true,
-		CURLOPT_TIMEOUT        => 30,
-		CURLOPT_CONNECTTIMEOUT => 30
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_FORBID_REUSE   => true,
+			CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
+			CURLOPT_URL            => $url,
+			//CURLOPT_POST		   => true,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_TIMEOUT        => 30,
+			CURLOPT_CONNECTTIMEOUT => 30
 		];
 		curl_setopt_array($ch, $opts);
 		$result=curl_exec ($ch);
@@ -110,6 +88,7 @@ class RaspBEECom {
 		$error=curl_error($ch);
 		$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
+		error_log("genericResponseProcess result : ".$result,3,"/tmp/prob.txt");
 		$response = $responseHelper;
 		if ($result===false){
 			$response->state="nok";

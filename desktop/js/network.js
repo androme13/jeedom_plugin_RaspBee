@@ -42,52 +42,58 @@ function deleteUser(item,row){
 	dialog_message += '<label class="control-label" > {{Veuillez confirmer la suppression de l\'utilisateur suivant}} :</label><br><br>{{Nom}} : '+item.currentTarget['name']+'<br>{{Clé}} : ('+item.currentTarget['id']+')'+' ' + '<br><br>' + '<label class="lbl lbl-warning" for="name">{{Attention, une fois supprimé, il le sera définitivement.}}</label> ';
 	dialog_message += '</form>';
 	bootbox.dialog({
-title: dialog_title,
-message: dialog_message,
-buttons: {
+		title: dialog_title,
+		message: dialog_message,
+		buttons: {
 			"{{Annuler}}": {
-callback: function () {
-				}
-			},
-success: {
-label: "{{Supprimer}}",
-className: "btn-danger",
-callback: function () {		   
-					$.ajax({
-type: "POST", 
-url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
-data: {
-action: "deleteRaspBEEUser",
-user: item.currentTarget['id'],
-						},
-dataType: 'json',
-error: function (request, status, error) {
-							$('#div_networkRaspBEEAlert').showAlert({message: error.message, level: 'danger'});
-							handleAjaxError(request, status, error);
-						},
-success: function (data) {
-							console.dir("réponse:",data);
-							if (data.state != 'ok') {
-								$('#div_networkRaspBEEAlert').showAlert({message: data.message, level: 'danger'});
-							} else
-							{									
-								$('#div_networkRaspBEEAlert').showAlert({message: "{{Utilisateur supprimé}} ("+data.result[0].success+")", level: 'success'});
-								$('#'+row).remove();
-							}
-						} 
-					});
-					
-				}
-			},
+				callback: function () {
+			}
+		},
+		success: {
+			label: "{{Supprimer}}",
+			className: "btn-danger",
+			callback: function () {		   
+				$.ajax({
+				type: "POST", 
+				url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+				data: {
+					action: "deleteRaspBEEUser",
+					user: item.currentTarget['id'],
+				},
+				dataType: 'json',
+				error: function (resp, status, error) {
+					$('#div_networkRaspBEEAlert').showAlert({message: '{{Erreur}} : '+error+' ('+resp.status+')', level: 'danger'});
+				},
+				success: function (resp) {
+					console.dir('deleteuser network.js: ',resp);
+					try
+					{
+					   var cleanResp = JSON.parse(resp.result.replace('\"', '"'));
+					}
+					catch(e)
+					{
+					   var cleanResp='invalid json';
+					}							
+					if (resp.state == 'ok') {
+						$('#div_networkRaspBEEAlert').showAlert({message: '{{Utilisateur supprimé}}: '+cleanResp[0].success, level: 'success'});
+						$('#'+row).remove();
+					} else{
+						console.dir("cleanresp",resp);
+						$('#div_networkRaspBEEAlert').showAlert({message: '{{Impossible de supprimer l\'utilisateur}} : '+HTMLClean(resp.result), level: 'danger'});
+					}
+				} 
+				});					
+			}
+		}
 		}
 	});
 }
 
+function HTMLClean(value){
+	return value.replace(/<\/?[^>]+(>|$)/g, "");
+}
+
 function showDebug(action){	
-
-
-
-
 $.ajax({
 	type: "POST", 
 	url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
@@ -100,15 +106,12 @@ $.ajax({
 				handleAjaxError(request, status, error);
 			},
 	success: function (data) {
-		//console.dir("réponse:",data);
 		if (data.state != 'ok') {
 			$('#div_networkRaspBEEAlert').showAlert({message: data.message, level: 'danger'});
 		} else
 		{									
 			var dialog_title = '{{Affichage debug RaspBEE en mode raw}}';
-			var dialog_message = '';//'<form class="form-horizontal onsubmit="return false;"> ';
-			dialog_message += '<label class="control-label" > {{infos debug}}</label><br><textarea rows="15" cols="70">'+data.result+'</textarea>';
-			//dialog_message += '</form>';
+			var dialog_message = '<label class="control-label" > {{infos debug}}</label><br><textarea rows="15" cols="70">'+data.result+'</textarea>';
 			bootbox.dialog({
 				title: dialog_title,
 				message: dialog_message,

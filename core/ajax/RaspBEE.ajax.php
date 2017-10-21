@@ -2,7 +2,7 @@
 
 /* This file is part of Plugin RaspBEE for jeedom.
  *
- * Plugin openzwave for jeedom is free software: you can redistribute it and/or modify
+ * Plugin RaspBEE for jeedom is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
@@ -23,47 +23,7 @@ try {
     if (!isConnect('admin')) {
         throw new Exception(__('401 - Accès non autorisé', __FILE__));
     }
-	
 	ajax::init();
-	  
-   /*	if (init('action') == 'syncEqLogicWithRaspBEE') {
-		$resp=RaspBEE::syncEqLogicWithRaspBEE();		
-		if ($resp===false){
-			ajax::error($resp);
-		}else{
-			ajax::success($resp);
-		}
-	}*/
-	
-	if (init('action') == 'deleteRaspBEEUser') {
-		$resp=RaspBEE::deleteRaspBEEUser(init('user'));
-		error_log("|deleteRaspBEEUser raspbee.ajax.php|".$resp->state,3,"/tmp/prob.txt");
-		if ($resp->state=="error"){		
-			ajax::error($resp);
-		} else{
-			ajax::success($resp);
-		}
-	}
-	
-	if (init('action') == 'findRaspBEE') {
-		//error_log("findRaspBEE ajax debut ",3,"/tmp/prob.txt");
-		$resp=RaspBEE::findRaspBEE();		
-		//error_log("findRaspBEE ajax resp : ".$resp->message,3,"/tmp/prob.txt");
-		if ($resp->state=="nok"){		
-			ajax::error($resp->message);
-		} else{
-			ajax::success($resp->message);
-		}
-	}
-	
-	if (init('action') == 'getAPIAccess') {
-		$resp=RaspBEE::getApiKey();
-		if ($resp->state=="nok"){		
-			ajax::error($resp->message);
-		} else{
-			ajax::success($resp->message);
-		}
-	}
 	
 	if (init('action') == 'getRaspBEEConf') {
 		$resp=RaspBEE::getRaspBEEConf();
@@ -114,7 +74,6 @@ try {
 	}
 	
 	if (init('action') == 'removeAll') {
-		//error_log("removeall");
 		$resp=RaspBEE::removeAll();
 		if ($resp===false){		
 			ajax::error($resp);
@@ -122,9 +81,22 @@ try {
 			ajax::success($resp);
 		}
 	}
-
-
-
+	$resp='';
+	switch (init('action')){
+		case 'deleteRaspBEEUser' :
+		$resp=RaspBEE::deleteRaspBEEUser(init('user'));
+		break;
+		case 'findRaspBEE' :
+		$resp=RaspBEE::findRaspBEE();
+		break;
+		case 'getAPIAccess' :
+		$resp=RaspBEE::getApiKey();
+		break;
+	}
+	if ($resp!='')
+		if ($resp->state=="nok") ajax::error($resp->message);
+		else ajax::success($resp->message);
+		
 	throw new Exception('Aucune methode correspondante');
 	/*     * *********Catch exeption*************** */
 } catch (Exception $e) {
