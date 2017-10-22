@@ -28,52 +28,65 @@ class eqLogicOperate extends eqLogic {
 			return false;
 		}
 	}*/
+	private $responseHelper = array("error" => 0, "message" => "", "state" => "");
 	
 	public function createDevice($device,$syncType = ''){
-		//error_log("|eqlogic create device|".$device[type]."|",3,"/tmp/rasbee.err");
-
+		//error_log("|eqlogic create device|".json_encode($device[type])."|",3,"/tmp/prob.txt");
+		$response = $responseHelper;
 		foreach (eqlogic::byType('RaspBEE') as $eqLogic){
-		if ($eqLogic->getConfiguration('origid')==$device[origid] && $eqLogic->getConfiguration('type')==$device[type]) return array("state"=> "nok", "message" => "Equipement deja existant : <strong>".$eqLogic->name."</strong>");
+			
+		if ($eqLogic->getConfiguration('origid')==$device[origid] && $eqLogic->getConfiguration('type')==$device[type]){
+			error_log("|eqlogic create device deja existant|".$device[type]."|",3,"/tmp/prob.txt");
+			$response->state="nok";
+			$response->error=1;
+			$response->message="Equipement deja existant : <strong>".$eqLogic->name."</strong>";
+			return $response;
+		// return array("state"=> "nok", "message" => "Equipement deja existant : <strong>".$eqLogic->name."</strong>");
+		}
 		
 		}
+		//error_log("|eqlogic create device NON existant|".$device[type]."|",3,"/tmp/prob.txt");
 		switch ($device[type]){
 		case "ZHASwitch" :{
-				eqLogicOperate::createGenericDevice('/../config/devices/ZHASwitch.json',$device,$syncType);
+				return eqLogicOperate::createGenericDevice('/../config/devices/ZHASwitch.json',$device,$syncType);
 				break;
 			}
 		case "ZHATemperature" :{
-				eqLogicOperate::createGenericDevice('/../config/devices/ZHATemperature.json',$device,$syncType);
+				return eqLogicOperate::createGenericDevice('/../config/devices/ZHATemperature.json',$device,$syncType);
 				break;
 			}
 		case "ZHAHumidity" :{
-				eqLogicOperate::createGenericDevice('/../config/devices/ZHAHumidity.json',$device,$syncType);
+				return eqLogicOperate::createGenericDevice('/../config/devices/ZHAHumidity.json',$device,$syncType);
 				break;
 			}
 		case "ZHAPressure" :{
-				eqLogicOperate::createGenericDevice('/../config/devices/ZHAPressure.json',$device,$syncType);
+				return eqLogicOperate::createGenericDevice('/../config/devices/ZHAPressure.json',$device,$syncType);
 				break;
 			}
 		case "Color light" :{
-			eqLogicOperate::createColorLight($device,$syncType);
-			break;
+				return eqLogicOperate::createColorLight($device,$syncType);
+				break;
 		}
 		case "Extended color light" :{
-				eqLogicOperate::createExtendedColorLight($device,$syncType);
+				return eqLogicOperate::createExtendedColorLight($device,$syncType);
 				break;
 			}
 		case "Dimmable light" :{
-				eqLogicOperate::createDimmableLight($device,$syncType);
+				return eqLogicOperate::createDimmableLight($device,$syncType);
 				break;
 			}
 		case "LightGroup" :{
-				eqLogicOperate::createLightGroup($device,$syncType);
+				return eqLogicOperate::createLightGroup($device,$syncType);
 				break;
 			}
 		default : {
-			error_log("eqLogicOperate : devicetype inconnu");
+				$response->state="nok";
+				$response->error=1;
+				$response->message="Equipement inconnu";
+				return $response;
 			}
 		}
-		return true;
+		//return true;
 	}
 	
 	public function createDimmableLight($device,$syncType){
@@ -105,7 +118,7 @@ class eqLogicOperate extends eqLogic {
 	}
 	
 	public function createLightGroup($device,$syncType){
-		error_log("|createLightGroup syncType| ".$syncType,3,"/tmp/prob.txt");
+		//error_log("|createLightGroup syncType| ".$syncType,3,"/tmp/prob.txt");
 
 		if (!is_file(dirname(__FILE__) . '/../config/devices/Group.json')){
 		return false;
@@ -246,8 +259,7 @@ class eqLogicOperate extends eqLogic {
 			case 2:
 			break;
 			
-		}
-		
+		}		
 		return $eqLogic;		
 	}
 	
@@ -258,7 +270,8 @@ class eqLogicOperate extends eqLogic {
 		if (!is_json($configFile)) return false;
 		$model = json_decode($configFile, true);
 		$commands = $model['commands'];
-		
+		$response = $responseHelper;
+		$cmdSyncCount = 0;
 		switch ($syncType){			
 			case 0:
 				foreach ($model['commands'] as $command) {
@@ -299,7 +312,8 @@ class eqLogicOperate extends eqLogic {
 					foreach ($command[configuration] as $command => $key){
 						$RaspBEECmd->setConfiguration($command,$key);				
 					}				
-					$RaspBEECmd->save();						
+					$RaspBEECmd->save();
+					$cmdSyncCount++;
 				}
 			break;
 		}
@@ -308,7 +322,10 @@ class eqLogicOperate extends eqLogic {
 
 		//error_log("|setGenericCmdList|",3,"/tmp/rasbee.err");
 
-		return true;		
+		$response->state="ok";
+		$response->error=0;
+		$response->message="Commandes ajoutées : <strong>".$cmdSyncCount."</strong>";
+		return $response;		
 	}
 }
 

@@ -55,12 +55,12 @@ class RaspBEECom {
 			CURLOPT_TIMEOUT        => 30,
 			CURLOPT_CONNECTTIMEOUT => 30
 		];		
-		return self::genericResponseProcess($ch,$opts);
+		return self::genericResponseProcess($opts);
 	}
 	
 	private function genericGet($url=null){
-		if ($url==null) return false;
-		$ch = curl_init();
+		//if ($url==null) return false;
+		//$ch = curl_init();
 		$opts = [
 			CURLOPT_SSL_VERIFYPEER => false,
 			CURLOPT_FORBID_REUSE   => true,
@@ -71,24 +71,17 @@ class RaspBEECom {
 			CURLOPT_TIMEOUT        => 30,
 			CURLOPT_CONNECTTIMEOUT => 30
 		];
-		curl_setopt_array($ch, $opts);
-		$result=curl_exec ($ch);
-		curl_close($ch);
-		if ($result===false){
-		return false;	
-		}else{
-		return $result;//substr($result,1,-1);
-		}
+		return self::genericResponseProcess($opts);
 	}
 	
-	private function genericResponseProcess($ch,$opts){
+	private function genericResponseProcess($opts){
 		$ch = curl_init();
 		curl_setopt_array($ch, $opts);
 		$result=curl_exec ($ch);
 		$error=curl_error($ch);
 		$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
-		error_log("genericResponseProcess result : ".$result,3,"/tmp/prob.txt");
+		//error_log("genericResponseProcess result : ".$result,3,"/tmp/prob.txt");
 		$response = $responseHelper;
 		if ($result===false){
 			$response->state="nok";
@@ -118,7 +111,7 @@ class RaspBEECom {
 			CURLOPT_TIMEOUT        => 30,
 			CURLOPT_CONNECTTIMEOUT => 30
 		];
-		return self::genericResponseProcess($ch,$opts);
+		return self::genericResponseProcess($opts);
 	}
 	
 	public function getConf(){
@@ -134,8 +127,7 @@ class RaspBEECom {
 		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/groups");
 		
 	}
-	
-	
+		
 	public function getLights(){
 		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/lights");
 	}

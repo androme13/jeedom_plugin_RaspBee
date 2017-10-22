@@ -67,23 +67,32 @@ function syncDevices(type,action,syncType){
 			action: action
 		},
 		dataType: 'json',
-		error: function (request, status, error) {
-			handleAjaxError(request, status, error);
-			
-		},
-		success: function (data) {			
-			if (data.state != 'ok') {
-				$('#div_alert').showAlert({message: data.result, level: 'info'});
-				return;
+		error: function (resp, status, error) {
+			$('#div_syncAlert').showAlert({message: '{{Erreur}} : '+error+' ('+resp.status+')', level: 'danger'});		
+		},		
+		success: function (resp) {		
+		try
+			{
+			var cleanResp = resp.result.message.replace('\"', '"');
 			}
-			let devices = JSON.parse(data.result);
-			if (Object.keys(devices).length>0){
-				$('#'+type+'Label').append(' ('+Object.keys(devices).length+')');
-				for (var device in devices) {
-					devices[device].origid=device;
-					createDevice(devices[device],type,syncType);										
-				}
-			}	
+			catch(e)
+			{
+			   var cleanResp='invalid json';
+			}							
+			if (resp.state == 'ok') {
+				let devices = JSON.parse(cleanResp);
+				if (Object.keys(devices).length>0){
+					$('#'+type+'Label').append(' ('+Object.keys(devices).length+')');
+					for (var device in devices) {
+						devices[device].origid=device;
+						//console.dir(devices[device]);
+						createDevice(devices[device],type,syncType);										
+					}
+				}	
+
+			} else{
+				$('#div_syncAlert').showAlert({message: '{{Impossible d\'afficher les infos}} : '+HTMLClean(resp.result), level: 'danger'});
+			}
 		} 
 	});
 }
@@ -93,7 +102,7 @@ function syncDevices(type,action,syncType){
 //https://makina-corpus.com/blog/metier/2014/construire-un-tree-view-en-css-pur
 
 function createDevice(device,type,syncType){
-	console.dir(device);
+	//console.dir(device);
 	var deviceName=device.name.replace(/ /g,'')+device.etag;
 	var treechild = '<li class="tree" style="list-style:none;" id="'+deviceName+'"><div id="'+deviceName+'Icon" class="fa fa-refresh"></div> '+device.name+'</li>';
 	$('#'+type+'childs').append(treechild);
@@ -106,31 +115,42 @@ function createDevice(device,type,syncType){
 			syncType: syncType
 		},
 		dataType: 'json',
-		error: function (request, status, error) {
-			handleAjaxError(request, status, error);
-			console.log("create error",error);
+		error: function (resp, status, error) {
+			$('#div_syncAlert').showAlert({message: '{{Erreur}} : '+error+' ('+resp.status+')', level: 'danger'});
+			//handleAjaxError(request, status, error);
+			//console.log("create error",error);
 			$('#'+deviceName+'Icon').attr("class", "fa fa-times");
 			$('#'+deviceName+'Icon').css("color", "red");
-			$('#'+deviceName).append('( erreur :'+error+')');		
+			$('#'+deviceName).append('{{Erreur}} : '+error+' ('+resp.status+')');		
 		},
-		success: function (data) {
-			//console.dir ("data",data);
-			if (data.state == 'error') {
-				//$('#div_syncAlert').showAlert({message: "erreur sync capteur " + data.result.message, level: 'danger'});
-				$('#'+deviceName+'Icon').attr("class", "fa fa-times");
-				$('#'+deviceName+'Icon').css("color", "orange");
-				$('#'+deviceName).append(' <span style="font-size:80%">('+data.result.message+')</span>');				
-				//return;
-			}
-			else
-			{
-				$('#'+deviceName+'Icon').attr("class", "fa fa-check");
-				$('#'+deviceName+'Icon').css("color", "green");
-				$('#'+deviceName).append(' <span style="font-size:80%">(Equipement ajouté)</span>');	
-			}			
-		} 
+		
+		success: function (resp) {		
+			try	{
+				//console.dir(resp);
+					var cleanResp = resp.result.replace('\"', '"');
+				   
+				}
+				catch(e)
+				{
+				   var cleanResp='invalid json';
+				}							
+				if (resp.state == 'ok') {
+					$('#'+deviceName+'Icon').attr("class", "fa fa-check");
+					$('#'+deviceName+'Icon').css("color", "green");
+					$('#'+deviceName).append(' <span style="font-size:80%">Equipement ajouté ('+cleanResp+')</span>');
+
+				} else{
+					$('#'+deviceName+'Icon').attr("class", "fa fa-times");
+					$('#'+deviceName+'Icon').css("color", "orange");
+					$('#'+deviceName).append(' <span style="font-size:80%">('+cleanResp+')</span>');	
+				}	
+		}
 	});	
 };
+
+function HTMLClean(value){
+	return value.replace(/<\/?[^>]+(>|$)/g, "");
+}
 
 /*
 ZHALightLevel ZHAPresence ZHAOpenClose ZHATemperature ZHAHumidity ZHAPressure ZHASwitch

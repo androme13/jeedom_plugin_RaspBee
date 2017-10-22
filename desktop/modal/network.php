@@ -20,10 +20,8 @@ if (!isConnect('admin')) {
 }
 require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
 $raspbeecom = new RaspBEECom;
-		$RaspBEEConfJson = json_decode($raspbeecom->getConf());
-		//print_r(get_object_vars($RaspBEEConfJson));
-		//print_r($RaspBEEConfJson);
-		//echo "debut :".$RaspBEEConfJson->apiversion;
+		$RaspBEEConf = $raspbeecom->getConf();
+		$RaspBEEConfJson = json_decode($RaspBEEConf->message,true);
 ?>
 <script type="text/javascript" src="plugins/openzwave/3rdparty/vivagraph/vivagraph.min.js"></script>
 <style>
@@ -46,19 +44,19 @@ $raspbeecom = new RaspBEECom;
                         <div class="panel-body">
 							<p>{{Nom}} <span class="label label-default" style="font-size : 1em;">
 							<?php
-							echo $RaspBEEConfJson->name;
+							echo $RaspBEEConfJson[name];
 							?>
 							</span></p>
 							<p>{{ID Modèle}} <span class="label label-default" style="font-size : 1em;">
 							<?php
-							echo $RaspBEEConfJson->modelid;
+							echo $RaspBEEConfJson[modelid];
 							?>
 							</span></p>
                             <p>{{Version}} <span class="label label-default" style="font-size : 1em;">
 							<?php							
-							echo $RaspBEEConfJson->swversion;							
+							echo $RaspBEEConfJson[swversion];	
 							echo'</span>';
-							$versionDetail = explode(".", $RaspBEEConfJson->swversion);
+							$versionDetail = explode(".", $RaspBEEConfJson[swversion]);
 							// version mini de deconz 2.4.70
 							$minVersion = array(2,4,70);
 							$error = '';							
@@ -73,21 +71,21 @@ $raspbeecom = new RaspBEECom;
 							</p>								
                             <p>{{UUID}} <span class="label label-default" style="font-size : 1em;">
 							<?php
-							echo $RaspBEEConfJson->uuid;
+							echo $RaspBEEConfJson[uuid];
 							?>
 							</span></p>								
 							<p>{{ID bridge RaspBEE}} <span class="label label-default" style="font-size : 1em;">
 							<?php
-							echo $RaspBEEConfJson->bridgeid;
+							echo $RaspBEEConfJson[bridgeid];
 							?>
 							</span></p>							
                             <p>{{Port Websocket}} <span class="label label-default" style="font-size : 1em;">
 							<?php
-							echo $RaspBEEConfJson->websocketport;
+							echo $RaspBEEConfJson[websocketport];
 							?>							
                             <p>{{Canal ZigBEE}} <span class="label label-default" style="font-size : 1em;">
 							<?php
-							echo $RaspBEEConfJson->zigbeechannel;
+							echo $RaspBEEConfJson[zigbeechannel];
 							?>
 							</span></p>
                             <p>{{Clé API RaspBEE}} <span class="label label-default" style="font-size : 1em;">
@@ -108,17 +106,17 @@ $raspbeecom = new RaspBEECom;
                         <div class="panel-body"><lu style="font-size : 1em;"></span></p>
                             <p>{{Adresse IP}} <span class="label label-default" style="font-size : 1em;">
 							<?php
-							echo $RaspBEEConfJson->ipaddress.' ('.$RaspBEEConfJson->netmask.')';
+							echo $RaspBEEConfJson[ipaddress].' ('.$RaspBEEConfJson[netmask].')';
 							?>
 							</span></p>
                             <p>{{Gateway}} <span class="label label-default" style="font-size : 1em;">
 							<?php
-							echo $RaspBEEConfJson->gateway;
+							echo $RaspBEEConfJson[gateway];
 							?>
 							</span></p>
                             <p>{{Adresse MAC}} <span class="label label-default" style="font-size : 1em;">
 							<?php
-							echo $RaspBEEConfJson->mac;
+							echo $RaspBEEConfJson[mac];
 							?>
 							</span></p>								
 						</div>
@@ -128,27 +126,27 @@ $raspbeecom = new RaspBEECom;
                         <div class="panel-body"><lu style="font-size : 1em;"></span></p>
                             <p>{{Etat}} <span class="label label-default" style="font-size : 1em;">
 							<?php
-							echo $RaspBEEConfJson->wifi;
+							echo $RaspBEEConfJson[wifi];
 							?>
 							</span></p>
 							<p>{{SSID}} <span class="label label-default" style="font-size : 1em;">
 							<?php
-							echo $RaspBEEConfJson->wifiname;
+							echo $RaspBEEConfJson[wifiname];
 							?>
 							</span></p>
                             <p>{{Adresse IP}} <span class="label label-default" style="font-size : 1em;">
 							<?php
-							echo $RaspBEEConfJson->wifiip;
+							echo $RaspBEEConfJson[wifiip];
 							?>
 							</span></p>
                             <p>{{Canal}} <span class="label label-default" style="font-size : 1em;">
 							<?php
-							echo $RaspBEEConfJson->wifichannel;
+							echo $RaspBEEConfJson[wifichannel];
 							?>
 							</span></p>
                             <p>{{Type}} <span class="label label-default" style="font-size : 1em;">
 							<?php
-							echo $RaspBEEConfJson->wifitype;
+							echo $RaspBEEConfJson[wifitype];
 							?>
 							</span></p>							
 						</div>
@@ -158,17 +156,17 @@ $raspbeecom = new RaspBEECom;
                         <div class="panel-body">
                             <p>{{Heure}} <span class="label label-default" style="font-size : 1em;">
 							<?php
-							echo $RaspBEEConfJson->localtime;
+							echo $RaspBEEConfJson[localtime];
 							?>
 							</span></p>							
                             <p>{{Format de l'heure}} <span class="label label-default" style="font-size : 1em;">
 							<?php
-							echo $RaspBEEConfJson->timeformat;
+							echo $RaspBEEConfJson[timeformat];
 							?>
 							</span></p>							
                             <p>{{TimeZone}} <span class="label label-default" style="font-size : 1em;">
 							<?php
-							echo $RaspBEEConfJson->timezone;
+							echo $RaspBEEConfJson[timezone];
 							?>
 							</span></p>							
                         </div>
@@ -197,20 +195,19 @@ $raspbeecom = new RaspBEECom;
 					</tr>
 					<tbody>
 					<?php
-					foreach ($RaspBEEConfJson->whitelist as $user => $value) {
+					foreach ($RaspBEEConfJson[whitelist] as $user => $value) {
 						if (config::byKey('raspbeeAPIKEY','RaspBEE')==$user)
 							echo '<tr id="'.$user.'" bgcolor="DarkCyan" style="color: white;">';
 						else
 							echo '<tr id="'.$user.'">';
 						echo "<td>".$user."</td>";
-						echo "<td>".$value->name."</td>";
-						echo "<td>".$value->{"create date"}."</td>";
-						echo "<td>".$value->{"last use date"}."</td>";
-						if (config::byKey('raspbeeAPIKEY','RaspBEE')==$user)
-							
+						echo "<td>".$value[name]."</td>";
+						echo "<td>".$value["create date"].".</td>";
+						echo "<td>".$value["last use date"]."</td>";
+						if (config::byKey('raspbeeAPIKEY','RaspBEE')==$user)							
 							echo '<td><span class="label control-label" style="font-size : 1.1em;">{{Clé utilisée par le plugin}}.</span></td>';
 						else
-							echo '<td><a id='.$user.' name='.$value->name.' class="btn btn-danger  deleteRaspBeeUser"><i class="fa fa-minus-circle"></i> {{Supprimer l\'utilisateur}}</a></td>';
+							echo '<td><a id='.$user.' name='.$value[name].' class="btn btn-danger  deleteRaspBeeUser"><i class="fa fa-minus-circle"></i> {{Supprimer l\'utilisateur}}</a></td>';
 						echo "</tr>";
 					}
 					?>

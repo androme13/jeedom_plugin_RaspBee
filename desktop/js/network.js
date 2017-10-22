@@ -101,26 +101,35 @@ $.ajax({
 	action: action,
 			},
 	dataType: 'json',
-	error: function (request, status, error) {
-				$('#div_networkRaspBEEAlert').showAlert({message: error.message, level: 'danger'});
-				handleAjaxError(request, status, error);
+	error: function (resp, status, error) {
+				$('#div_networkRaspBEEAlert').showAlert({message: '{{Erreur}} : '+error+' ('+resp.status+')', level: 'danger'});
+				//handleAjaxError(request, status, error);
 			},
-	success: function (data) {
-		if (data.state != 'ok') {
-			$('#div_networkRaspBEEAlert').showAlert({message: data.message, level: 'danger'});
-		} else
-		{									
-			var dialog_title = '{{Affichage debug RaspBEE en mode raw}}';
-			var dialog_message = '<label class="control-label" > {{infos debug}}</label><br><textarea rows="15" cols="70">'+data.result+'</textarea>';
-			bootbox.dialog({
-				title: dialog_title,
-				message: dialog_message,
-				buttons: {"{{Fermer}}": {
-						callback: function () {}
+	success: function (resp) {		
+		try
+			{
+			var cleanResp = resp.result.message.replace('\"', '"');
+			   console.dir(resp.result.message);
+			}
+			catch(e)
+			{
+			   var cleanResp='invalid json';
+			}							
+			if (resp.state == 'ok') {
+				var dialog_title = '{{Affichage debug RaspBEE en mode raw}}';
+				var dialog_message = '<label class="control-label" > {{infos debug}}</label><br><textarea rows="15" cols="70">'+resp.result.message+'</textarea>';
+				bootbox.dialog({
+					title: dialog_title,
+					message: dialog_message,
+					buttons: {"{{Fermer}}": {
+							callback: function () {}
+						}
 					}
-				}
-			});
-		}
+				});
+
+			} else{
+				$('#div_networkRaspBEEAlert').showAlert({message: '{{Impossible d\'afficher les infos}} : '+HTMLClean(resp.result), level: 'danger'});
+			}
 	} 
 });
 

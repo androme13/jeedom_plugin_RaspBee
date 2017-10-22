@@ -62,17 +62,6 @@ try {
 		}
 	}
 	
-	
-	if (init('action') == 'createDevice') {
-		//error_log("creation du device demande ajax");
-		$resp=RaspBEE::createDevice(init('device'),init('syncType'));
-		if ($resp[state]=="nok"){		
-			ajax::error($resp);
-		} else{
-			ajax::success($resp);
-		}
-	}
-	
 	if (init('action') == 'removeAll') {
 		$resp=RaspBEE::removeAll();
 		if ($resp===false){		
@@ -83,6 +72,9 @@ try {
 	}
 	$resp='';
 	switch (init('action')){
+		case 'createDevice' :
+		$resp=RaspBEE::createDevice(init('device'),init('syncType'));
+		break;
 		case 'deleteRaspBEEUser' :
 		$resp=RaspBEE::deleteRaspBEEUser(init('user'));
 		break;
