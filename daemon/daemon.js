@@ -37,14 +37,14 @@ function cleanexit(){
 	process.exit();
 }
 
-function checkcfgfile (){
+/*function checkcfgfile (){
 	try {
 		return fs.readFileSync(path.resolve(__dirname, 'config/default.json'), 'UTF-8');
 	} catch (err) {
 		console.log ("Problème avec le fichier de configuration :",err);
 		return 0;
 	}
-}
+}*/
 
 function websocketCallBack(jsondata){
 	try {

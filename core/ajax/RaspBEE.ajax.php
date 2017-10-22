@@ -25,14 +25,14 @@ try {
     }
 	ajax::init();
 	
-	if (init('action') == 'getRaspBEEConf') {
+	/*if (init('action') == 'getRaspBEEConf') {
 		$resp=RaspBEE::getRaspBEEConf();
 		if ($resp===false){		
 			ajax::error($resp);
 		} else{
 			ajax::success($resp);
 		}
-	}
+	}*/
 	
 	if (init('action') == 'getRaspBEEGroups') {
 		$resp=RaspBEE::getRaspBEEGroups();
@@ -83,6 +83,9 @@ try {
 		break;
 		case 'getAPIAccess' :
 		$resp=RaspBEE::getApiKey();
+		break;
+		case 'getRaspBEEConf' :
+		$resp=RaspBEE::getRaspBEEConf();
 		break;
 	}
 	if ($resp!='')

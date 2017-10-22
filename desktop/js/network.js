@@ -31,6 +31,9 @@ $('.showDebugInfoBTN').on( "click", function(e) {
 		break;
 	case 'showdebuggroups':
 		showDebug('getRaspBEEGroups');
+		break;	
+	case 'showdebugconfig':
+		showDebug('getRaspBEEConf');
 		break;
 	}
 });

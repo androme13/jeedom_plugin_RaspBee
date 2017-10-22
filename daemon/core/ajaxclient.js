@@ -16,9 +16,9 @@ data: DATA,
 headers: {}
 		},function(err, res, body){
 			try{
-				console.log("data:"+JSON.stringify(DATA));
-				console.log("ajax client jeedom return body:",JSON.stringify(body));
-				console.log("ajax client jeedom return err:",err);
+				//console.log("data:"+JSON.stringify(DATA));
+				//console.log("ajax client jeedom return body:",JSON.stringify(body));
+				//console.log("ajax client jeedom return err:",err);
 				//console.log(res);
 				//console.log(res.statusCode);
 				//console.log(res.statusMessage);

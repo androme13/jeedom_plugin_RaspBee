@@ -130,14 +130,9 @@ class RaspBEE extends eqLogic {
 		$rurlRAW=config::byKey('raspbeeIP','RaspBEE');
 		$rurl = explode(":",config::byKey('raspbeeIP','RaspBEE'));
 		$japikey = jeedom::getApiKey('RaspBEE');
-		$raspbeeCom = new RaspBEECom;
-		$wsconfig = json_decode($raspbeeCom->getConf());
-		//$wsport = $wsconfig->
-		//unset($raspbeecom);
-		//$wsPort= $config->websocketport;
-		error_log('wsport'.$config,3,'/tmp/prob.txt');
+		$raspbeeCom = new RaspBEECom;		
+		$wsconfig = json_decode($raspbeeCom->getConf()->message);
 		$cmd = 'nice -n 19 nodejs ' . $daemon_path . '/daemon.js ' .'apikey='.$japikey . ' jurl='.$jurl . ' rurl='.$rurl[0]. ' wsp='.$wsconfig->websocketport;		
-
 		log::add('RaspBEE', 'info', 'Lancement du démon RAspBEE : ' . $cmd);
 		exec('nohup ' . $cmd . ' >> ' . log::getPathToLog('RaspBEE_node') . ' 2>&1 &');
 		$i = 0;

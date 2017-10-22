@@ -180,6 +180,7 @@ $raspbeecom = new RaspBEECom;
 						<a id="showdebugsensors" name='.$value->name.' class="btn btn-info showDebugInfoBTN"><i class="fa fa-info-circle"></i> {{Afficher les capteurs}}</a>
 						<a id="showdebuglights" name='.$value->name.' class="btn btn-info  showDebugInfoBTN"><i class="fa fa-info-circle"></i> {{Afficher les éclairages}}</a>
 						<a id="showdebuggroups" name='.$value->name.' class="btn btn-info showDebugInfoBTN"><i class="fa fa-info-circle"></i> {{Afficher les groupes}}</a>
+						<a id="showdebugconfig" name='.$value->name.' class="btn btn-info showDebugInfoBTN"><i class="fa fa-info-circle"></i> {{Afficher la config raspbee}}</a>						
                         </div>
                     </div>
 				</div>
