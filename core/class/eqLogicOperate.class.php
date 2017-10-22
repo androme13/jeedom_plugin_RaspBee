@@ -18,16 +18,6 @@ require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
 class eqLogicOperate extends eqLogic {
 	
-	
-	/*function checkConfigFile(){
-		if (!is_file(dirname(__FILE__) . '/../config/devices/ZHASwitch.json')){
-		return false;
-		};
-		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/ZHASwitch.json');
-		if (!is_json($configFile)) {
-			return false;
-		}
-	}*/
 	private $responseHelper = array("error" => 0, "message" => "", "state" => "");
 	
 	public function createDevice($device,$syncType = ''){
@@ -41,7 +31,6 @@ class eqLogicOperate extends eqLogic {
 			$response->error=1;
 			$response->message="Equipement deja existant : <strong>".$eqLogic->name."</strong>";
 			return $response;
-		// return array("state"=> "nok", "message" => "Equipement deja existant : <strong>".$eqLogic->name."</strong>");
 		}
 		
 		}
@@ -64,15 +53,15 @@ class eqLogicOperate extends eqLogic {
 				break;
 			}
 		case "Color light" :{
-				return eqLogicOperate::createColorLight($device,$syncType);
+				return eqLogicOperate::createLight('/../config/devices/ColorLight.json',$device,$syncType);
 				break;
 		}
 		case "Extended color light" :{
-				return eqLogicOperate::createExtendedColorLight($device,$syncType);
+				return eqLogicOperate::createLight('/../config/devices/ExtendedColorLight.json',$device,$syncType);
 				break;
 			}
 		case "Dimmable light" :{
-				return eqLogicOperate::createDimmableLight($device,$syncType);
+				return eqLogicOperate::createLight('/../config/devices/DimmableLight.json',$device,$syncType);
 				break;
 			}
 		case "LightGroup" :{
@@ -89,32 +78,23 @@ class eqLogicOperate extends eqLogic {
 		//return true;
 	}
 	
-	public function createDimmableLight($device,$syncType){
-		if (!is_file(dirname(__FILE__) . '/../config/devices/DimmableLight.json')) return false;
-	
-		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/DimmableLight.json');
+	public function createLight($config='',$device,$syncType){
+		if (!is_file(dirname(__FILE__) . $config)){
+		return false;
+		};
+		$configFile = file_get_contents(dirname(__FILE__) . $config);
 		if (!is_json($configFile)) {
 			return false;
 		}
+		//error_log("createLight ".$device[origID],0);
 		$eqLogic = new eqLogic();
+		$eqLogic = self::setGenericEqLogicConf($eqLogic,$device,$syncType);
 		$eqLogic->setEqType_name('RaspBEE');
 		$eqLogic->setName($device[name]." ".$device[origid]);
-		$eqLogic->setIsEnable(1);
-		$_logical_id = null;
-		$eqLogic->setLogicalId($_logical_id);
-		// on fabrique un DIMMABLE LIGHT
-		$eqLogic->setConfiguration('origid', $device[origid]);
 		$eqLogic->setConfiguration('hascolor', $device[hascolor]);
-		$eqLogic->setConfiguration('manufacturername', $device[manufacturername]);
-		$eqLogic->setConfiguration('reachable', $device[state][reachable]);
-		$eqLogic->setConfiguration('modelid', $device[modelid]);
-		$eqLogic->setConfiguration('swversion', $device[swversion]);
-		$eqLogic->setConfiguration('type', $device[type]);
-		$eqLogic->setConfiguration('uniqueid', $device[uniqueid]);
 		$eqLogic->setConfiguration('colormode', $device[state][colormode]);
-		$eqLogic->setIsVisible(1);
-		$eqLogic->save();
-		return self::setGenericCmdList("DimmableLight.json",$eqLogic,$syncType);
+		$eqLogic->save();			
+		return self::setGenericCmdList(basename($config),$eqLogic,$syncType);		
 	}
 	
 	public function createLightGroup($device,$syncType){
@@ -147,76 +127,14 @@ class eqLogicOperate extends eqLogic {
 		$eqLogic->setEqType_name('RaspBEE');
 		$eqLogic->setName($device[name]." ".$device[origid]);
 		$eqLogic->setIsEnable(1);
+		$eqLogic->setIsVisible(1);
 		$_logical_id = null;
 		$eqLogic->setLogicalId($_logical_id);
-		// on fabrique un LIGHT
 		$eqLogic->setConfiguration('origid', $device[origid]);
 		$eqLogic->setConfiguration('lights', json_encode($device[lights]));		$eqLogic->setConfiguration('devicemembership', json_encode($device[devicemembership]));
 		$eqLogic->setConfiguration('type', $device[type]);
-		$eqLogic->setIsVisible(1);
 		$eqLogic->save();
 		return self::setGenericCmdList("Group.json",$eqLogic,$syncType);
-	}
-	
-	
-	public function createColorLight($device,$syncType){
-		if (!is_file(dirname(__FILE__) . '/../config/devices/ColorLight.json')){
-		return false;
-		};
-		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/ColorLight.json');
-		if (!is_json($configFile)) {
-			return false;
-		}
-		//error_log("createLight ".$device[origID],0);
-		$eqLogic = new eqLogic();
-		$eqLogic->setEqType_name('RaspBEE');
-		$eqLogic->setName($device[name]." ".$device[origid]);
-		$eqLogic->setIsEnable(1);
-		$_logical_id = null;
-		$eqLogic->setLogicalId($_logical_id);
-		// on fabrique un LIGHT
-		$eqLogic->setConfiguration('origid', $device[origid]);
-		$eqLogic->setConfiguration('hascolor', $device[hascolor]);
-		$eqLogic->setConfiguration('manufacturername', $device[manufacturername]);
-		$eqLogic->setConfiguration('reachable', $device[state][reachable]);
-		$eqLogic->setConfiguration('modelid', $device[modelid]);
-		$eqLogic->setConfiguration('swversion', $device[swversion]);
-		$eqLogic->setConfiguration('type', $device[type]);
-		$eqLogic->setConfiguration('uniqueid', $device[uniqueid]);
-		$eqLogic->setConfiguration('colormode', $device[state][colormode]);
-		$eqLogic->setIsVisible(1);
-		$eqLogic->save();			
-		return self::setGenericCmdList("ColorLight.json",$eqLogic,$syncType);
-	}	
-	
-	public function createExtendedColorLight($device,$syncType){
-		if (!is_file(dirname(__FILE__) . '/../config/devices/ExtendedColorLight.json')){
-		return false;
-		};
-		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/ExtendedColorLight.json');
-		if (!is_json($configFile)) {
-			return false;
-		}
-		//error_log("createLight ".$device[origID],0);
-		$eqLogic = new eqLogic();
-		$eqLogic->setEqType_name('RaspBEE');
-		$eqLogic->setName($device[name]." ".$device[origid]);
-		$eqLogic->setIsEnable(1);
-		$_logical_id = null;
-		$eqLogic->setLogicalId($_logical_id);
-		// on fabrique un LIGHT
-		$eqLogic->setConfiguration('origid', $device[origid]);
-		$eqLogic->setConfiguration('hascolor', $device[hascolor]);
-		$eqLogic->setConfiguration('manufacturername', $device[manufacturername]);
-		$eqLogic->setConfiguration('reachable', $device[state][reachable]);
-		$eqLogic->setConfiguration('modelid', $device[modelid]);
-		$eqLogic->setConfiguration('swversion', $device[swversion]);
-		$eqLogic->setConfiguration('type', $device[type]);
-		$eqLogic->setConfiguration('uniqueid', $device[uniqueid]);
-		$eqLogic->setConfiguration('colormode', $device[state][colormode]);
-		$eqLogic->setIsVisible(1);
-		$eqLogic->save();			
-		return self::setGenericCmdList("ExtendedColorLight.json",$eqLogic,$syncType);
 	}
 	
 	public function createGenericDevice($path,$device,$syncType){
@@ -230,16 +148,12 @@ class eqLogicOperate extends eqLogic {
 		$eqLogic = self::setGenericEqLogic($device,$syncType);
 		return self::setGenericCmdList(basename($path),$eqLogic,$syncType);
 	}
-		
-	function setGenericEqLogic($device,$syncType){
-		error_log("synctype: ".$syncType,3,"/tmp/prob.text");
+	
+	function setGenericEqLogicConf($eqLogic,$device,$syncType){
+		//error_log("synctype: ".$syncType,3,"/tmp/prob.text");
 		$syncType=0;
 		switch ($syncType){
 			case 0:
-				$eqLogic = new eqLogic();
-				$eqLogic->setEqType_name('RaspBEE');
-				$eqLogic->setName($device[name]);
-				//$eqLogic->setName($device[name]." ".$device[origid]);
 				$eqLogic->setIsEnable(1);
 				$eqLogic->setIsVisible(1);
 				$_logical_id = null;
@@ -251,6 +165,25 @@ class eqLogicOperate extends eqLogic {
 				$eqLogic->setConfiguration('swversion', $device[swversion]);
 				$eqLogic->setConfiguration('type', $device[type]);
 				$eqLogic->setConfiguration('uniqueid', $device[uniqueid]);
+			break;
+			case 1:
+			break;
+			case 2:
+			break;
+			
+		}		
+		return $eqLogic;		
+	}
+		
+	function setGenericEqLogic($device,$syncType){
+		error_log("synctype: ".$syncType,3,"/tmp/prob.text");
+		$syncType=0;
+		switch ($syncType){
+			case 0:
+				$eqLogic = new eqLogic();
+				$eqLogic = self::setGenericEqLogicConf($eqLogic,$device,$syncType);
+				$eqLogic->setEqType_name('RaspBEE');
+				$eqLogic->setName($device[name]);
 				$eqLogic->batteryStatus($device[config][battery]);
 				$eqLogic->save();
 			break;
@@ -317,11 +250,6 @@ class eqLogicOperate extends eqLogic {
 				}
 			break;
 		}
-		
-		
-
-		//error_log("|setGenericCmdList|",3,"/tmp/rasbee.err");
-
 		$response->state="ok";
 		$response->error=0;
 		$response->message="Commandes ajoutées : <strong>".$cmdSyncCount."</strong>";
