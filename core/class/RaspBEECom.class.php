@@ -100,6 +100,7 @@ class RaspBEECom {
 	}
 
 	public function getAPIAccess(){
+		// méthode 1
 		$opts = [
 			CURLOPT_SSL_VERIFYPEER => false,
 			CURLOPT_FORBID_REUSE   => true,
@@ -111,7 +112,32 @@ class RaspBEECom {
 			CURLOPT_TIMEOUT        => 30,
 			CURLOPT_CONNECTTIMEOUT => 30
 		];
-		return self::genericResponseProcess($opts);
+		$response = self::genericResponseProcess($opts);
+		if ($response->state=="ok")
+			return $response;
+		// si la premère méthode échoue on passe à la seconde
+		//user et pwd par défaut
+		$usr = "delight";
+		$pwd = "delight";
+		//$str = $user.':'.$pwd;
+		//		error_log('hash : '.base64_encode(utf8_encode($usr.':'.$pwd)),3,'/tmp/prob.txt');
+
+		$opts = [
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_FORBID_REUSE   => true,
+			CURLOPT_POSTFIELDS     => "{\"devicetype\":\"jeedomRaspBEEPlugin\"}",
+			CURLOPT_HTTPHEADER     => array('Content-Type: application/json','Authorization: Basic '.base64_encode(utf8_encode($usr.':'.$pwd))),
+			//CURLOPT_HTTPAUTH	=> CURLAUTH_ANY,
+			//CURLOPT_USERPWD => base64_encode($user.':'.$pwd),
+			//'Authorization: Basic '.base64_encode($user.':'.$pwd)
+			CURLOPT_URL            => "http://".$this->ip."/api",
+			CURLOPT_POST		   => true,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_TIMEOUT        => 30,
+			CURLOPT_CONNECTTIMEOUT => 30
+		];
+		$response = self::genericResponseProcess($opts);		
+		return $response;								
 	}
 	
 	public function getConf(){
