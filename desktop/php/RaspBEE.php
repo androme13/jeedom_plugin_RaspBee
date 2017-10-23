@@ -130,12 +130,12 @@ foreach ($eqLogics as $eqLogic) {
 	case "ZHAPressure" :
 		echo '<i class="meteo meteo-nuage-soleil-pluie" style="font-size :6em;color:#767676;"></i>';
 		break;
+	case "Color light" :
+	case "Dimmable light" :
 	case "Extended color light" :
 		echo '<i class="jeedom jeedom-lumiere-off" style="font-size : 6em;color:#767676;"></i>';
 		break;
-	case "Dimmable light" :
-		echo '<i class="jeedom jeedom-lumiere-off" style="font-size : 6em;color:#767676;"></i>';
-		break;
+
 	case "LightGroup" :
 		echo '<i class="fa fa-circle-o" style="font-size : 6em;color:#767676;"></i>';
 		break;	
