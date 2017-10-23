@@ -43,16 +43,16 @@ require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
 								<h4 class="panel-title">
 								{{Types de Synchronisation}}
 								</h4>
-								<input type="radio" id="optionType1" name="optionType" value="limited" disabled>
+								<input type="radio" id="optionType1" name="optionType" value="limited" >
 								<label for="optionType1">{{Limitée}}.</label><br>
 								
 								<input type="radio" id="optionType2" name="optionType" value="basic" >
 								<label for="optionType1">{{Normale}} ({{recommandée}}).</label><br>
 
-								<input type="radio" id="optionType3" name="optionType" value="renew" disabled>
+								<input type="radio" id="optionType3" name="optionType" value="renew" >
 								<label for="optionType2">{{Totale}}.</label><br>
 								
-								<input type="radio" id="optionType4" name="optionType" value="renewbutidandname" disabled>
+								<input type="radio" id="optionType4" name="optionType" value="renewbutidandname" >
 								<label for="optionType3">{{Partielle}}.</label><br>
 
 							</div>

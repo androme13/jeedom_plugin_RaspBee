@@ -25,14 +25,14 @@ try {
     }
 	ajax::init();
 	
-	if (init('action') == 'removeAll') {
+	/*if (init('action') == 'removeAll') {
 		$resp=RaspBEE::removeAll();
 		if ($resp===false){		
 			ajax::error($resp);
 		} else{
 			ajax::success($resp);
 		}
-	}
+	}*/
 	$resp='';
 	switch (init('action')){
 		case 'createDevice' :
