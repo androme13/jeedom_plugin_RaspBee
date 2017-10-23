@@ -32,7 +32,6 @@ class RaspBEECom {
     }	
 	
 	public function deleteRaspBEEUser($user=''){
-		$ch = curl_init();
 		$opts = [
 			CURLOPT_SSL_VERIFYPEER => false,
 			CURLOPT_FORBID_REUSE   => true,
@@ -43,7 +42,7 @@ class RaspBEECom {
 			CURLOPT_TIMEOUT        => 30,
 			CURLOPT_CONNECTTIMEOUT => 30
 		];
-		return self::genericResponseProcess($ch,$opts);
+		return self::genericResponseProcess($opts);
 	}
 	
 	public function findRaspBEE(){
