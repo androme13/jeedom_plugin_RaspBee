@@ -111,8 +111,9 @@ $.ajax({
 	success: function (resp) {		
 		try
 			{
-			var cleanResp = resp.result.message.replace('\"', '"');
-			   console.dir(resp.result.message);
+			console.dir(resp);
+			var cleanResp = resp.result.replace('\"', '"');
+			   //console.dir(resp);
 			}
 			catch(e)
 			{
@@ -120,7 +121,7 @@ $.ajax({
 			}							
 			if (resp.state == 'ok') {
 				var dialog_title = '{{Affichage debug RaspBEE en mode raw}}';
-				var dialog_message = '<label class="control-label" > {{infos debug}}</label><br><textarea rows="15" cols="70">'+resp.result.message+'</textarea>';
+				var dialog_message = '<label class="control-label" > {{infos debug}}</label><br><textarea rows="15" cols="70">'+cleanResp+'</textarea>';
 				bootbox.dialog({
 					title: dialog_title,
 					message: dialog_message,

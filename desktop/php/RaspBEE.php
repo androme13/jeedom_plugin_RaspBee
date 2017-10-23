@@ -140,7 +140,7 @@ foreach ($eqLogics as $eqLogic) {
 		echo '<i class="fa fa-circle-o" style="font-size : 6em;color:#767676;"></i>';
 		break;	
 	default:
-		echo '<i class="jeedom jeedom-lumiere-off" style="font-size : 6em;color:#767676;"></i>';
+		echo '<i class="fa fa-question-circle" style="font-size : 6em;color:#767676;"></i>';
 	}
 	//
 	echo '<br>';

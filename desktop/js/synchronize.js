@@ -70,10 +70,11 @@ function syncDevices(type,action,syncType){
 		error: function (resp, status, error) {
 			$('#div_syncAlert').showAlert({message: '{{Erreur}} : '+error+' ('+resp.status+')', level: 'danger'});		
 		},		
-		success: function (resp) {		
+		success: function (resp) {
+		//console.dir(resp);
 		try
 			{
-			var cleanResp = resp.result.message.replace('\"', '"');
+			var cleanResp = resp.result.replace('\"', '"');
 			}
 			catch(e)
 			{

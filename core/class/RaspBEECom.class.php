@@ -118,23 +118,7 @@ class RaspBEECom {
 		//user et pwd par défaut
 		$usr = "delight";
 		$pwd = "delight";
-		//$str = $user.':'.$pwd;
-		//		error_log('hash : '.base64_encode(utf8_encode($usr.':'.$pwd)),3,'/tmp/prob.txt');
-
-		$opts = [
-			CURLOPT_SSL_VERIFYPEER => false,
-			CURLOPT_FORBID_REUSE   => true,
-			CURLOPT_POSTFIELDS     => "{\"devicetype\":\"jeedomRaspBEEPlugin\"}",
-			CURLOPT_HTTPHEADER     => array('Content-Type: application/json','Authorization: Basic '.base64_encode(utf8_encode($usr.':'.$pwd))),
-			//CURLOPT_HTTPAUTH	=> CURLAUTH_ANY,
-			//CURLOPT_USERPWD => base64_encode($user.':'.$pwd),
-			//'Authorization: Basic '.base64_encode($user.':'.$pwd)
-			CURLOPT_URL            => "http://".$this->ip."/api",
-			CURLOPT_POST		   => true,
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_TIMEOUT        => 30,
-			CURLOPT_CONNECTTIMEOUT => 30
-		];
+		$opts[CURLOPT_HTTPHEADER] = array('Content-Type: application/json','Authorization: Basic '.base64_encode(utf8_encode($usr.':'.$pwd)));
 		$response = self::genericResponseProcess($opts);		
 		return $response;								
 	}
@@ -148,9 +132,7 @@ class RaspBEECom {
 	}
 	
 	public function getGroups(){
-		//error_log("|synchro groupes|",3,"/tmp/rasbee.err");
-		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/groups");
-		
+		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/groups");		
 	}
 		
 	public function getLights(){

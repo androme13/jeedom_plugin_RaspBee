@@ -25,34 +25,6 @@ try {
     }
 	ajax::init();
 	
-	if (init('action') == 'getRaspBEEGroups') {
-		$resp=RaspBEE::getRaspBEEGroups();
-		if ($resp===false){		
-			ajax::error($resp);
-		} else{
-			ajax::success($resp);
-		}
-	}
-	
-	if (init('action') == 'getRaspBEESensors') {
-		$resp=RaspBEE::getRaspBEESensors();
-		if ($resp===false){		
-			ajax::error($resp);
-		} else{
-			ajax::success($resp);
-		}
-	}
-	
-		
-	if (init('action') == 'getRaspBEELights') {
-		$resp=RaspBEE::getRaspBEELights();
-		if ($resp===false){		
-			ajax::error($resp);
-		} else{
-			ajax::success($resp);
-		}
-	}
-	
 	if (init('action') == 'removeAll') {
 		$resp=RaspBEE::removeAll();
 		if ($resp===false){		
@@ -78,6 +50,18 @@ try {
 		case 'getRaspBEEConf' :
 		$resp=RaspBEE::getRaspBEEConf();
 		break;
+		case 'getRaspBEEGroups' :
+		$resp=RaspBEE::getRaspBEEGroups();
+		break;
+		case 'getRaspBEESensors' :
+		$resp=RaspBEE::getRaspBEESensors();
+		break;
+		case 'getRaspBEELights' :
+		$resp=RaspBEE::getRaspBEELights();
+		break;	
+		case 'removeAll' :
+		$resp=RaspBEE::removeAll();
+		break;				
 	}
 	if ($resp!='')
 		if ($resp->state=="nok") ajax::error($resp->message);
