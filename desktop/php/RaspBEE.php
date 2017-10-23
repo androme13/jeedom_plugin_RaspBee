@@ -158,10 +158,9 @@ foreach ($eqLogics as $eqLogic) {
 	case "ZHAPressure" :
 		echo '{{Capteur de pression}}';
 		break;
-	case "Extended color light" :
-		echo '{{Eclairage}}';
-		break;
+	case "Color light" :
 	case "Dimmable light" :
+	case "Extended color light" :
 		echo '{{Eclairage}}';
 		break;
 	case "LightGroup" :

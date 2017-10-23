@@ -26,28 +26,42 @@ require_once dirname(__FILE__).'/../core/class/RaspBEECom.class.php';
 ?>
 <div id='div_configAlert' style="display: none;"></div>
 <form class="form-horizontal">
-<fieldset>
-<legend><i class="fa fa-list-alt"></i> {{Passerelle}}</legend>
+<div class="tab-pane active" id="summary_network">
+	<span><i class="fa fa-info-circle"></i> {{Une fois la passerelle saisie, sauvegardez avant de demander une clé API RaspBEE et sauvegardez de nouveau}}.</span>
+	<div class="panel panel-primary">
+		<div class="panel-heading"><h4 class="panel-title"><i class="fa techno-freebox"></i> {{Passerelle}}</h4></div>
+		<div class="panel-body">
+		<div class="form-group">
+		<label class="raspbeeGWRefresh col-lg-4 control-label">{{Adresse IP:PORT du pont RaspBEE}}</label>
+		<div class="col-lg-2">
+		<input class="configKey form-control" id="raspbeeGWIP" data-l1key="raspbeeIP" />				
+		</div>		
+		<div class="col-lg-5">
+		<a class="btn btn-success tooltips" id="bt_searchRaspBEE" title="{{Cherche la première passerelle RaspBee sur le réseau}}"><i class="fa fa-refresh"></i></a>
+		</div>
+		</div>
+		</div>
+	</div>
+	<div class="panel panel-primary">
+		<div class="panel-heading"><h4 class="panel-title"><i class="fa securite-key1"></i> {{Clé API}}</h4></div>
+		<div class="panel-body">
+		<input type="radio" id="method1" name="method" value="1">
+    <label for="genderChoice1">Méthode 1</label>
 
-<div class="form-group">
-<label class="raspbeeGWRefresh col-lg-4 control-label">{{Adresse IP:PORT du pont RaspBEE}}</label>
-<div class="col-lg-2">
-<input class="configKey form-control" id="raspbeeGWIP" data-l1key="raspbeeIP" />				
-</div>		
-<div class="col-lg-5">
-<a class="btn btn-success tooltips" id="bt_searchRaspBEE" title="{{Cherche la première passerelle RaspBee sur le réseau}}"><i class="fa fa-refresh"></i></a>
+    <input type="radio" id="method2" name="method" value="2">
+    <label for="genderChoice2">Méthode 2</label>
+		<div class="form-group">
+		<label class="col-lg-4 control-label">{{Clé API RaspBEE}}</label>
+		<div class="col-lg-2">
+		<input disabled class="configKey form-control" id="raspbeeAPIKEY" data-l1key="raspbeeAPIKEY"/>
+		</div>		
+		<div class="col-lg-5">
+		<a class="btn btn-info tooltips" id="bt_raspbeeGETNEWKEY" title="{{Demande une nouvelle cléf API}}" disabled><i class="fa fa-refresh"></i></a>
+		</div>
+		</div>
+		</div>
+	</div>
 </div>
-</div>
-<div class="form-group">
-<label class="col-lg-4 control-label">{{Clé API RaspBEE}}</label>
-<div class="col-lg-2">
-<input disabled class="configKey form-control" id="raspbeeAPIKEY" data-l1key="raspbeeAPIKEY"/>
-</div>
-<div class="col-lg-5">
-<a class="btn btn-info tooltips" id="bt_raspbeeGETNEWKEY" title="{{Demande une nouvelle cléf API}}" disabled><i class="fa fa-refresh"></i></a>
-</div>		
-</div>
-<span><i class="fa fa-info-circle"></i> {{Une fois la passerelle saisie, sauvegardez avant de demander une clé API RaspBEE et sauvegardez de nouveau}}.</span>
 <legend><i class="fa fa-list-alt"></i> {{Général}}</legend>
 <div class="form-group">
 <label class="col-lg-4 control-label">{{Supprimer automatiquement les périphériques exclus de la passerelle}}</label>
@@ -55,7 +69,6 @@ require_once dirname(__FILE__).'/../core/class/RaspBEECom.class.php';
 <input type="checkbox" class="configKey" data-l1key="autoRemoveExcludeDevice" />
 </div>
 </div>
-</fieldset>
 </form>
 <script>
 

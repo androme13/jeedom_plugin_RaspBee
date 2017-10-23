@@ -32,30 +32,18 @@ if (!is_object($results)) {
 }
 
 if ($results->type == "sensors"){
-	
-	// on traite l'info batterie d'un device
-	//error_log("|action sensor : ".json_encode($results),3,"/tmp/prob.txt");
-	//error_log("|traitement batterie type : ".$results->info->battery,3,"/tmp/prob.txt");
-	//error_log("|fin traitement batterie: ",3,"/tmp/prob.txt");
 	if (is_int($results->info->battery))
 	{	
 		//error_log("traitement batterie: ".json_encode($results),3,"/tmp/prob.txt");
-		foreach (eqLogic::byType('RaspBEE') as $equipement) {
-			
+		foreach (eqLogic::byType('RaspBEE') as $equipement) {		
 			$type = $equipement->getConfiguration('type');
-			// le type ne doit pas comporter le mot light (eviter de se melanger dans le originid qui peuvent être identiques entre les light et le reste, donc on teste)
+			// le type ne doit pas comporter le mot light (eviter de se melanger dans le originid qui peuvent être identiques entre les light et les sensors, donc on teste)
 			if (strpos(strtolower($type),"light")===false){
 				//error_log("traitement batterie type eq: ".$equipement->getConfiguration('type'),3,"/tmp/prob.txt");
 				if ($equipement->getConfiguration('origid')==$results->id){
 					$equipement->batteryStatus($results->info->battery);
 					break;
-			//foreach ($equipement->getCmd('info') as $cmd){
-				// on set le niveau de batterie de l'eqlogic
-				
-
-				//erro_log("batterie: ".$results->info->battery,3,"/tmp/prob.txt");
-				//}
-			}
+				}	
 			}			
 		}
 	}else
@@ -105,8 +93,7 @@ if($results->type == "lights"){
 								// si la valeur est differente de la valeur stockée
 								if ($cmd2->getConfiguration('lastCmdValue')!=$key){
 									$cmd2->setConfiguration('lastCmdValue',$key);
-									$cmd2->save();
-									
+									$cmd2->save();									
 									// on traite le changement de couleur du widget
 									// on recuperes aussi toutes les valeurs hue sat et bri (hsl) afin d'envoyer un hexrgb au widget;
 									// enlever (|| $actioncmd=='bri') pour eviter variations sur action couleur.
