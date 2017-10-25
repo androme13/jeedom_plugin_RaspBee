@@ -20,10 +20,10 @@ class eqLogicOperate extends eqLogic {
 	
 	private $responseHelper = array("error" => 0, "message" => "", "state" => "");
 	
-	public function createDevice($device,$syncType="basic"){
+	public function createEqLogic($device,$syncType="basic"){
 		//error_log("|eqlogic create device|".json_encode($device[type])."|",3,"/tmp/prob.txt");
 		$response = $responseHelper;
-		$mode = false;
+		$eqLogicMode = false;
 		$eqLogic=null;
 		// on check si l'eqLogic existe
 		foreach (eqlogic::byType('RaspBEE') as $eqLogicPass){			
@@ -34,7 +34,7 @@ class eqLogicOperate extends eqLogic {
 				$response->message="Equipement deja existant : <strong>".$eqLogic->name."</strong>";
 				return $response;*/
 				error_log("|eqlogic create device deja existant|".$eqLogicPass->getName()."|",3,"/tmp/prob.txt");
-				$mode = true;
+				$eqLogicMode = true;
 				$eqLogic = $eqLogicPass;
 				break;
 			}		
@@ -43,35 +43,35 @@ class eqLogicOperate extends eqLogic {
 		//error_log("|eqlogic create device NON existant|".$device[type]."|",3,"/tmp/prob.txt");
 		switch ($device[type]){
 		case "ZHASwitch" :{
-				return eqLogicOperate::createGenericDevice('/../config/devices/ZHASwitch.json',$eqLogic,$device,$syncType,$mode);
+				return eqLogicOperate::createGenericDevice('/../config/devices/ZHASwitch.json',$eqLogic,$device,$syncType,$eqLogicMode);
 				break;
 			}
 		case "ZHATemperature" :{
-				return eqLogicOperate::createGenericDevice('/../config/devices/ZHATemperature.json',$eqLogic,$device,$syncType,$mode);
+				return eqLogicOperate::createGenericDevice('/../config/devices/ZHATemperature.json',$eqLogic,$device,$syncType,$eqLogicMode);
 				break;
 			}
 		case "ZHAHumidity" :{
-				return eqLogicOperate::createGenericDevice('/../config/devices/ZHAHumidity.json',$eqLogic,$device,$syncType,$mode);
+				return eqLogicOperate::createGenericDevice('/../config/devices/ZHAHumidity.json',$eqLogic,$device,$syncType,$eqLogicMode);
 				break;
 			}
 		case "ZHAPressure" :{
-				return eqLogicOperate::createGenericDevice('/../config/devices/ZHAPressure.json',$eqLogic,$device,$syncType,$mode);
+				return eqLogicOperate::createGenericDevice('/../config/devices/ZHAPressure.json',$eqLogic,$device,$syncType,$eqLogicMode);
 				break;
 			}
 		case "Color light" :{
-				return eqLogicOperate::createLight('/../config/devices/ColorLight.json',$eqLogic,$device,$syncType,$mode);
+				return eqLogicOperate::createLight('/../config/devices/ColorLight.json',$eqLogic,$device,$syncType,$eqLogicMode);
 				break;
 		}
 		case "Extended color light" :{
-				return eqLogicOperate::createLight('/../config/devices/ExtendedColorLight.json',$eqLogic,$device,$syncType,$mode);
+				return eqLogicOperate::createLight('/../config/devices/ExtendedColorLight.json',$eqLogic,$device,$syncType,$eqLogicMode);
 				break;
 			}
 		case "Dimmable light" :{
-				return eqLogicOperate::createLight('/../config/devices/DimmableLight.json',$eqLogic,$device,$syncType,$mode);
+				return eqLogicOperate::createLight('/../config/devices/DimmableLight.json',$eqLogic,$device,$syncType,$eqLogicMode);
 				break;
 			}
 		case "LightGroup" :{
-				return eqLogicOperate::createLightGroup('/../config/devices/Group.json',$eqLogic,$device,$syncType,$mode);
+				return eqLogicOperate::createLightGroup('/../config/devices/Group.json',$eqLogic,$device,$syncType,$eqLogicMode);
 				break;
 			}
 		default : {
@@ -84,7 +84,7 @@ class eqLogicOperate extends eqLogic {
 		//return true;
 	}
 	
-	public function createLight($config='',$eqLogic,$device,$syncType="basic",$mode){
+	public function createLight($config='',$eqLogic,$device,$syncType="basic",$eqLogicMode){
 		if (!is_file(dirname(__FILE__) . $config)){
 		return false;
 		};
@@ -92,7 +92,7 @@ class eqLogicOperate extends eqLogic {
 		if (!is_json($configFile)) {
 			return false;
 		}			
-		if ($mode ==false && $eqLogic==null){
+		if ($eqLogicMode ==false && $eqLogic==null){
 			$eqLogic = new eqLogic();
 			$eqLogic->setIsEnable(1);
 			$eqLogic->setIsVisible(1);
@@ -105,9 +105,9 @@ class eqLogicOperate extends eqLogic {
 			case "limited" :
 			break;
 			case "basic" :			
-				$eqLogic = self::setGenericEqLogicConf($eqLogic,$device,$syncType,$mode);
-				$eqLogic = self::checkAndSetConfiguration($eqLogic,'hascolor',$device[hascolor],$syncType);
-				$eqLogic = self::checkAndSetConfiguration($eqLogic,'colormode',$device[state][colormode],$syncType);
+				$eqLogic = self::setGenericEqLogicConf($eqLogic,$device,$syncType,$eqLogicMode);
+				$eqLogic = self::checkAndSetEqLogicConfiguration($eqLogic,'hascolor',$device[hascolor],$syncType);
+				$eqLogic = self::checkAndSetEqLogicConfiguration($eqLogic,'colormode',$device[state][colormode],$syncType);
 				$eqLogic->save();
 			break;
 			case "renew" :
@@ -118,7 +118,7 @@ class eqLogicOperate extends eqLogic {
 		return self::setGenericCmdList(basename($config),$eqLogic,$syncType);			
 	}
 	
-	public function createLightGroup($config='',$eqLogic,$device,$syncType="basic",$mode){
+	public function createLightGroup($config='',$eqLogic,$device,$syncType="basic",$eqLogicMode){
 		//error_log("|createLightGroup syncType| ".$syncType,3,"/tmp/prob.txt");
 
 		if (!is_file(dirname(__FILE__) . $config)){
@@ -131,7 +131,7 @@ class eqLogicOperate extends eqLogic {
 		}
 		
 		
-		if ($mode == false && $eqLogic==null){
+		if ($eqLogicMode == false && $eqLogic==null){
 			$eqLogic = new eqLogic();
 			$eqLogic->setIsEnable(1);
 			$eqLogic->setIsVisible(1);
@@ -144,9 +144,9 @@ class eqLogicOperate extends eqLogic {
 			case "limited" :
 			break;
 			case "basic" :			
-				$eqLogic = self::setGenericEqLogicConf($eqLogic,$device,$syncType,$mode);
-				$eqLogic = self::checkAndSetConfiguration($eqLogic,'lights',json_encode($device[lights]),$syncType);
-				$eqLogic = self::checkAndSetConfiguration($eqLogic,'devicemembership',json_encode($device[devicemembership]),$syncType);
+				$eqLogic = self::setGenericEqLogicConf($eqLogic,$device,$syncType,$eqLogicMode);
+				$eqLogic = self::checkAndSetEqLogicConfiguration($eqLogic,'lights',json_encode($device[lights]),$syncType);
+				$eqLogic = self::checkAndSetEqLogicConfiguration($eqLogic,'devicemembership',json_encode($device[devicemembership]),$syncType);
 				$eqLogic->save();
 			break;
 			case "renew" :
@@ -193,7 +193,7 @@ class eqLogicOperate extends eqLogic {
 		//return self::setGenericCmdList("Group.json",$eqLogic,$syncType);
 	}
 	
-	public function createGenericDevice($path,$eqLogic=null,$device,$syncType="basic",$mode){
+	public function createGenericDevice($path,$eqLogic=null,$device,$syncType="basic",$eqLogicMode){
 		if (!is_file(dirname(__FILE__) . $path)){
 		return false;
 		};
@@ -201,18 +201,18 @@ class eqLogicOperate extends eqLogic {
 		if (!is_json($configFile)) {
 			return false;
 		}
-		$eqLogic = self::setGenericEqLogic($eqLogic,$device,$syncType,$mode);
-		return self::setGenericCmdList(basename($path),$eqLogic,$syncType,$mode);
+		$eqLogic = self::setGenericEqLogic($eqLogic,$device,$syncType,$eqLogicMode);
+		return self::setGenericCmdList(basename($path),$eqLogic,$syncType,$eqLogicMode);
 	}
 	
 	
-	private function checkAndSetConfiguration($eqLogic=null,$attr,$value,$syncType="basic"){
+	private function checkAndSetEqLogicConfiguration($eqLogic=null,$attr,$value,$syncType="basic"){
 		
 		switch ($syncType){
 			case "limited" :
 			break;
 			case "basic" :
-			error_log("|checkAndSetConfiguration attr|".$eqLogic->getConfiguration($attr),3,"/tmp/rasbee.err");
+			//error_log("|checkAndSetEqLogicConfiguration attr|".$eqLogic->getConfiguration($attr),3,"/tmp/rasbee.err");
 				$eqLogic->setConfiguration($attr, $value);
 			break;
 			case "renew" :
@@ -223,19 +223,19 @@ class eqLogicOperate extends eqLogic {
 		return $eqLogic;
 	}
 	
-	function setGenericEqLogicConf($eqLogic=null,$device,$syncType="basic",$mode){
+	function setGenericEqLogicConf($eqLogic=null,$device,$syncType="basic",$eqLogicMode){
 		//error_log("synctype: ".$syncType,3,"/tmp/prob.text");
 		switch ($syncType){
 			case "limited" :
 			break;
 			case "basic" :
-				self::checkAndSetConfiguration($eqLogic,'origid',$device[origid],$syncType);
-				self::checkAndSetConfiguration($eqLogic,'manufacturername',$device[manufacturername],$syncType);
-				self::checkAndSetConfiguration($eqLogic,'modelid',$device[modelid],$syncType);
-				self::checkAndSetConfiguration($eqLogic,'reachable',$device[reachable],$syncType);
-				self::checkAndSetConfiguration($eqLogic,'swversion',$device[swversion],$syncType);
-				self::checkAndSetConfiguration($eqLogic,'type',$device[type],$syncType);
-				self::checkAndSetConfiguration($eqLogic,'uniqueid',$device[uniqueid],$syncType);
+				self::checkAndSetEqLogicConfiguration($eqLogic,'origid',$device[origid],$syncType);
+				self::checkAndSetEqLogicConfiguration($eqLogic,'manufacturername',$device[manufacturername],$syncType);
+				self::checkAndSetEqLogicConfiguration($eqLogic,'modelid',$device[modelid],$syncType);
+				self::checkAndSetEqLogicConfiguration($eqLogic,'reachable',$device[reachable],$syncType);
+				self::checkAndSetEqLogicConfiguration($eqLogic,'swversion',$device[swversion],$syncType);
+				self::checkAndSetEqLogicConfiguration($eqLogic,'type',$device[type],$syncType);
+				self::checkAndSetEqLogicConfiguration($eqLogic,'uniqueid',$device[uniqueid],$syncType);
 			break;
 			case "renew" :
 			break;
@@ -245,10 +245,10 @@ class eqLogicOperate extends eqLogic {
 		return $eqLogic;		
 	}
 		
-	function setGenericEqLogic($eqLogic=null,$device,$syncType="basic",$mode){
+	function setGenericEqLogic($eqLogic=null,$device,$syncType="basic",$eqLogicMode){
 		error_log("synctype: ".$syncType,3,"/tmp/prob.text");
 
-		if ($mode == false && $eqLogic==null){
+		if ($eqLogicMode == false && $eqLogic==null){
 			$eqLogic = new eqLogic();
 			$eqLogic->setIsEnable(1);
 			$eqLogic->setIsVisible(1);
@@ -262,7 +262,7 @@ class eqLogicOperate extends eqLogic {
 			case "limited" :
 			break;
 			case "basic" :			
-				$eqLogic = self::setGenericEqLogicConf($eqLogic,$device,$syncType,$mode);
+				$eqLogic = self::setGenericEqLogicConf($eqLogic,$device,$syncType,$eqLogicMode);
 				$eqLogic->save();
 			break;
 			case "renew" :
@@ -273,24 +273,21 @@ class eqLogicOperate extends eqLogic {
 		return $eqLogic;		
 	}
 	
-	function setGenericCmdList($file=null,$eqLogic=null,$syncType=0,$mode){
-		
-		if ($file == null ||$eqLogic==null) return false;
-		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/'.$file);
-		if (!is_json($configFile)) return false;
-		$model = json_decode($configFile, true);
-		$commands = $model['commands'];
-		$response = $responseHelper;
-		$cmdSyncCount = 0;
-		switch ($syncType){			
-			case 0:
-				foreach ($model['commands'] as $command) {
-					$RaspBEECmd = new RaspBEECmd();
-					$RaspBEECmd->setName($command[name]);
-					$RaspBEECmd->setLogicalId($command[name]);
-					$RaspBEECmd->setEqLogic_id($eqLogic->getId());
-					//error_log("|isvisible|".$command[isVisible],3,"/tmp/prob.txt");
-					if (array_key_exists('isVisible', $command)) {
+	function setGenericCmd($eqLogic=null,$cmdPass,$command,$syncType="basic",$cmdMode){
+		error_log("setGenericCmd synctype: ".$syncType,3,"/tmp/prob.text");
+
+		if ($cmdMode == false && $cmdPass==null){
+			$RaspBEECmd = new RaspBEECmd();
+			$RaspBEECmd->setName($command[name]);
+			$RaspBEECmd->setLogicalId($command[name]);
+			$RaspBEECmd->setEqLogic_id($eqLogic->getId());
+		} else
+			$RaspBEECmd = $cmdPass;
+		switch ($syncType){
+			case "limited" :
+			break;
+			case "basic" :			
+				if (array_key_exists('isVisible', $command)) {
 						$RaspBEECmd->setIsVisible($command[isVisible]);
 					}
 					if (array_key_exists('isHistorized', $command)) {
@@ -304,7 +301,6 @@ class eqLogicOperate extends eqLogic {
 						if (array_key_exists('dashboard',$command[template])){
 							$RaspBEECmd->setTemplate('dashboard',$command[template][dashboard]);
 						}
-						//if ($command[template][mobile])
 						if (array_key_exists('mobile',$command[template])){
 							$RaspBEECmd->setTemplate('mobile',$command[template][mobile]);
 						}
@@ -323,14 +319,76 @@ class eqLogicOperate extends eqLogic {
 						$RaspBEECmd->setConfiguration($command,$key);				
 					}				
 					$RaspBEECmd->save();
-					$cmdSyncCount++;
-				}
+					//$cmdAddCount++;
+			break;
+			case "renew" :
+			break;
+			case "renewbutidandname" :
 			break;
 		}
+		return $RaspBEECmd;		
+	}
+	
+	
+	
+	
+	function setGenericCmdList($file=null,$eqLogic=null,$syncType=0,$eqLogicMode){
+		
+		if ($file == null ||$eqLogic==null) return false;
+		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/'.$file);
+		if (!is_json($configFile)) return false;
+		$eqLogicModel = json_decode($configFile, true);
+		$commands = $eqLogicModel['commands'];
+		
+		$response = $responseHelper;
+		$cmdAddCount = 0;
+		$cmdNotTouchedCount =0;
+		$cmdRemoveCount =0;
+		
+				foreach ($eqLogicModel['commands'] as $command) {
+					// on check si la commande existe ou pas
+					$cmdMode = false;
+					$cmdPass = null;
+					if ($eqLogic!=null)
+					foreach ($eqLogic->getCmd(null,null,null,true) as $checkCmd) {
+						if (($checkCmd->getType() === $command[type]) && ($checkCmd->getConfiguration("fieldname") === $command[configuration][fieldname]) && ($checkCmd->getName() === $command[name])){
+						error_log("|commande existante|".$checkCmd->getName(),3,"/tmp/prob.txt");
+						$cmdMode = true;
+						$cmdPass = $checkCmd;
+						break;
+						}
+	
+					}
+					switch ($syncType){
+						case "limited" :
+						break;
+						case "basic" :
+							// si la commande n'existe pas
+							if ($cmdMode===false){
+							error_log("|ajout de la commande|".$command[name],3,"/tmp/prob.txt");
+							$cmd = self::setGenericCmd($eqLogic,$cmdPass,$command,$syncType,$cmdMode);
+							$cmdAddCount++;
+							}
+							else
+							{
+							error_log("|commande non ajoutée|".$command[name],3,"/tmp/prob.txt");	
+							$cmdNotTouchedCount++;
+							}
+						break;
+						case "renew" :
+						break;
+						case "renewbutidandname" :
+						break;
+					}
+
+				}
 		$response->state="ok";
 		$response->error=0;
-		$response->message="Commandes ajoutées : <strong>".$cmdSyncCount."</strong>";
+		$response->message='{"notTouched":'.$cmdNotTouchedCount.', "added":'.$cmdAddCount.', "removed":'.$cmdRemoveCount.'}';
 		return $response;		
+	}
+	
+	function setGenericCommand($eqLogic=null,$device,$syncType="basic",$eqLogicMode){
 	}
 }
 

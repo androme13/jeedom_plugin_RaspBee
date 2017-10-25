@@ -87,7 +87,7 @@ function syncDevices(type,action,syncType){
 					for (var device in devices) {
 						devices[device].origid=device;
 						//console.dir(devices[device]);
-						createDevice(devices[device],type,syncType);										
+						createEqLogic(devices[device],type,syncType);										
 					}
 				}	
 
@@ -102,7 +102,7 @@ function syncDevices(type,action,syncType){
 //code css
 //https://makina-corpus.com/blog/metier/2014/construire-un-tree-view-en-css-pur
 
-function createDevice(device,type,syncType){
+function createEqLogic(device,type,syncType){
 	//console.dir(device);
 	var deviceName=device.name.replace(/ /g,'')+device.etag;
 	var treechild = '<li class="tree" style="list-style:none;" id="'+deviceName+'"><div id="'+deviceName+'Icon" class="fa fa-refresh"></div> '+device.name+'</li>';
@@ -111,7 +111,7 @@ function createDevice(device,type,syncType){
 		type: "POST", 
 		url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
 		data: {
-			action: "createDevice",
+			action: "createEqLogic",
 			device: device,
 			syncType: syncType
 		},

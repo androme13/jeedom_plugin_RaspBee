@@ -35,8 +35,8 @@ try {
 	}*/
 	$resp='';
 	switch (init('action')){
-		case 'createDevice' :
-		$resp=RaspBEE::createDevice(init('device'),init('syncType'));
+		case 'createEqLogic' :
+		$resp=RaspBEE::createEqLogic(init('device'),init('syncType'));
 		break;
 		case 'deleteRaspBEEUser' :
 		$resp=RaspBEE::deleteRaspBEEUser(init('user'));

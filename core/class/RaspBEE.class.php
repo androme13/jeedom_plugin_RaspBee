@@ -262,9 +262,9 @@ class RaspBEE extends eqLogic {
 	}
 
 	
-	public function syncEqLogicWithRaspBEE($_logical_id = null, $_exclusion = 0){
-		return eqLogicOperate::createDevice();
-	}
+	/*public function syncEqLogicWithRaspBEE($_logical_id = null, $_exclusion = 0){
+		return eqLogicOperate::createEqLogic();
+	}*/
 		
 	public function deleteRaspBEEUser($user){
 		$raspbeecom = new RaspBEECom;
@@ -318,9 +318,9 @@ class RaspBEE extends eqLogic {
 		return $result;
 	}
 	
-	public function createDevice($device,$syncType){
-		//error_log("createDevice pass");
-		return eqLogicOperate::createDevice($device,$syncType);
+	public function createEqLogic($device,$syncType){
+		//error_log("createEqLogic pass");
+		return eqLogicOperate::createEqLogic($device,$syncType);
 	}
 	
 	public function removeAll(){
