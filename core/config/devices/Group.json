@@ -10,20 +10,6 @@
 	"multideviceids": "",	
     "commands": [
 			{
-				"name": "test", 
-				"type": "info", 
-				"isVisible": 0, 
-				"isHistorized": 0,
-				"logicalId": "test_state",				
-				"configuration" :{
-					"fieldname" : "test"
-				}, 
-				"subtype": "other", 
-				"display": {
-					"generic_type": "DONT"
-				}
-			},
-			{
 				"name": "Mode couleur", 
 				"type": "info", 
 				"isVisible": 0, 
