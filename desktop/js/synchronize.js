@@ -127,23 +127,39 @@ function createEqLogic(device,type,syncType){
 		
 		success: function (resp) {		
 			try	{
-				//console.dir(resp);
+				
 					var cleanResp = resp.result.replace('\"', '"');
+					console.dir(cleanResp);
+					var jsonResp = JSON.parse(cleanResp);
 				   
 				}
 				catch(e)
 				{
 				   var cleanResp='invalid json';
 				}							
-				if (resp.state == 'ok') {
-					$('#'+deviceName+'Icon').attr("class", "fa fa-check");
-					$('#'+deviceName+'Icon').css("color", "green");
-					$('#'+deviceName).append(' <span style="font-size:80%">Equipement ajouté ('+cleanResp+')</span>');
-
-				} else{
+				if (jsonResp.cmdError == 3) {
 					$('#'+deviceName+'Icon').attr("class", "fa fa-times");
-					$('#'+deviceName+'Icon').css("color", "orange");
-					$('#'+deviceName).append(' <span style="font-size:80%">('+cleanResp+')</span>');	
+					$('#'+deviceName+'Icon').css("color", "red");
+					$('#'+deviceName).append(' <span style="font-size:80%">erreur inconnue ('+cleanResp+')</span>');	
+				} else{
+
+					switch(jsonResp.cmdError){
+						case 0:
+							$('#'+deviceName+'Icon').attr("class", "fa fa-check");
+							$('#'+deviceName+'Icon').css("color", "green");
+							$('#'+deviceName).append(' <span style="font-size:80%">Equipement dejà à jour ('+cleanResp+')</span>');
+							break;
+						case 1:
+							$('#'+deviceName+'Icon').attr("class", "fa fa-refresh");
+							$('#'+deviceName+'Icon').css("color", "green");
+							$('#'+deviceName).append(' <span style="font-size:80%">Equipement mis à jour ('+cleanResp+')</span>');
+							break;
+						case 2:
+							$('#'+deviceName+'Icon').attr("class", "fa fa-plus");
+							$('#'+deviceName+'Icon').css("color", "DarkCyan");
+							$('#'+deviceName).append(' <span style="font-size:80%">Equipement ajouté ('+cleanResp+')</span>');
+							break;										
+					}					
 				}	
 		}
 	});	

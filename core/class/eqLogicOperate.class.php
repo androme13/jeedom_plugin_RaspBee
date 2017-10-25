@@ -28,11 +28,6 @@ class eqLogicOperate extends eqLogic {
 		// on check si l'eqLogic existe
 		foreach (eqlogic::byType('RaspBEE') as $eqLogicPass){			
 			if ($eqLogicPass->getConfiguration('origid')==$device[origid] && $eqLogicPass->getConfiguration('type')==$device[type]){
-				/*error_log("|eqlogic create device deja existant|".$device[type]."|",3,"/tmp/prob.txt");
-				$response->state="nok";
-				$response->error=1;
-				$response->message="Equipement deja existant : <strong>".$eqLogic->name."</strong>";
-				return $response;*/
 				error_log("|eqlogic create device deja existant|".$eqLogicPass->getName()."|",3,"/tmp/prob.txt");
 				$eqLogicMode = true;
 				$eqLogic = $eqLogicPass;
@@ -154,43 +149,9 @@ class eqLogicOperate extends eqLogic {
 			case "renewbutidandname" :
 			break;
 		}
+		
+		
 		return self::setGenericCmdList(basename($config),$eqLogic,$syncType);	
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		//error_log("|group create2|".json_encode($device),3,"/tmp/rasbee.err");
-		//$test = json_decode($device);
-		//error_log("|group create2|".$device[type],3,"/tmp/rasbee.err");
-		// on traite le type de synchro
-		/*switch ($syncType){
-			case "limited" :
-			break;
-			case "basic" :
-			break;
-			case "renew" :
-			break;
-			case "renewbutidandname"
-			break;
-		}*/
-		/*$eqLogic = new eqLogic();
-		$eqLogic->setEqType_name('RaspBEE');
-		$eqLogic->setName($device[name]." ".$device[origid]);
-		$eqLogic->setIsEnable(1);
-		$eqLogic->setIsVisible(1);
-		$_logical_id = null;
-		$eqLogic->setLogicalId($_logical_id);
-		$eqLogic->setConfiguration('origid', $device[origid]);*/
-	//	$eqLogic->setConfiguration('lights', json_encode($device[lights]));
-		//$eqLogic->setConfiguration('devicemembership', json_encode($device[devicemembership]));
-		//$eqLogic->setConfiguration('type', $device[type]);
-		//$eqLogic->save();
-		//return self::setGenericCmdList("Group.json",$eqLogic,$syncType);
 	}
 	
 	public function createGenericDevice($path,$eqLogic=null,$device,$syncType="basic",$eqLogicMode){
@@ -319,7 +280,6 @@ class eqLogicOperate extends eqLogic {
 						$RaspBEECmd->setConfiguration($command,$key);				
 					}				
 					$RaspBEECmd->save();
-					//$cmdAddCount++;
 			break;
 			case "renew" :
 			break;
@@ -344,8 +304,10 @@ class eqLogicOperate extends eqLogic {
 		$cmdAddCount = 0;
 		$cmdNotTouchedCount =0;
 		$cmdRemoveCount =0;
+		$cmdTotalCount =0;
 		
 				foreach ($eqLogicModel['commands'] as $command) {
+					$cmdTotalCount++;	
 					// on check si la commande existe ou pas
 					$cmdMode = false;
 					$cmdPass = null;
@@ -371,7 +333,7 @@ class eqLogicOperate extends eqLogic {
 							}
 							else
 							{
-							error_log("|commande non ajoutée|".$command[name],3,"/tmp/prob.txt");	
+							error_log("|commande non ajoutée|".$command[name],3,"/tmp/prob.txt");
 							$cmdNotTouchedCount++;
 							}
 						break;
@@ -382,9 +344,19 @@ class eqLogicOperate extends eqLogic {
 					}
 
 				}
-		$response->state="ok";
-		$response->error=0;
-		$response->message='{"notTouched":'.$cmdNotTouchedCount.', "added":'.$cmdAddCount.', "removed":'.$cmdRemoveCount.'}';
+		$response->error="3";
+		// 0: commandes non modifiées car à jour,
+		// 1: commandes modifiées car pas à jour,
+		// 2 : commandes ajoutées
+		// 3 : erreur inconnue;
+		//$response->error=3;
+		if ($cmdTotalCount==$cmdNotTouchedCount) $response->error=0;
+		//if (cmdAddCount!=0 || cmdRemoveCount !=0) $response->error=1;
+		if ($cmdTotalCount!=$cmdNotTouchedCount) $response->error=1;
+		//if (cmdAddCount!=0 || cmdRemoveCount !=0) $response->error=3;
+		if ($cmdTotalCount==$cmdAddCount && $cmdNotTouchedCount==0) $response->error=2;
+		
+		$response->message='{"cmdError":'.$response->error.',"TotalCmdCount":'.$cmdTotalCount.',"notTouchedCmd":'.$cmdNotTouchedCount.',"addedCmd":'.$cmdAddCount.',"removedCmd":'.$cmdRemoveCount.'}';
 		return $response;		
 	}
 	
