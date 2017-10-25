@@ -302,48 +302,80 @@ class eqLogicOperate extends eqLogic {
 		
 		$response = $responseHelper;
 		$cmdAddCount = 0;
-		$cmdNotTouchedCount =0;
-		$cmdRemoveCount =0;
-		$cmdTotalCount =0;
+		$cmdNotTouchedCount = 0;
+		$cmdRemoveCount = 0;
+		$cmdTotalCount = 0;
 		
-				foreach ($eqLogicModel['commands'] as $command) {
-					$cmdTotalCount++;	
-					// on check si la commande existe ou pas
-					$cmdMode = false;
-					$cmdPass = null;
-					if ($eqLogic!=null)
-					foreach ($eqLogic->getCmd(null,null,null,true) as $checkCmd) {
-						if (($checkCmd->getType() === $command[type]) && ($checkCmd->getConfiguration("fieldname") === $command[configuration][fieldname]) && ($checkCmd->getName() === $command[name])){
-						error_log("|commande existante|".$checkCmd->getName(),3,"/tmp/prob.txt");
-						$cmdMode = true;
-						$cmdPass = $checkCmd;
-						break;
-						}
-	
-					}
-					switch ($syncType){
-						case "limited" :
-						break;
-						case "basic" :
-							// si la commande n'existe pas
-							if ($cmdMode===false){
-							error_log("|ajout de la commande|".$command[name],3,"/tmp/prob.txt");
-							$cmd = self::setGenericCmd($eqLogic,$cmdPass,$command,$syncType,$cmdMode);
-							$cmdAddCount++;
-							}
-							else
-							{
-							error_log("|commande non ajoutée|".$command[name],3,"/tmp/prob.txt");
-							$cmdNotTouchedCount++;
-							}
-						break;
-						case "renew" :
-						break;
-						case "renewbutidandname" :
-						break;
-					}
-
+		// on s'occupe en premier d'updater les commandes si nécessaire
+		foreach ($eqLogicModel['commands'] as $command) {
+			$cmdTotalCount++;	
+			// on check si la commande existe ou pas
+			$cmdMode = false;
+			$cmdPass = null;
+			if ($eqLogic!=null)
+			foreach ($eqLogic->getCmd(null,null,null,true) as $checkCmd) {
+				if (($checkCmd->getType() === $command[type]) && ($checkCmd->getConfiguration("fieldname") === $command[configuration][fieldname]) && ($checkCmd->getName() === $command[name])){
+				error_log("|commande existante|".$checkCmd->getName(),3,"/tmp/prob.txt");
+				$cmdMode = true;
+				$cmdPass = $checkCmd;
+				break;
 				}
+
+			}
+			switch ($syncType){
+				case "limited" :
+				break;
+				case "basic" :
+					// on teste si la commande existe
+					if ($cmdMode===false){
+					error_log("|ajout de la commande|".$command[name],3,"/tmp/prob.txt");
+					$cmd = self::setGenericCmd($eqLogic,$cmdPass,$command,$syncType,$cmdMode);
+					$cmdAddCount++;
+					}
+					else
+					{
+					error_log("|commande non ajoutée|".$command[name],3,"/tmp/prob.txt");
+					$cmdNotTouchedCount++;
+					}
+				break;
+				case "renew" :
+				break;
+				case "renewbutidandname" :
+				break;
+			}
+
+		}
+		// on s'occupe ensuite de supprimer les commandes obsolètes selon le mode de synchro
+		
+		foreach ($eqLogic->getCmd(null,null,null,true) as $checkCmd) {
+			$cmdInConfigFile = false;
+			foreach ($eqLogicModel['commands'] as $command) {
+				if (($checkCmd->getType() === $command[type]) && ($checkCmd->getConfiguration("fieldname") === $command[configuration][fieldname]) && ($checkCmd->getName() === $command[name])){
+				$cmdInConfigFile = true;
+				error_log("|commande presente dans config|".$command[name],3,"/tmp/prob.txt");
+				break;
+				}
+			}
+			switch ($syncType){
+				case "limited" :
+				break;
+				case "basic" :
+					// on teste si la commande existe
+					if ($cmdInConfigFile==false){
+						error_log("|commande non presente dans config|(command:".$command[name].", config:".$checkCmd->getName().")",3,"/tmp/prob.txt");
+						$checkCmd->remove();
+						$cmdRemoveCount++;
+						if ($cmdNotTouchedCount>0) $cmdNotTouchedCount--;					
+					}
+				break;
+				case "renew" :
+				break;
+				case "renewbutidandname" :
+				break;
+			}
+		}
+		
+		
 		$response->error="3";
 		// 0: commandes non modifiées car à jour,
 		// 1: commandes modifiées car pas à jour,
@@ -354,8 +386,7 @@ class eqLogicOperate extends eqLogic {
 		//if (cmdAddCount!=0 || cmdRemoveCount !=0) $response->error=1;
 		if ($cmdTotalCount!=$cmdNotTouchedCount) $response->error=1;
 		//if (cmdAddCount!=0 || cmdRemoveCount !=0) $response->error=3;
-		if ($cmdTotalCount==$cmdAddCount && $cmdNotTouchedCount==0) $response->error=2;
-		
+		if ($cmdTotalCount==$cmdAddCount && $cmdNotTouchedCount==0) $response->error=2;		
 		$response->message='{"cmdError":'.$response->error.',"TotalCmdCount":'.$cmdTotalCount.',"notTouchedCmd":'.$cmdNotTouchedCount.',"addedCmd":'.$cmdAddCount.',"removedCmd":'.$cmdRemoveCount.'}';
 		return $response;		
 	}

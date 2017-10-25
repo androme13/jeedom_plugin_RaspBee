@@ -135,7 +135,8 @@ function createEqLogic(device,type,syncType){
 				}
 				catch(e)
 				{
-				   var cleanResp='invalid json';
+				   var jsonResp=new Object();
+				   jsonResp.cmdError = 3;
 				}							
 				if (jsonResp.cmdError == 3) {
 					$('#'+deviceName+'Icon').attr("class", "fa fa-times");
@@ -147,17 +148,17 @@ function createEqLogic(device,type,syncType){
 						case 0:
 							$('#'+deviceName+'Icon').attr("class", "fa fa-check");
 							$('#'+deviceName+'Icon').css("color", "green");
-							$('#'+deviceName).append(' <span style="font-size:80%">Equipement dejà à jour ('+cleanResp+')</span>');
+							$('#'+deviceName).append(' <span style="font-size:80%">Equipement dejà à jour</span>');
 							break;
 						case 1:
 							$('#'+deviceName+'Icon').attr("class", "fa fa-refresh");
 							$('#'+deviceName+'Icon').css("color", "green");
-							$('#'+deviceName).append(' <span style="font-size:80%">Equipement mis à jour ('+cleanResp+')</span>');
+							$('#'+deviceName).append(' <span style="font-size:80%">Equipement mis à jour (+'+jsonResp.addedCmd+' -'+jsonResp.removedCmd+')</span>');
 							break;
 						case 2:
 							$('#'+deviceName+'Icon').attr("class", "fa fa-plus");
 							$('#'+deviceName+'Icon').css("color", "DarkCyan");
-							$('#'+deviceName).append(' <span style="font-size:80%">Equipement ajouté ('+cleanResp+')</span>');
+							$('#'+deviceName).append(' <span style="font-size:80%">Equipement ajouté ('+jsonResp.TotalCmdCount+')</span>');
 							break;										
 					}					
 				}	
