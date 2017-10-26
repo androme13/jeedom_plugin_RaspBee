@@ -207,7 +207,7 @@ class eqLogicOperate extends eqLogic {
 	}
 		
 	function setGenericEqLogic($eqLogic=null,$device,$syncType="basic",$eqLogicMode){
-		error_log("synctype: ".$syncType,3,"/tmp/prob.text");
+		error_log("setGenericEqLogic: ".json_encode($device),3,"/tmp/prob.txt");
 
 		if ($eqLogicMode == false && $eqLogic==null){
 			$eqLogic = new eqLogic();
@@ -217,6 +217,7 @@ class eqLogicOperate extends eqLogic {
 			$eqLogic->setLogicalId($_logical_id);
 			$eqLogic->setEqType_name('RaspBEE');
 			$eqLogic->setName($device[name]);
+			if (array_key_exists('battery', $device[config]))
 			$eqLogic->batteryStatus($device[config][battery]);
 		}
 		switch ($syncType){
@@ -298,14 +299,12 @@ class eqLogicOperate extends eqLogic {
 		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/'.$file);
 		if (!is_json($configFile)) return false;
 		$eqLogicModel = json_decode($configFile, true);
-		$commands = $eqLogicModel['commands'];
-		
+		$commands = $eqLogicModel['commands'];		
 		$response = $responseHelper;
 		$cmdAddCount = 0;
 		$cmdNotTouchedCount = 0;
 		$cmdRemoveCount = 0;
-		$cmdTotalCount = 0;
-		
+		$cmdTotalCount = 0;		
 		// on s'occupe en premier d'updater les commandes si nécessaire
 		foreach ($eqLogicModel['commands'] as $command) {
 			$cmdTotalCount++;	
@@ -389,9 +388,6 @@ class eqLogicOperate extends eqLogic {
 		if ($cmdTotalCount==$cmdAddCount && $cmdNotTouchedCount==0) $response->error=2;		
 		$response->message='{"cmdError":'.$response->error.',"TotalCmdCount":'.$cmdTotalCount.',"notTouchedCmd":'.$cmdNotTouchedCount.',"addedCmd":'.$cmdAddCount.',"removedCmd":'.$cmdRemoveCount.'}';
 		return $response;		
-	}
-	
-	function setGenericCommand($eqLogic=null,$device,$syncType="basic",$eqLogicMode){
 	}
 }
 

@@ -104,7 +104,8 @@ function syncDevices(type,action,syncType){
 
 function createEqLogic(device,type,syncType){
 	//console.dir(device);
-	var deviceName=device.name.replace(/ /g,'')+device.etag;
+	// on supprime les points et les espaces du nom (uniquement pour le code html)
+	var deviceName=device.name.replace(/[ -\.]/g,'')+device.etag;
 	var treechild = '<li class="tree" style="list-style:none;" id="'+deviceName+'"><div id="'+deviceName+'Icon" class="fa fa-refresh"></div> '+device.name+'</li>';
 	$('#'+type+'childs').append(treechild);
 	$.ajax({
