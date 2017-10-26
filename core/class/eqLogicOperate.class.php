@@ -98,7 +98,6 @@ class eqLogicOperate extends eqLogic {
 		}
 		switch ($syncType){
 			case "limited" :
-			break;
 			case "basic" :			
 				$eqLogic = self::setGenericEqLogicConf($eqLogic,$device,$syncType,$eqLogicMode);
 				$eqLogic = self::checkAndSetEqLogicConfiguration($eqLogic,'hascolor',$device[hascolor],$syncType);
@@ -137,7 +136,6 @@ class eqLogicOperate extends eqLogic {
 		}
 		switch ($syncType){
 			case "limited" :
-			break;
 			case "basic" :			
 				$eqLogic = self::setGenericEqLogicConf($eqLogic,$device,$syncType,$eqLogicMode);
 				$eqLogic = self::checkAndSetEqLogicConfiguration($eqLogic,'lights',json_encode($device[lights]),$syncType);
@@ -171,7 +169,6 @@ class eqLogicOperate extends eqLogic {
 		
 		switch ($syncType){
 			case "limited" :
-			break;
 			case "basic" :
 			//error_log("|checkAndSetEqLogicConfiguration attr|".$eqLogic->getConfiguration($attr),3,"/tmp/rasbee.err");
 				$eqLogic->setConfiguration($attr, $value);
@@ -188,7 +185,6 @@ class eqLogicOperate extends eqLogic {
 		//error_log("synctype: ".$syncType,3,"/tmp/prob.text");
 		switch ($syncType){
 			case "limited" :
-			break;
 			case "basic" :
 				self::checkAndSetEqLogicConfiguration($eqLogic,'origid',$device[origid],$syncType);
 				self::checkAndSetEqLogicConfiguration($eqLogic,'manufacturername',$device[manufacturername],$syncType);
@@ -222,7 +218,6 @@ class eqLogicOperate extends eqLogic {
 		}
 		switch ($syncType){
 			case "limited" :
-			break;
 			case "basic" :			
 				$eqLogic = self::setGenericEqLogicConf($eqLogic,$device,$syncType,$eqLogicMode);
 				$eqLogic->save();
@@ -293,8 +288,7 @@ class eqLogicOperate extends eqLogic {
 	
 	
 	
-	function setGenericCmdList($file=null,$eqLogic=null,$syncType=0,$eqLogicMode){
-		
+	function setGenericCmdList($file=null,$eqLogic=null,$syncType=0,$eqLogicMode){	
 		if ($file == null ||$eqLogic==null) return false;
 		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/'.$file);
 		if (!is_json($configFile)) return false;
@@ -323,7 +317,6 @@ class eqLogicOperate extends eqLogic {
 			}
 			switch ($syncType){
 				case "limited" :
-				break;
 				case "basic" :
 					// on teste si la commande existe
 					if ($cmdMode===false){

@@ -31,10 +31,10 @@ $('input[type=radio][name=optionType][value=basic]').attr('checked', true);
 $('input[type=radio][name=optionType]').on( "click", function() {
 	var help ="";
 	switch ($( "input[type=radio][name=optionType]:checked" ).val()){
-		case 'limited' : help = "{{Limitée}} : {{Conserve les équipements existants et ajoute les nouveaux équipements ainsi que les nouvelles commandes sur les équipements existants}}."; break;
+		case 'limited' : help = "{{Limitée}} : {{Conserve les équipements existants et ajoute les nouveaux équipements ainsi que les nouvelles commandes sur les équipements existants mais ne supprime aucune commande considérée comme obsolète}}."; break;
 		case 'basic' : help = "{{Normale}} : {{Type de synchronisation par défaut, conserve les équipements existants et ajoute les nouveaux équipements ainsi que l\'ajout/suppression des nouvelles/anciennes commandes sur les équipements existants}}."; break;
 		case 'renew' : help = "{{Totale}} : {{Tous les équipements sont supprimés, et une nouvelle synchronisation débute}}."; break;
-		case 'renewbutidandname' : help = "{{Partielle}} : {{Tous les équipements sont supprimés, et une nouvelle synchronisation débute, mais les id et les noms sont conservés}}."; break;
+		case 'renewbutidandname' : help = "{{Partielle}} : {{Tous les équipements sont renouvellés avec conservation de leur nom et de leur id, idem concernant les commandes des équipements.}}."; break;
 		
 	};
   $( "#syncOptionsHelp" ).html(help);
