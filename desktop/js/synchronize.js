@@ -45,17 +45,77 @@ $('#bt_synchronize').on('click', function () {
 	$('#treeSync').empty();
 	$('#div_syncAlert').showAlert({message: "{{Synchronisation en cours}}...", level: 'info'});
 	syncType=$('input[name=optionType]:checked').val();
+	if (syncType=="renew"){
+		confirmFullSync();
+	}
+	else
+	{
 	console.log('synctype: ',syncType);
 	syncDevices('Capteurs','getRaspBEESensors',syncType);	
 	syncDevices('Eclairages','getRaspBEELights',syncType);	
 	syncDevices('Groupes','getRaspBEEGroups',syncType);
 	$('#div_syncAlert').showAlert({message: "{{Synchronisation Terminée}}", level: 'success'});
+	}
 });
 
 var displayHelp = function() {
   var n = $( "input:checked" ).length;
   $( "div" ).text( n + (n === 1 ? " is" : " are") + " checked!" );
 };
+
+function confirmFullSync(){
+var dialog_title = '{{Confirmation de synchronisation totale}}';
+	var dialog_message = '<form class="form-horizontal onsubmit="return false;"> ';
+	dialog_message += '{{Veuillez confirmer la synchronisation totale, à noter que tous les équipements RaspBEE existants seront supprimés avant la synchronisation}}.<br><label class="lbl lbl-warning" for="name">{{Attention, une fois supprimés, ils le seront définitivement}}.</label>';
+	dialog_message += '</form>';
+	bootbox.dialog({
+		title: dialog_title,
+		message: dialog_message,
+		buttons: {
+			"{{Annuler}}": {
+				callback: function () {
+				$('#div_syncAlert').showAlert({message: "{{Synchronisation totale annulée}}", level: 'info'});
+				}
+			},
+		success: {
+			label: "{{Synchroniser}}",
+			className: "btn-danger",
+			callback: function () {		   
+				$.ajax({
+					type: "POST", 
+					url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+					data: {
+						action: "removeAll",
+					},
+					dataType: 'json',
+					error: function (request, status, error) {
+						console.dir(error);
+						$('#div_syncAlert').showAlert({message: error.message, level: 'danger'});
+						handleAjaxError(request, status, error);
+					},
+					success: function (data) { 
+						if (data.state != 'ok') {
+							console.dir(data);
+							$('#div_syncAlert').showAlert({message: data.result, level: 'danger'});
+						}else
+						{
+							console.log("synchro après suppression");
+							syncType="basic";
+							syncDevices('Capteurs','getRaspBEESensors',syncType);	
+							syncDevices('Eclairages','getRaspBEELights',syncType);	
+							syncDevices('Groupes','getRaspBEEGroups',syncType);
+							$('#div_syncAlert').showAlert({message: "{{Synchronisation Terminée}}", level: 'success'});
+						}
+					}
+				});
+								
+			}
+		}
+		}
+	});	
+	
+}
+
 
 function syncDevices(type,action,syncType){
 	var treechild =   '<li class="treeblock"><input type="checkbox" id="'+type+'" class="tree"><i class="fa fa-angle-double-right"></i><i class="fa fa-angle-double-down"></i><strong><label id="'+type+'Label" for="'+type+'"> '+type+'</label></strong><ul id="'+type+'childs"></ul></li>';

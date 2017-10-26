@@ -175,7 +175,7 @@ $raspbeecom = new RaspBEECom;
 				<div id="api_actions" class="tab-pane">
 					<br>
                     <div class="panel panel-primary">
-                        <div class="panel-heading"><h4 class="panel-title">{{Debug}}</h4></div>
+                        <div class="panel-heading"><h4 class="panel-title">{{Debug (Deconz)}}</h4></div>
                         <div class="panel-body">
 						<a id="showdebugsensors" name='.$value->name.' class="btn btn-info showDebugInfoBTN"><i class="fa fa-info-circle"></i> {{Afficher les capteurs}}</a>
 						<a id="showdebuglights" name='.$value->name.' class="btn btn-info  showDebugInfoBTN"><i class="fa fa-info-circle"></i> {{Afficher les éclairages}}</a>

@@ -46,54 +46,6 @@ $('#bt_RaspBEENetwork').on('click', function () {
 	$('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=network').dialog('open');
 });
 
-/*$('#bt_RaspBEERemoveAll').on('click', function () {	
-	var dialog_title = '{{Confirmation de suppression de tous les équipements RaspBEE}}';
-	var dialog_message = '<form class="form-horizontal onsubmit="return false;"> ';
-	dialog_message += '<label class="control-label" > {{Veuillez confirmer la suppression de tous les équipements RaspBEE}}</label><br><label class="lbl lbl-warning" for="name">{{Attention, une fois supprimés, ils le seront définitivement.}}</label>';
-	dialog_message += '</form>';
-	bootbox.dialog({
-		title: dialog_title,
-		message: dialog_message,
-		buttons: {
-			"{{Annuler}}": {
-				callback: function () {
-				}
-		},
-		success: {
-			label: "{{Supprimer}}",
-			className: "btn-danger",
-			callback: function () {		   
-				$.ajax({
-					type: "POST", 
-					url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
-					data: {
-						action: "removeAll",
-					},
-					dataType: 'json',
-					error: function (request, status, error) {
-						console.dir(error);
-						$('#div_alert').showAlert({message: error.message, level: 'danger'});
-						handleAjaxError(request, status, error);
-					},
-					success: function (data) { 
-						if (data.state != 'ok') {
-							console.dir(data);
-							$('#div_alert').showAlert({message: data.result, level: 'danger'});
-						}else
-						{									
-							$('#div_alert').showAlert({message: "{{Tous les équipements ont été supprimés}}", level: 'success'});
-								
-						}
-						window.location.reload();	
-						}
-					});
-								
-				}
-		},
-		}
-	});
-});*/
-
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 
 /*

@@ -18,7 +18,7 @@ $('.bt_RaspBEERemoveAll').on('click', function () {
 console.log('removeall');	
 	var dialog_title = '{{Confirmation de suppression de tous les équipements RaspBEE}}';
 	var dialog_message = '<form class="form-horizontal onsubmit="return false;"> ';
-	dialog_message += '<label class="control-label" > {{Veuillez confirmer la suppression de tous les équipements RaspBEE}}</label><br><label class="lbl lbl-warning" for="name">{{Attention, une fois supprimés, ils le seront définitivement.}}</label>';
+	dialog_message += '{{Veuillez confirmer la suppression de tous les équipements RaspBEE}}</label><br><label class="lbl lbl-warning" for="name">{{Attention, une fois supprimés, ils le seront définitivement}}.';
 	dialog_message += '</form>';
 	bootbox.dialog({
 		title: dialog_title,
@@ -26,6 +26,7 @@ console.log('removeall');
 		buttons: {
 			"{{Annuler}}": {
 				callback: function () {
+				$('#div_networkRaspBEEAlert').showAlert({message: "{{Suppression de tous les équipements annulée}}.", level: 'info'});
 				}
 			},
 		success: {

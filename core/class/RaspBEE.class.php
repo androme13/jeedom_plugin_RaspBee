@@ -26,10 +26,7 @@ require_once dirname(__FILE__) . '/colorHelper.class.php';
 class RaspBEE extends eqLogic {
 	//private $raspbeecom = null; // attention les variables déclarées ici s'enregistrent dans la base sql lors du save
 	
-	public static function RaspBEECall($_url) {
-	
-	}
-	
+	//private $responseHelper = array("error" => 0, "message" => "", "state" => "");	
 	
 	public function getAllEqLogics(){	
 		//error_log("data: ".$data['type']."|",3,"/tmp/prob.txt");
@@ -327,6 +324,12 @@ class RaspBEE extends eqLogic {
 		foreach (eqLogic::byType('RaspBEE') as $equipement) {
 			$equipement->remove();
 		}
+		$result = array("error" => '', "message" => "", "state" => "");
+		$result->state="ok";
+		//$error='';
+		//$response->error=$httpcode;
+		$result->message="Equipements supprimés";
+		return $result;		
 	}
 	/*
 	* Non obligatoire mais permet de modifier l'affichage du widget si vous en avez besoin
