@@ -98,15 +98,6 @@ if ($status['launchable']=="ok"){
 </span>';
 	echo '</div>';
 }
-// bouton removeall(debug)
-echo '<div class="cursor card" id="bt_RaspBEERemoveAll" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
-echo '<center>';
-echo '<i class="fa fa-times" style="font-size : 6em;color:#FA5858;"></i>';
-echo '</center>';
-echo '<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#FA5858">
-<center>{{Tout supprimer}}</center>
-</span>';
-echo '</div>';
 ?>	 
 		</div>
 		<legend>

@@ -183,6 +183,12 @@ $raspbeecom = new RaspBEECom;
 						<a id="showdebugconfig" name='.$value->name.' class="btn btn-info showDebugInfoBTN"><i class="fa fa-info-circle"></i> {{Afficher la config raspbee}}</a>						
                         </div>
                     </div>
+						<div class="panel panel-primary">
+                        <div class="panel-heading"><h4 class="panel-title">{{Réinitialisation}}</h4></div>
+                        <div class="panel-body">
+						<a id="bt_RaspBEERemoveAll" class="btn btn-danger bt_RaspBEERemoveAll"><i class="fa fa-times"></i> {{Supprimer tous les équipements RaspBEE}}</a>
+						</div>
+					</div>
 				</div>
                 <div id="api_users" class="tab-pane">
                     <br>
