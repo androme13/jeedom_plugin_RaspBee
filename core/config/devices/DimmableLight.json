@@ -133,7 +133,7 @@
 				"logicalId": "luminosity_state",				
 				"subtype": "numeric", 
 				"display": {
-					"generic_type": "LIGHT_STATE"
+					"generic_type": "DONT"
 				}
 			}
 		]

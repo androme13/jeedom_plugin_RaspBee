@@ -23,7 +23,7 @@
 				"value" : "Etat alerte",								
 				"subtype": "other", 
 				"display": {
-					"generic_type": "LIGHT_MODE"
+					"generic_type": "DONT"
 				}
 			},
 			{
@@ -38,7 +38,7 @@
 				"value" : "Etat alerte",
 				"subtype": "other", 
 				"display": {
-					"generic_type": "LIGHT_MODE"
+					"generic_type": "DONT"
 				}
 			},
 			{
@@ -83,7 +83,7 @@
 				"configuration": {
 					"fieldname" : "on"
 				},
-				"value" : "Etat On",				
+				"value" : "Etat",				
 				"subtype": "other", 
 				"display": {
 					"generic_type": "LIGHT_ON"
@@ -98,7 +98,7 @@
 				"configuration": {
 				"fieldname" : "on"
 				},
-				"value" : "Etat On",				
+				"value" : "Etat",				
 				"subtype": "other", 
 				"display": {
 					"generic_type": "LIGHT_OFF"
@@ -137,7 +137,11 @@
 				"subtype": "slider", 
 				"display": {
 					"generic_type": "LIGHT_SLIDER"
-				}
+				},
+				"template":{
+                    "dashboard" : "light",
+                    "mobile" : "light"
+                }
 			},
 			{
 				"name": "Etat luminosité", 
@@ -152,7 +156,7 @@
 				"logicalId": "luminosity_state",				
 				"subtype": "numeric", 
 				"display": {
-					"generic_type": "LIGHT_STATE"
+					"generic_type": "DONT"
 				}
 			},
 			{
@@ -169,7 +173,7 @@
 				"value" : "Etat Temperature Blanc",				
 				"subtype": "slider", 
 				"display": {
-					"generic_type": "LIGHT_SLIDER"
+					"generic_type": "DONT"
 				}
 			},
 			{
@@ -185,7 +189,7 @@
 				"logicalId": "tc_state",				
 				"subtype": "numeric", 
 				"display": {
-					"generic_type": "LIGHT_STATE"
+					"generic_type": "DONT"
 				}
 			},
 			{
@@ -202,7 +206,7 @@
 				"value" : "Etat Teinte",					
 				"subtype": "slider", 
 				"display": {
-					"generic_type": "LIGHT_SLIDER"
+					"generic_type": "DONT"
 				}
 			},
 			{
@@ -218,7 +222,7 @@
 				"logicalId": "hue_state",				
 				"subtype": "numeric", 
 				"display": {
-					"generic_type": "LIGHT_STATE"
+					"generic_type": "DONT"
 				}
 			},
 			{
@@ -235,7 +239,7 @@
 				"value" : "Etat saturation",				
 				"subtype": "slider", 
 				"display": {
-					"generic_type": "LIGHT_SLIDER"
+					"generic_type": "DONT"
 				}
 			},
 			{
@@ -251,7 +255,7 @@
 				"logicalId": "saturation_state",				
 				"subtype": "numeric", 
 				"display": {
-					"generic_type": "LIGHT_STATE"
+					"generic_type": "DONT"
 				}
 			},
 			{
