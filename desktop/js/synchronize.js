@@ -33,8 +33,8 @@ $('input[type=radio][name=optionType]').on( "click", function() {
 	switch ($( "input[type=radio][name=optionType]:checked" ).val()){
 		case 'limited' : help = "{{Limitée}} : {{Conserve les équipements existants et ajoute les nouveaux équipements ainsi que les nouvelles commandes sur les équipements existants mais ne supprime aucune commande considérée comme obsolète}}."; break;
 		case 'basic' : help = "{{Normale}} : {{Type de synchronisation par défaut, conserve les équipements existants et ajoute les nouveaux équipements ainsi que l\'ajout/suppression des nouvelles/anciennes commandes sur les équipements existants}}."; break;
-		case 'renew' : help = "{{Totale}} : {{Tous les équipements sont supprimés, et une nouvelle synchronisation débute}}."; break;
-		case 'renewbutidandname' : help = "{{Partielle}} : {{Tous les équipements sont renouvellés avec conservation de leur nom et de leur id, idem concernant les commandes des équipements.}}."; break;
+		case 'renew' : help = "{{Resynchronisation totale}} : {{Tous les équipements sont supprimés, et une nouvelle synchronisation débute}}."; break;
+		case 'renewbutidandname' : help = "{{Resynchronisation partielle}} : {{Tous les équipements sont renouvellés avec conservation de leur nom et de leur id, idem concernant les commandes des équipements.}}."; break;
 		
 	};
   $( "#syncOptionsHelp" ).html(help);
@@ -209,17 +209,17 @@ function createEqLogic(device,type,syncType){
 						case 0:
 							$('#'+deviceName+'Icon').attr("class", "fa fa-check");
 							$('#'+deviceName+'Icon').css("color", "green");
-							$('#'+deviceName).append(' <span style="font-size:80%">Equipement dejà à jour ( <i class="fa fa-info-circle">'+jsonResp.notTouchedCmd+'</i> )</span>');
+							$('#'+deviceName).append(' <span style="font-size:80%">Equipement dejà à jour ( <i class="fa fa-info-circle">'+jsonResp.notTouchedCmd+'</i> ) '+cleanResp+'</span>');
 							break;
 						case 1:
 							$('#'+deviceName+'Icon').attr("class", "fa fa-refresh");
 							$('#'+deviceName+'Icon').css("color", "green");
-							$('#'+deviceName).append(' <span style="font-size:80%">Equipement mis à jour ( <i class="fa fa-plus-circle">'+jsonResp.addedCmd+'</i>&nbsp<i class="fa fa-minus-circle">'+jsonResp.removedCmd+'</i> )</span>');
+							$('#'+deviceName).append(' <span style="font-size:80%">Equipement mis à jour ( '+'<i class="fa fa-refresh">'+jsonResp.modifiedCmd+'</i>&nbsp'+'<i class="fa fa-plus-circle">'+jsonResp.addedCmd+'</i>&nbsp<i class="fa fa-minus-circle">'+jsonResp.removedCmd+'</i> ) '+cleanResp+'</span>');
 							break;
 						case 2:
 							$('#'+deviceName+'Icon').attr("class", "fa fa-plus");
 							$('#'+deviceName+'Icon').css("color", "DarkCyan");
-							$('#'+deviceName).append(' <span style="font-size:80%">Equipement ajouté ( <i class="fa fa-plus-circle">'+jsonResp.TotalCmdCount+'</i> )</span>');
+							$('#'+deviceName).append(' <span style="font-size:80%">Equipement ajouté ( <i class="fa fa-plus-circle">'+jsonResp.totalCmdCount+'</i> ) '+cleanResp+'</span>');
 							break;										
 					}					
 				}	

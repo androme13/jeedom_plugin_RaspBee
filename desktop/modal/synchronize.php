@@ -50,10 +50,10 @@ require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
 								<label for="optionType1">{{Normale}} ({{recommandée}}).</label><br>
 
 								<input type="radio" id="optionType3" name="optionType" value="renew" >
-								<label for="optionType2">{{Totale}}.</label><br>
+								<label for="optionType2">{{Resynchronisation totale}}.</label><br>
 								
-								<input type="radio" id="optionType4" name="optionType" value="renewbutidandname" >
-								<label for="optionType3">{{Partielle}}.</label><br>
+								<input type="radio" id="optionType4" name="optionType" value="renewbutidandname">
+								<label for="optionType3">{{Resynchronisation partielle}}.</label><br>
 
 							</div>
 						</li>

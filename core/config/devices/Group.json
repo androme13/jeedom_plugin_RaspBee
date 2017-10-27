@@ -35,7 +35,7 @@
 				"value" : "Etat alerte",								
 				"subtype": "other", 
 				"display": {
-					"generic_type": "LIGHT_MODE"
+					"generic_type": "DONT"
 				}
 			},
 			{
@@ -169,7 +169,7 @@
 			{
 				"name": "Teinte", 
 				"type": "action", 
-				"isVisible": 1, 
+				"isVisible": 0, 
 				"isHistorized": 0, 
 				"configuration": {
 				"fieldname" : "hue",
@@ -202,7 +202,7 @@
 			{
 				"name": "Saturation", 
 				"type": "action", 
-				"isVisible": 1, 
+				"isVisible": 0, 
 				"isHistorized": 0, 
 				"configuration": {
 				"fieldname" : "sat",

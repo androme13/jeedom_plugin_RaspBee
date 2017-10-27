@@ -15,7 +15,6 @@
 * along with Plugin RaspBEE for jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
-
 class eqLogicOperate extends eqLogic {
 	
 	private $responseHelper = array("error" => 0, "message" => "", "state" => "");
@@ -114,7 +113,6 @@ class eqLogicOperate extends eqLogic {
 	
 	public function createLightGroup($config='',$eqLogic,$device,$syncType="basic",$eqLogicMode){
 		//error_log("|createLightGroup syncType| ".$syncType,3,"/tmp/prob.txt");
-
 		if (!is_file(dirname(__FILE__) . $config)){
 		return false;
 		};
@@ -204,7 +202,6 @@ class eqLogicOperate extends eqLogic {
 		
 	function setGenericEqLogic($eqLogic=null,$device,$syncType="basic",$eqLogicMode){
 		error_log("setGenericEqLogic: ".json_encode($device),3,"/tmp/prob.txt");
-
 		if ($eqLogicMode == false && $eqLogic==null){
 			$eqLogic = new eqLogic();
 			$eqLogic->setIsEnable(1);
@@ -229,10 +226,11 @@ class eqLogicOperate extends eqLogic {
 		}
 		return $eqLogic;		
 	}
-	
-	function setGenericCmd($eqLogic=null,$cmdPass,$command,$syncType="basic",$cmdMode){
-		error_log("setGenericCmd synctype: ".$syncType,3,"/tmp/prob.text");
 
+	function setGenericCmd($eqLogic=null,$cmdPass,$command,$syncType="basic",$cmdMode){
+		//error_log("setGenericCmd synctype: ".$syncType,3,"/tmp/prob.text");
+		$response = $responseHelper;
+		$response->error = 3;
 		if ($cmdMode == false && $cmdPass==null){
 			$RaspBEECmd = new RaspBEECmd();
 			$RaspBEECmd->setName($command[name]);
@@ -243,9 +241,10 @@ class eqLogicOperate extends eqLogic {
 		switch ($syncType){
 			case "limited" :
 			break;
-			case "basic" :			
-				if (array_key_exists('isVisible', $command)) {
-						$RaspBEECmd->setIsVisible($command[isVisible]);
+			case "basic" :
+				if ($cmdMode==false){
+					if (array_key_exists('isVisible', $command)) {
+						$RaspBEECmd->setIsVisible($command[isVisible]);	
 					}
 					if (array_key_exists('isHistorized', $command)) {
 						$RaspBEECmd->setIsHistorized($command[isHistorized]);
@@ -253,7 +252,6 @@ class eqLogicOperate extends eqLogic {
 					if (array_key_exists('display', $command)) {
 						$RaspBEECmd->setDisplay('generic_type',$command[display][generic_type]);
 					}			
-
 					if (array_key_exists('template', $command)) {
 						if (array_key_exists('dashboard',$command[template])){
 							$RaspBEECmd->setTemplate('dashboard',$command[template][dashboard]);
@@ -262,7 +260,6 @@ class eqLogicOperate extends eqLogic {
 							$RaspBEECmd->setTemplate('mobile',$command[template][mobile]);
 						}
 					}						
-
 					if (array_key_exists('unite', $command)) {
 						$RaspBEECmd->setUnite($command[unite]);
 					}	
@@ -276,19 +273,94 @@ class eqLogicOperate extends eqLogic {
 						$RaspBEECmd->setConfiguration($command,$key);				
 					}				
 					$RaspBEECmd->save();
+					$response->message=$RaspBEECmd;
+					$response->error = 1;
+				}
 			break;
 			case "renew" :
 			break;
 			case "renewbutidandname" :
+				$response->error = 0;
+				if (array_key_exists('isVisible', $command)) {
+					if ($RaspBEECmd->getIsVisible()!=$command[isVisible]){
+						error_log("|visibilite differente",3,"/tmp/prob.txt");
+						$RaspBEECmd->setIsVisible($command[isVisible]);
+						$response->error = 2;
+					}
+					else error_log("|visibilite identique",3,"/tmp/prob.txt");
+				}
+				if (array_key_exists('isHistorized', $command)) {
+					if ($RaspBEECmd->getIsHistorized()!=$command[isHistorized]){
+						$RaspBEECmd->setIsHistorized($command[isHistorized]);
+						$response->error = 2;
+					}
+				}
+				if (array_key_exists('display', $command)) {
+					if ($RaspBEECmd->getDisplay('generic_type')!=$command[display][generic_type]){
+						$RaspBEECmd->setDisplay('generic_type',$command[display][generic_type]);
+						$response->error = 2;
+					}
+				}			
+				if (array_key_exists('template', $command)) {
+					if (array_key_exists('dashboard',$command[template])){
+						if ($RaspBEECmd->getTemplate('dashboard')!=$command[template][dashboard]){
+							$RaspBEECmd->setTemplate('dashboard',$command[template][dashboard]);
+							$response->error = 2;
+						}
+					}
+					if (array_key_exists('mobile',$command[template])){
+						if ($RaspBEECmd->getTemplate('mobile')!=$command[template][mobile]){
+							$RaspBEECmd->setTemplate('mobile',$command[template][mobile]);
+							$response->error = 2;
+						}
+					}
+				}						
+				if (array_key_exists('unite', $command)) {
+					if ($RaspBEECmd->getUnite()!=$command[unite]){
+						$RaspBEECmd->setUnite($command[unite]);
+						$response->error = 2;
+					}
+				}	
+				if (array_key_exists('type', $command)) {
+					if ($RaspBEECmd->getType()!=$command[type]){
+						$RaspBEECmd->setType($command[type]);
+						$response->error = 2;
+					}
+				}				
+				if (array_key_exists('subtype', $command)) {
+					if ($RaspBEECmd->getSubType()!=$command[subtype]){
+						$RaspBEECmd->setSubType($command[subtype]);
+						$response->error = 2;
+					}
+				}						
+				foreach ($command[configuration] as $command => $key){
+					if ($RaspBEECmd->getConfiguration($command)!=$key){
+						$RaspBEECmd->setConfiguration($command,$key);
+						$response->error = 2;
+					}					
+				}				
+				$RaspBEECmd->save();
+				$response->message=$RaspBEECmd;
+				//$response->error = 2;
 			break;
 		}
-		return $RaspBEECmd;		
+		
+		$response->state="ok";
+		// 0 : commande à jour
+		// 1 : commande crée
+		// 2 : commande modifiée
+		// 3 : inconnu
+		//$response->error = 0;
+		$response->message = "";
+		return $response;
+		//return $RaspBEECmd;		
 	}
 	
 	
 	
 	
-	function setGenericCmdList($file=null,$eqLogic=null,$syncType=0,$eqLogicMode){	
+	function setGenericCmdList($file=null,$eqLogic=null,$syncType="basic",$eqLogicMode){
+	//error_log("setGenericCmdList synctype: ".$syncType,3,"/tmp/prob.text");		
 		if ($file == null ||$eqLogic==null) return false;
 		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/'.$file);
 		if (!is_json($configFile)) return false;
@@ -297,6 +369,7 @@ class eqLogicOperate extends eqLogic {
 		$response = $responseHelper;
 		$cmdAddCount = 0;
 		$cmdNotTouchedCount = 0;
+		$cmdModifiedCount = 0;
 		$cmdRemoveCount = 0;
 		$cmdTotalCount = 0;		
 		// on s'occupe en premier d'updater les commandes si nécessaire
@@ -313,7 +386,6 @@ class eqLogicOperate extends eqLogic {
 				$cmdPass = $checkCmd;
 				break;
 				}
-
 			}
 			switch ($syncType){
 				case "limited" :
@@ -321,7 +393,7 @@ class eqLogicOperate extends eqLogic {
 					// on teste si la commande existe
 					if ($cmdMode===false){
 					error_log("|ajout de la commande|".$command[name],3,"/tmp/prob.txt");
-					$cmd = self::setGenericCmd($eqLogic,$cmdPass,$command,$syncType,$cmdMode);
+					$cmd = self::setGenericCmd($eqLogic,$cmdPass,$command,$syncType,$cmdMode)->message;;
 					$cmdAddCount++;
 					}
 					else
@@ -333,9 +405,24 @@ class eqLogicOperate extends eqLogic {
 				case "renew" :
 				break;
 				case "renewbutidandname" :
+					// on teste si la commande existe
+					//if ($cmdMode===true){					
+					$cmd = self::setGenericCmd($eqLogic,$cmdPass,$command,$syncType,$cmdMode);
+					error_log("|modification de la commande retour erruer :".$cmd->error,3,"/tmp/prob.txt");
+					if ($cmd->error==0)
+						$cmdNotTouchedCount++;
+					if ($cmd->error==1)
+						$cmdAddCount++;
+					if ($cmd->error==2)
+						$cmdModifiedCount++;				
+					//}
+					//else
+					//{
+					//error_log("|commande non modifiée|".$command[name],3,"/tmp/prob.txt");
+					//$cmdNotTouchedCount++;
+					//}
 				break;
 			}
-
 		}
 		// on s'occupe ensuite de supprimer les commandes obsolètes selon le mode de synchro
 		
@@ -379,9 +466,8 @@ class eqLogicOperate extends eqLogic {
 		if ($cmdTotalCount!=$cmdNotTouchedCount) $response->error=1;
 		//if (cmdAddCount!=0 || cmdRemoveCount !=0) $response->error=3;
 		if ($cmdTotalCount==$cmdAddCount && $cmdNotTouchedCount==0) $response->error=2;		
-		$response->message='{"cmdError":'.$response->error.',"TotalCmdCount":'.$cmdTotalCount.',"notTouchedCmd":'.$cmdNotTouchedCount.',"addedCmd":'.$cmdAddCount.',"removedCmd":'.$cmdRemoveCount.'}';
+		$response->message='{"cmdError":'.$response->error.',"totalCmdCount":'.$cmdTotalCount.',"modifiedCmd":'.$cmdModifiedCount.',"notTouchedCmd":'.$cmdNotTouchedCount.',"addedCmd":'.$cmdAddCount.',"removedCmd":'.$cmdRemoveCount.'}';
 		return $response;		
 	}
 }
-
 ?>
