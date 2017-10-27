@@ -70,15 +70,51 @@ function showTouchlink(){
 		},
 		success: function (data) { 
 			if (data.state != 'ok') {
-				console.dir(data);
+				//console.dir(data);
 				$('#div_includeAlert').showAlert({message: data.result, level: 'danger'});
 			}else
 			{
 				
-				$('#includecontent').html(data.result);
+				$('#includecontent').html(constructTouchlinkTable(data.result));
 			}
 		}
 	});
+}
+
+function constructTouchlinkTable(data){
+	
+	
+	//var data='{"lastscan":"2017-10-21T23:45:18","result":{"1":{"address":"0x0017880101209030","channel":15,"factorynew":false,"panid":24267,"rssi":-40},"2":{"address":"0x00178801023484a8","channel":15,"factorynew":false,"panid":24267,"rssi":-40}},"scanstate":"idle"}';
+
+	var dataresultJson=JSON.parse(data);
+	var table ='<table class="table table-bordered table-condensed" style="width:100%">';
+	//table+='<tr>';
+	table+='<caption>Dernier scan le : '+dataresultJson.lastscan+'</caption>';
+	//table+='</tr>';
+	table+='<tr>';
+	table+='<th>{{Faire clignoter}}</th>';
+	table+='<th>{{Adresse}}</th>';
+	table+='<th>{{Canal}}</th>';
+	table+='<th>{{rssi}}</th>';
+	table+='<th>{{Reset}}</th>';
+	table+='</tr>';
+	table+='<tbody>';
+
+
+	for (var i=1;i<Object.keys(dataresultJson.result).length+1;i++) {
+
+		table+='<tr>';
+		table+='<td><a id="'+i+'blink" name="'+dataresultJson.result[i].address+'" class="btn btn-info  touchlinkDeviceReset"><i class="jeedom2 jeedom2-bright4"></i> {{Clignoter}}</a></td>';
+		table+='<td>'+dataresultJson.result[i].address+'</td>';
+		table+='<td>'+dataresultJson.result[i].channel+'</td>';
+		table+='<td>'+dataresultJson.result[i].rssi+'</td>';
+		table+='<td><a id="'+i+'reset" name="'+dataresultJson.result[i].address+'" class="btn btn-danger  touchlinkDeviceReset"><i class="fa fa-minus-circle"></i> {{Reset}}</a></td>';
+		table+='</tr>';	
+	}
+	table+='</tbody>';
+	table+='</table>';
+	return table;
+	
 }
 
 /*
