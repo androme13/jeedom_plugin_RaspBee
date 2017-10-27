@@ -16,6 +16,27 @@
 */
 refreshEqlogicsList();
 
+
+$('#bt_include').on('click', function () {
+	$('#md_modal').dialog({
+title: "{{Mode inclusion}}",
+dialogClass: "no-close",
+		// on cache le bouton fermer
+open: function(event, ui) { jQuery('.ui-dialog-titlebar-close').hide(); },
+buttons: [
+		{
+text: "{{Fermer}}",
+click: function() {
+				window.location.reload();
+			}
+		}
+		],
+	});
+	$('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=include').dialog('open');
+	
+});
+
+
 $('#bt_syncEqLogic').on('click', function () {
 	$('#md_modal').dialog({
 title: "{{Synchronisation}}",

@@ -122,7 +122,11 @@
 				"subtype": "slider", 
 				"display": {
 					"generic_type": "LIGHT_SLIDER"
-				}
+				},
+				"template":{
+                    "dashboard" : "",
+                    "mobile" : ""
+                }
 			},
 			{
 				"name": "Etat luminosité", 

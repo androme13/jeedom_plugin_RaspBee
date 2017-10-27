@@ -59,6 +59,9 @@ try {
 		case 'getRaspBEELights' :
 		$resp=RaspBEE::getRaspBEELights();
 		break;	
+		case 'getTouchlink' :
+		$resp=RaspBEE::getTouchlink();
+		break;
 		case 'removeAll' :
 		$resp=RaspBEE::removeAll();
 		break;				

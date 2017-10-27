@@ -139,6 +139,10 @@ class RaspBEECom {
 		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/lights");
 	}
 	
+	public function getTouchlink(){
+		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/touchlink/scan");
+	}
+	
 	
 	
 	public function sendCommand($type=null,$id=null,$command=null){

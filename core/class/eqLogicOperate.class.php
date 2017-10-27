@@ -347,12 +347,14 @@ class eqLogicOperate extends eqLogic {
 						$response->error = 2;
 					}
 				}						
-				foreach ($command[configuration] as $command => $key){
+				foreach ($command[configuration] as $command => $key){					
 					if ($RaspBEECmd->getConfiguration($command)!=$key){
 						$RaspBEECmd->setConfiguration($command,$key);
 						$response->error = 2;
 					}					
-				}				
+				}
+				
+				
 				$RaspBEECmd->save();
 				$response->message=$RaspBEECmd;
 				//$response->error = 2;

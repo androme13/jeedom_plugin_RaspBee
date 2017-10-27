@@ -139,8 +139,8 @@
 					"generic_type": "LIGHT_SLIDER"
 				},
 				"template":{
-                    "dashboard" : "light",
-                    "mobile" : "light"
+                    "dashboard" : "",
+                    "mobile" : ""
                 }
 			},
 			{

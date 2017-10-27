@@ -49,7 +49,7 @@ foreach ($eqLogics as $eqLogic) {
 $controllerMode=1;
 $status=RaspBEE::deamon_info();
 // bouton mode inclusion
-echo '<div class="cursor changeIncludeState card" data-mode="1" data-state="0" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
+echo '<div class="cursor changeIncludeState card" id="bt_include" data-mode="1" data-state="0" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
 echo '<center>';
 echo '<i class="fa fa-sign-in fa-rotate-90" style="font-size : 6em;color:#94ca02;"></i>';
 echo '</center>';
