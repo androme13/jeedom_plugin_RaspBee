@@ -106,6 +106,10 @@ class eqLogicOperate extends eqLogic {
 			case "renew" :
 			break;
 			case "renewbutidandname" :
+				$eqLogic = self::setGenericEqLogicConf($eqLogic,$device,$syncType,$eqLogicMode);
+				$eqLogic = self::checkAndSetEqLogicConfiguration($eqLogic,'hascolor',$device[hascolor],$syncType);
+				$eqLogic = self::checkAndSetEqLogicConfiguration($eqLogic,'colormode',$device[state][colormode],$syncType);
+				$eqLogic->save();
 			break;
 		}
 		return self::setGenericCmdList(basename($config),$eqLogic,$syncType);			
@@ -174,6 +178,7 @@ class eqLogicOperate extends eqLogic {
 			case "renew" :
 			break;
 			case "renewbutidandname" :
+				$eqLogic->setConfiguration($attr, $value);
 			break;
 		}
 		return $eqLogic;
@@ -195,6 +200,13 @@ class eqLogicOperate extends eqLogic {
 			case "renew" :
 			break;
 			case "renewbutidandname" :
+				self::checkAndSetEqLogicConfiguration($eqLogic,'origid',$device[origid],$syncType);
+				self::checkAndSetEqLogicConfiguration($eqLogic,'manufacturername',$device[manufacturername],$syncType);
+				self::checkAndSetEqLogicConfiguration($eqLogic,'modelid',$device[modelid],$syncType);
+				self::checkAndSetEqLogicConfiguration($eqLogic,'reachable',$device[reachable],$syncType);
+				self::checkAndSetEqLogicConfiguration($eqLogic,'swversion',$device[swversion],$syncType);
+				self::checkAndSetEqLogicConfiguration($eqLogic,'type',$device[type],$syncType);
+				self::checkAndSetEqLogicConfiguration($eqLogic,'uniqueid',$device[uniqueid],$syncType);
 			break;
 		}	
 		return $eqLogic;		
@@ -222,6 +234,8 @@ class eqLogicOperate extends eqLogic {
 			case "renew" :
 			break;
 			case "renewbutidandname" :
+				$eqLogic = self::setGenericEqLogicConf($eqLogic,$device,$syncType,$eqLogicMode);
+				$eqLogic->save();
 			break;
 		}
 		return $eqLogic;		

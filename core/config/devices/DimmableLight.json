@@ -14,7 +14,7 @@
 			{
 				"name": "Alerte on", 
 				"type": "action", 
-				"isVisible": 1, 
+				"isVisible": 0, 
 				"isHistorized": 0,
 				"logicalId": "alert_on",				
 				"configuration": {
@@ -29,7 +29,7 @@
 			{
 				"name": "Alerte off", 
 				"type": "action", 
-				"isVisible": 1, 
+				"isVisible": 0, 
 				"isHistorized": 0,
 				"logicalId": "alert_off",				
 				"configuration": {
