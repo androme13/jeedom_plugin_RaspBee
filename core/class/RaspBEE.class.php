@@ -323,6 +323,14 @@ class RaspBEE extends eqLogic {
 		return $result;
 	}
 	
+	public function getTouchlinkIdentify($id){
+		//error_log("getRaspBEESensors pass");
+		$raspbeecom = new RaspBEECom;
+		$result = $raspbeecom->getTouchlinkIdentify($id);
+		unset($raspbeecom);
+		return $result;
+	}
+	
 	public function createEqLogic($device,$syncType){
 		//error_log("createEqLogic pass");
 		return eqLogicOperate::createEqLogic($device,$syncType);

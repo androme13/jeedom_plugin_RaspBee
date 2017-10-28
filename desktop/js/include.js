@@ -15,6 +15,7 @@
 */
 
 var includemode = 0;
+
 $('input[type=radio][name=optionType][value=light]').attr('checked', true);
 $('input[type=radio][name=optionType]').on( "click", function() {
 	var help ="";
@@ -33,6 +34,7 @@ $('input[type=radio][name=optionType]').on( "click", function() {
 	help+="<br>-{{Le prériphérique doit être à 50 cm environ}}.";
 	help+="<br>-{{Vous devez appuyer sur le bouton reset du périphérique}}.";
 	help+="<br>-{{Après le reset, le périphérique pourra rejoindre le réseau}}.";
+	help+="<br>-{{L'inclusion peut ensuite être lancée}}.";
   $( "#syncOptionsHelp" ).html(help);
 });
 $('input[type=radio][name=optionType][value=light]').click();
@@ -76,23 +78,61 @@ function showTouchlink(){
 			{
 				
 				$('#includecontent').html(constructTouchlinkTable(data.result));
+				$('.blinkLight').on( "click", function(e) {
+					//console.log(e);
+					//var button = $(this);
+					$('.blinkLight').attr('disabled','disabled');
+					var timeleft = 10;
+					var reEnable = setInterval(function(){
+						$('.blinkLight').removeAttr("disabled");
+						clearInterval(reEnable);
+						
+					},6000);
+					var id = $(this).closest("tr")[0].id;
+					//console.dir("row",row);
+					$.ajax({
+					type: "POST", 
+					url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+					data: {
+						action: "getTouchlinkIdentify",
+						id: id
+					},
+					dataType: 'json',
+					error: function (request, status, error) {
+						console.dir(error);
+						$('#div_includeAlert').showAlert({message: error.message, level: 'danger'});
+						//handleAjaxError(request, status, error);
+					},
+					success: function (data) { 
+						if (data.state != 'ok') {
+							console.dir(data);
+							$('#div_includeAlert').showAlert({message: data.result, level: 'danger'});
+						}else
+						{									
+							//$(this).removeAttr("disabled");
+							//$('#div_includeAlert').showAlert({message: "{{Tous les équipements ont été supprimés}}", level: 'success'});								
+						}
+						//window.location.reload();	
+					}
+				});
+				});
 			}
 		}
 	});
 }
 
 function constructTouchlinkTable(data){
-	
-	
 	//var data='{"lastscan":"2017-10-21T23:45:18","result":{"1":{"address":"0x0017880101209030","channel":15,"factorynew":false,"panid":24267,"rssi":-40},"2":{"address":"0x00178801023484a8","channel":15,"factorynew":false,"panid":24267,"rssi":-40}},"scanstate":"idle"}';
 
 	var dataresultJson=JSON.parse(data);
 	var table ='<table class="table table-bordered table-condensed" style="width:100%">';
 	//table+='<tr>';
-	table+='<caption>Dernier scan le : '+dataresultJson.lastscan+'</caption>';
+	table+='<caption><a id="'+i+'blink" name="refresh" class="btn btn-success"><i class="fa fa-refresh"></i> {{Raffraichir}}</a>&nbsp';
+	table+='Dernier scan le : '+dataresultJson.lastscan+'</caption>';
 	//table+='</tr>';
 	table+='<tr>';
 	table+='<th>{{Faire clignoter}}</th>';
+	table+='<th>{{ID réseau}}</th>';
 	table+='<th>{{Adresse}}</th>';
 	table+='<th>{{Canal}}</th>';
 	table+='<th>{{rssi}}</th>';
@@ -103,8 +143,9 @@ function constructTouchlinkTable(data){
 
 	for (var i=1;i<Object.keys(dataresultJson.result).length+1;i++) {
 
-		table+='<tr>';
-		table+='<td><a id="'+i+'blink" name="'+dataresultJson.result[i].address+'" class="btn btn-info  touchlinkDeviceReset"><i class="jeedom2 jeedom2-bright4"></i> {{Clignoter}}</a></td>';
+		table+='<tr id="'+i+'">';
+		table+='<td><a id="'+i+'blink" name="'+dataresultJson.result[i].address+'" class="btn btn-info  blinkLight"><i class="jeedom2 jeedom2-bright4"></i> {{Clignoter}}</a></td>';
+		table+='<td>0x'+dataresultJson.result[i].panid.toString(16)+'</td>';
 		table+='<td>'+dataresultJson.result[i].address+'</td>';
 		table+='<td>'+dataresultJson.result[i].channel+'</td>';
 		table+='<td>'+dataresultJson.result[i].rssi+'</td>';
@@ -117,7 +158,6 @@ function constructTouchlinkTable(data){
 	
 }
 
-/*
-ZHALightLevel ZHAPresence ZHAOpenClose ZHATemperature ZHAHumidity ZHAPressure ZHASwitch
-*/
+
+
 

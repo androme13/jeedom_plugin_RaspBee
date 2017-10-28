@@ -62,6 +62,9 @@ try {
 		case 'getTouchlink' :
 		$resp=RaspBEE::getTouchlink();
 		break;
+		case 'getTouchlinkIdentify' :
+		$resp=RaspBEE::getTouchlinkIdentify(init('id'));
+		break;
 		case 'removeAll' :
 		$resp=RaspBEE::removeAll();
 		break;				

@@ -54,11 +54,10 @@ require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
 					<div id="syncOptionsHelp" class="panel-footer"></div>
 				</div>
 			</div>
-
-		<div class="panel panel-footer">			
-				<a class="btn btn-success" id="bt_launchinclude">
-					<i class="fa fa-sign-in fa-rotate-90"></i> {{Lancer l'inclusion}}</a>
-		</div>        
+			<div class="panel panel-footer">			
+				<a class="btn btn-info" id="bt_launchinclude">
+				<i class="fa fa-sign-in fa-rotate-90"></i> {{Lancer l'inclusion}}</a>
+			</div>        
 		</div> 	
 	</form>
 	</div>

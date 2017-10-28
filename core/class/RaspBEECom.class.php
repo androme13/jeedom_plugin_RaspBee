@@ -73,6 +73,22 @@ class RaspBEECom {
 		return self::genericResponseProcess($opts);
 	}
 	
+	private function genericPost($url=null){
+		//if ($url==null) return false;
+		//$ch = curl_init();
+		$opts = [
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_FORBID_REUSE   => true,
+			CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
+			CURLOPT_URL            => $url,
+			CURLOPT_POST		   => true,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_TIMEOUT        => 30,
+			CURLOPT_CONNECTTIMEOUT => 30
+		];
+		return self::genericResponseProcess($opts);
+	}
+	
 	private function genericResponseProcess($opts){
 		$ch = curl_init();
 		curl_setopt_array($ch, $opts);
@@ -141,6 +157,10 @@ class RaspBEECom {
 	
 	public function getTouchlink(){
 		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/touchlink/scan");
+	}
+	
+	public function getTouchlinkIdentify($id){
+		return self::genericPost("http://".$this->ip."/api/".$this->apikey."/touchlink/".$id."/identify");
 	}
 	
 	
