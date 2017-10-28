@@ -163,6 +163,10 @@ class RaspBEECom {
 		return self::genericPost("http://".$this->ip."/api/".$this->apikey."/touchlink/".$id."/identify");
 	}
 	
+	public function getTouchlinkRefresh($id){
+		return self::genericPost("http://".$this->ip."/api/".$this->apikey."/touchlink/scan");
+	}
+	
 	
 	
 	public function sendCommand($type=null,$id=null,$command=null){

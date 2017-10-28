@@ -27,7 +27,7 @@ $('input[type=radio][name=optionType]').on( "click", function() {
 			break;
 		case 'sensor' :
 			help = "{{Autre}} : {{Permet d'inclure d'autres périphériques ZigBEE comme les capteurs, ou interupteurs}}.";
-			includemode = 1
+			includemode = 1;
 			break;
 		
 	};
@@ -58,6 +58,28 @@ function HTMLClean(value){
 }
 
 function showTouchlink(){
+	var content='<a id="bt_TouchlinkRefresh" class="btn btn-success"><i class="fa fa-refresh"></i> {{Raffraichir}}</a>';	
+	content+='<div id="progressbar" class="AcceptedBar" style="background-color: #497ad6;"></div>';
+	
+	$('#includecontent').html(content);
+	$('#bt_TouchlinkRefresh').on( "click", function(e) {
+		$('#bt_TouchlinkRefresh').attr('disabled','disabled');
+		$('.blinkLight').attr('disabled','disabled');
+		$('.resetLight').attr('disabled','disabled');
+		$( "#progressbar" ).progressbar({
+		  classes: {
+			"ui-progressbar": "ui-corner-all",
+		  }
+		});
+		$( "#progressbar" ).progressbar({value: 0}); 
+		$('#progressbar').css("background-color","#FF0000 !important;");  
+		showTouchlinkScan();
+	});
+	showTouchlinkRefresh();
+}
+
+
+function showTouchlinkRefresh(){
 	$.ajax({
 		type: "POST", 
 		url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
@@ -76,62 +98,81 @@ function showTouchlink(){
 				$('#div_includeAlert').showAlert({message: data.result, level: 'danger'});
 			}else
 			{
-				
-				$('#includecontent').html(constructTouchlinkTable(data.result));
+									
+				$('#includetable').html(constructTouchlinkTable(data.result));
 				$('.blinkLight').on( "click", function(e) {
-					//console.log(e);
-					//var button = $(this);
 					$('.blinkLight').attr('disabled','disabled');
-					var timeleft = 10;
 					var reEnable = setInterval(function(){
 						$('.blinkLight').removeAttr("disabled");
-						clearInterval(reEnable);
-						
+						clearInterval(reEnable);						
 					},6000);
 					var id = $(this).closest("tr")[0].id;
-					//console.dir("row",row);
 					$.ajax({
-					type: "POST", 
-					url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
-					data: {
-						action: "getTouchlinkIdentify",
-						id: id
-					},
-					dataType: 'json',
-					error: function (request, status, error) {
-						console.dir(error);
-						$('#div_includeAlert').showAlert({message: error.message, level: 'danger'});
-						//handleAjaxError(request, status, error);
-					},
-					success: function (data) { 
-						if (data.state != 'ok') {
-							console.dir(data);
-							$('#div_includeAlert').showAlert({message: data.result, level: 'danger'});
-						}else
-						{									
-							//$(this).removeAttr("disabled");
-							//$('#div_includeAlert').showAlert({message: "{{Tous les équipements ont été supprimés}}", level: 'success'});								
+						type: "POST", 
+						url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+						data: {
+							action: "getTouchlinkIdentify",
+							id: id
+						},
+						dataType: 'json',
+						error: function (request, status, error) {
+							console.dir(error);
+							$('#div_includeAlert').showAlert({message: error.message, level: 'danger'});
+						},
+						success: function (data) { 
+							if (data.state != 'ok') {
+								console.dir(data);
+								$('#div_includeAlert').showAlert({message: data.result, level: 'danger'});
+							}
 						}
-						//window.location.reload();	
-					}
-				});
+					});
 				});
 			}
 		}
 	});
 }
 
+function showTouchlinkScan(){
+		$.ajax({
+			type: "POST", 
+			url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+			data: {
+				action: "getTouchlinkRefresh",
+			},
+			dataType: 'json',
+			error: function (request, status, error) {
+				$('#div_includeAlert').showAlert({message: error.message, level: 'danger'});
+			},
+			success: function (data) { 
+				if (data.state != 'ok') {
+					$('#div_includeAlert').showAlert({message: data.result, level: 'danger'});
+				}else
+				{									
+					var timer = 0;
+					var downloadTimer = setInterval(function(){
+						timer++;
+						$( "#progressbar" ).progressbar({value: timer*10});
+						if(timer >= 10){
+							showTouchlinkRefresh();
+							$('.blinkLight').removeAttr("disabled");
+							$('.resetLight').removeAttr("disabled");
+							$('#bt_TouchlinkRefresh').removeAttr("disabled");
+							clearInterval(downloadTimer);
+						};
+					},1000);								
+				}
+			}
+		});
+}
+
 function constructTouchlinkTable(data){
 	//var data='{"lastscan":"2017-10-21T23:45:18","result":{"1":{"address":"0x0017880101209030","channel":15,"factorynew":false,"panid":24267,"rssi":-40},"2":{"address":"0x00178801023484a8","channel":15,"factorynew":false,"panid":24267,"rssi":-40}},"scanstate":"idle"}';
-
+	var disabledReset='';
 	var dataresultJson=JSON.parse(data);
-	var table ='<table class="table table-bordered table-condensed" style="width:100%">';
-	//table+='<tr>';
-	table+='<caption><a id="'+i+'blink" name="refresh" class="btn btn-success"><i class="fa fa-refresh"></i> {{Raffraichir}}</a>&nbsp';
-	table+='Dernier scan le : '+dataresultJson.lastscan+'</caption>';
-	//table+='</tr>';
+	var table ='<table id="touchlinkTable" class="table table-bordered table-condensed" style="width:100%;">';
+	table+='<caption><span class="label label-default">Dernier scan le : '+dataresultJson.lastscan+'</span></caption>';
 	table+='<tr>';
-	table+='<th>{{Faire clignoter}}</th>';
+	table+='<th>{{Identifier}}</th>';
 	table+='<th>{{ID réseau}}</th>';
 	table+='<th>{{Adresse}}</th>';
 	table+='<th>{{Canal}}</th>';
@@ -139,23 +180,22 @@ function constructTouchlinkTable(data){
 	table+='<th>{{Reset}}</th>';
 	table+='</tr>';
 	table+='<tbody>';
-
-
 	for (var i=1;i<Object.keys(dataresultJson.result).length+1;i++) {
-
-		table+='<tr id="'+i+'">';
-		table+='<td><a id="'+i+'blink" name="'+dataresultJson.result[i].address+'" class="btn btn-info  blinkLight"><i class="jeedom2 jeedom2-bright4"></i> {{Clignoter}}</a></td>';
+		table+='<tr id="'+i+'" >';
+		table+='<td><a id="'+i+'blink" name="'+dataresultJson.result[i].address+'" class="btn btn-info  blinkLight"><i class="jeedom2 jeedom2-bright4"></i></a></td>';
 		table+='<td>0x'+dataresultJson.result[i].panid.toString(16)+'</td>';
 		table+='<td>'+dataresultJson.result[i].address+'</td>';
 		table+='<td>'+dataresultJson.result[i].channel+'</td>';
 		table+='<td>'+dataresultJson.result[i].rssi+'</td>';
-		table+='<td><a id="'+i+'reset" name="'+dataresultJson.result[i].address+'" class="btn btn-danger  touchlinkDeviceReset"><i class="fa fa-minus-circle"></i> {{Reset}}</a></td>';
+		if (dataresultJson.result[i].factorynew==false)
+			table+='<td><a id="'+i+'reset" name="'+dataresultJson.result[i].address+'" class="btn btn-danger resetLight"><i class="fa fa-minus-circle"></i> {{Reset}}</a></td>';
+		else
+			table+='<td></td>';
 		table+='</tr>';	
 	}
 	table+='</tbody>';
 	table+='</table>';
 	return table;
-	
 }
 
 
