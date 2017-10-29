@@ -251,7 +251,13 @@ class RaspBEE extends eqLogic {
 	}
 
 	public function preRemove() {
-		
+		$eqLogic= $this;
+		// si c'est un groupe que l'on supprime
+		if ($eqLogic->getConfiguration("type")=="LightGroup"){
+			$raspbeecom = new RaspBEECom;
+			$result = $raspbeecom->groupDelete($eqLogic->getConfiguration("origid"));
+			unset($raspbeecom);
+		};
 	}
 
 	public function postRemove() {

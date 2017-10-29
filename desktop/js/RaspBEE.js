@@ -32,8 +32,7 @@ click: function() {
 		}
 		],
 	});
-	$('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=include').dialog('open');
-	
+	$('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=include').dialog('open');	
 });
 
 
@@ -41,21 +40,20 @@ click: function() {
 
 $('#bt_syncEqLogic').on('click', function () {
 	$('#md_modal').dialog({
-title: "{{Synchronisation}}",
-dialogClass: "no-close",
+		title: "{{Synchronisation}}",
+		dialogClass: "no-close",
 		// on cache le bouton fermer
-open: function(event, ui) { jQuery('.ui-dialog-titlebar-close').hide(); },
-buttons: [
-		{
-text: "{{Fermer}}",
-click: function() {
+		open: function(event, ui) { jQuery('.ui-dialog-titlebar-close').hide(); },
+		buttons: [
+			{
+				text: "{{Fermer}}",
+				click: function() {
 				window.location.reload();
 			}
 		}
 		],
 	});
-	$('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=synchronize').dialog('open');
-	
+	$('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=synchronize').dialog('open');	
 });
 
 
@@ -164,83 +162,6 @@ var dialog_title = "{{Création d'un groupe}}";
 	
 }
 
-function deleteGroup(origid,id){
-var dialog_title = "{{Suppression totale d'un groupe}}";
-	var dialog_message = '<form class="form-horizontal onsubmit="return false;"> ';
-	dialog_message += '{{Veuillez confirmer la suppression totale du groupe}}.'+origid+' '+id+'<br><br><br><label class="lbl lbl-warning" for="name">{{Attention, une fois le groupe supprimé, il le sera définitivement}}.</label>';
-	dialog_message += '</form>';
-	bootbox.dialog({
-		title: dialog_title,
-		message: dialog_message,
-		buttons: {
-			"{{Annuler}}": {
-				callback: function () {
-				$('#div_raspbeeAlert').showAlert({message: "{{Suppression de groupe annulée}}", level: 'info'});
-				}
-			},
-		success: {
-			label: "{{Supprimer le groupe}}",
-			className: "btn-success",
-			callback: function () {		
-				//console.log($("#groupName").val())
-				$.ajax({
-					type: "POST", 
-					url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
-					data: {
-						action: "groupDelete",
-						id: origid
-					},
-					dataType: 'json',
-					error: function (request, status, error) {
-						console.dir(error);
-						$('#div_raspbeeAlert').showAlert({message: error.message, level: 'danger'});
-						//handleAjaxError(request, status, error);
-					},
-					success: function (data) { 
-						if (data.state != 'ok') {
-							console.dir(data);
-							$('#div_raspbeeAlert').showAlert({message: data.result, level: 'danger'});
-						}else
-						{
-							console.dir(data);
-							$.ajax({
-								type: "POST", 
-								url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
-								data: {
-									action: "eqLogicDelete",
-									id: id
-								},
-								dataType: 'json',
-								error: function (request, status, error) {
-									console.dir(error);
-									$('#div_raspbeeAlert').showAlert({message: error.message, level: 'danger'});
-									//handleAjaxError(request, status, error);
-								},
-								success: function (data) { 
-									if (data.state != 'ok') {
-										console.dir(data);
-										$('#div_raspbeeAlert').showAlert({message: data.result, level: 'danger'});
-									}else
-									{
-										console.dir(data);
-
-										$('#div_raspbeeAlert').showAlert({message: "{{Le groupe a été supprimé avec succès}}", level: 'success'});
-										$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE");
-									}
-								}
-							});
-							/*$('#div_raspbeeAlert').showAlert({message: "{{Le groupe a été supprimé avec succès}}", level: 'success'});*/
-						}
-					}
-				});
-								
-			}
-		}
-		}
-	});	
-	
-}
-
 // fonction executée par jeedom lors de l'affichage des details d'un eqlogic
 function printEqLogic(_eqLogic) {
 	if (!isset(_eqLogic)) {
@@ -263,15 +184,24 @@ function printEqLogic(_eqLogic) {
 	// on regarde si c'est un groupe ou pas
 	// on ne peut supprimer les groupes qui n'ont pas de ctrl maitre
 	if(_eqLogic.configuration.type=="LightGroup" && ("devicemembership" in _eqLogic.configuration)){
-		if (_eqLogic.configuration.devicemembership==="null"){
-			$('#buttons_infoseqlogic').append('<a id="bt_deleteGroup" class="btn btn-danger" style="margin-bottom:20px;"><i class="fa fa-minus-circle"></i> {{Supprimer totalement le groupe}}</a>');
-			$('#buttons_infoseqlogic').click(function() {
-				deleteGroup(_eqLogic.configuration.origid,_eqLogic.id);
-			});
+		if (_eqLogic.configuration.devicemembership!="null"){
+			$('#div_removeGeneric').hide();
+			//$('#div_removeSpecial').hide();
+			
+			$('#buttons_infoseqlogic').append('<a class="label label-info" style="margin-bottom:20px;"><i class="fa fa-info-circle"></i> {{Ce groupe ne peut pas être supprimé car il appartient à un contrôleur}}.</a>');
 		}
-	
+		else
+		{
+			$('#div_removeGeneric').show();
+		}
+	}
 	else
-		$('#buttons_infoseqlogic').append('<a class="label label-info" style="margin-bottom:20px;"><i class="fa fa-info-circle"></i> {{Ce groupe ne peut être supprimé totalement car il appartient à un contrôleur}}.</a>');
+	{
+		$('#div_removeGeneric').show();
+		/*$('#div_remove').html='<div id="div_remove"><a class="btn btn-danger pull-right"><i class="fa fa-minus-circle"></i> {{Supprimer}}</a></div>';
+		$('#div_remove').click(function() {
+			deleteGroup(_eqLogic.configuration.origid,_eqLogic.id);
+		});*/
 	}
 	if (("devicemembership" in _eqLogic.configuration))
 	printMasterEqLogic(_eqLogic);
