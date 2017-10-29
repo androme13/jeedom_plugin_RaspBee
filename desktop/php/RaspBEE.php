@@ -256,6 +256,7 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 						</tbody>
 					</table>
 				</form>
+				<div id="buttons_infoseqlogic"></div>
 			</div>
 		</div>
 

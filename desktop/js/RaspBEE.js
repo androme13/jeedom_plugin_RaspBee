@@ -106,31 +106,36 @@ function addCmdToTable(_cmd) {
 }
 
 // fonction executée par jeedom lors de l'affichage des details d'un eqlogic
-function printEqLogic(_eqlogic) {
-	if (!isset(_eqlogic)) {
-		var _eqlogic = {configuration: {}};
+function printEqLogic(_eqLogic) {
+	if (!isset(_eqLogic)) {
+		var _eqLogic = {configuration: {}};
 	}
-	if (!isset(_eqlogic.configuration)) {
-		_eqlogic.configuration = {};
+	if (!isset(_eqLogic.configuration)) {
+		_eqLogic.configuration = {};
 	}
 	$('#table_infoseqlogic tbody').empty();
+	$('#buttons_infoseqlogic').empty();
 	var subst = { true : '<span title="Le périphérique est online"><i class="fa fa-check-circle" style="color:#007600;"></i></span', false: '<span title="Le périphérique est offline"><i class="fa fa-times-circle" style="color:#760000;"></i></span>'};
-	printEqLogicHelper(false,"{{Connecté}}","reachable",_eqlogic,subst);
-	printEqLogicHelper(true,"{{Id origine}}","origid",_eqlogic);	
-	printEqLogicHelper(false,"{{Marque}}","manufacturername",_eqlogic);
-	printEqLogicHelper(false,"{{Modèle}}","modelid",_eqlogic);	
-	printEqLogicHelper(true,"{{Firmware}}","swversion",_eqlogic);	
-	printEqLogicHelper(true,"{{Type}}","type",_eqlogic);	
-	printEqLogicHelper(true,"{{UID}}","uniqueid",_eqlogic);
-	if 	(_eqlogic.configuration.type=="LightGroup"){
-	$('#div_infoseqlogic').append('<a id="bt_addGroup" class="btn btn-danger" style="margin-bottom:20px;"><i class="fa fa-minus"></i> {{Supprimer le groupe}}</a>');
-	};
-	if (("devicemembership" in _eqlogic.configuration))
-	printMasterEqLogic(_eqlogic);
+	printEqLogicHelper(false,"{{Connecté}}","reachable",_eqLogic,subst);
+	printEqLogicHelper(true,"{{Id origine}}","origid",_eqLogic);	
+	printEqLogicHelper(false,"{{Marque}}","manufacturername",_eqLogic);
+	printEqLogicHelper(false,"{{Modèle}}","modelid",_eqLogic);	
+	printEqLogicHelper(true,"{{Firmware}}","swversion",_eqLogic);	
+	printEqLogicHelper(true,"{{Type}}","type",_eqLogic);	
+	printEqLogicHelper(true,"{{UID}}","uniqueid",_eqLogic);
+	//printEqLogicHelper(true,"{{membership}}","devicemembership",_eqLogic);
+	// on regarde si c'est un groupe ou pas
+	// on ne peut supprimer les groupes qui n'ont pas de ctrl maitre
+	if(_eqLogic.configuration.type=="LightGroup" && ("devicemembership" in _eqLogic.configuration)){
+		if (_eqLogic.configuration.devicemembership==="null")
+		$('#buttons_infoseqlogic').append('<a id="bt_addGroup" class="btn btn-danger" style="margin-bottom:20px;"><i class="fa fa-minus-circle"></i> {{Supprimer le groupe}}</a>');
+	}
+	if (("devicemembership" in _eqLogic.configuration))
+	printMasterEqLogic(_eqLogic);
 	else
 	$('#masterEqLogic').empty();
-	if (("lights" in _eqlogic.configuration))
-	printMembersEqLogic(_eqlogic);
+	if (("lights" in _eqLogic.configuration))
+	printMembersEqLogic(_eqLogic);
 	else
 	$('#membersEqLogic').empty();
 }
@@ -194,7 +199,7 @@ function printMembersEqLogic(_eqLogic){
 	if (!is_null(lights)){
 
 		var master ="";
-		master+='<legend><i class="fa fa-table"></i> {{Membres du groupe}}</legend>'
+		master+='<legend><i class="fa fa-table"></i> {{Membres du groupe}} ('+lights.length+')</legend>'
 		master+='<div class="membersCard" style="display: flex;">';
 
 		for(var i= 0; i < lights.length; i++){
@@ -210,9 +215,9 @@ function printMembersEqLogic(_eqLogic){
 					if (result!=undefined){			
 						//console.log("success");		
 						var card = "";
-						card+='<div class="eqLogicDisplayCard cursor eql'+result.id+'" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;position: relative;">';
-						card+='<div style="margin:0;position:absolute;top: 10px;left: 125px;" expertModeVisible><a id="bt_removeFromGroup" title="{{Retirer cet équipement du groupe}}"><i class="fa fa-minus-circle" style="color:#c9302c;font-size : 2em;"></i></a></div>';
-						//card+='<div style="margin:0;position:relative;top: -80px;left: 55px;"><a id="bt_removeFromGroup"><i class="fa fa-minus-circle" style="color:red;font-size : 2em;"></i></a></div>';
+						card+='<div style="position: relative;">';
+						card+='<div class="eqlremove'+result.id+'" ownerGroup="'+_eqLogic.configuration.id+'" style="margin:0;position:absolute;top: 3px;left: 140px;"><a id="bt_removeFromGroup" title="{{Retirer cet équipement du groupe}}"><i class="fa fa-minus-circle" style="color:#c9302c;font-size : 2em;"></i></a></div>';
+						card+='<div class="eqLogicDisplayCard cursor eql'+result.id+'" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
 						card+= "<center>";
 						card+= '<span><i class="jeedom jeedom-lumiere-off" style="font-size : 6em;color:#767676;float: center;"></i></span>';
 						card+= '<br>';
@@ -220,9 +225,14 @@ function printMembersEqLogic(_eqLogic){
 						card+= '{{Eclairage}}';
 						card+= '</span>';
 						card+= "<span style='font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;'><center>"+result.humanName+"</center></span>";
-						card+='</div>';				
+						card+='</div>';
+						card+='</div>';
 						$('.membersCard').append(card);
 						$('.eql'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
+						$('.eqlremove'+result.id).click(function() {
+							//$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)
+							console.log("ok");
+						});
 					}
 				}		
 			});
