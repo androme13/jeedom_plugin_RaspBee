@@ -120,3 +120,6 @@ websocketclientparser = module.exports = {
 		}
 	}
 }
+
+// ajout de préirph
+//{"e":"added","r":"sensors","sensor":{"config":{"on":true,"reachable":true},"ep":2,"etag":"f87cca45d48d9f4f85299508a888be30","id":"14","manufacturername":"Philips","mode":1,"modelid":"RWL021","name":"RWL021 14","state":{},"type":"ZHASwitch","uniqueid":"00:17:88:01:02:e2:0d:2d-02-fc00"},"t":"event"}

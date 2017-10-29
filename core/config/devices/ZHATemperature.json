@@ -24,8 +24,8 @@
                 "generic_type": "TEMPERATURE"
             },
 			"template":{
-				"dashboard" : "badge",
-				"mobile" : "badge"
+				"dashboard" : "tile",
+				"mobile" : "tile"
 			}
         }		
     ]

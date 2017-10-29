@@ -23,8 +23,8 @@
                 "generic_type": "GENERIC_INFO"
             },
 			"template":{
-				"dashboard" : "badge",
-				"mobile" : "badge"
+				"dashboard" : "tile",
+				"mobile" : "tile"
 			}
         }		
     ]
