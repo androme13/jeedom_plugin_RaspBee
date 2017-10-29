@@ -277,6 +277,13 @@ class RaspBEE extends eqLogic {
 		return $result;
 	}
 	
+	public function groupCreate($name){
+		$raspbeecom = new RaspBEECom;
+		$result = $raspbeecom->groupCreate($name);
+		unset($raspbeecom);
+		return $result;
+	}
+	
 	public function getApiKey(){
 		$raspbeecom = new RaspBEECom;
 		$result = $raspbeecom->getAPIAccess();

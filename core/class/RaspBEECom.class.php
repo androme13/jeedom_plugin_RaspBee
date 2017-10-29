@@ -73,13 +73,14 @@ class RaspBEECom {
 		return self::genericResponseProcess($opts);
 	}
 	
-	private function genericPost($url=null){
+	private function genericPost($url=null,$param=null){
 		//if ($url==null) return false;
 		//$ch = curl_init();
 		$opts = [
 			CURLOPT_SSL_VERIFYPEER => false,
 			CURLOPT_FORBID_REUSE   => true,
 			CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
+			CURLOPT_POSTFIELDS     => $param,//"{\"devicetype\":\"jeedomRaspBEEPlugin\"}",
 			CURLOPT_URL            => $url,
 			CURLOPT_POST		   => true,
 			CURLOPT_RETURNTRANSFER => true,
@@ -112,6 +113,10 @@ class RaspBEECom {
 			$response->message=strval($response->error);			
 			return $response;
 		}		
+	}
+	
+	public function groupCreate($name){
+		return self::genericPost("http://".$this->ip."/api/".$this->apikey."/groups",'{"name":"'.$name.'"}');
 	}
 
 	public function getAPIAccess(){

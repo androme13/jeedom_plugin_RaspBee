@@ -44,6 +44,9 @@ try {
 		case 'findRaspBEE' :
 		$resp=RaspBEE::findRaspBEE();
 		break;
+		case 'groupCreate' :
+		$resp=RaspBEE::groupCreate(init('name'));
+		break;
 		case 'getAPIAccess' :
 		$resp=RaspBEE::getApiKey();
 		break;

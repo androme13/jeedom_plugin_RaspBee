@@ -21,7 +21,7 @@ if (!isConnect('admin')) {
 $plugin = plugin::byId('RaspBEE');
 sendVarToJS('eqType', $plugin->getId());
 $eqLogics = eqLogic::byType($plugin->getId());
-echo '<div id="div_inclusionAlert"/>';
+echo '<div id="div_raspbeeAlert"/></div>';
 ?>
 <div class="row row-overflow">
 	<div class="col-lg-2 col-md-3 col-sm-4">
@@ -102,8 +102,8 @@ if ($status['launchable']=="ok"){
 		</div>
 		<legend>
 			<i class="fa fa-table"></i> {{Mes équipements RaspBEE}}</legend>
-			<div><a id="bt_addGroup" class="btn btn-info" style="margin-bottom:20px;"><i class="fa fa-circle-o"></i> {{Créer un groupe}}</a></div>
-		<div class="eqLogicThumbnailContainer">	
+			<div><a id="bt_addGroup" class="btn btn-info" style="margin-bottom:20px;"><i class="fa fa-plus-circle"></i> {{Créer un groupe}}</a></div>
+			<div class="eqLogicThumbnailContainer">	
 			<?php
 foreach ($eqLogics as $eqLogic) {
 	$opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
