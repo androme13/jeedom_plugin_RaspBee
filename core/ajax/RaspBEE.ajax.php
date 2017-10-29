@@ -59,13 +59,13 @@ try {
 		case 'getRaspBEELights' :
 		$resp=RaspBEE::getRaspBEELights();
 		break;	
-		case 'getTouchlink' :
+		case 'getTouchlinkInfos' :
 		$resp=RaspBEE::getTouchlink();
 		break;
 		case 'getTouchlinkIdentify' :
 		$resp=RaspBEE::getTouchlinkIdentify(init('id'));
 		break;
-		case 'getTouchlinkRefresh' :
+		case 'launchTouchlinkScan' :
 		$resp=RaspBEE::getTouchlinkRefresh();
 		break;
 		case 'removeAll' :

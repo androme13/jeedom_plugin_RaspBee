@@ -15,21 +15,24 @@
 */
 
 var includemode = 0;
-
+//var touchlinkDatas = object();
+var touchlinkState = '';
+var touchlinkLastScan = '';
+var firstScan = true;
 $('input[type=radio][name=optionType][value=light]').attr('checked', true);
 $('input[type=radio][name=optionType]').on( "click", function() {
+	//$('#div_includeAlert').empty();
 	var help ="";
 	switch ($( "input[type=radio][name=optionType]:checked" ).val()){
 		case 'light' :
 			help = "<b>{{Un éclairage}} : {{Permet d'inclure un éclairage zigbee}}.</b>";
 			includemode = 0;
-			showTouchlink();
+			showTouchlinkView();
 			break;
 		case 'sensor' :
 			help = "<b>{{Autre}} : {{Permet d'inclure d'autres périphériques ZigBEE comme les capteurs, ou interupteurs}}.</b>";
 			includemode = 1;
-			break;
-		
+			break;		
 	};
 	help+="<br>-{{Le prériphérique doit être à 50 cm environ}}.";
 	help+="<br>-{{Vous devez appuyer sur le bouton reset du périphérique}}.";
@@ -48,45 +51,75 @@ var displayHelp = function() {
   $( "div" ).text( n + (n === 1 ? " is" : " are") + " checked!" );
 };
 
-function confirmFullSync(){
-
-	
-}
 
 function HTMLClean(value){
 	return value.replace(/<\/?[^>]+(>|$)/g, "");
 }
 
-function showTouchlink(){
-	var content='<a id="bt_TouchlinkRefresh" class="btn btn-success" style="margin-bottom:20px;"><i class="fa fa-refresh"></i> {{Raffraichir}}</a>';	
+function showTouchlinkView(){	
+	var content='<a id="bt_TouchlinkRefresh" class="btn btn-success" style="margin-bottom:20px;"><i class="fa fa-refresh"></i> {{Raffraichir}}</a><br>';	
 	content+='<div id="progressbar" class="AcceptedBar"></div>';
+	content+='<span class="label label-default">Dernier scan</span>&nbsp<span id="touchlinkLastScan" class="label label-info" style="margin-right: 20px;">'+touchlinkLastScan+'</span>';
+	content+='<span class="label label-default">Statut du scan</span>&nbsp<span id="touchlinkState" class="label label-info">'+touchlinkState+'</span>';
 	
 	$('#includecontent').html(content);
 	$('#bt_TouchlinkRefresh').on( "click", function(e) {
-		$('#bt_TouchlinkRefresh').attr('disabled','disabled');
-		$('#bt_TouchlinkRefresh').html('<i class="fa fa-clock-o"></i> {{Veuillez patienter}}...');
-		$('.blinkLight').attr('disabled','disabled');
-		$('.resetLight').attr('disabled','disabled');
-		$('#progressbar').show();
-		$( "#progressbar" ).progressbar({
-		  classes: {
-			"ui-progressbar": "ui-corner-all",
-		  }
-		});
-		$( "#progressbar" ).progressbar({value: 0}); 
-		$('#progressbar').css("background-color","#FF0000 !important;");  
-		showTouchlinkScan();
+		waitMode(true);
+		launchTouchlinkScan();
+		var timer = 0;
+					var downloadTimer = setInterval(function(){
+						getTouchlinkInfos();
+						timer++;
+						$( "#progressbar" ).progressbar({value: timer*5});
+						if(timer >= 20 || (timer >=2 && touchlinkState=='idle')){
+							waitMode(false);
+							
+							clearInterval(downloadTimer);
+						};
+					},1000);					
 	});
-	showTouchlinkRefresh();
+	getTouchlinkInfos();
 }
 
 
-function showTouchlinkRefresh(){
+function getTouchlinkInfos(){
 	$.ajax({
 		type: "POST", 
 		url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
 		data: {
-			action: "getTouchlink",
+			action: "getTouchlinkInfos",
+		},
+		dataType: 'json',
+		error: function (request, status, error) {
+			console.dir(error);
+			$('#div_includeAlert').showAlert({message: error.message, level: 'danger'});
+		},
+		success: function (data) { 
+			if (data.state != 'ok') {
+				//console.dir(data);
+				$('#div_includeAlert').showAlert({message: data.result, level: 'danger'});
+			}else
+			{
+				var response = JSON.parse(data.result);
+				touchlinkState = response.scanstate;
+				touchlinkLastScan = response.lastscan;
+				refreshStatesView();
+				if (touchlinkState=='idle')	{
+					if (firstScan===false)
+						$('#div_includeAlert').showAlert({message: "{{Scan du réseau terminé}}.", level: 'success'});
+					touchlinkTablePrepare(data);
+				}
+			}
+		}
+	});
+}
+
+/*function getTouchlinkScanDatas(){
+	$.ajax({
+		type: "POST", 
+		url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+		data: {
+			action: "getTouchlinkInfos",
 		},
 		dataType: 'json',
 		error: function (request, status, error) {
@@ -99,21 +132,99 @@ function showTouchlinkRefresh(){
 				//console.dir(data);
 				$('#div_includeAlert').showAlert({message: data.result, level: 'danger'});
 			}else
-			{
-									
-				$('#includetable').html(constructTouchlinkTable(data.result));
-				$('.blinkLight').on( "click", function(e) {
-					$('.blinkLight').attr('disabled','disabled');
-					var reEnable = setInterval(function(){
-						$('.blinkLight').removeAttr("disabled");
-						clearInterval(reEnable);						
-					},6000);
-					var id = $(this).closest("tr")[0].id;
+			{			
+			//touchlinkDatas=JSON.parse(data);
+			}			
+		}
+	});
+}*/
+
+function launchTouchlinkScan(){
+		$.ajax({
+			type: "POST", 
+			url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+			data: {
+				action: "launchTouchlinkScan",
+			},
+			dataType: 'json',
+			error: function (request, status, error) {
+				$('#div_includeAlert').showAlert({message: error.message, level: 'danger'});
+			},
+			success: function (data) { 
+				if (data.state != 'ok') {
+					$('#div_includeAlert').showAlert({message: data.result, level: 'danger'});
+				}else
+				{									
+					$('#div_includeAlert').showAlert({message: "{{Scan du réseau en cours, veuillez patienter}}...", level: 'info'});
+					firstScan=false;			
+				}
+			}
+		});
+}
+
+function refreshStatesView(){
+	if ($('#touchlinkLastScan').html()!=touchlinkLastScan) $('#touchlinkLastScan').html(touchlinkLastScan);
+	if ($('#touchlinkState').html()!=touchlinkState) $('#touchlinkState').html(touchlinkState);
+}
+
+
+function touchlinkTablePrepare(data){
+	$('#includetable').html(constructTouchlinkTable(JSON.parse(data.result)));
+	$('.blinkLight').on( "click", function(e) {
+		$('.blinkLight').attr('disabled','disabled');
+		var reEnable = setInterval(function(){
+			$('.blinkLight').removeAttr("disabled");
+			clearInterval(reEnable);						
+		},6000);
+		var id = $(this).closest("tr")[0].id;
+		$.ajax({
+			type: "POST", 
+			url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+			data: {
+				action: "getTouchlinkIdentify",
+				id: id
+			},
+			dataType: 'json',
+			error: function (request, status, error) {
+				//console.dir(error);
+				$('#div_includeAlert').showAlert({message: error.message, level: 'danger'});
+			},
+			success: function (data) { 
+				if (data.state != 'ok') {
+					//console.dir(data);
+					$('#div_includeAlert').showAlert({message: data.result, level: 'danger'});
+				}
+			}
+		});
+	});
+	$('.resetLight').on( "click", function(e) {
+		//$('.resetLight').attr('disabled','disabled');
+		//var id = $(this).closest("tr")[0].id;
+		
+		
+		var dialog_title = '{{Confirmation de reset d\'un éclairage}}';
+		var dialog_message = '<form class="form-horizontal onsubmit="return false;"> ';
+		dialog_message += '{{Veuillez confirmer le reset de l\'éclairage}}.';
+		dialog_message += '</form>';
+		bootbox.dialog({
+			title: dialog_title,
+			message: dialog_message,
+			buttons: {
+				"{{Annuler}}": {
+					callback: function () {
+					$('#div_includeAlert').showAlert({message: "{{Reset de l\'éclairage annulé}}", level: 'info'});
+					
+					}
+				},
+			success: {
+				label: "{{Reset}}",
+				className: "btn-danger",
+				callback: function () {		   
 					$.ajax({
 						type: "POST", 
 						url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
 						data: {
-							action: "getTouchlinkIdentify",
+							action: "getTouchlinkReset",
 							id: id
 						},
 						dataType: 'json',
@@ -128,103 +239,24 @@ function showTouchlinkRefresh(){
 							}
 						}
 					});
-				});
-				$('.resetLight').on( "click", function(e) {
-					//$('.resetLight').attr('disabled','disabled');
-					//var id = $(this).closest("tr")[0].id;
-					
-					
-					var dialog_title = '{{Confirmation de reset d\'un éclairage}}';
-					var dialog_message = '<form class="form-horizontal onsubmit="return false;"> ';
-					dialog_message += '{{Veuillez confirmer le reset de l\'éclairage}}.';
-					dialog_message += '</form>';
-					bootbox.dialog({
-						title: dialog_title,
-						message: dialog_message,
-						buttons: {
-							"{{Annuler}}": {
-								callback: function () {
-								$('#div_includeAlert').showAlert({message: "{{Reset de l\'éclairage annulé}}", level: 'info'});
-								
-								}
-							},
-						success: {
-							label: "{{Reset}}",
-							className: "btn-danger",
-							callback: function () {		   
-								$.ajax({
-									type: "POST", 
-									url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
-									data: {
-										action: "getTouchlinkReset",
-										id: id
-									},
-									dataType: 'json',
-									error: function (request, status, error) {
-										//console.dir(error);
-										$('#div_includeAlert').showAlert({message: error.message, level: 'danger'});
-									},
-									success: function (data) { 
-										if (data.state != 'ok') {
-											//console.dir(data);
-											$('#div_includeAlert').showAlert({message: data.result, level: 'danger'});
-										}
-									}
-								});
-												
-							}
-						}
-						}
-					});	
-				});
-			}
-		}
-	});
-}
-
-function showTouchlinkScan(){
-		$.ajax({
-			type: "POST", 
-			url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
-			data: {
-				action: "getTouchlinkRefresh",
-			},
-			dataType: 'json',
-			error: function (request, status, error) {
-				$('#div_includeAlert').showAlert({message: error.message, level: 'danger'});
-			},
-			success: function (data) { 
-				if (data.state != 'ok') {
-					$('#div_includeAlert').showAlert({message: data.result, level: 'danger'});
-				}else
-				{									
-					var timer = 0;
-					var downloadTimer = setInterval(function(){
-						timer++;
-						$( "#progressbar" ).progressbar({value: timer*5});
-						if(timer >= 20){
-							showTouchlinkRefresh();
-							$('#progressbar').hide();
-							$('.blinkLight').removeAttr("disabled");
-							$('.resetLight').removeAttr("disabled");
-							$('#bt_TouchlinkRefresh').removeAttr("disabled");
-							$('#bt_TouchlinkRefresh').html('<i class="fa fa-refresh"></i> {{Raffraichir}}');
-							clearInterval(downloadTimer);
-						};
-					},1000);								
+									
 				}
 			}
-		});
+			}
+		});	
+	});		
 }
+
 
 function constructTouchlinkTable(data){
 	//var data='{"lastscan":"2017-10-21T23:45:18","result":{"1":{"address":"0x0017880101209030","channel":15,"factorynew":false,"panid":24267,"rssi":-40},"2":{"address":"0x00178801023484a8","channel":15,"factorynew":false,"panid":24267,"rssi":-40}},"scanstate":"idle"}';
 	var disabledReset='';
-	var dataresultJson=JSON.parse(data);
-	var table ='<table id="touchlinkTable" class="table table-bordered table-condensed" style="width:100%;">';
-	table+='<caption><span class="label label-default">Dernier scan</span>&nbsp<span class="label label-info" style="margin-right: 20px;">'+dataresultJson.lastscan+'</span>';
-	table+='<span class="label label-default">Statut du scan</span>&nbsp<span class="label label-info">'+dataresultJson.scanstate+'</span>';
-	table+='</caption>';
+	var dataresultJson=data;
+	//var dataresultJson=JSON.parse(data);
+	var table ='<table id="touchlinkTable" class="table table-bordered table-condensed" style="width:100%;margin-top:10px;">';
+	//table+='<caption><span class="label label-default">Dernier scan</span>&nbsp<span class="label label-info" style="margin-right: 20px;">'+dataresultJson.lastscan+'</span>';
+	//table+='<span class="label label-default">Statut du scan</span>&nbsp<span class="label label-info">'+dataresultJson.scanstate+'</span>';
+	//table+='</caption>';
 	table+='<tr>';
 	table+='<th>{{Identifier}}</th>';
 	table+='<th>{{ID réseau}}</th>';
@@ -252,6 +284,30 @@ function constructTouchlinkTable(data){
 	return table;
 }
 
+
+function waitMode(mode){
+	if (mode===true){
+		$('#bt_TouchlinkRefresh').attr('disabled','disabled');
+		$('#bt_TouchlinkRefresh').html('<i class="fa fa-clock-o"></i> {{Veuillez patienter}}...');
+		$('.blinkLight').attr('disabled','disabled');
+		$('.resetLight').attr('disabled','disabled');
+		$('#progressbar').show();
+		$( "#progressbar" ).progressbar({
+		  classes: {
+			"ui-progressbar": "ui-corner-all",
+		  }
+		});
+		$( "#progressbar" ).progressbar({value: 0}); 
+		$('#progressbar').css("background-color","#FF0000 !important;");  
+	}
+	else{
+		$('#progressbar').hide();
+		$('.blinkLight').removeAttr("disabled");
+		$('.resetLight').removeAttr("disabled");
+		$('#bt_TouchlinkRefresh').removeAttr("disabled");
+		$('#bt_TouchlinkRefresh').html('<i class="fa fa-refresh"></i> {{Raffraichir}}');
+	}
+}
 
 
 
