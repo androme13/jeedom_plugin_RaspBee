@@ -31,29 +31,44 @@ require_once dirname(__FILE__).'/../core/class/RaspBEECom.class.php';
 		<div class="panel panel-primary">
 			<div class="panel-heading"><h4 class="panel-title"><i class="fa techno-freebox"></i> {{Passerelle}}</h4></div>
 			<div class="panel-body">
-			<div class="form-group">
-			<label class="raspbeeGWRefresh col-lg-4 control-label">{{Adresse IP:PORT du pont RaspBEE}}</label>
-			<div class="col-lg-2">
-			<input class="configKey form-control" id="raspbeeGWIP" data-l1key="raspbeeIP" />				
-			</div>		
-			<div class="col-lg-5">
-			<a class="btn btn-success tooltips" id="bt_searchRaspBEE" title="{{Cherche la première passerelle RaspBee sur le réseau}}"><i class="fa fa-refresh"></i></a>
-			</div>
-			</div>
+				<div class="form-group">
+					<label class="raspbeeGWRefresh col-lg-4 control-label">{{Adresse IP:PORT du pont RaspBEE}}</label>
+					<div class="col-lg-2">
+						<input class="configKey form-control" id="raspbeeGWIP" data-l1key="raspbeeIP" />
+					</div>		
+					<div class="col-lg-5">
+						<a class="btn btn-success tooltips" id="bt_searchRaspBEE" title="{{Cherche automatiquement la première passerelle RaspBee sur le réseau}}"><i class="fa fa-refresh"></i></a>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="panel panel-primary">
 			<div class="panel-heading"><h4 class="panel-title"><i class="fa securite-key1"></i> {{Clé API}}</h4></div>
 			<div class="panel-body">
-			<div class="form-group">
-			<label class="col-lg-4 control-label">{{Clé API RaspBEE}}</label>
-			<div class="col-lg-2">
-			<input disabled class="configKey form-control" id="raspbeeAPIKEY" data-l1key="raspbeeAPIKEY"/>
-			</div>		
-			<div class="col-lg-5">
-			<a class="btn btn-info tooltips" id="bt_raspbeeGETNEWKEY" title="{{Demande une nouvelle cléf API}}" disabled><i class="fa fa-refresh"></i></a>
+				<div class="form-group">
+					<label class="col-lg-4 control-label">{{Clé API RaspBEE}}</label>
+					<div class="col-lg-2">
+						<input disabled class="configKey form-control" id="raspbeeAPIKEY" data-l1key="raspbeeAPIKEY"/>
+					</div>		
+					<div class="col-lg-5">
+						<a class="btn btn-info tooltips" id="bt_raspbeeGETNEWKEY" title="{{Demande automatiquement une nouvelle cléf API}}" disabled><i class="fa fa-refresh"></i></a>
+					</div>
+				</div>
 			</div>
-			</div>
+		</div>
+		<div class="panel panel-primary">
+			<div class="panel-heading"><h4 class="panel-title"><i class="personne personne-boy22"></i> {{Mot de passe de l'utilisateur 'pi' de la passerelle distante}}</h4></div>
+						<span><i class="fa fa-info-circle"></i> {{Utile pour que le plugin effectue les mise à jour de la passerelle tout seul. Si non rempli ou erroné, la mise à jour devra être effectuée manuellement par l'utilisateur}}.</span>
+			<div class="panel-body">
+				<div class="form-group">
+					<label class="col-lg-4 control-label">{{Mot de passe}}</label>
+					<div class="col-lg-2">
+						<input type="password" class="configKey form-control" id="raspbeePIPWD" data-l1key="raspbeePIPWD"/>
+					</div>
+						<div class="col-lg-5">
+						<a class="btn btn-info tooltips" id="bt_raspbeePIPWD" title="{{Tester l'accès}}"><i class="fa fa-refresh"></i></a>
+					</div>					
+				</div>
 			</div>
 		</div>
 	</div>
