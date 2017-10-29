@@ -102,6 +102,7 @@ if ($status['launchable']=="ok"){
 		</div>
 		<legend>
 			<i class="fa fa-table"></i> {{Mes équipements RaspBEE}}</legend>
+			<div><a id="bt_addGroup" class="btn btn-info" style="margin-bottom:20px;"><i class="fa fa-circle-o"></i> {{Créer un groupe}}</a></div>
 		<div class="eqLogicThumbnailContainer">	
 			<?php
 foreach ($eqLogics as $eqLogic) {
@@ -246,7 +247,7 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 					</fieldset>
 				</form>
 			</div>
-			<div class="col-sm-5">
+			<div class="col-sm-5" id="div_infoseqlogic">
 				<form class="form-horizontal">				
 					<table id="table_infoseqlogic" class="table table-condensed" style="border-radius: 10px;">
 						<thead>

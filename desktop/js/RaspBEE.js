@@ -121,7 +121,10 @@ function printEqLogic(_eqlogic) {
 	printEqLogicHelper(false,"{{Modèle}}","modelid",_eqlogic);	
 	printEqLogicHelper(true,"{{Firmware}}","swversion",_eqlogic);	
 	printEqLogicHelper(true,"{{Type}}","type",_eqlogic);	
-	printEqLogicHelper(true,"{{UID}}","uniqueid",_eqlogic);		
+	printEqLogicHelper(true,"{{UID}}","uniqueid",_eqlogic);
+	if 	(_eqlogic.configuration.type=="LightGroup"){
+	$('#div_infoseqlogic').append('<a id="bt_addGroup" class="btn btn-danger" style="margin-bottom:20px;"><i class="fa fa-minus"></i> {{Supprimer le groupe}}</a>');
+	};
 	if (("devicemembership" in _eqlogic.configuration))
 	printMasterEqLogic(_eqlogic);
 	else
@@ -155,14 +158,14 @@ function printMasterEqLogic(_eqLogic){
 		master+='<div class="mastersCard" style="display: flex;">';	
 		for(var i= 0; i < devicemembership.length; i++){
 			jeedom.raspbee.eqLogic.humanNameByOrigIdAndType({
-origId:devicemembership[i],
+				origId:devicemembership[i],
 				//action:'humanNameByOrigId',
-type:'switch',
-error: function(error){
+				type:'switch',
+				error: function(error){
 					console.log("THE error printMasterEqLogic "+_eqLogic.name);	
 					console.log("THE error printMasterEqLogic devicemembership[i] "+devicemembership[i]);
 				},
-success:function (result){
+				success:function (result){
 					if (result!=undefined){
 						console.log("THE result: "+result+"|");
 						var card = "";
@@ -186,9 +189,7 @@ success:function (result){
 	}}
 
 function printMembersEqLogic(_eqLogic){
-	$('#membersEqLogic').empty();
-
-	
+	$('#membersEqLogic').empty();	
 	var lights=JSON.parse(_eqLogic.configuration.lights);
 	if (!is_null(lights)){
 
@@ -198,20 +199,22 @@ function printMembersEqLogic(_eqLogic){
 
 		for(var i= 0; i < lights.length; i++){
 			jeedom.raspbee.eqLogic.humanNameByOrigIdAndType({
-origId:lights[i],
-type: "light",
-error: function(error){
+			origId:lights[i],
+			type: "light",
+			error: function(error){
 					console.log("THE error printMemberEqLogic "+_eqLogic.name);	
 					console.log("THE error printMemberEqLogic light[i] "+lights[i]);
 
 				},
-success:function (result){
+			success:function (result){
 					if (result!=undefined){			
 						//console.log("success");		
 						var card = "";
-						card+='<div class="eqLogicDisplayCard cursor eql'+result.id+'" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
+						card+='<div class="eqLogicDisplayCard cursor eql'+result.id+'" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;position: relative;">';
+						card+='<div style="margin:0;position:absolute;top: 10px;left: 125px;" expertModeVisible><a id="bt_removeFromGroup" title="{{Retirer cet équipement du groupe}}"><i class="fa fa-minus-circle" style="color:#c9302c;font-size : 2em;"></i></a></div>';
+						//card+='<div style="margin:0;position:relative;top: -80px;left: 55px;"><a id="bt_removeFromGroup"><i class="fa fa-minus-circle" style="color:red;font-size : 2em;"></i></a></div>';
 						card+= "<center>";
-						card+= '<i class="jeedom jeedom-lumiere-off" style="font-size : 6em;color:#767676;"></i>';
+						card+= '<span><i class="jeedom jeedom-lumiere-off" style="font-size : 6em;color:#767676;float: center;"></i></span>';
 						card+= '<br>';
 						card+= '<span style="font-size : 0.8em;">';
 						card+= '{{Eclairage}}';
@@ -234,20 +237,18 @@ success:function (result){
 function refreshEqlogicsList(){
 	console.log("refreshEqlogicsList2");
 	//console.dir(jeedom.raspbee);
-				jeedom.raspbee.eqLogic.getAll({
-error: function(error){
-					console.log("THE error refreshEqlogicsList "+error);	
-					
-
-				},
-success:function (result){
-	console.log("result eqlogics",result.getHumanName(true,true));	
-					if (result!=undefined){			
-						//console.log("result eqlogics",result);		
-						
-					}
-				}		
-			});
+	jeedom.raspbee.eqLogic.getAll({
+		error: function(error){
+			console.log("THE error refreshEqlogicsList "+error);	
+		},
+		success:function (result){
+		console.log("result eqlogics",result.getHumanName(true,true));	
+			if (result!=undefined){			
+				//console.log("result eqlogics",result);		
+				
+			}
+		}		
+	});
 }
 
 
@@ -262,7 +263,7 @@ success:function (result){
 
 
 
-function syncEqLogicWithRaspBEE() {
+/*function syncEqLogicWithRaspBEE() {
 	$.ajax({
 type: "POST", 
 url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
@@ -282,4 +283,4 @@ success: function (data) {
 			//window.location.reload();
 		}
 	});
-}
+}*/
