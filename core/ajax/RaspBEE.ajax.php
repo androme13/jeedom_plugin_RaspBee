@@ -41,11 +41,17 @@ try {
 		case 'deleteRaspBEEUser' :
 		$resp=RaspBEE::deleteRaspBEEUser(init('user'));
 		break;
+		case 'eqLogicDelete' :
+		$resp=RaspBEE::eqLogicDelete(init('id'));
+		break;
 		case 'findRaspBEE' :
 		$resp=RaspBEE::findRaspBEE();
 		break;
 		case 'groupCreate' :
 		$resp=RaspBEE::groupCreate(init('name'));
+		break;
+		case 'groupDelete' :
+		$resp=RaspBEE::groupDelete(init('id'));
 		break;
 		case 'getAPIAccess' :
 		$resp=RaspBEE::getApiKey();

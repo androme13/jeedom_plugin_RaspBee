@@ -58,6 +58,16 @@ echo '<span style="font-size : 1.1em;position:relative; top : 23px;word-break: b
 </span>';
 echo '</div>';
 
+// bouton création de groupe
+echo '<div class="cursor card" id="bt_addGroup" data-mode="1" data-state="0" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
+echo '<center>';
+echo '<i class="fa fa-plus-circle" style="font-size : 6em;color:darkcyan;"></i>';
+echo '</center>';
+echo '<span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:darkcyan">
+<center>{{Créer un groupe}}</center>
+</span>';
+echo '</div>';
+
 // bouton configuration
 echo '<div class="cursor eqLogicAction card" data-action="gotoPluginConf" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
 echo '<center>';
@@ -100,11 +110,9 @@ if ($status['launchable']=="ok"){
 }
 ?>	 
 		</div>
-		<legend>
-			<i class="fa fa-table"></i> {{Mes équipements RaspBEE}}</legend>
-			<div><a id="bt_addGroup" class="btn btn-info" style="margin-bottom:20px;"><i class="fa fa-plus-circle"></i> {{Créer un groupe}}</a></div>
-			<div class="eqLogicThumbnailContainer">	
-			<?php
+		<legend><i class="fa fa-table"></i> {{Mes équipements RaspBEE}}</legend>
+		<div class="eqLogicThumbnailContainer">	
+<?php
 foreach ($eqLogics as $eqLogic) {
 	$opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
 	echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="'. $eqLogic->getId().'" data-logical-id="' . $eqLogic->getLogicalId().'"  style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';

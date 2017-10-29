@@ -270,6 +270,14 @@ class RaspBEE extends eqLogic {
 		return $result;
 	}
 	
+	public function eqLogicDelete($id){
+		//$raspbeecom = new RaspBEECom;
+		return eqLogicOperate::deleteEqLogic($id);
+		//$result = $raspbeecom->eqLogicDelete($id);
+		//unset($raspbeecom);
+		//return $result;
+	}
+	
 	public function findRaspBEE(){
 		$raspbeecom = new RaspBEECom;
 		$result = $raspbeecom->findRaspBEE();
@@ -280,6 +288,13 @@ class RaspBEE extends eqLogic {
 	public function groupCreate($name){
 		$raspbeecom = new RaspBEECom;
 		$result = $raspbeecom->groupCreate($name);
+		unset($raspbeecom);
+		return $result;
+	}
+	
+	public function groupDelete($id){
+		$raspbeecom = new RaspBEECom;
+		$result = $raspbeecom->groupDelete($id);
 		unset($raspbeecom);
 		return $result;
 	}

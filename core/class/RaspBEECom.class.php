@@ -57,6 +57,24 @@ class RaspBEECom {
 		return self::genericResponseProcess($opts);
 	}
 	
+	private function genericDelete($url=null,$param=null){
+		//if ($url==null) return false;
+		//$ch = curl_init();
+		$opts = [
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_FORBID_REUSE   => true,
+			CURLOPT_CUSTOMREQUEST =>  "DELETE",
+			CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
+			CURLOPT_POSTFIELDS     => $param,
+			CURLOPT_URL            => $url,
+			CURLOPT_POST		   => true,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_TIMEOUT        => 30,
+			CURLOPT_CONNECTTIMEOUT => 30
+		];
+		return self::genericResponseProcess($opts);
+	}
+	
 	private function genericGet($url=null){
 		//if ($url==null) return false;
 		//$ch = curl_init();
@@ -114,10 +132,7 @@ class RaspBEECom {
 			return $response;
 		}		
 	}
-	
-	public function groupCreate($name){
-		return self::genericPost("http://".$this->ip."/api/".$this->apikey."/groups",'{"name":"'.$name.'"}');
-	}
+
 
 	public function getAPIAccess(){
 		// méthode 1
@@ -170,6 +185,14 @@ class RaspBEECom {
 	
 	public function getTouchlinkRefresh($id){
 		return self::genericPost("http://".$this->ip."/api/".$this->apikey."/touchlink/scan");
+	}
+	
+	public function groupCreate($name){
+		return self::genericPost("http://".$this->ip."/api/".$this->apikey."/groups",'{"name":"'.$name.'"}');
+	}
+	
+	public function groupDelete($id){
+		return self::genericDelete("http://".$this->ip."/api/".$this->apikey."/groups/".$id);
 	}
 	
 	
