@@ -22,6 +22,7 @@ if (!isConnect()) {
 	die();
 }
 require_once dirname(__FILE__).'/../core/class/RaspBEECom.class.php';
+require_once dirname(__FILE__).'/../core/class/DeCONZTools.class.php';
 
 ?>
 <div id='div_configAlert' style="display: none;"></div>
@@ -68,6 +69,23 @@ require_once dirname(__FILE__).'/../core/class/RaspBEECom.class.php';
 						<div class="col-lg-5">
 						<a class="btn btn-info tooltips" id="bt_raspbeePIPWD" title="{{Tester l'accès}}"><i class="fa fa-refresh"></i></a>
 					</div>					
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-primary">
+			<div class="panel-heading"><h4 class="panel-title"><i class="personne personne-boy22"></i> {{etat ssh}}</h4></div>
+						<span><i class="fa fa-info-circle"></i> {{ssh}}.</span>
+			<div class="panel-body">
+				<div class="form-group">
+					<textarea id="sshtext" class="col-lg-8" rows="30"><?php
+						$DT = new DeCONZTools;
+						
+						$result = $DT->cnxTest("dpkg-deb --info deconz-2.04.82-qt5.deb");
+						$DT->cnxClose();
+						unset($DT);
+						echo $result->message;
+					?></textarea>
+					<a class="btn btn-info tooltips" id="bt_ssh" title="{{Tester}}"><i class="fa fa-refresh"></i></a>
 				</div>
 			</div>
 		</div>
