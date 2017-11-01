@@ -24,6 +24,9 @@ if (!isConnect('admin')) {
 ajax::init();
 try {
 	switch(init('action')){
+		case 'humanNameById' :
+			$resp = RaspBEE::humanNameById(init('request'));
+			break;		
 		case 'getOwnersGroups' :
 			$resp = RaspBEE::getOwnersGroups(init('request'));
 			break;

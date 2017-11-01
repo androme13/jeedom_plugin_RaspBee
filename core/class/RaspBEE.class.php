@@ -56,36 +56,45 @@ class RaspBEE extends eqLogic {
 		//error_log("origId :".$data[origId],3,"/tmp/prob.txt");
 		$groups = array();
 		foreach (eqLogic::byType('RaspBEE') as $equipement) {				
-			$isGroup = stristr($equipement->getConfiguration('type'), "group");// $equipement->type
+			$isGroup = stristr($equipement->getConfiguration('type'), "LightGroup");
+			//error_log("type  : ".$equipement->getConfiguration('type'),3,"/tmp/prob.txt");
 			if ($isGroup){					
 				$obj = json_decode($equipement->configuration);
 				$lights = json_decode($obj->lights);
-				for ($i=0;$i<count($lights);$i++){
-					//error_log("light  : ".$lights[$i],3,"/tmp/prob.txt");
-					//error_log("origid : ".$data[origId],3,"/tmp/prob.txt");					
-					if ($lights[$i]===$data[origId]){
+				foreach ($lights as $light){
+					//error_log("light  : ".$light,3,"/tmp/prob.txt");
+					//error_log("data origid  : ".$data[origId],3,"/tmp/prob.txt");
+					if ($light===$data[origId]){
+						//error_log("corespondace",3,"/tmp/prob.txt");
 						array_push($groups,$equipement->getId());
+						break;
 					}
 				}
 			}
 		}
-		error_log("terminé",3,"/tmp/prob.txt");
+		//error_log("terminé",3,"/tmp/prob.txt");
+		error_log("groupes generés  : ".json_encode($group),3,"/tmp/prob.txt");
 		return $groups;		
 	}
 
 	// recupere un humaname par son id
 	// return humanName
-	public function humanNameById($id){	
-		//error_log("data: ".$data['type']."|",3,"/tmp/prob.txt");
+	public function humanNameById($data){
+		$humanName="";
+		error_log("humanNameById id : ".$data[id]."|",3,"/tmp/prob.txt");
+		//error_log("humanNameById id value: ".$id[0].$id[1].$id[2]."|",3,"/tmp/prob.txt");
 		foreach (eqLogic::byType('RaspBEE') as $equipement) {
 				//$decode = str_replace('\"', '"',$equipement->configuration);
 				//$obj = json_decode($decode);				
-				if ($equipement->getId()===$id) {
+				if ($equipement->getId()===$data[id]) {
+					//error_log("humanNameById trouve: |",3,"/tmp/prob.txt");
 					$humanName = $equipement->getHumanName(true,true);
-					return array($humanName);
+					//return $humanName;
 				}
-				return "probleme humanNameByid";
-		}						
+				
+		}
+		return $humanName;
+		//return "probleme humanNameByid";		
 	}
 	
 	// recupere un humaname et un id par l'originid et le type (ex : switch ou light)

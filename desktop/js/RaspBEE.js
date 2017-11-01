@@ -213,12 +213,15 @@ function printEqLogic(_eqLogic) {
 		$('#membersEqLogic').empty();
 	
 	//if (_eqLogic.configuration.type.toLowerCase.indexOf("light")){
-		console.log(_eqLogic.configuration.type.toLowerCase());
+		//console.log(_eqLogic.configuration.type.toLowerCase());
+	//if ((_eqLogic.configuration.type).indexOf('group')==-1){
 	if ((_eqLogic.configuration.type).indexOf('light')!=-1){
+		console.log("traitement groupe d'un equip");
 		printGroupsEqLogic(_eqLogic);
 	}
 	else 
 		$('#groupsEqLogic').empty();
+	
 }
 function printEqLogicHelper(expertMode,label,name,_eqLogic,_subst){
 	var expertModeVal="";
@@ -235,47 +238,55 @@ function printEqLogicHelper(expertMode,label,name,_eqLogic,_subst){
 	$('#table_infoseqlogic tbody tr:last').setValues(_eqLogic, '.eqLogicAttr');		
 }
 
+function pringGroupEqlogic(id){	
+	console.dir("result humanNameById ",id );
+		
+	jeedom.raspbee.eqLogic.humanNameById({
+		id: id,
+		error: function(error){
+			if (error) $('#div_raspbeeAlert').showAlert({message: error.message, level: 'danger'});
+		},
+		success:function (result){
+			//console.dir("pringGroupEqlogic result",result);
+			if (result!==undefined){
+				var card = "";
+				card+='<div class="eqLogicDisplayCard cursor eqlg" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
+				card+= "<center>";
+				card+= '<i class="fa fa-circle-o" style="font-size : 6em;color:#767676;"></i>';
+				card+= '<br>';
+				card+= '<span style="font-size : 0.8em;">';
+				card+= '{{Groupe}}';
+				card+= '</span>';
+				card+= "<span style='font-size : 1.1em;position:relative; top : 15px;white-space: pre-wrap;word-wrap: break-word;'><center>"+result+"</center></span>";
+				card+='</div>';				
+				$('.groupsCard').append(card);
+			}			
+		}				
+	})
+}
+
 function printGroupsEqLogic(_eqLogic){
 	$('#groupsEqLogic').empty();	
 	var master ="";
 	master+='<legend><i class="fa fa-circle-o"></i> {{Groupes}}</legend>'
 	master+='<div class="groupsCard" style="display: flex;">';	
-	
+	master+="</div>";		
+	$('#groupsEqLogic').append(master);
 	var origId = _eqLogic.configuration["origid"];
 	console.log("origid: ",origId);
 	jeedom.raspbee.eqLogic.getOwnersGroups({
-				origId: origId,
-				error: function(error){
-					if (error) $('#div_raspbeeAlert').showAlert({message: error.message, level: 'danger'});
-				},
-				success:function (result){
-					console.dir("getOwnersGroups",result);
-					if (result!=undefined)
-					for (i=0;i<result.length;i++){
-						console.log("coucle");
-						var card = "";
-						card+='<div class="eqLogicDisplayCard cursor eqlg" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
-						card+= "<center>";
-						card+= '<i class="fa fa-circle-o" style="font-size : 6em;color:#767676;"></i>';
-						card+= '<br>';
-						card+= '<span style="font-size : 0.8em;">';
-						card+= '{{Commande}}';
-						card+= '</span>';
-						card+= "<span style='font-size : 1.1em;position:relative; top : 15px;white-space: pre-wrap;word-wrap: break-word;'><center>"+result.humanName+"</center></span>";
-						card+='</div>';				
-						$('.groupsCard').append(card);
-						//$('.eql'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
-					}
+		origId: origId,
+		error: function(error){
+			if (error) $('#div_raspbeeAlert').showAlert({message: error.message, level: 'danger'});
+		},
+		success:function (groupResult){
+			if (groupResult!==undefined){
+				for (var i=0;i<groupResult.length;i++){
+					pringGroupEqlogic(groupResult[i]);
 				}
-			})
-	
-	
-	
-	
-	
-	master+="</div>";		
-	$('#groupsEqLogic').append(master);
-
+			}
+		}				
+	})
 	
 }
 
@@ -292,12 +303,12 @@ function printMasterEqLogic(_eqLogic){
 				//action:'humanNameByOrigId',
 				type:'switch',
 				error: function(error){
-					console.log("THE error printMasterEqLogic "+_eqLogic.name);	
-					console.log("THE error printMasterEqLogic devicemembership[i] "+devicemembership[i]);
+					//console.log("THE error printMasterEqLogic "+_eqLogic.name);	
+					//console.log("THE error printMasterEqLogic devicemembership[i] "+devicemembership[i]);
 				},
 				success:function (result){
 					if (result!=undefined){
-						console.log("THE result: "+result+"|");
+						//console.log("THE result: "+result+"|");
 						var card = "";
 						card+='<div class="eqLogicDisplayCard cursor eql'+result.id+'" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
 						card+= "<center>";
@@ -332,8 +343,8 @@ function printMembersEqLogic(_eqLogic){
 			origId:lights[i],
 			type: "light",
 			error: function(error){
-					console.log("THE error printMemberEqLogic "+_eqLogic.name);	
-					console.log("THE error printMemberEqLogic light[i] "+lights[i]);
+					//console.log("THE error printMemberEqLogic "+_eqLogic.name);	
+					//console.log("THE error printMemberEqLogic light[i] "+lights[i]);
 
 				},
 			success:function (result){
@@ -356,7 +367,7 @@ function printMembersEqLogic(_eqLogic){
 						$('.eql'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
 						$('.eqlremove'+result.id).click(function() {
 							//$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)
-							console.log("ok");
+							//console.log("ok");
 						});
 					}
 				}		
