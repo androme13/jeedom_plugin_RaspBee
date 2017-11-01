@@ -267,7 +267,7 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 				<div id="buttons_infoseqlogic"></div>
 			</div>
 		</div>
-
+		<div id="groupsEqLogic"></div>
 		<div id="masterEqLogic"></div>
 		<div id="membersEqLogic"></div>
 	</div>

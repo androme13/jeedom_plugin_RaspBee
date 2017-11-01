@@ -50,6 +50,43 @@ class RaspBEE extends eqLogic {
 			
 	}
 	
+	// recupere les groupes d'un equipement par son id
+	// return array(humanName)
+	public function getOwnersGroups($data){	
+		//error_log("origId :".$data[origId],3,"/tmp/prob.txt");
+		$groups = array();
+		foreach (eqLogic::byType('RaspBEE') as $equipement) {				
+			$isGroup = stristr($equipement->getConfiguration('type'), "group");// $equipement->type
+			if ($isGroup){					
+				$obj = json_decode($equipement->configuration);
+				$lights = json_decode($obj->lights);
+				for ($i=0;$i<count($lights);$i++){
+					//error_log("light  : ".$lights[$i],3,"/tmp/prob.txt");
+					//error_log("origid : ".$data[origId],3,"/tmp/prob.txt");					
+					if ($lights[$i]===$data[origId]){
+						array_push($groups,$equipement->getId());
+					}
+				}
+			}
+		}
+		error_log("terminé",3,"/tmp/prob.txt");
+		return $groups;		
+	}
+
+	// recupere un humaname par son id
+	// return humanName
+	public function humanNameById($id){	
+		//error_log("data: ".$data['type']."|",3,"/tmp/prob.txt");
+		foreach (eqLogic::byType('RaspBEE') as $equipement) {
+				//$decode = str_replace('\"', '"',$equipement->configuration);
+				//$obj = json_decode($decode);				
+				if ($equipement->getId()===$id) {
+					$humanName = $equipement->getHumanName(true,true);
+					return array($humanName);
+				}
+				return "probleme humanNameByid";
+		}						
+	}
 	
 	// recupere un humaname et un id par l'originid et le type (ex : switch ou light)
 	// return array(id,humanName)

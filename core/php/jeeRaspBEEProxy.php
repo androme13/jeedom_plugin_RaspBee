@@ -24,12 +24,15 @@ if (!isConnect('admin')) {
 ajax::init();
 try {
 	switch(init('action')){
-		case 'humanNameByOrigIdAndType' :
-		$resp = RaspBEE::humanNameByOrigIdAndType(init('request'));		
-		break;
+		case 'getOwnersGroups' :
+			$resp = RaspBEE::getOwnersGroups(init('request'));
+			break;
 		case 'getAllEqLogics' :
-		$resp = RaspBEE::getAllEqLogics();
-		break;
+			$resp = RaspBEE::getAllEqLogics();
+			break;
+		case 'humanNameByOrigIdAndType' :
+			$resp = RaspBEE::humanNameByOrigIdAndType(init('request'));		
+			break;
 	}
 	
 	

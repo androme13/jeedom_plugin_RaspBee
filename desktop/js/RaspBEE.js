@@ -210,7 +210,15 @@ function printEqLogic(_eqLogic) {
 	if (("lights" in _eqLogic.configuration))
 	printMembersEqLogic(_eqLogic);
 	else
-	$('#membersEqLogic').empty();
+		$('#membersEqLogic').empty();
+	
+	//if (_eqLogic.configuration.type.toLowerCase.indexOf("light")){
+		console.log(_eqLogic.configuration.type.toLowerCase());
+	if ((_eqLogic.configuration.type).indexOf('light')!=-1){
+		printGroupsEqLogic(_eqLogic);
+	}
+	else 
+		$('#groupsEqLogic').empty();
 }
 function printEqLogicHelper(expertMode,label,name,_eqLogic,_subst){
 	var expertModeVal="";
@@ -225,6 +233,50 @@ function printEqLogicHelper(expertMode,label,name,_eqLogic,_subst){
 	var trm = '<tr class="eqLogic '+expertModeVal+'"><td class="col-sm-2"><span class="label control-label" style="font-size : 1em;">'+label+'</span></td><td><span class="label label-default" style="font-size : 1em;"> <span class="eqLogicAttr" data-l1key="configuration" data-l2key="'+name+'"></span></span></td></tr>';
 	$('#table_infoseqlogic tbody').append(trm);
 	$('#table_infoseqlogic tbody tr:last').setValues(_eqLogic, '.eqLogicAttr');		
+}
+
+function printGroupsEqLogic(_eqLogic){
+	$('#groupsEqLogic').empty();	
+	var master ="";
+	master+='<legend><i class="fa fa-circle-o"></i> {{Groupes}}</legend>'
+	master+='<div class="groupsCard" style="display: flex;">';	
+	
+	var origId = _eqLogic.configuration["origid"];
+	console.log("origid: ",origId);
+	jeedom.raspbee.eqLogic.getOwnersGroups({
+				origId: origId,
+				error: function(error){
+					if (error) $('#div_raspbeeAlert').showAlert({message: error.message, level: 'danger'});
+				},
+				success:function (result){
+					console.dir("getOwnersGroups",result);
+					if (result!=undefined)
+					for (i=0;i<result.length;i++){
+						console.log("coucle");
+						var card = "";
+						card+='<div class="eqLogicDisplayCard cursor eqlg" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
+						card+= "<center>";
+						card+= '<i class="fa fa-circle-o" style="font-size : 6em;color:#767676;"></i>';
+						card+= '<br>';
+						card+= '<span style="font-size : 0.8em;">';
+						card+= '{{Commande}}';
+						card+= '</span>';
+						card+= "<span style='font-size : 1.1em;position:relative; top : 15px;white-space: pre-wrap;word-wrap: break-word;'><center>"+result.humanName+"</center></span>";
+						card+='</div>';				
+						$('.groupsCard').append(card);
+						//$('.eql'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
+					}
+				}
+			})
+	
+	
+	
+	
+	
+	master+="</div>";		
+	$('#groupsEqLogic').append(master);
+
+	
 }
 
 function printMasterEqLogic(_eqLogic){
