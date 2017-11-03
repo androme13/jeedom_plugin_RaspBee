@@ -49,7 +49,7 @@ foreach ($eqLogics as $eqLogic) {
 $controllerMode=1;
 $status=RaspBEE::deamon_info();
 // bouton mode inclusion
-echo '<div class="cursor changeIncludeState card" id="bt_include" data-mode="1" data-state="0" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
+echo '<div class="cursor changeIncludeState card eqLogicHoverEffect" id="bt_include" data-mode="1" data-state="0" style="background-color : #8000FF; height : 140px;box-shadow: 3px 3px 8px #000;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
 echo '<center>';
 echo '<i class="fa fa-sign-in fa-rotate-90" style="font-size : 6em;color:#94ca02;"></i>';
 echo '</center>';
@@ -59,7 +59,7 @@ echo '<span style="font-size : 1.1em;position:relative; top : 23px;word-break: b
 echo '</div>';
 
 // bouton création de groupe
-echo '<div class="cursor card" id="bt_addGroup" data-mode="1" data-state="0" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
+echo '<div class="cursor card eqLogicHoverEffect" id="bt_addGroup" data-mode="1" data-state="0" style="background-color : #8000FF; height : 140px;box-shadow: 3px 3px 8px #000;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
 echo '<center>';
 echo '<i class="fa fa-plus-circle" style="font-size : 6em;color:darkcyan;"></i>';
 echo '</center>';
@@ -69,7 +69,7 @@ echo '<span style="font-size : 1.1em;position:relative; top : 23px;word-break: b
 echo '</div>';
 
 // bouton configuration
-echo '<div class="cursor eqLogicAction card" data-action="gotoPluginConf" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
+echo '<div class="cursor eqLogicAction card eqLogicHoverEffect" data-action="gotoPluginConf" style="background-color : #8000FF; height : 140px;box-shadow: 3px 3px 8px #000;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
 echo '<center>';
 echo '<i class="fa fa-wrench" style="font-size : 6em;color:#767676;"></i>';
 echo '</center>';
@@ -79,7 +79,7 @@ echo '<span style="font-size : 1.1em;position:relative; top : 23px;word-break: b
 echo '</div>';
 if ($status['launchable']=="ok"){
 	// bouton synchroniser
-	echo '<div class="cursor card disabled" id="bt_syncEqLogic" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
+	echo '<div class="cursor card disabled eqLogicHoverEffect" id="bt_syncEqLogic" style="background-color : #8000FF; height : 140px;box-shadow: 3px 3px 8px #000;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
 	echo '<center>';
 	echo '<i class="fa fa-refresh" style="font-size : 6em;color:#767676;"></i>';
 	echo '</center>';
@@ -89,7 +89,7 @@ if ($status['launchable']=="ok"){
 	echo '</div>';
 
 	// bouton Réseau RaspBEE
-	echo '<div class="cursor card" id="bt_RaspBEENetwork" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
+	echo '<div class="cursor card eqLogicHoverEffect" id="bt_RaspBEENetwork" style="background-color : #8000FF; height : 140px;box-shadow: 3px 3px 8px #000;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
 	echo '<center>';
 	echo '<i class="fa fa-sitemap" style="font-size : 6em;color:#767676;"></i>';
 	echo '</center>';
@@ -99,7 +99,7 @@ if ($status['launchable']=="ok"){
 	echo '</div>';
 	
 	// bouton santé
-	echo '<div class="cursor card" id="bt_RaspBEEHealth" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
+	echo '<div class="cursor card eqLogicHoverEffect" id="bt_RaspBEEHealth" style="background-color : #8000FF; height : 140px;box-shadow: 3px 3px 8px #000;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
 	echo '<center>';
 	echo '<i class="fa fa-medkit" style="font-size : 6em;color:#767676;"></i>';
 	echo '</center>';
@@ -111,11 +111,11 @@ if ($status['launchable']=="ok"){
 ?>	 
 		</div>
 		<legend><i class="fa fa-table"></i> {{Mes équipements RaspBEE}}</legend>
-		<div class="eqLogicThumbnailContainer">	
+		<div class="eqLogicThumbnailContainer" id="eqLogicThumbnailContainment">	
 <?php
 foreach ($eqLogics as $eqLogic) {
 	$opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
-	echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="'. $eqLogic->getId().'" data-logical-id="' . $eqLogic->getLogicalId().'"  style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
+	echo '<div class="eqLogicDisplayCard eqLogicHoverEffect cursor" data-eqLogic_id="'. $eqLogic->getId().'" data-logical-id="' . $eqLogic->getLogicalId().'"  style="background-color : #ffffff; height : 200px;box-shadow: 3px 3px 8px #000;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
 	echo "<center>";
 	switch ($eqLogic->getConfiguration('type')){
 	case "ZHASwitch" :
@@ -174,6 +174,7 @@ foreach ($eqLogics as $eqLogic) {
 	echo '<span style="font-size : 1.1em;position:relative; top : 15px;white-space: pre-wrap;word-wrap: normal;"><center>' . $eqLogic->getHumanName(true, true) . '</center>
 	</span>';
 	echo '</div>';
+	
 }
 ?>
 		</div>
@@ -296,3 +297,13 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 <?php include_file('core', 'RaspBEE', 'class.js', 'RaspBEE');?>
 <?php include_file('desktop', 'RaspBEE', 'js', 'RaspBEE');?>
 <?php include_file('core', 'plugin.template', 'js');?>
+<style>
+.eqLogicHoverEffect{
+    opacity: 1; /* css standard */
+	transition: opacity .3s ;
+}
+.eqLogicHoverEffect:hover {
+    opacity: 0.7; /* css standard */	
+}
+</style>
+

@@ -15,28 +15,40 @@
 * along with Plugin RaspBEE for jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 refreshEqlogicsList();
+/*$(".eqLogicDisplayCard").draggable({
+	containment : '#eqLogicThumbnailContainment'
+});*/
 
+/*$('.eqLogicDisplayCard').hover(
+    function() {
+       // $(this).animate({ 'zoom': 1.2 }, 400);
+		  $(this).fadeTo( "slow" , 1, function() {
+    // Animation complete.
+  });
+    },
+    function() {
+		  $(this).fadeTo( "slow" , 0.8, function() {
+    // Animation complete.
+  });
+       // $(this).animate({ 'zoom': 1 }, 400);
+    });
+});*/
 
 $('#bt_include').on('click', function () {
 	$('#md_modal').dialog({
-title: "{{Mode inclusion}}",
-dialogClass: "no-close",
+		title: "{{Mode inclusion}}",
+		dialogClass: "no-close",
 		// on cache le bouton fermer
-open: function(event, ui) { jQuery('.ui-dialog-titlebar-close').hide(); },
-buttons: [
-		{
-text: "{{Fermer}}",
-click: function() {
+		open: function(event, ui) { jQuery('.ui-dialog-titlebar-close').hide(); },
+		buttons: [{
+			text: "{{Fermer}}",
+			click: function() {
 				window.location.reload();
 			}
-		}
-		],
+		}],
 	});
 	$('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=include').dialog('open');	
 });
-
-
-
 
 $('#bt_syncEqLogic').on('click', function () {
 	$('#md_modal').dialog({
@@ -50,12 +62,10 @@ $('#bt_syncEqLogic').on('click', function () {
 				click: function() {
 				window.location.reload();
 			}
-		}
-		],
+		}],
 	});
 	$('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=synchronize').dialog('open');	
 });
-
 
 $('#bt_RaspBEEHealth').on('click', function () {
 	$('#md_modal').dialog({title: "{{Santé RaspBEE}}"});
@@ -113,7 +123,7 @@ function addCmdToTable(_cmd) {
 function createGroup(){
 	var dialog_title = "{{Création d'un groupe}}";
 	var dialog_message = '<form class="form-horizontal onsubmit="return false;"> ';
-	dialog_message += '{{Veuillez saisir le nom du groupe à créer}}.<br><label for="text-3">Nom du groupe: </label><br><input data-clear-btn="true" name="text-3" id="groupName" value="" type="text"><br><br><label class="lbl lbl-warning" for="name">{{Attention, une fois le groupe crée, une synchronisation limitée débutera}}.</label>';
+	dialog_message += '{{Veuillez saisir le nom du groupe à créer}}.<br><label for="text-3">Nom du groupe: </label><br><input data-clear-btn="true" name="text-3" id="groupName" value="" type="text"><br><br><label class="lbl lbl-warning" for="name">{{Attention, une fois le groupe crée, une synchronisation de celui-ci débutera}}.</label>';
 	dialog_message += '</form>';
 	bootbox.dialog({
 		title: dialog_title,
@@ -124,38 +134,37 @@ function createGroup(){
 				$('#div_raspbeeAlert').showAlert({message: "{{Création de groupe annulée}}", level: 'info'});
 				}
 			},
-		success: {
-			label: "{{Creer le groupe}}",
-			className: "btn-success",
-			callback: function () {		
-				//console.log($("#groupName").val())
-				$.ajax({
-					type: "POST", 
-					url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
-					data: {
-						action: "groupCreate",
-						name: $("#groupName").val()
-					},
-					dataType: 'json',
-					error: function (request, status, error) {
-						//console.dir(error);
-						$('#div_raspbeeAlert').showAlert({message: error.message, level: 'danger'});
-						//handleAjaxError(request, status, error);
-					},
-					success: function (data) { 
-						if (data.state != 'ok') {
-							//console.dir(data);
-							$('#div_raspbeeAlert').showAlert({message: data.result, level: 'danger'});
-						}else
-						{
-							//console.dir(data);
-							$('#div_raspbeeAlert').showAlert({message: "{{Le groupe est crée avec succès}}", level: 'success'});
-							$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE");
+			success: {
+				label: "{{Creer le groupe}}",
+				className: "btn-success",
+				callback: function () {		
+					//console.log($("#groupName").val())
+					$.ajax({
+						type: "POST", 
+						url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+						data: {
+							action: "groupCreate",
+							name: $("#groupName").val()
+						},
+						dataType: 'json',
+						error: function (request, status, error) {
+							//console.dir(error);
+							$('#div_raspbeeAlert').showAlert({message: error.message, level: 'danger'});
+						},
+						success: function (data) { 
+							if (data.state != 'ok') {
+								//console.dir(data);
+								$('#div_raspbeeAlert').showAlert({message: data.result, level: 'danger'});
+							}else
+							{
+								//console.dir(data);
+								$('#div_raspbeeAlert').showAlert({message: "{{Le groupe est crée avec succès}}", level: 'success'});
+								$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE");
+							}
 						}
-					}
-				});								
+					});								
+				}
 			}
-		}
 		}
 	});		
 }
@@ -196,10 +205,6 @@ function printEqLogic(_eqLogic) {
 	else
 	{
 		$('#div_removeGeneric').show();
-		/*$('#div_remove').html='<div id="div_remove"><a class="btn btn-danger pull-right"><i class="fa fa-minus-circle"></i> {{Supprimer}}</a></div>';
-		$('#div_remove').click(function() {
-			deleteGroup(_eqLogic.configuration.origid,_eqLogic.id);
-		});*/
 	}
 	if (("devicemembership" in _eqLogic.configuration))
 	printMasterEqLogic(_eqLogic);
@@ -209,12 +214,7 @@ function printEqLogic(_eqLogic) {
 	printMembersEqLogic(_eqLogic);
 	else
 		$('#membersEqLogic').empty();
-	
-	//if (_eqLogic.configuration.type.toLowerCase.indexOf("light")){
-		//console.log(_eqLogic.configuration.type.toLowerCase());
-	//if ((_eqLogic.configuration.type).indexOf('group')==-1){
 	if ((_eqLogic.configuration.type).indexOf('light')!=-1){
-		//console.log("traitement groupe d'un equip");
 		printGroupsEqLogic(_eqLogic);
 	}
 	else 
@@ -417,7 +417,8 @@ function getEqlogic(_params){
 }
 
 function removeFromGroup(eqLogic,group){
-	var dialog_title = '{{Retrait d\'un équipement d\'un groupe d\'un groupe}}';
+	//console.dir("eqlogic",eqLogic);
+	var dialog_title = '{{Retrait d\'un équipement d\'un groupe}}.';
 	var dialog_message = '<form class="form-horizontal onsubmit="return false;"> ';
 	dialog_message += '{{Veuillez confirmer le retrait de}} <b><span id="eqLogic_Remove"></span></b> {{du groupe}} <b><span id="groupName_Remove"></span></b>.';
 	//dialog_message +='<br><br><label class="lbl lbl-warning" for="name">{{Attention, une fois le groupe crée, une synchronisation limitée débutera}}.</label>';
@@ -425,8 +426,7 @@ function removeFromGroup(eqLogic,group){
 	getEqlogic({
 		id:group.id,
 		callback:function(data){
-			console.dir("success",data);	
-			
+			//console.dir("success",data);				
 			bootbox.dialog({
 				title: dialog_title,
 				message: dialog_message,
@@ -447,7 +447,7 @@ function removeFromGroup(eqLogic,group){
 				}
 			}).on("shown.bs.modal", function(e) {
 				$("#eqLogic_Remove").html(eqLogic.name);
-					$("#groupName_Remove").html(group.name);
+				$("#groupName_Remove").html(group.name);
 				});	
 		}
 	});	
