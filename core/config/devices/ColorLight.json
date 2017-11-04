@@ -58,7 +58,25 @@
 					"dashboard" : "badge",
 					"mobile" : "badge"
 				}
-			},	
+			},
+			{
+				"name": "Etat", 
+				"type": "info", 
+				"isVisible": 1, 
+				"isHistorized": 0,
+				"logicalId": "on_state",				
+				"configuration" :{
+					"fieldname" : "on"
+				}, 
+				"subtype": "binary", 
+				"display": {
+					"generic_type": "LIGHT_STATE"
+				},
+				"template":{
+                    "dashboard" : "light",
+                    "mobile" : "light"
+                }
+			},			
 			{
 				"name": "On", 
 				"type": "action", 
@@ -90,22 +108,20 @@
 				}
 			},
 			{
-				"name": "Etat", 
+				"name": "Etat luminosité", 
 				"type": "info", 
-				"isVisible": 1, 
-				"isHistorized": 0,
-				"logicalId": "on_state",				
+				"isVisible": 0, 
+				"isHistorized": 0,			
 				"configuration" :{
-					"fieldname" : "on"
-				}, 
-				"subtype": "binary", 
-				"display": {
-					"generic_type": "LIGHT_STATE"
+					"fieldname" : "bri",
+					"minValue": 0, 
+					"maxValue": 255
 				},
-				"template":{
-                    "dashboard" : "light",
-                    "mobile" : "light"
-                }
+				"logicalId": "luminosity_state",				
+				"subtype": "numeric", 
+				"display": {
+					"generic_type": "DONT"
+				}
 			},
 			{
 				"name": "Luminosité", 
@@ -129,19 +145,19 @@
                 }
 			},
 			{
-				"name": "Etat luminosité", 
+				"name": "Etat Teinte", 
 				"type": "info", 
 				"isVisible": 0, 
-				"isHistorized": 0,			
+				"isHistorized": 0, 
 				"configuration" :{
-					"fieldname" : "bri",
+					"fieldname" : "hue",
 					"minValue": 0, 
-					"maxValue": 255
+					"maxValue": 65535					
 				},
-				"logicalId": "luminosity_state",				
+				"logicalId": "hue_state",				
 				"subtype": "numeric", 
 				"display": {
-					"generic_type": "DONT"
+					"generic_type": "LIGHT_STATE"
 				}
 			},			
 			{
@@ -162,21 +178,21 @@
 				}
 			},
 			{
-				"name": "Etat Teinte", 
+				"name": "Etat saturation", 
 				"type": "info", 
 				"isVisible": 0, 
 				"isHistorized": 0, 
 				"configuration" :{
-					"fieldname" : "hue",
+					"fieldname" : "sat",
 					"minValue": 0, 
-					"maxValue": 65535					
+					"maxValue": 255					
 				},
-				"logicalId": "hue_state",				
+				"logicalId": "saturation_state",				
 				"subtype": "numeric", 
 				"display": {
 					"generic_type": "LIGHT_STATE"
 				}
-			},
+			},			
 			{
 				"name": "Saturation", 
 				"type": "action", 
@@ -195,21 +211,19 @@
 				}
 			},
 			{
-				"name": "Etat saturation", 
+				"name": "Etat couleur", 
 				"type": "info", 
 				"isVisible": 0, 
 				"isHistorized": 0, 
 				"configuration" :{
-					"fieldname" : "sat",
-					"minValue": 0, 
-					"maxValue": 255					
+					"fieldname" : "color"				
 				},
-				"logicalId": "saturation_state",				
-				"subtype": "numeric", 
+				"logicalId": "color_state",				
+				"subtype": "other", 
 				"display": {
-					"generic_type": "LIGHT_STATE"
+					"generic_type": "LIGHT_COLOR"
 				}
-			},
+			},			
 			{
 				"name": "Couleur", 
 				"type": "action", 
@@ -226,20 +240,6 @@
 				}
 			},
 			{
-				"name": "Etat couleur", 
-				"type": "info", 
-				"isVisible": 0, 
-				"isHistorized": 0, 
-				"configuration" :{
-					"fieldname" : "color"				
-				},
-				"logicalId": "color_state",				
-				"subtype": "other", 
-				"display": {
-					"generic_type": "LIGHT_COLOR"
-				}
-			},
-{
 				"name": "Effet", 
 				"type": "action", 
 				"isVisible": 1, 

@@ -301,7 +301,16 @@ class eqLogicOperate extends eqLogic {
 					}				
 					if (array_key_exists('subtype', $command)) {
 						 $RaspBEECmd->setSubType($command[subtype]);
-					}						
+					}
+					if (array_key_exists('value', $command)) {
+						foreach ($eqLogic->getCmd() as $_cmd) {
+							if ($_cmd->getName()===$command[value]){
+									error_log("setvalue : ".$_cmd->getName()." +++ ".$command[value],3,"/tmp/prob.txt");
+									$RaspBEECmd->setValue($_cmd->getId());
+									break;
+							}
+						}
+					}					
 					foreach ($command[configuration] as $command => $key){
 						$RaspBEECmd->setConfiguration($command,$key);				
 					}				
@@ -316,7 +325,7 @@ class eqLogicOperate extends eqLogic {
 				$response->error = 0;
 				if (array_key_exists('isVisible', $command)) {
 					if ($RaspBEECmd->getIsVisible()!=$command[isVisible]){
-						error_log("|visibilite differente",3,"/tmp/prob.txt");
+						//error_log("|visibilite differente",3,"/tmp/prob.txt");
 						$RaspBEECmd->setIsVisible($command[isVisible]);
 						$response->error = 2;
 					}
@@ -365,13 +374,24 @@ class eqLogicOperate extends eqLogic {
 						$RaspBEECmd->setSubType($command[subtype]);
 						$response->error = 2;
 					}
-				}						
+				}
+				if (array_key_exists('value', $command)) {
+					foreach ($eqLogic->getCmd() as $_cmd) {
+						if ($_cmd->getName()===$command[value]){
+								error_log("setvalue : ".$_cmd->getName()." +++ ".$command[value],3,"/tmp/prob.txt");
+								$RaspBEECmd->setValue($_cmd->getId());
+								$response->error = 2;
+								break;
+						}
+					}
+				}	
 				foreach ($command[configuration] as $command => $key){					
 					if ($RaspBEECmd->getConfiguration($command)!=$key){
 						$RaspBEECmd->setConfiguration($command,$key);
 						$response->error = 2;
 					}					
 				}
+				
 				
 				
 				$RaspBEECmd->save();

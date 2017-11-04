@@ -54,7 +54,25 @@
 				"display": {
 					"generic_type": "LIGHT_STATE"
 				}
-			},	
+			},
+			{
+				"name": "Etat", 
+				"type": "info", 
+				"isVisible": 1, 
+				"isHistorized": 0,
+				"logicalId": "on_state",				
+				"configuration" :{
+					"fieldname" : "on"
+				}, 
+				"subtype": "binary", 
+				"display": {
+					"generic_type": "LIGHT_STATE"
+				},
+				"template":{
+                    "dashboard" : "light",
+                    "mobile" : "light"
+                }
+			},
 			{
 				"name": "On", 
 				"type": "action", 
@@ -86,23 +104,21 @@
 				}
 			},
 			{
-				"name": "Etat", 
+				"name": "Etat luminosité", 
 				"type": "info", 
-				"isVisible": 1, 
-				"isHistorized": 0,
-				"logicalId": "on_state",				
+				"isVisible": 0, 
+				"isHistorized": 0,			
 				"configuration" :{
-					"fieldname" : "on"
-				}, 
-				"subtype": "binary", 
-				"display": {
-					"generic_type": "LIGHT_STATE"
+					"fieldname" : "bri",
+					"minValue": 0, 
+					"maxValue": 255
 				},
-				"template":{
-                    "dashboard" : "light",
-                    "mobile" : "light"
-                }
-			},
+				"logicalId": "luminosity_state",				
+				"subtype": "numeric", 
+				"display": {
+					"generic_type": "DONT"
+				}
+			},			
 			{
 				"name": "Luminosité", 
 				"type": "action", 
@@ -123,22 +139,6 @@
                     "dashboard" : "",
                     "mobile" : ""
                 }
-			},
-			{
-				"name": "Etat luminosité", 
-				"type": "info", 
-				"isVisible": 0, 
-				"isHistorized": 0,			
-				"configuration" :{
-					"fieldname" : "bri",
-					"minValue": 0, 
-					"maxValue": 255
-				},
-				"logicalId": "luminosity_state",				
-				"subtype": "numeric", 
-				"display": {
-					"generic_type": "DONT"
-				}
 			}
 		]
 }
