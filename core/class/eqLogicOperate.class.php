@@ -329,7 +329,7 @@ class eqLogicOperate extends eqLogic {
 						$RaspBEECmd->setIsVisible($command[isVisible]);
 						$response->error = 2;
 					}
-					else error_log("|visibilite identique",3,"/tmp/prob.txt");
+					//else error_log("|visibilite identique",3,"/tmp/prob.txt");
 				}
 				if (array_key_exists('isHistorized', $command)) {
 					if ($RaspBEECmd->getIsHistorized()!=$command[isHistorized]){
@@ -378,10 +378,11 @@ class eqLogicOperate extends eqLogic {
 				if (array_key_exists('value', $command)) {
 					foreach ($eqLogic->getCmd() as $_cmd) {
 						if ($_cmd->getName()===$command[value]){
-								error_log("setvalue : ".$_cmd->getName()." +++ ".$command[value],3,"/tmp/prob.txt");
+							if ($RaspBEECmd->getValue()!=$_cmd->getId()){
 								$RaspBEECmd->setValue($_cmd->getId());
 								$response->error = 2;
 								break;
+							}
 						}
 					}
 				}	
