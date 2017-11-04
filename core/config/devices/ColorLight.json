@@ -86,7 +86,7 @@
 				"configuration": {
 					"fieldname" : "on"
 				},
-				"value" : "Etat On",				
+				"value" : "Etat",				
 				"subtype": "other", 
 				"display": {
 					"generic_type": "LIGHT_ON"
@@ -101,7 +101,7 @@
 				"configuration": {
 				"fieldname" : "on"
 				},
-				"value" : "Etat On",				
+				"value" : "Etat",				
 				"subtype": "other", 
 				"display": {
 					"generic_type": "LIGHT_OFF"
