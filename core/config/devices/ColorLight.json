@@ -120,7 +120,7 @@
 				"logicalId": "luminosity_state",				
 				"subtype": "numeric", 
 				"display": {
-					"generic_type": "DONT"
+					"generic_type": "LIGHT_STATE"
 				}
 			},
 			{

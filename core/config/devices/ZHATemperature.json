@@ -1,5 +1,5 @@
 {
-    "name": "Temperature",
+    "name": "Température",
     "configuration": {
 		"swversion": "",
 		"type": "",
@@ -11,7 +11,7 @@
     },
     "commands": [
         {
-            "name": "temperature", 
+            "name": "Etat température", 
             "type": "info", 
             "isVisible": 1, 
             "isHistorized": 1,

@@ -11,7 +11,7 @@
     },
     "commands": [
         {
-            "name": "Pression", 
+            "name": "Etat pression", 
             "type": "info", 
             "isVisible": 1, 
             "isHistorized": 1,			

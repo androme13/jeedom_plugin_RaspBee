@@ -127,7 +127,7 @@
 					"maxValue": 255
 				},
 				"logicalId": "luminosity",
-				"value" : "Etat Luminosité",				
+				"value" : "Etat luminosité",				
 				"subtype": "slider", 
 				"display": {
 					"generic_type": "LIGHT_SLIDER"
