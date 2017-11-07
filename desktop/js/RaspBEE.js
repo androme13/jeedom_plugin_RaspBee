@@ -14,24 +14,9 @@
 * You should have received a copy of the GNU General Public License
 * along with Plugin RaspBEE for jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
-refreshEqlogicsList();
+//refreshEqlogicsList();
 /*$(".eqLogicDisplayCard").draggable({
 	containment : '#eqLogicThumbnailContainment'
-});*/
-
-/*$('.eqLogicDisplayCard').hover(
-    function() {
-       // $(this).animate({ 'zoom': 1.2 }, 400);
-		  $(this).fadeTo( "slow" , 1, function() {
-    // Animation complete.
-  });
-    },
-    function() {
-		  $(this).fadeTo( "slow" , 0.8, function() {
-    // Animation complete.
-  });
-       // $(this).animate({ 'zoom': 1 }, 400);
-    });
 });*/
 
 $('#bt_include').on('click', function () {
@@ -158,8 +143,10 @@ function createGroup(){
 							}else
 							{
 								//console.dir(data);
-								$('#div_raspbeeAlert').showAlert({message: "{{Le groupe est crée avec succès}}", level: 'success'});
-								$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE");
+								
+								syncDevices('getRaspBEEGroups','basic');
+								//window.location.reload();
+								//$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE");
 							}
 						}
 					});								
@@ -452,6 +439,85 @@ function removeFromGroup(eqLogic,group){
 		}
 	});	
 }
+
+function syncDevices(action,syncType){
+	$.ajax({
+		type: "POST", 
+		url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+		data: {
+			action: action
+		},
+		dataType: 'json',
+		error: function (resp, status, error) {
+			$('#div_raspbeeAlert').showAlert({message: '{{Erreur}} : '+error+' ('+resp.status+')', level: 'danger'});		
+		},		
+		success: function (resp) {
+		//console.dir(resp);
+		try
+			{
+			var cleanResp = resp.result.replace('\"', '"');
+			}
+			catch(e)
+			{
+			   var cleanResp='invalid json';
+			}							
+			if (resp.state == 'ok') {
+				let devices = JSON.parse(cleanResp);
+				if (Object.keys(devices).length>0){
+					for (var device in devices) {
+						devices[device].origid=device;
+						//console.dir(devices[device]);
+						createEqLogic(devices[device],syncType);
+					}
+				}	
+
+			} else{
+				$('#div_raspbeeAlert').showAlert({message: '{{Impossible d\'afficher les infos}} : '+HTMLClean(resp.result), level: 'danger'});
+			}
+		} 
+	});
+}
+
+function createEqLogic(device,syncType){
+	$.ajax({
+		type: "POST", 
+		url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+		data: {
+			action: "createEqLogic",
+			device: device,
+			syncType: syncType
+		},
+		dataType: 'json',
+		error: function (resp, status, error) {
+			$('#div_raspbeeAlert').showAlert({message: '{{Erreur}} : '+error+' ('+resp.status+')', level: 'danger'});	
+		},
+		
+		success: function (resp) {		
+			try	{
+				
+					var cleanResp = resp.result.replace('\"', '"');
+					console.dir(cleanResp);
+					var jsonResp = JSON.parse(cleanResp);
+				   
+				}
+				catch(e)
+				{
+				   var jsonResp=new Object();
+				   jsonResp.cmdError = 3;
+				}							
+				if (jsonResp.cmdError == 3) {
+					$('#div_raspbeeAlert').showAlert({message: "{{erreur inconnue}} ("+cleanResp+')', level: 'danger'});					
+				} else{
+					switch(jsonResp.cmdError){
+						case 2:
+							$('#div_raspbeeAlert').showAlert({message: "{{Le groupe est crée avec succès}}", level: 'info'});
+							break;									
+					}					
+				}
+			//window.location.reload();				
+		}
+	});	
+};
 
 
 /*function arraySearch(arr,val) {
