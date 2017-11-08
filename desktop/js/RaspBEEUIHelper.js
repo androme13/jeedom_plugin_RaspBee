@@ -42,7 +42,7 @@ function eqLogicDraw(eqLogic){
 	icon="";
 	card="";
 	type="";
-	card= '<div class="eqLogicDisplayCard eqLogicHoverEffect cursor" data-eqLogic_id="'+ eqLogic.id+'" data-logical-id="' + eqLogic.logicalId+'"  style="background-color : #ffffff; height : 200px;box-shadow: 3px 3px 8px #000;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' + opacity + '" >';
+	card= '<div class="eqLogicDisplayCard eqLogicHoverEffect cursor" data-eqLogic_id="'+ eqLogic.id+'" data-logical-id="' + eqLogic.logicalId+'"  style="background-color : #ffffff; height : 200px;box-shadow: 3px 3px 8px #000;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;"' + opacity + '" >';
 	card+="<center>";
 	
 	switch (eqLogic.type){
@@ -94,7 +94,7 @@ function groupDraw(id,group){
 	var card = "";
 	card+='<div style="position: relative;">';
 	card+='<div class="eqlremove'+group.id+'" ownerGroup="'+id+'" style="margin:0;position:absolute;top: 3px;left: 140px;"><a id="bt_removeFromGroup" title="{{Retirer l\'équipement de ce groupe}}"><i class="fa fa-minus-circle" style="color:#c9302c;font-size : 2em;"></i></a></div>';				
-	card+='<div class="eqLogicDisplayCard cursor eqlg'+id+'" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
+	card+='<div class="eqLogicDisplayCard cursor eqLogicHoverEffect eqlg'+id+'" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
 	card+= "<center>";
 	card+= '<i class="fa fa-circle-o" style="font-size : 6em;color:#767676;"></i>';
 	card+= '<br>';
@@ -109,7 +109,7 @@ function groupDraw(id,group){
 
 function masterDraw(master){
 	var card = "";
-	card+='<div class="eqLogicDisplayCard cursor eql'+master.id+'" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
+	card+='<div class="eqLogicDisplayCard eqLogicHoverEffect cursor eql'+master.id+'" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
 	card+= "<center>";
 	card+= '<i class="fa fa-th-large" style="font-size : 6em;color:#767676;"></i>';
 	card+= '<br>';
@@ -124,9 +124,9 @@ function masterDraw(master){
 function memberDraw(member,id)
 {
 	var card = "";
-	card+='<div style="position: relative;">';
+	card+='<div style="position: relative;" id="eqlmember'+member.id+'">';
 	card+='<div class="eqlremove'+member.id+'" ownerGroup="'+id+'" style="margin:0;position:absolute;top: 3px;left: 140px;"><a id="bt_removeFromGroup" title="{{Retirer cet équipement du groupe}}"><i class="fa fa-minus-circle" style="color:#c9302c;font-size : 2em;"></i></a></div>';
-	card+='<div class="eqLogicDisplayCard cursor eql'+member.id+'" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
+	card+='<div class="eqLogicDisplayCard eqLogicHoverEffect cursor eql'+member.id+'" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
 	card+= "<center>";
 	card+= '<span><i class="jeedom jeedom-lumiere-off" style="font-size : 6em;color:#767676;float: center;"></i></span>';
 	card+= '<br>';

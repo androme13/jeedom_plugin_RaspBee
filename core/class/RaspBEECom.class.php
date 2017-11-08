@@ -108,6 +108,24 @@ class RaspBEECom {
 		return self::genericResponseProcess($opts);
 	}
 	
+	private function genericPut($url=null,$param=null){
+		//if ($url==null) return false;
+		//$ch = curl_init();
+		$opts = [
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_FORBID_REUSE   => true,
+			CURLOPT_CUSTOMREQUEST =>  "PUT",
+			CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
+			CURLOPT_POSTFIELDS     => $param,
+			CURLOPT_URL            => $url,
+			CURLOPT_POST		   => true,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_TIMEOUT        => 30,
+			CURLOPT_CONNECTTIMEOUT => 30
+		];
+		return self::genericResponseProcess($opts);
+	}
+	
 	private function genericResponseProcess($opts){
 		$ch = curl_init();
 		curl_setopt_array($ch, $opts);
@@ -203,15 +221,22 @@ class RaspBEECom {
 		$groupAttrAction = self::getGroupAttributes($groupId);
 		$groupAttr = json_decode($groupAttrAction->message);
 		$lightsGroup = $groupAttr->{$params['groupId']}->lights;
+		$count=0;
 		foreach ($lightsGroup as $light){
 			
 			error_log("comparaison(".$light."<->".$params['deviceId'].")",3,"/tmp/prob.txt");
 			if ($light === $params['deviceId']){
-				error_log("lumiere trouvée(".$light.")",3,"/tmp/prob.txt");
+				//error_log("lumiere trouvée(".$light.")",3,"/tmp/prob.txt");
+				unset($lightsGroup[$count]);
 				break;				
 			}
+			$count++;
 		}
+		// on vire les clés du tableau avant d'encoder en json (api deconz)
+		$lightsGroup = array_values($lightsGroup);
 		//error_log("removeFromGroup(".json_encode($groupAttr).")",3,"/tmp/prob.txt");
+		$final = '{"lights":'.json_encode($lightsGroup).'}';
+		error_log("final(".$final.")",3,"/tmp/prob.txt");
 			$response->state="ok";
 			$response->error=0;
 			$response->message="Element supprimé du groupe";

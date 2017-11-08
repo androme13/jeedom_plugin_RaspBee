@@ -272,7 +272,7 @@ function printMembersEqLogic(_eqLogic){
 	if (!is_null(lights)){
 
 		var master ="";
-		master+='<legend><i class="fa fa-table"></i> {{Membres du groupe}} ('+lights.length+')</legend>'
+		master+='<legend><i class="fa fa-table"></i> {{Membres du groupe}}</legend>'
 		master+='<div class="membersCard" style="display: flex;">';
 
 		for(var i= 0; i < lights.length; i++){
@@ -369,7 +369,7 @@ function removeFromGroup(eqLogic,group){
 							label: "{{Retirer du groupe}}",
 							className: "btn-success",
 							callback: function () {
-								removeFromGroupCallback(eqLogic.configuration.origid,group.configuration.origid);
+								removeFromGroupCallback(eqLogic.id,eqLogic.configuration.origid,group.configuration.origid);
 							}
 						}
 					}
@@ -381,13 +381,15 @@ function removeFromGroup(eqLogic,group){
 		});	
 }
 
-function removeFromGroupCallback(deviceId,groupId){
+function removeFromGroupCallback(eqLogicId,deviceId,groupId){
 	console.log("removeFromGroupCallback",deviceId,groupId);
 	
 	jeedom.raspbee.eqLogic.removeFromGroup({
 		deviceId:deviceId,
 		groupId:groupId,
 		success:function (data){
+			$('#eqlmember'+eqLogicId).empty();
+			$('#eqlmember'+eqLogicId).remove();
 			console.dir("removeFromGroup",data)
 		}		
 	});
