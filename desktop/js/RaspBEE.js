@@ -18,7 +18,7 @@
 /*$(".eqLogicDisplayCard").draggable({
 	containment : '#eqLogicThumbnailContainment'
 });*/
-
+refreshEqlogicsList();
 $('#bt_include').on('click', function () {
 	$('#md_modal').dialog({
 		title: "{{Mode inclusion}}",
@@ -68,6 +68,9 @@ $('#bt_addGroup').on('click', function () {
 
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 
+
+
+
 /*
 * Fonction de listage des commandes
 */
@@ -78,25 +81,7 @@ function addCmdToTable(_cmd) {
 	if (!isset(_cmd.configuration)) {
 		_cmd.configuration = {};
 	}
-	var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
-	tr += '<td class="expertModeVisible">';
-	tr += '<span class="cmdAttr" data-l1key="id" style="" placeholder="#"></span>';
-	tr += '</td>';
-	tr += '<td>';
-	tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="width : 140px;" placeholder="{{Nom}}" readonly>';
-	tr += '</td>';
-	tr += '<td>';
-	tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isVisible" checked/>{{Afficher}}</label></span> ';
-	tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span> ';
-	tr += '</td>';
-	tr += '<td>';
-	if (is_numeric(_cmd.id)) {
-		tr += '<a class="btn btn-default btn-xs cmdAction expertModeVisible" data-action="configure"><i class="fa fa-cogs"></i></a> ';
-		tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fa fa-rss"></i> {{Tester}}</a>';
-	}
-	//tr +=_cmd.configuration.fieldname;
-	tr += '</td>';
-	$('#table_cmd tbody').append(tr);
+	$('#table_cmd tbody').append(commandDraw(_cmd));
 	$('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
 	if (isset(_cmd.type)) {
 		$('#table_cmd tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
@@ -208,20 +193,7 @@ function printEqLogic(_eqLogic) {
 		$('#groupsEqLogic').empty();
 	
 }
-function printEqLogicHelper(expertMode,label,name,_eqLogic,_subst){
-	var expertModeVal="";
-	if (expertMode==true) expertModeVal = "expertModeVisible";
-	// (expertmodevisible,nom du champ,eqlogic en cours,tableau de substitution des valeurs)
-	if (_eqLogic.configuration[name]==undefined) return;
-	if (_subst!=null && _subst!=undefined){
-		name = _subst[_eqLogic.configuration[name]];
-		var trm = '<tr class="eqLogic '+expertModeVal+'"><td class="col-sm-2"><span class="label control-label" style="font-size : 1em;">'+label+'</span></td><td><span class="label label-default" style="font-size : 1em;">'+name+'</span></td></tr>';
-	}
-	else
-	var trm = '<tr class="eqLogic '+expertModeVal+'"><td class="col-sm-2"><span class="label control-label" style="font-size : 1em;">'+label+'</span></td><td><span class="label label-default" style="font-size : 1em;"> <span class="eqLogicAttr" data-l1key="configuration" data-l2key="'+name+'"></span></span></td></tr>';
-	$('#table_infoseqlogic tbody').append(trm);
-	$('#table_infoseqlogic tbody tr:last').setValues(_eqLogic, '.eqLogicAttr');		
-}
+
 
 function pringGroupEqlogic(id){	
 	//console.dir("result humanNameById ",id );
@@ -233,21 +205,8 @@ function pringGroupEqlogic(id){
 		},
 		success:function (result){
 			//console.dir("pringGroupEqlogic result",result);
-			if (result!==undefined){
-				var card = "";
-				card+='<div style="position: relative;">';
-				card+='<div class="eqlremove'+result.id+'" ownerGroup="'+id+'" style="margin:0;position:absolute;top: 3px;left: 140px;"><a id="bt_removeFromGroup" title="{{Retirer l\'équipement de ce groupe}}"><i class="fa fa-minus-circle" style="color:#c9302c;font-size : 2em;"></i></a></div>';				
-				card+='<div class="eqLogicDisplayCard cursor eqlg'+id+'" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
-				card+= "<center>";
-				card+= '<i class="fa fa-circle-o" style="font-size : 6em;color:#767676;"></i>';
-				card+= '<br>';
-				card+= '<span style="font-size : 0.8em;">';
-				card+= '{{Groupe}}';
-				card+= '</span>';
-				card+= "<span style='font-size : 1.1em;position:relative; top : 15px;white-space: pre-wrap;word-wrap: break-word;'><center>"+result+"</center></span>";
-				card+='</div>';		
-				card+='</div>';				
-				$('.groupsCard').append(card);
+			if (result!==undefined){			
+				$('.groupsCard').append(groupDraw(id,result));
 				$('.eqlg'+id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+id)});
 			}			
 		}				
@@ -296,19 +255,8 @@ function printMasterEqLogic(_eqLogic){
 					//console.log("THE error printMasterEqLogic devicemembership[i] "+devicemembership[i]);
 				},
 				success:function (result){
-					if (result!=undefined){
-						//console.log("THE result: "+result+"|");
-						var card = "";
-						card+='<div class="eqLogicDisplayCard cursor eql'+result.id+'" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
-						card+= "<center>";
-						card+= '<i class="fa fa-th-large" style="font-size : 6em;color:#767676;"></i>';
-						card+= '<br>';
-						card+= '<span style="font-size : 0.8em;">';
-						card+= '{{Commande}}';
-						card+= '</span>';
-						card+= "<span style='font-size : 1.1em;position:relative; top : 15px;white-space: pre-wrap;word-wrap: break-word;'><center>"+result.humanName+"</center></span>";
-						card+='</div>';				
-						$('.mastersCard').append(card);
+					if (result!=undefined){						
+						$('.mastersCard').append(masterDraw(result));
 						$('.eql'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
 					}			
 				}
@@ -338,34 +286,15 @@ function printMembersEqLogic(_eqLogic){
 				},
 			success:function (result){
 					if (result!=undefined){			
-						//console.log("success");		
-						var card = "";
-						card+='<div style="position: relative;">';
-						card+='<div class="eqlremove'+result.id+'" ownerGroup="'+_eqLogic.configuration.id+'" style="margin:0;position:absolute;top: 3px;left: 140px;"><a id="bt_removeFromGroup" title="{{Retirer cet équipement du groupe}}"><i class="fa fa-minus-circle" style="color:#c9302c;font-size : 2em;"></i></a></div>';
-						card+='<div class="eqLogicDisplayCard cursor eql'+result.id+'" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
-						card+= "<center>";
-						card+= '<span><i class="jeedom jeedom-lumiere-off" style="font-size : 6em;color:#767676;float: center;"></i></span>';
-						card+= '<br>';
-						card+= '<span style="font-size : 0.8em;">';
-						card+= '{{Eclairage}}';
-						card+= '</span>';
-						card+= "<span style='font-size : 1.1em;position:relative; top : 15px;white-space: pre-wrap;word-wrap: break-word;'><center>"+result.humanName+"</center></span>";
-						card+='</div>';
-						card+='</div>';
-						$('.membersCard').append(card);
+						$('.membersCard').append(memberDraw(result,_eqLogic.configuration.id));
 						$('.eql'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
 						$('.eqlremove'+result.id).click(function() {
-							//$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)
-							//console.log("ok");
 							getEqlogic({
 								id:result.id,
 								callback:function(data){
 									removeFromGroup(data,_eqLogic);
 								}
 							});
-							
-							
-							//console.dir(jeedom);
 						});
 					}
 				}		
@@ -378,18 +307,29 @@ function printMembersEqLogic(_eqLogic){
 
 
 function refreshEqlogicsList(){
-	//console.log("refreshEqlogicsList2");
+	console.dir("refreshEqlogicsList");
 	//console.dir(jeedom.raspbee);
 	jeedom.raspbee.eqLogic.getAll({
 		error: function(error){
-			//console.log("THE error refreshEqlogicsList "+error);	
+			console.dir("THE error refreshEqlogicsList "+error);
 		},
 		success:function (result){
-		//console.log("result eqlogics",result.getHumanName(true,true));	
 			if (result!=undefined){			
-				//console.log("result eqlogics",result);		
+				console.dir("result eqlogics filtré",JSON.parse(result));
+				resultArray=JSON.parse(result);
+				var objects="";
+				resultArray.forEach(function(element) {
+				//var card = JSON.parse(element);
+				objects+=eqLogicDraw(element);
+				//$("#eqLogicThumbnailContainment").append(eqLogicDraw(element));
+				//$("#testdiv").append(eqLogicDraw(element));
+				//$("#testdiv").append(eqLogicDraw(element));	
+				})
+				$("#eqLogicThumbnailContainment").append(objects);
+				//var card = JSON.parse(result);
 				
-			}
+				//$("#testdiv").html(eqLogicDraw(card)[0]);
+			}			
 		}		
 	});
 }
@@ -514,7 +454,7 @@ function createEqLogic(device,syncType){
 							break;									
 					}					
 				}
-			//window.location.reload();				
+			window.location.reload();				
 		}
 	});	
 };

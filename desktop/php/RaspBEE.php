@@ -111,7 +111,8 @@ if ($status['launchable']=="ok"){
 ?>	 
 		</div>
 		<legend><i class="fa fa-table"></i> {{Mes équipements RaspBEE}}</legend>
-		<div class="eqLogicThumbnailContainer" id="eqLogicThumbnailContainment">	
+		<div class="eqLogicThumbnailContainer" id="eqLogicThumbnailContainment">
+				
 <?php
 foreach ($eqLogics as $eqLogic) {
 	$opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
@@ -173,8 +174,7 @@ foreach ($eqLogics as $eqLogic) {
 	echo '</center>';
 	echo '<span style="font-size : 1.1em;position:relative; top : 15px;white-space: pre-wrap;word-wrap: normal;"><center>' . $eqLogic->getHumanName(true, true) . '</center>
 	</span>';
-	echo '</div>';
-	
+	echo '</div>';	
 }
 ?>
 		</div>
@@ -296,6 +296,7 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 </div>
 <?php include_file('core', 'RaspBEE', 'class.js', 'RaspBEE');?>
 <?php include_file('desktop', 'RaspBEE', 'js', 'RaspBEE');?>
+<?php include_file('desktop', 'RaspBEEUIHelper', 'js', 'RaspBEE');?>
 <?php include_file('core', 'plugin.template', 'js');?>
 <style>
 .eqLogicHoverEffect{

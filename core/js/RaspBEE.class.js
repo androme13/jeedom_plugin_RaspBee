@@ -78,8 +78,8 @@ jeedom.raspbee.eqLogic.humanNameByOrigIdAndType = function (_params) {
 	$.ajax(paramsAJAX);
 };
 
-jeedom.raspbee.eqLogic.getAll = function () {
-	/*var paramsRequired = ['origId','type'];
+jeedom.raspbee.eqLogic.getAll = function (_params) {
+	var paramsRequired = [];
 	var paramsSpecifics = {};
 	try {
 		jeedom.private.checkParamsRequired(_params || {}, paramsRequired);
@@ -88,8 +88,6 @@ jeedom.raspbee.eqLogic.getAll = function () {
 		return;
 	}
 	var params = $.extend({}, jeedom.private.default_params, paramsSpecifics, _params || {});
-	var paramsAJAX = jeedom.private.getParamsAJAX(params);*/
-	var params = $.extend({}, jeedom.private.default_params,{},{});
 	var paramsAJAX = jeedom.private.getParamsAJAX(params);
 	paramsAJAX.url = 'plugins/RaspBEE/core/php/jeeRaspBEEProxy.php';
 	paramsAJAX.data = {

@@ -28,7 +28,8 @@ class RaspBEE extends eqLogic {
 	
 	//private $responseHelper = array("error" => 0, "message" => "", "state" => "");	
 	
-	public function getAllEqLogics(){	
+	public function getAllEqLogics(){
+		$returnArray=array();
 		//error_log("data: ".$data['type']."|",3,"/tmp/prob.txt");
 		/*foreach (eqLogic::byType('RaspBEE') as $equipement) {
 				$decode = str_replace('\"', '"',$equipement->configuration);
@@ -41,13 +42,21 @@ class RaspBEE extends eqLogic {
 				}
 				//return "probleme humanNameByOrigIdAndType";
 		}	*/
+			
 			foreach(eqLogic::byType('RaspBEE') as $eqLogic)
 			{
-				return json_encode($eqLogic);//->getHumanName(true,true);;
-				
+				$return=null;
+				$return->id=$eqLogic->getId();
+				$return->logicalId=$eqLogic->getLogicalId();
+				$return->isEnabled=$eqLogic->getIsEnable();
+				$return->type=$eqLogic->getConfiguration('type');
+				$return->name=$eqLogic->getName();//->getHumanName(true,true);
+				$return->humanName=$eqLogic->getHumanName(true,true);
+				array_push($returnArray,$return);
+				//break;				
 			}
-			
-			
+			//error_log("return: ".$return."|",3,"/tmp/prob.txt");
+			return $returnArray;			
 	}
 	
 	// recupere les groupes d'un equipement par son id

@@ -31,7 +31,7 @@ try {
 			$resp = RaspBEE::getOwnersGroups(init('request'));
 			break;
 		case 'getAllEqLogics' :
-			$resp = RaspBEE::getAllEqLogics();
+			$resp = json_encode(RaspBEE::getAllEqLogics());
 			break;
 		case 'humanNameByOrigIdAndType' :
 			$resp = RaspBEE::humanNameByOrigIdAndType(init('request'));		
