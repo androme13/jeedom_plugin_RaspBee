@@ -435,8 +435,15 @@ class RaspBEE extends eqLogic {
 		$result->state="ok";
 		//$error='';
 		//$response->error=$httpcode;
-		$result->message="Equipements supprimés";
+		$result->message="Tous les équipements supprimés";
 		return $result;		
+	}
+	
+	public function removeFromGroup($deviceId,$groupId){
+		$raspbeecom = new RaspBEECom;
+		$result = $raspbeecom->removeFromGroup($deviceId,$groupId);
+		unset($raspbeecom);
+		return $result;
 	}
 	/*
 	* Non obligatoire mais permet de modifier l'affichage du widget si vous en avez besoin

@@ -18,8 +18,8 @@
 /*$(".eqLogicDisplayCard").draggable({
 	containment : '#eqLogicThumbnailContainment'
 });*/
-refreshEqlogicsList();
-$('#bt_include').on('click', function () {
+//refreshEqlogicsList();
+/*$('#bt_include').on('click', function () {
 	$('#md_modal').dialog({
 		title: "{{Mode inclusion}}",
 		dialogClass: "no-close",
@@ -33,7 +33,7 @@ $('#bt_include').on('click', function () {
 		}],
 	});
 	$('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=include').dialog('open');	
-});
+});*/
 
 $('#bt_syncEqLogic').on('click', function () {
 	$('#md_modal').dialog({
@@ -280,12 +280,12 @@ function printMembersEqLogic(_eqLogic){
 			origId:lights[i],
 			type: "light",
 			error: function(error){
-					//console.log("THE error printMemberEqLogic "+_eqLogic.name);	
+					//console.dir("THE error printMemberEqLogic ",_eqLogic);	
 					//console.log("THE error printMemberEqLogic light[i] "+lights[i]);
 
-				},
+			},
 			success:function (result){
-					if (result!=undefined){			
+					if (typeof result !== 'undefined'){			
 						$('.membersCard').append(memberDraw(result,_eqLogic.configuration.id));
 						$('.eql'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
 						$('.eqlremove'+result.id).click(function() {
@@ -350,34 +350,48 @@ function removeFromGroup(eqLogic,group){
 	dialog_message += '{{Veuillez confirmer le retrait de}} <b><span id="eqLogic_Remove"></span></b> {{du groupe}} <b><span id="groupName_Remove"></span></b>.';
 	//dialog_message +='<br><br><label class="lbl lbl-warning" for="name">{{Attention, une fois le groupe crée, une synchronisation limitée débutera}}.</label>';
 	dialog_message += '</form>';
-	getEqlogic({
-		id:group.id,
-		callback:function(data){
-			//console.dir("success",data);				
-			bootbox.dialog({
-				title: dialog_title,
-				message: dialog_message,
-				//size: 'small',
-				buttons: {
-					"{{Annuler}}": {
-						callback: function () {
-						$('#div_raspbeeAlert').showAlert({message: "{{Retrait de}} "+eqLogic.name+" {{annulé}}", level: 'info'});
-						}
-					},
-					success: {
-						label: "{{Retirer du groupe}}",
-						className: "btn-success",
-						callback: function () {
-							
+	if (typeof eqLogic !== 'undefined' &&  typeof group !== 'undefined')
+		getEqlogic({
+			id:group.id,
+			callback:function(data){
+				console.dir("removeFromGroup",data);				
+				bootbox.dialog({
+					title: dialog_title,
+					message: dialog_message,
+					//size: 'small',
+					buttons: {
+						"{{Annuler}}": {
+							callback: function () {
+							$('#div_raspbeeAlert').showAlert({message: "{{Retrait de}} "+eqLogic.name+" {{annulé}}", level: 'info'});
+							}
+						},
+						success: {
+							label: "{{Retirer du groupe}}",
+							className: "btn-success",
+							callback: function () {
+								removeFromGroupCallback(eqLogic.configuration.origid,group.configuration.origid);
+							}
 						}
 					}
-				}
-			}).on("shown.bs.modal", function(e) {
-				$("#eqLogic_Remove").html(eqLogic.name);
-				$("#groupName_Remove").html(group.name);
-				});	
-		}
-	});	
+				}).on("shown.bs.modal", function(e) {
+					$("#eqLogic_Remove").html(eqLogic.name);
+					$("#groupName_Remove").html(group.name);
+					});	
+			}
+		});	
+}
+
+function removeFromGroupCallback(deviceId,groupId){
+	console.log("removeFromGroupCallback",deviceId,groupId);
+	
+	jeedom.raspbee.eqLogic.removeFromGroup({
+		deviceId:deviceId,
+		groupId:groupId,
+		success:function (data){
+			console.dir("removeFromGroup",data)
+		}		
+	});
+	
 }
 
 function syncDevices(action,syncType){

@@ -170,6 +170,10 @@ class RaspBEECom {
 	public function getGroups(){
 		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/groups");		
 	}
+	
+	public function getGroupAttributes($groupId){
+		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/groups/".$groupId);
+	}
 		
 	public function getLights(){
 		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/lights");
@@ -193,6 +197,25 @@ class RaspBEECom {
 	
 	public function groupDelete($id){
 		return self::genericDelete("http://".$this->ip."/api/".$this->apikey."/groups/".$id);
+	}
+	
+	public function removeFromGroup($params){
+		$groupAttrAction = self::getGroupAttributes($groupId);
+		$groupAttr = json_decode($groupAttrAction->message);
+		$lightsGroup = $groupAttr->{$params['groupId']}->lights;
+		foreach ($lightsGroup as $light){
+			
+			error_log("comparaison(".$light."<->".$params['deviceId'].")",3,"/tmp/prob.txt");
+			if ($light === $params['deviceId']){
+				error_log("lumiere trouvée(".$light.")",3,"/tmp/prob.txt");
+				break;				
+			}
+		}
+		//error_log("removeFromGroup(".json_encode($groupAttr).")",3,"/tmp/prob.txt");
+			$response->state="ok";
+			$response->error=0;
+			$response->message="Element supprimé du groupe";
+			return $response;		
 	}
 	
 	

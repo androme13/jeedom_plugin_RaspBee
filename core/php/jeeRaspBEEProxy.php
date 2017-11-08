@@ -36,6 +36,9 @@ try {
 		case 'humanNameByOrigIdAndType' :
 			$resp = RaspBEE::humanNameByOrigIdAndType(init('request'));		
 			break;
+		case 'removeFromGroup' :
+			$resp = RaspBEE::removeFromGroup(init('request'));		
+			break;
 	}
 	
 	
