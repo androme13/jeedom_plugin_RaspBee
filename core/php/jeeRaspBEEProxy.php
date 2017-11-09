@@ -26,7 +26,7 @@ try {
 	switch(init('action')){
 		case 'humanNameById' :
 			$resp = RaspBEE::humanNameById(init('request'));
-			break;		
+			break;
 		case 'getOwnersGroups' :
 			$resp = RaspBEE::getOwnersGroups(init('request'));
 			break;
@@ -34,10 +34,16 @@ try {
 			$resp = json_encode(RaspBEE::getAllEqLogics());
 			break;
 		case 'humanNameByOrigIdAndType' :
-			$resp = RaspBEE::humanNameByOrigIdAndType(init('request'));		
+			$resp = RaspBEE::humanNameByOrigIdAndType(init('request'));
 			break;
 		case 'removeFromGroup' :
-			$resp = RaspBEE::removeFromGroup(init('request'));		
+			$resp = RaspBEE::removeFromGroup(init('request'));
+			break;
+		case 'removeFromGroup' :
+			$resp = RaspBEE::getGroupsMembers(init('request'));
+			break;
+		case 'removeFromGroup' :
+			$resp = RaspBEE::setGroupsMembers(init('request'));
 			break;
 	}
 	

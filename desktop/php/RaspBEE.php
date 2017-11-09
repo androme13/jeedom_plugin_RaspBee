@@ -180,9 +180,9 @@ foreach ($eqLogics as $eqLogic) {
 		</div>
 	</div>
 
-	<div class="col-lg-10 col-md-9 col-sm-8 eqLogic" style="border-left: solid 1px #EEE;padding-left: 25px;display: none;">
-		<a class="btn btn-success eqLogicAction pull-right" data-action="save">
-			<i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>
+	<div class="col-lg-10 col-md-9 col-sm-8 eqLogic" style="border-left: solid 1px #EEE;padding-left: 25px;display: none;" id="eqLogicDetailSaveButtons">		
+		<a class="btn btn-success eqLogicAction pull-right" id="eqLogicSave" data-action="save"><i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>
+		<a class="btn btn-success pull-right" id="specialEqLogicSave"><i class="fa fa-check-circle"></i> {{Sauvegarder2}}</a>
 		<div id="div_removeGeneric"><a class="btn btn-danger eqLogicAction pull-right" data-action="remove">
 			<i class="fa fa-minus-circle"></i> {{Supprimer}}</a></div>
 		<a class="btn btn-default eqLogicAction pull-right" data-action="configure">
@@ -203,7 +203,7 @@ foreach ($eqLogics as $eqLogic) {
 		<a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab">
 			<i class="fa fa-list-alt">
 		</i> {{Commandes}}</a>
-</li>
+	</li>
 </ul>
 <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
 	<div role="tabpanel" class="tab-pane active" id="eqlogictab">

@@ -298,11 +298,18 @@ class RaspBEE extends eqLogic {
 	}
 
 	public function preUpdate() {
+		/*if ($eqLogic->getConfiguration("type")=="LightGroup"){
+			
+		}*/
+		/*if ($this->getConfiguration('addr') == '') {
+            throw new Exception(__('L\'adresse IP ne peut etre vide. Vous pouvez la trouver dans les paramètres de votre TV ou de votre routeur (box).',__FILE__));
+        }*/
 		
 	}
 
 	public function postUpdate() {
 		
+
 	}
 
 	public function preRemove() {
@@ -364,6 +371,23 @@ class RaspBEE extends eqLogic {
 		$raspbeecom = new RaspBEECom;
 		$result = $raspbeecom->getAPIAccess();
 		unset($raspbeecom);
+		return $result;
+	}
+	
+	public function getGroupsMembers($id){
+		$eql=$eqLogic->getById($id);
+		$result = array("error" => 0, "message" => "", "state" => "");
+		$result->state="ok";
+		$result->message=$eql->getConfiguration('lights');
+		return $result;
+	}
+	
+	public function setGroupsMembers($id,$members){
+		$eql = $eqLogic->byId($id);		
+		$eql->setConfiguration('lights',$members);
+		$eql->save();
+		$result = array("error" => 0, "message" => "", "state" => "");
+		$result->state="ok";
 		return $result;
 	}
 	
