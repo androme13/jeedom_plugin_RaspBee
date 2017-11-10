@@ -16,6 +16,7 @@
 */
 
 function commandDraw(_cmd){
+	console.dir("cmd",_cmd);
 	var command = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
 	command += '<td class="expertModeVisible">';
 	command += '<span class="cmdAttr" data-l1key="id" style="" placeholder="#"></span>';
@@ -26,6 +27,8 @@ function commandDraw(_cmd){
 	command += '<td>';
 	command += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isVisible" checked/>{{Afficher}}</label></span> ';
 	command += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span> ';
+	if (_cmd.subType==='binary')
+		command += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="configuration" data-l2key="isReversed"/>{{Inverser}}</label></span> ';
 	command += '</td>';
 	command += '<td>';
 	if (is_numeric(_cmd.id)) {

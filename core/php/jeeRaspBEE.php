@@ -54,6 +54,9 @@ if ($results->type == "sensors"){
 			foreach ($equipement->getCmd('info') as $cmd){
 				foreach ($results->action as $actioncmd => $key){
 					if ($cmd->getConfiguration('fieldname')==$actioncmd){
+						// si le param reversed existe c'estque c'est un boolean
+						if ($cmd->getConfiguration('isReversed'))
+							$key = !$key;							
 						if ($cmd->getConfiguration('fieldname')=="temperature" || $cmd->getConfiguration('fieldname')=="humidity")
 						$cmd->event($key/100);
 						else
