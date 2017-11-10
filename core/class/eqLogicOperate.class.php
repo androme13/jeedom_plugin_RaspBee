@@ -48,6 +48,10 @@ class eqLogicOperate extends eqLogic {
 				return eqLogicOperate::createGenericDevice('/../config/devices/ZHAHumidity.json',$eqLogic,$device,$syncType,$eqLogicMode);
 				break;
 			}
+		case "ZHAOpenClose" :{
+				return eqLogicOperate::createGenericDevice('/../config/devices/ZHAOpenClose.json',$eqLogic,$device,$syncType,$eqLogicMode);
+				break;
+			}
 		case "ZHAPressure" :{
 				return eqLogicOperate::createGenericDevice('/../config/devices/ZHAPressure.json',$eqLogic,$device,$syncType,$eqLogicMode);
 				break;

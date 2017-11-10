@@ -163,14 +163,10 @@ function printEqLogic(_eqLogic) {
 	// on regarde si c'est un groupe ou pas
 	// on ne peut supprimer les groupes qui n'ont pas de ctrl maitre
 	if(_eqLogic.configuration.type=="LightGroup" && ("devicemembership" in _eqLogic.configuration)){
-		//$('#eqLogicDetailMenuButtons').append('<a class="btn btn-success pull-right" id="specialEqLogicSave"><i class="fa fa-check-circle"></i> {{Sauvegarder2}}</a>');
 		$('#specialEqLogicSave').show();
 		$('#eqLogicSave').hide();
-		//$('#eqLogicDetailSaveButtons').html('<div class="btn btn-success pull-right" id="specialEqLogicSave"><i class="fa fa-check-circle"></i> {{Sauvegarder2}}</div>');
 		if (_eqLogic.configuration.devicemembership!="null"){
-			$('#div_removeGeneric').hide();
-			//$('#div_removeSpecial').hide();
-			
+			$('#div_removeGeneric').hide();			
 			$('#buttons_infoseqlogic').append('<a class="label label-info" style="margin-bottom:20px;"><i class="fa fa-info-circle"></i> {{Ce groupe ne peut pas être supprimé car il appartient à un contrôleur}}.</a>');
 		}
 		else

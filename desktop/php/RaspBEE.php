@@ -128,6 +128,9 @@ foreach ($eqLogics as $eqLogic) {
 	case "ZHAHumidity" :
 		echo '<i class="jeedom2 jeedom2-plante_eau2" style="font-size : 6em;color:#767676;"></i>';
 		break;
+	case "ZHAOpenClose" :
+		echo '<i class="jeedom jeedom-porte-ouverte" style="font-size : 6em;color:#767676;"></i>';
+		break;
 	case "ZHAPressure" :
 		echo '<i class="meteo meteo-nuage-soleil-pluie" style="font-size :6em;color:#767676;"></i>';
 		break;
@@ -156,6 +159,9 @@ foreach ($eqLogics as $eqLogic) {
 	case "ZHAHumidity" :
 		echo '{{Capteur d\'humidité}}';
 		break;
+	case "ZHAOpenClose" :
+		echo '{{Capteur ouvert/fermé}}';
+		break;		
 	case "ZHAPressure" :
 		echo '{{Capteur de pression}}';
 		break;
