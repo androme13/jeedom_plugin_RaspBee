@@ -58,9 +58,9 @@ if ($results->type == "sensors"){
 						if ($cmd->getConfiguration('isReversed'))
 							$key = !$key;							
 						if ($cmd->getConfiguration('fieldname')=="temperature" || $cmd->getConfiguration('fieldname')=="humidity")
-						$cmd->event($key/100);
+							$cmd->event($key/100);
 						else
-						$cmd->event($key);
+							$cmd->event($key);
 						break;
 					}
 				}

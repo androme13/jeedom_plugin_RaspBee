@@ -217,6 +217,7 @@ class RaspBEECom {
 		return self::genericDelete("http://".$this->ip."/api/".$this->apikey."/groups/".$id);
 	}
 	
+	
 	public function removeFromGroup($params){
 		$groupAttrAction = self::getGroupAttributes($groupId);
 		$groupAttr = json_decode($groupAttrAction->message);

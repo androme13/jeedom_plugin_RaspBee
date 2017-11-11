@@ -16,7 +16,7 @@
 */
 
 function commandDraw(_cmd){
-	console.dir("cmd",_cmd);
+	//console.dir("cmd",_cmd);
 	var command = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
 	command += '<td class="expertModeVisible">';
 	command += '<span class="cmdAttr" data-l1key="id" style="" placeholder="#"></span>';

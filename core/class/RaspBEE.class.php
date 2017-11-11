@@ -298,9 +298,12 @@ class RaspBEE extends eqLogic {
 	}
 
 	public function preUpdate() {
-		/*if ($eqLogic->getConfiguration("type")=="LightGroup"){
-			
-		}*/
+		$eqLogic= $this;
+		if ($eqLogic->getConfiguration("type")=="LightGroup"){
+		//$newTab = $('#membersEqLogic').html().match('/eql\d+/g');
+		//$newTab = $('#membersEqLogic').html();
+		//error_log("preupdate: ".json_encode($newTab)."|",3,"/tmp/prob.txt");
+		}
 		/*if ($this->getConfiguration('addr') == '') {
             throw new Exception(__('L\'adresse IP ne peut etre vide. Vous pouvez la trouver dans les paramètres de votre TV ou de votre routeur (box).',__FILE__));
         }*/

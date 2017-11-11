@@ -66,6 +66,10 @@ $('#bt_addGroup').on('click', function () {
 	createGroup();	
 });
 
+$('#specialEqLogicSave').on('click', function () {
+	specialEqLogicSave();	
+});
+
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 
 
@@ -163,8 +167,8 @@ function printEqLogic(_eqLogic) {
 	// on regarde si c'est un groupe ou pas
 	// on ne peut supprimer les groupes qui n'ont pas de ctrl maitre
 	if(_eqLogic.configuration.type=="LightGroup" && ("devicemembership" in _eqLogic.configuration)){
-		$('#specialEqLogicSave').show();
-		$('#eqLogicSave').hide();
+		//$('#specialEqLogicSave').show();
+		//$('#eqLogicSave').hide();
 		if (_eqLogic.configuration.devicemembership!="null"){
 			$('#div_removeGeneric').hide();			
 			$('#buttons_infoseqlogic').append('<a class="label label-info" style="margin-bottom:20px;"><i class="fa fa-info-circle"></i> {{Ce groupe ne peut pas être supprimé car il appartient à un contrôleur}}.</a>');
@@ -177,8 +181,8 @@ function printEqLogic(_eqLogic) {
 	else
 	{
 		$('#div_removeGeneric').show();
-		$('#specialEqLogicSave').hide();
-		$('#eqLogicSave').show();
+		//$('#specialEqLogicSave').hide();
+		//$('#eqLogicSave').show();
 	}
 	if (("devicemembership" in _eqLogic.configuration))
 	printMasterEqLogic(_eqLogic);
@@ -346,6 +350,65 @@ function getEqlogic(_params){
 }
 
 function removeFromGroup(eqLogic,group){
+//console.dir("eqlogic",eqLogic);
+	var dialog_title = '{{Retrait d\'un équipement d\'un groupe}}.';
+	var dialog_message = '<form class="form-horizontal onsubmit="return false;"> ';
+	dialog_message += '{{Veuillez confirmer le retrait de}} <b><span id="eqLogic_Remove"></span></b> {{du groupe}} <b><span id="groupName_Remove"></span></b>.';
+	//dialog_message +='<br><br><label class="lbl lbl-warning" for="name">{{Attention, une fois le groupe crée, une synchronisation limitée débutera}}.</label>';
+	dialog_message += '</form>';
+	if (typeof eqLogic !== 'undefined' &&  typeof group !== 'undefined')
+		getEqlogic({
+			id:group.id,
+			callback:function(data){
+				console.dir("removeFromGroup",data);				
+				bootbox.dialog({
+					title: dialog_title,
+					message: dialog_message,
+					//size: 'small',
+					buttons: {
+						"{{Annuler}}": {
+							callback: function () {
+							$('#div_raspbeeAlert').showAlert({message: "{{Retrait de}} "+eqLogic.name+" {{annulé}}", level: 'info'});
+							}
+						},
+						success: {
+							label: "{{Retirer du groupe}}",
+							className: "btn-success",
+							callback: function () {
+								$('#eqlmember'+eqLogic.id).remove();
+								removeFromGroupStep2(eqLogic.id,eqLogic.configuration.origid,group.configuration.origid);
+							}
+						}
+					}
+				}).on("shown.bs.modal", function(e) {
+					$("#eqLogic_Remove").html(eqLogic.name);
+					$("#groupName_Remove").html(group.name);
+					});	
+			}
+		});	
+
+
+}
+
+function removeFromGroupStep2(eqLogicId,deviceId,groupId){
+	console.log("removeFromGroupStep2",deviceId,groupId);
+	var newTab = $('#membersEqLogic').html().match(/eql\d+/g);
+	for (var i=0; i<newTab.length;i++) {
+		newTab[i] = newTab[i].replace('eql', "");	
+	}
+	//newTab.forEach(function(element){
+	//element.replace("eql", "");	
+	//});
+	//var newTab = $("#eqlmember").find();
+	//var newTab=$("div:regex(class, /eql\d*/g)");
+	//var newTab = $( "#membersEqLogic" ).find( ".eqLogicDisplayCard" );
+	console.dir("newtab",JSON.stringify(newTab));
+	
+	
+}
+
+
+function AremoveFromGroup(eqLogic,group){
 	//console.dir("eqlogic",eqLogic);
 	var dialog_title = '{{Retrait d\'un équipement d\'un groupe}}.';
 	var dialog_message = '<form class="form-horizontal onsubmit="return false;"> ';
@@ -383,7 +446,7 @@ function removeFromGroup(eqLogic,group){
 		});	
 }
 
-function removeFromGroupStep2(eqLogicId,deviceId,groupId){
+function AremoveFromGroupStep2(eqLogicId,deviceId,groupId){
 	console.log("removeFromGroupStep2",deviceId,groupId);
 	
 	jeedom.raspbee.eqLogic.removeFromGroup({
@@ -409,10 +472,36 @@ function removeFromGroupStep2(eqLogicId,deviceId,groupId){
 	
 }
 
-function removeFromGroupStep3(eqLogicId,deviceId,groupId){
+/*function removeFromGroupStep3(eqLogicId,deviceId,groupId){
 	console.log("removeFromGroupStep2",deviceId,groupId);
 	
 	jeedom.raspbee.eqLogic.removeFromGroup({
+		deviceId:deviceId,
+		groupId:groupId,
+		success:function (data){
+			//$('#eqlmember'+eqLogicId).empty();
+			$('#eqlmember'+eqLogicId).remove();
+			console.dir("removeFromGroup",data);
+			console.dir("jeedom",jeedom.eqLogic);
+			
+			jeedom.eqLogic.save({
+		//deviceId:deviceId,
+		//groupId:groupId,
+		success:function (data){
+			console.dir("data",data);
+			//console.dir("jeedom",jeedom.eqLogic);
+			
+		}		
+	});			
+		}		
+	});
+	
+}*/
+
+function specialEqLogicSave(eqLogic){
+	console.log ("sauvegarde eqlogix pecial");
+	
+	jeedom.raspbee.eqLogic.setGroupMembers({
 		deviceId:deviceId,
 		groupId:groupId,
 		success:function (data){

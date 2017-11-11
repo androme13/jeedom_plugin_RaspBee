@@ -207,6 +207,26 @@ class eqLogicOperate extends eqLogic {
 		return $response;
 	}
 	
+	/*public function removeFromGroup($id){
+		$response = $responseHelper;
+		$response->state="nok";
+		$response->error = 1;
+		$response->message = "Equipement introuvable id:".$id;
+		// on s'assure de rester dans les eqLogics de RaspBEE
+		$eqLogic = null;
+		foreach (eqlogic::byType('RaspBEE') as $eqLogicPass){
+			if ($eqLogicPass->getId()==$id){
+				$eqLogicPass->remove();			
+				$response->state="ok";
+				$response->error = 0;
+				$response->message = json_encode($eqLogicPass);
+				break;
+			}
+		}
+		return $response;
+	}*/
+	
+	
 	function setGenericEqLogicConf($eqLogic=null,$device,$syncType="basic",$eqLogicMode){
 		//error_log("synctype: ".$syncType,3,"/tmp/prob.text");
 		switch ($syncType){
