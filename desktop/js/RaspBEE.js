@@ -292,8 +292,8 @@ function printMembersEqLogic(_eqLogic){
 			},
 			success:function (result){
 					if (typeof result !== 'undefined'){			
-						$('.membersCard').append(memberDraw(result,_eqLogic.configuration.id));
-						$('.eql'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
+						$('.membersCard').append(memberDraw(result,_eqLogic.configuration.origid));
+						$('.eqlmember'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
 						$('.eqlremove'+result.id).click(function() {
 							getEqlogic({
 								id:result.id,
@@ -373,7 +373,7 @@ function removeFromGroup(eqLogic,group){
 						},
 						success: {
 							label: "{{Retirer du groupe}}",
-							className: "btn-success",
+							className: "btn-warning",
 							callback: function () {
 								$('#eqlmember'+eqLogic.id).remove();
 								removeFromGroupStep2(eqLogic.id,eqLogic.configuration.origid,group.configuration.origid);
@@ -392,18 +392,30 @@ function removeFromGroup(eqLogic,group){
 
 function removeFromGroupStep2(eqLogicId,deviceId,groupId){
 	console.log("removeFromGroupStep2",deviceId,groupId);
-	var newTab = $('#membersEqLogic').html().match(/eql\d+/g);
-	for (var i=0; i<newTab.length;i++) {
-		newTab[i] = newTab[i].replace('eql', "");	
-	}
-	//newTab.forEach(function(element){
-	//element.replace("eql", "");	
-	//});
-	//var newTab = $("#eqlmember").find();
-	//var newTab=$("div:regex(class, /eql\d*/g)");
-	//var newTab = $( "#membersEqLogic" ).find( ".eqLogicDisplayCard" );
-	console.dir("newtab",JSON.stringify(newTab));
+	var newTab = $('#membersEqLogic').html().match(/eqlorigid\d+/g);
+	var value = "";
+	if (newTab){
+	console.dir("newtab before",JSON.stringify(newTab));
 	
+	// on ne garde que le nombre (qui est egal à l'id)
+	for (var i=0; i<newTab.length;i++) {
+		newTab[i] = newTab[i].replace('eqlorigid', "");	
+	}
+	//console.dir("newtab after",JSON.stringify(newTab));
+	value = JSON.stringify(newTab);
+	}
+	else {	
+	console.dir("newtab vide");	
+	
+	}
+	
+	$('#membersField').val(value);
+	
+	// ensuite on set des attributs au bouton sauvegarderspecial en cas de click sur lui même
+/*	$('#specialEqLogicSave').attr({
+		"eqLogicIdToSave" : eqLogicId,
+		"lights" : value
+	});	*/
 	
 }
 
@@ -498,8 +510,37 @@ function AremoveFromGroupStep2(eqLogicId,deviceId,groupId){
 	
 }*/
 
-function specialEqLogicSave(eqLogic){
-	console.log ("sauvegarde eqlogix pecial");
+function specialEqLogicSave(){
+	console.log ("sauvegarde eqlogic special groupe");
+	var eqLogicIdToSave = $('#specialEqLogicSave').attr("eqLogicIdToSave");
+	var lights = $('#specialEqLogicSave').attr("lights");
+	console.dir ("sauvegarde eqlogic special groupe",eqLogicIdToSave);
+	console.dir ("lights",lights);
+	/*jeedom.raspbee.eqLogic.setGroupMembers({
+		deviceId:deviceId,
+		groupId:groupId,
+		success:function (data){
+			//$('#eqlmember'+eqLogicId).empty();
+			$('#eqlmember'+eqLogicId).remove();
+			console.dir("removeFromGroup",data);
+			console.dir("jeedom",jeedom.eqLogic);
+			
+			jeedom.eqLogic.save({
+		//deviceId:deviceId,
+		//groupId:groupId,
+		success:function (data){
+			console.dir("data",data);
+			//console.dir("jeedom",jeedom.eqLogic);
+			
+		}		
+	});			
+		}		
+	});*/
+	
+}
+
+function specialEqLogicSaveStep2(eqLogic){
+	console.log ("sauvegarde eqlogix special groupe");
 	
 	jeedom.raspbee.eqLogic.setGroupMembers({
 		deviceId:deviceId,

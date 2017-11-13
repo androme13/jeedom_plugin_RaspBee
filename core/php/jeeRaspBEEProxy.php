@@ -39,10 +39,10 @@ try {
 		case 'removeFromGroup' :
 			$resp = RaspBEE::removeFromGroup(init('request'));
 			break;
-		case 'removeFromGroup' :
+		case 'getGroupsMembers' :
 			$resp = RaspBEE::getGroupsMembers(init('request'));
 			break;
-		case 'removeFromGroup' :
+		case 'setGroupsMembers' :
 			$resp = RaspBEE::setGroupsMembers(init('request'));
 			break;
 	}

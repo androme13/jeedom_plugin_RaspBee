@@ -17,7 +17,7 @@
 jeedom.raspbee = function() {};
 
 jeedom.raspbee.eqLogic = function() {};
-
+jeedom.raspbee.com = function() {};
 
 
 jeedom.raspbee.eqLogic.getOwnersGroups = function (_params) {
@@ -135,7 +135,9 @@ jeedom.raspbee.eqLogic.getGroupMembers = function (_params) {
 	$.ajax(paramsAJAX);
 }
 
-jeedom.raspbee.eqLogic.setGroupMembers = function (_params) {
+
+// members = json array
+jeedom.raspbee.com.setGroupMembers = function (_params) {
 	var paramsRequired = ['groupId','members'];
 	var paramsSpecifics = {};
 	try {

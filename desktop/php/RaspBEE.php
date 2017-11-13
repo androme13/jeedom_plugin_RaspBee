@@ -223,6 +223,7 @@ foreach ($eqLogics as $eqLogic) {
 							<div class="col-sm-6">
 								<input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;">
 								<input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l'équipement}}">
+								<input type="hidden" id="membersField" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="lights" placeholder="{{membres de l'équipement}}">
 							</div>
 						</div>
 						<div class="form-group">

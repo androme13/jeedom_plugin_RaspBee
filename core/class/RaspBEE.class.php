@@ -107,7 +107,7 @@ class RaspBEE extends eqLogic {
 	}
 	
 	// recupere un humaname et un id par l'originid et le type (ex : switch ou light)
-	// return array(id,humanName)
+	// return array(id,origid,humanName)
 	public function humanNameByOrigIdAndType($data){	
 		//error_log("data: ".$data['type']."|",3,"/tmp/prob.txt");
 		foreach (eqLogic::byType('RaspBEE') as $equipement) {
@@ -115,11 +115,11 @@ class RaspBEE extends eqLogic {
 				$obj = json_decode($decode);				
 				if ($obj->origid==$data[origId] && strstr(strtolower($obj->type), strtolower($data[type]))!==false) {
 					$id = $equipement->id;
+					$origid = $equipement->getConfiguration('origid');
 					$humanName = $equipement->getHumanName(true,true);
-					return array('id' => $id,'humanName' => $humanName);
+					return array('id' => $id, 'origid' => $origid, 'humanName' => $humanName);
 
 				}
-				//return "probleme humanNameByOrigIdAndType";
 		}			
 			
 	}

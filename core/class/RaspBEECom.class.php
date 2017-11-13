@@ -244,6 +244,25 @@ class RaspBEECom {
 			return $response;		
 	}
 	
+	/*public function setGroupMembers($params){
+			$response->state="nok";
+			$response->error=-1;
+			$response->message="";
+			if (json.decode($params->lights))
+			{
+				
+			}
+			else {
+				$response->error=1;
+				$response->message="Lights pas au format json";
+			}
+				
+			
+			
+			return $response;
+		
+	}*/
+	
 	
 	
 	public function sendCommand($type=null,$id=null,$command=null){
