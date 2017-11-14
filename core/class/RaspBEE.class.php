@@ -290,23 +290,28 @@ class RaspBEE extends eqLogic {
 	}
 
 	public function preSave() {
-		
-	}
-
-	public function postSave() {
-		
-	}
-
-	public function preUpdate() {
+		error_log("preSave:",3,"/tmp/prob.txt");
 		$eqLogic= $this;
 		if ($eqLogic->getConfiguration("type")=="LightGroup"){
+		$value = $eqLogic->getConfiguration("lights");
+		
 		//$newTab = $('#membersEqLogic').html().match('/eql\d+/g');
 		//$newTab = $('#membersEqLogic').html();
-		//error_log("preupdate: ".json_encode($newTab)."|",3,"/tmp/prob.txt");
+		error_log("preSave: ".$value."|",3,"/tmp/prob.txt");
+		
 		}
 		/*if ($this->getConfiguration('addr') == '') {
             throw new Exception(__('L\'adresse IP ne peut etre vide. Vous pouvez la trouver dans les paramètres de votre TV ou de votre routeur (box).',__FILE__));
         }*/
+	}
+
+	public function postSave() {
+		//error_log("postSave:",3,"/tmp/prob.txt");
+		
+	}
+
+	public function preUpdate() {
+
 		
 	}
 
@@ -567,18 +572,11 @@ class RaspBEECmd extends cmd {
 	
 	
 	private function sendCommand($type=null,$id=null,$command=null){
-		//error_log("sendCommand",3,"/tmp/prob.txt");
-
 		if ($id===null || $command===null || $type===null)return false;
-		//error_log("getRaspBEESensors pass");
 		$raspbeecom = new RaspBEECom;
 		$result = $raspbeecom->sendCommand($type,$id,$command);
 		unset($raspbeecom);
-		//error_log("error :".$result,3,"/tmp/prob.txt");
-				//error_log("commande :".$command,3,"/tmp/prob.txt");
-
-		return $result;
-		
+		return $result;		
 	}
 
 	/*     * **********************Getteur Setteur*************************** */

@@ -278,7 +278,8 @@ function printMembersEqLogic(_eqLogic){
 	if (!is_null(lights)){
 
 		var master ="";
-		master+='<legend><i class="fa fa-table"></i> {{Membres du groupe}}</legend>'
+		master+='<legend><i class="fa fa-table"></i> {{Membres du groupe}}';
+		master+='<a class="btn btn-success" id="bt_addMember" style="margin-left: 5px;"><i class="fa fa-plus-circle"></i></a></legend>';
 		master+='<div class="membersCard" style="display: flex;">';
 
 		for(var i= 0; i < lights.length; i++){
@@ -308,6 +309,12 @@ function printMembersEqLogic(_eqLogic){
 		}
 		master+="</div>";
 		$('#membersEqLogic').append(master);
+		$('#bt_addMember').on('click', function () {
+			$('#md_modal').dialog({title: "{{Ajouter un membre au groupe}}"});
+			$('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=addmember').dialog('open');
+		});
+		
+		
 	}
 }
 
@@ -409,7 +416,15 @@ function removeFromGroupStep2(eqLogicId,deviceId,groupId){
 	
 	}
 	
-	$('#membersField').val(value);
+	/*jeedom.raspbee.com.setGroupMembers({
+		groupId: groupId,
+		members: value,
+		success:function (data){
+			
+		}		
+	})*/
+	//$('#membersField').val(value);
+	
 	
 	// ensuite on set des attributs au bouton sauvegarderspecial en cas de click sur lui même
 /*	$('#specialEqLogicSave').attr({
