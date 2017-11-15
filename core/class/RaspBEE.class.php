@@ -100,7 +100,7 @@ class RaspBEE extends eqLogic {
 			}
 		}
 		//error_log("terminé",3,"/tmp/prob.txt");
-		error_log("groupes generés  : ".json_encode($group),3,"/tmp/prob.txt");
+		//error_log("groupes generés  : ".json_encode($group),3,"/tmp/prob.txt");
 		return $groups;		
 	}
 

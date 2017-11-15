@@ -110,7 +110,9 @@ function addMemberToGroup(_eqLogic){
 				callback: function () {		
 					//console.log($("#groupName").val())
 					if (!$('#membersField').val()) $('#membersField').val("[]");
+					
 					var actualMembers = JSON.parse($('#membersField').val());
+					if (!actualMembers) actualMembers = [];
 					var membersToAdd = $("#lightsList").val();
 					//console.dir("oldMembers",actualMembers);
 					//console.dir("membersToAdd",membersToAdd);
@@ -291,6 +293,7 @@ function printGroupsEqLogic(_eqLogic){
 	master+='<div class="groupsCard" style="display: flex;">';	
 	master+="</div>";		
 	$('#groupsEqLogic').append(master);
+	console.dir("printGroupsEqLogic",_eqLogic.configuration["origid"]);
 	var origId = _eqLogic.configuration["origid"];
 	//console.log("origid: ",origId);
 	jeedom.raspbee.eqLogic.getOwnersGroups({
@@ -299,6 +302,7 @@ function printGroupsEqLogic(_eqLogic){
 			if (error) $('#div_raspbeeAlert').showAlert({message: error.message, level: 'danger'});
 		},
 		success:function (groupResult){
+			console.dir("pringroup",groupResult);
 			if (groupResult!==undefined){
 				for (var i=0;i<groupResult.length;i++){
 					printGroupEqlogic(groupResult[i]);
@@ -342,7 +346,7 @@ function printMembersEqLogic(_eqLogic){
 		console.dir(_eqLogic.configuration.lights);
 			var master ="";
 			master+='<legend><i class="fa fa-table"></i> {{Membres du groupe}}';
-			master+='<a class="btn btn-success" id="bt_addMember" style="margin-left: 5px;"><i class="fa fa-plus-circle"></i></a></legend>';
+			master+='<a title="{{Ajouter un éclairage au groupe}}" class="btn btn-success" id="bt_addMember" style="margin-left: 5px;"><i class="fa fa-plus-circle"></i></a></legend>';
 			master+='<div id="membersCard" style="display: flex;">';		
 			if (_eqLogic.configuration.lights){
 			var lights=JSON.parse(_eqLogic.configuration.lights);
