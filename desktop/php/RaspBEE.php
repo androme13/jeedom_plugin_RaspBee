@@ -188,7 +188,6 @@ foreach ($eqLogics as $eqLogic) {
 
 	<div class="col-lg-10 col-md-9 col-sm-8 eqLogic" style="border-left: solid 1px #EEE;padding-left: 25px;display: none;" id="eqLogicDetailSaveButtons">		
 		<a class="btn btn-success eqLogicAction pull-right" id="eqLogicSave" data-action="save"><i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>
-		<a class="btn btn-success pull-right" id="specialEqLogicSave"><i class="fa fa-check-circle"></i> {{Sauvegarder2}}</a>
 		<div id="div_removeGeneric"><a class="btn btn-danger eqLogicAction pull-right" data-action="remove">
 			<i class="fa fa-minus-circle"></i> {{Supprimer}}</a></div>
 		<a class="btn btn-default eqLogicAction pull-right" data-action="configure">

@@ -13,10 +13,26 @@
 * You should have received a copy of the GNU General Public License
 * along with Plugin RaspBEE for jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
-console.log("add members");
+
 $('#bt_addSelectedLights').on('click', function () {
 	console.log("add members");
-	console.dir($("#lightsList").val());
+	//console.dir($("#lightsList").val());
+	var actualMembers = JSON.parse($('#membersField').val());
+	var membersToAdd = $("#lightsList").val();
+	console.dir("oldMembers",actualMembers);
+	console.dir("membersToAdd",membersToAdd);
+	membersToAdd.forEach(function(memberToAdd)
+	{
+		console.dir("memberToAdd",memberToAdd);
+		var index = actualMembers.indexOf(memberToAdd);
+		if(index == -1){
+		//console.dir("ajout",memberToAdd);
+		actualMembers.push(memberToAdd);
+		};
+	
+	});
+	$('#membersField').val(JSON.stringify(actualMembers))
+	//console.dir("newMembers",actualMembers);
 });
 
 

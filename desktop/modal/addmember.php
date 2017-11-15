@@ -15,16 +15,10 @@
  * along with Plugin RaspBEE for jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
  
-//require_once dirname(__FILE__) . '/../../core/class/eqLogicOperate.class.php'; 
-
 if (!isConnect('admin')) {
 	throw new Exception('401 Unauthorized');
 }
-
-require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
-/*$raspbeecom = new RaspBEECom;
-		$lights = json_decode($raspbeecom->getLights());
-		$groups = json_decode($raspbeecom->getGroups());*/		
+require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';	
 ?>
 <div id='div_addMemberAlert' style="display: none;"></div>
 <center>
