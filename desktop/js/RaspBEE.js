@@ -109,6 +109,7 @@ function addMemberToGroup(_eqLogic){
 				className: "btn-success",
 				callback: function () {		
 					//console.log($("#groupName").val())
+					if (!$('#membersField').val()) $('#membersField').val("[]");
 					var actualMembers = JSON.parse($('#membersField').val());
 					var membersToAdd = $("#lightsList").val();
 					//console.dir("oldMembers",actualMembers);
@@ -152,9 +153,9 @@ function addMemberToGroup(_eqLogic){
 				}			
 			}		
 		});
-		var actualMembers = JSON.parse($('#membersField').val());
+		//var actualMembers = JSON.parse($('#membersField').val());
 		//var memberEql=jeedom.eqLogic.byId({id:_eqLogic.id}) 
-		console.dir(actualMembers);
+		//console.dir(actualMembers);
 		//$("#eqLogic_Remove").html(eqLogic.name);
 		//$("#groupName_Remove").html(group.name);
 		});		
@@ -337,53 +338,56 @@ function printMasterEqLogic(_eqLogic){
 	}}
 
 function printMembersEqLogic(_eqLogic){
-	$('#membersEqLogic').empty();	
-	var lights=JSON.parse(_eqLogic.configuration.lights);
-	if (!is_null(lights)){
+	$('#membersEqLogic').empty();
+		console.dir(_eqLogic.configuration.lights);
+			var master ="";
+			master+='<legend><i class="fa fa-table"></i> {{Membres du groupe}}';
+			master+='<a class="btn btn-success" id="bt_addMember" style="margin-left: 5px;"><i class="fa fa-plus-circle"></i></a></legend>';
+			master+='<div id="membersCard" style="display: flex;">';		
+			if (_eqLogic.configuration.lights){
+			var lights=JSON.parse(_eqLogic.configuration.lights);
+			if (!is_null(lights)){
+			
 
-		var master ="";
-		master+='<legend><i class="fa fa-table"></i> {{Membres du groupe}}';
-		master+='<a class="btn btn-success" id="bt_addMember" style="margin-left: 5px;"><i class="fa fa-plus-circle"></i></a></legend>';
-		master+='<div id="membersCard" style="display: flex;">';
 
-		for(var i= 0; i < lights.length; i++){
-			jeedom.raspbee.eqLogic.humanNameByOrigIdAndType({
-			origId:lights[i],
-			type: "light",
-			error: function(error){
-					//console.dir("THE error printMemberEqLogic ",_eqLogic);	
-					//console.log("THE error printMemberEqLogic light[i] "+lights[i]);
-
-			},
-			success:function (result){
-					if (typeof result !== 'undefined'){			
-						$('#membersCard').append(memberDraw(result,_eqLogic.configuration.origid));
-						$('.eqlmember'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
-						$('.eqlmemberremove'+result.id).click(function() {
-							var id = result.id;
-							getEqlogic({
-								id:id,
-								callback:function(data){
-									removeFromGroup(data,_eqLogic);
-								}
+			for(var i= 0; i < lights.length; i++){
+				console.dir("boucle");
+				jeedom.raspbee.eqLogic.humanNameByOrigIdAndType({
+				origId:lights[i],
+				type: "light",
+				success:function (result){
+						if (typeof result !== 'undefined'){			
+							$('#membersCard').append(memberDraw(result,_eqLogic.configuration.origid));
+							$('.eqlmember'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
+							$('.eqlmemberremove'+result.id).click(function() {
+								console.dir('eqlmemberremove',result.id);
+								var id = result.id;
+								jeedom.raspbee.eqLogic.getById({
+									id:result.id,
+									success:function (data){
+										console.dir('success',data);
+										console.dir('id',result.id);
+										removeFromGroup(data,_eqLogic);
+									}		
+								});
 							});
-						});
-					}
-				}		
-			});
+						}
+					}		
+				});
+			}
+			
 		}
-		master+="</div>";
-		$('#membersEqLogic').append(master);
-		$('#bt_addMember').on('click', function () {
-			addMemberToGroup(_eqLogic);
-		});
+
 	}
+			master+="</div>";
+			$('#membersEqLogic').append(master);
+			$('#bt_addMember').on('click', function () {
+				addMemberToGroup(_eqLogic);
+			});
 }
 
 
 function refreshEqlogicsList(){
-	console.dir("refreshEqlogicsList");
-	//console.dir(jeedom.raspbee);
 	jeedom.raspbee.eqLogic.getAll({
 		error: function(error){
 			console.dir("THE error refreshEqlogicsList "+error);
@@ -394,16 +398,9 @@ function refreshEqlogicsList(){
 				resultArray=JSON.parse(result);
 				var objects="";
 				resultArray.forEach(function(element) {
-				//var card = JSON.parse(element);
 				objects+=eqLogicDraw(element);
-				//$("#eqLogicThumbnailContainment").append(eqLogicDraw(element));
-				//$("#testdiv").append(eqLogicDraw(element));
-				//$("#testdiv").append(eqLogicDraw(element));	
 				})
 				$("#eqLogicThumbnailContainment").append(objects);
-				//var card = JSON.parse(result);
-				
-				//$("#testdiv").html(eqLogicDraw(card)[0]);
 			}			
 		}		
 	});
@@ -419,17 +416,14 @@ function getEqlogic(_params){
 }
 
 function removeFromGroup(_eqLogic,group){
-	//console.dir("eqlogic",eqLogic);
 	var dialog_title = '{{Retrait d\'un équipement d\'un groupe}}.';
 	var dialog_message = '<form class="form-horizontal onsubmit="return false;"> ';
 	dialog_message += '{{Veuillez confirmer le retrait de}} <b><span id="eqLogic_Remove"></span></b> {{du groupe}} <b><span id="groupName_Remove"></span></b>.';
-	//dialog_message +='<br><br><label class="lbl lbl-warning" for="name">{{Attention, une fois le groupe crée, une synchronisation limitée débutera}}.</label>';
 	dialog_message += '</form>';
 	if (typeof _eqLogic !== 'undefined' &&  typeof group !== 'undefined')
 		getEqlogic({
 			id:group.id,
-			callback:function(data){
-				//console.dir("removeFromGroup",data);				
+			callback:function(data){			
 				bootbox.dialog({
 					title: dialog_title,
 					message: dialog_message,
@@ -438,8 +432,6 @@ function removeFromGroup(_eqLogic,group){
 						"{{Annuler}}": {
 							callback: function () {
 							$('#div_raspbeeAlert').showAlert({message: "{{Retrait de}} "+_eqLogic.name+" {{annulé}}", level: 'info'});
-							
-							//updateMembersEqLogic(_eqLogic,$('#membersField').val());
 							}
 						},
 						success: {
@@ -448,7 +440,7 @@ function removeFromGroup(_eqLogic,group){
 							callback: function () {
 								$('#eqlmember'+_eqLogic.id).unbind();
 								$('#eqlmember'+_eqLogic.id).remove();
-								removeFromGroupStep2(_eqLogic,_eqLogic.id,_eqLogic.configuration.origid,group.configuration.origid);
+								removeFromGroupStep2(_eqLogic,_eqLogic.id,_eqLogic.origid,group.configuration.origid);
 							}
 						}
 					}
@@ -467,8 +459,6 @@ function removeFromGroupStep2(_eqLogic,eqLogicId,deviceId,groupId){
 	var newTab = $('#membersEqLogic').html().match(/eqlorigid\d+/g);
 	var value = "";
 	if (newTab){
-	console.dir("newtab before",JSON.stringify(newTab));
-	
 	// on ne garde que le nombre (qui est egal à l'id)
 	for (var i=0; i<newTab.length;i++) {
 		newTab[i] = newTab[i].replace('eqlorigid', "");	
@@ -476,12 +466,7 @@ function removeFromGroupStep2(_eqLogic,eqLogicId,deviceId,groupId){
 	//console.dir("newtab after",JSON.stringify(newTab));
 	value = JSON.stringify(newTab);
 	}
-	else {	
-	console.dir("newtab vide");	
-	
-	}
 	$('#membersField').val(value);
-	//updateMembersEqLogic(_eqLogic);
 }
 
 
@@ -497,7 +482,6 @@ function syncDevices(action,syncType){
 			$('#div_raspbeeAlert').showAlert({message: '{{Erreur}} : '+error+' ('+resp.status+')', level: 'danger'});		
 		},		
 		success: function (resp) {
-		//console.dir(resp);
 		try
 			{
 			var cleanResp = resp.result.replace('\"', '"');
@@ -511,7 +495,6 @@ function syncDevices(action,syncType){
 				if (Object.keys(devices).length>0){
 					for (var device in devices) {
 						devices[device].origid=device;
-						//console.dir(devices[device]);
 						createEqLogic(devices[device],syncType);
 					}
 				}	
@@ -529,19 +512,11 @@ function updateMembersEqLogic(_eqLogic,members){
 	if (!is_null(lights)){
 
 		var master ="";
-		//master+='<legend><i class="fa fa-table"></i> {{Membres du groupe}}';
-		//master+='<a class="btn btn-success" id="bt_addMember" style="margin-left: 5px;"><i class="fa fa-plus-circle"></i></a></legend>';
-		//master+='<div class="membersCard" style="display: flex;">';
 
 		for(var i= 0; i < lights.length; i++){
 			jeedom.raspbee.eqLogic.humanNameByOrigIdAndType({
 			origId:lights[i],
 			type: "light",
-			error: function(error){
-					//console.dir("THE error printMemberEqLogic ",_eqLogic);	
-					//console.log("THE error printMemberEqLogic light[i] "+lights[i]);
-
-			},
 			success:function (result){
 					if (typeof result !== 'undefined'){			
 						$('#membersCard').append(memberDraw(result,_eqLogic.configuration.origid));
@@ -559,8 +534,6 @@ function updateMembersEqLogic(_eqLogic,members){
 				}		
 			});
 		}
-		//master+="</div>";
-		//$('#membersCard').append(master);
 	}
 }
 

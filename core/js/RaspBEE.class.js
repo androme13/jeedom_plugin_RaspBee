@@ -59,6 +59,25 @@ jeedom.raspbee.eqLogic.humanNameById = function (_params) {
 };
 
 
+jeedom.raspbee.eqLogic.getById = function (_params) {
+	var paramsRequired = ['id'];
+	var paramsSpecifics = {};
+	try {
+		jeedom.private.checkParamsRequired(_params || {}, paramsRequired);
+	} catch (e) {
+		(_params.error || paramsSpecifics.error || jeedom.private.default_params.error)(e);
+		return;
+	}
+	var params = $.extend({}, jeedom.private.default_params, paramsSpecifics, _params || {});
+	var paramsAJAX = jeedom.private.getParamsAJAX(params);
+	paramsAJAX.url = 'plugins/RaspBEE/core/php/jeeRaspBEEProxy.php';
+	paramsAJAX.data = {
+		action : 'getById',
+		request: _params
+	};
+	$.ajax(paramsAJAX);
+};
+
 jeedom.raspbee.eqLogic.humanNameByOrigIdAndType = function (_params) {
 	var paramsRequired = ['origId','type'];
 	var paramsSpecifics = {};

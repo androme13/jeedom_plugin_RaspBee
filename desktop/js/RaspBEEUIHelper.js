@@ -128,7 +128,7 @@ function memberDraw(member,groupid)
 {
 	var card = "";
 	card+='<div style="position: relative;" id="eqlmember'+member.id+'">';
-	card+='<div class="eqLogicDisplayCard eqLogicHoverEffect cursor eql'+member.id+' eqlorigid'+member.origid+'" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
+	card+='<div class="eqLogicDisplayCard eqLogicHoverEffect cursor eqlmember'+member.id+' eqlorigid'+member.origid+'" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
 	card+= "<center>";
 	card+= '<span><i class="jeedom jeedom-lumiere-off" style="font-size : 6em;color:#767676;float: center;"></i></span>';
 	card+= '<br>';

@@ -60,6 +60,23 @@ class RaspBEE extends eqLogic {
 			return $returnArray;			
 	}
 	
+	
+	public function getById($data){
+		//error_log("getbyid id : ".json_encode($id),3,"/tmp/prob.txt");
+		$eqLogic=eqLogic::byId($data[id]);
+		//error_log("getbyid  : ".json_encode($eqLogic),3,"/tmp/prob.txt");
+		$return=null;
+		$return->id=$eqLogic->getId();
+		$return->logicalId=$eqLogic->getLogicalId();
+		$return->isEnabled=$eqLogic->getIsEnable();
+		$return->type=$eqLogic->getConfiguration('type');
+		$return->name=$eqLogic->getName();//->getHumanName(true,true);
+		$return->humanName=$eqLogic->getHumanName(true,true);
+		$return->origId=$eqLogic->getConfiguration('origid');
+		$return->lights=$eqLogic->getConfiguration('lights');
+		return $return;
+	}
+	
 	// recupere les groupes d'un equipement par son id
 	// return array(humanName)
 	public function getOwnersGroups($data){	
