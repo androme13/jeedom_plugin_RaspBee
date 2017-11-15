@@ -96,7 +96,7 @@ function eqLogicDraw(eqLogic){
 function groupDraw(id,group){
 	var card = "";
 	card+='<div style="position: relative;">';				
-	card+='<div class="eqLogicDisplayCard cursor eqLogicHoverEffect eqlg'+id+'" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
+	card+='<div class="eqLogicDisplayCard cursor eqLogicHoverEffect eqlgroup'+id+'" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
 	card+= "<center>";
 	card+= '<i class="fa fa-circle-o" style="font-size : 6em;color:#767676;"></i>';
 	card+= '<br>';
@@ -112,7 +112,7 @@ function groupDraw(id,group){
 
 function masterDraw(master){
 	var card = "";
-	card+='<div class="eqLogicDisplayCard eqLogicHoverEffect cursor eql'+master.id+'" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
+	card+='<div class="eqLogicDisplayCard eqLogicHoverEffect cursor eqlmaster'+master.id+'" data-eqLogic_id="6" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
 	card+= "<center>";
 	card+= '<i class="fa fa-th-large" style="font-size : 6em;color:#767676;"></i>';
 	card+= '<br>';
@@ -137,8 +137,9 @@ function memberDraw(member,groupid)
 	card+= '</span>';
 	card+= "<span style='font-size : 1.1em;position:relative; top : 15px;white-space: pre-wrap;word-wrap: break-word;'><center>"+member.humanName+"</center></span>";
 	card+='</div>';
-	card+='<div class="eqlremove'+member.id+'" ownerGroup="'+groupid+'" style="margin:0;position:absolute;top: 3px;left: 140px;"><a id="bt_removeFromGroup" title="{{Retirer cet équipement du groupe}}"><i class="fa fa-minus-circle" style="color:#c9302c;font-size : 2em;"></i></a></div>';
+	card+='<div class="eqlmemberremove'+member.id+'" ownerGroup="'+groupid+'" style="margin:0;position:absolute;top: 3px;left: 140px;"><a id="bt_removeFromGroup" title="{{Retirer cet équipement du groupe}}"><i class="fa fa-minus-circle" style="color:#c9302c;font-size : 2em;"></i></a></div>';
 	card+='</div>';
+	//card+='<div class="eqlmemberremove'+member.id+'" ownerGroup="'+groupid+'" style=""><a id="bt_removeFromGroup" title="{{Retirer cet équipement du groupe}}"><i class="fa fa-minus-circle" style="color:#c9302c;font-size : 2em;"></i></a></div>';
 	return card;
 }
 

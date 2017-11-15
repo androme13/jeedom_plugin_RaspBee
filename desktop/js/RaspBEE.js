@@ -66,10 +66,6 @@ $('#bt_addGroup').on('click', function () {
 	createGroup();	
 });
 
-$('#specialEqLogicSave').on('click', function () {
-	specialEqLogicSave();	
-});
-
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 
 
@@ -93,6 +89,78 @@ function addCmdToTable(_cmd) {
 	jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
 }
 
+function addMemberToGroup(_eqLogic){	
+	var dialog_title = "{{Ajout de membres au groupe}}: "+_eqLogic.name;
+	var dialog_message = '<center><form> ';
+	dialog_message += '<select size="10" multiple name="lightsList" id="lightsList"  style="width: 300px; text-align:center;">';
+	dialog_message += '</select>';
+	dialog_message += '</form></center>';
+	bootbox.dialog({
+		title: dialog_title,
+		message: dialog_message,
+		buttons: {
+			"{{Annuler}}": {
+				callback: function () {
+				$('#div_raspbeeAlert').showAlert({message: "{{Ajout au groupe annulé}}", level: 'info'});
+				}
+			},
+			success: {
+				label: "{{Ajouter la selection au groupe}}",
+				className: "btn-success",
+				callback: function () {		
+					//console.log($("#groupName").val())
+					var actualMembers = JSON.parse($('#membersField').val());
+					var membersToAdd = $("#lightsList").val();
+					//console.dir("oldMembers",actualMembers);
+					//console.dir("membersToAdd",membersToAdd);
+					membersToAdd.forEach(function(memberToAdd)
+					{
+						//console.dir("memberToAdd",memberToAdd);
+						var index = actualMembers.indexOf(memberToAdd);
+						if(index == -1){
+						//console.dir("ajout",memberToAdd);
+						actualMembers.push(memberToAdd);
+						};
+					
+					});
+					
+					$('#membersField').val(JSON.stringify(actualMembers))
+					updateMembersEqLogic(_eqLogic,$('#membersField').val());
+				}
+			}
+		}
+	}).on("shown.bs.modal", function(e) {
+		jeedom.raspbee.eqLogic.getAll({
+			error: function(error){
+				console.dir("THE error refreshEqlogicsList "+error);
+			},
+			success:function (result){
+				if (result!=undefined){			
+					//console.dir("result eqlogics filtré",JSON.parse(result));
+					resultArray=JSON.parse(result);
+					var objects="";
+					resultArray.forEach(function(element) {
+						var position = element.type.indexOf("light");
+						if (position!==-1 && element.type!=='LightGroup'){
+							//console.dir(element);
+							var o = new Option("option text", element.origId);
+							$(o).html(element.humanName);
+							$("#lightsList").append(o);
+						}
+
+					})
+				}			
+			}		
+		});
+		var actualMembers = JSON.parse($('#membersField').val());
+		//var memberEql=jeedom.eqLogic.byId({id:_eqLogic.id}) 
+		console.dir(actualMembers);
+		//$("#eqLogic_Remove").html(eqLogic.name);
+		//$("#groupName_Remove").html(group.name);
+		});		
+	
+	
+}
 
 function createGroup(){
 	var dialog_title = "{{Création d'un groupe}}";
@@ -197,7 +265,7 @@ function printEqLogic(_eqLogic) {
 }
 
 
-function pringGroupEqlogic(id){	
+function printGroupEqlogic(id){	
 	//console.dir("result humanNameById ",id );
 		
 	jeedom.raspbee.eqLogic.humanNameById({
@@ -209,7 +277,7 @@ function pringGroupEqlogic(id){
 			//console.dir("pringGroupEqlogic result",result);
 			if (result!==undefined){			
 				$('.groupsCard').append(groupDraw(id,result));
-				$('.eqlg'+id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+id)});
+				$('.eqlgroup'+id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+id)});
 			}			
 		}				
 	})
@@ -232,7 +300,7 @@ function printGroupsEqLogic(_eqLogic){
 		success:function (groupResult){
 			if (groupResult!==undefined){
 				for (var i=0;i<groupResult.length;i++){
-					pringGroupEqlogic(groupResult[i]);
+					printGroupEqlogic(groupResult[i]);
 				}
 			}
 		}				
@@ -259,7 +327,7 @@ function printMasterEqLogic(_eqLogic){
 				success:function (result){
 					if (result!=undefined){						
 						$('.mastersCard').append(masterDraw(result));
-						$('.eql'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
+						$('.eqlmaster'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
 					}			
 				}
 			})
@@ -276,7 +344,7 @@ function printMembersEqLogic(_eqLogic){
 		var master ="";
 		master+='<legend><i class="fa fa-table"></i> {{Membres du groupe}}';
 		master+='<a class="btn btn-success" id="bt_addMember" style="margin-left: 5px;"><i class="fa fa-plus-circle"></i></a></legend>';
-		master+='<div class="membersCard" style="display: flex;">';
+		master+='<div id="membersCard" style="display: flex;">';
 
 		for(var i= 0; i < lights.length; i++){
 			jeedom.raspbee.eqLogic.humanNameByOrigIdAndType({
@@ -289,11 +357,12 @@ function printMembersEqLogic(_eqLogic){
 			},
 			success:function (result){
 					if (typeof result !== 'undefined'){			
-						$('.membersCard').append(memberDraw(result,_eqLogic.configuration.origid));
+						$('#membersCard').append(memberDraw(result,_eqLogic.configuration.origid));
 						$('.eqlmember'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
-						$('.eqlremove'+result.id).click(function() {
+						$('.eqlmemberremove'+result.id).click(function() {
+							var id = result.id;
 							getEqlogic({
-								id:result.id,
+								id:id,
 								callback:function(data){
 									removeFromGroup(data,_eqLogic);
 								}
@@ -306,11 +375,8 @@ function printMembersEqLogic(_eqLogic){
 		master+="</div>";
 		$('#membersEqLogic').append(master);
 		$('#bt_addMember').on('click', function () {
-			$('#md_modal').dialog({title: "{{Ajouter un membre au groupe}}"});
-			$('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=addmember').dialog('open');
+			addMemberToGroup(_eqLogic);
 		});
-		
-		
 	}
 }
 
@@ -352,18 +418,18 @@ function getEqlogic(_params){
 	});
 }
 
-function removeFromGroup(eqLogic,group){
+function removeFromGroup(_eqLogic,group){
 	//console.dir("eqlogic",eqLogic);
 	var dialog_title = '{{Retrait d\'un équipement d\'un groupe}}.';
 	var dialog_message = '<form class="form-horizontal onsubmit="return false;"> ';
 	dialog_message += '{{Veuillez confirmer le retrait de}} <b><span id="eqLogic_Remove"></span></b> {{du groupe}} <b><span id="groupName_Remove"></span></b>.';
 	//dialog_message +='<br><br><label class="lbl lbl-warning" for="name">{{Attention, une fois le groupe crée, une synchronisation limitée débutera}}.</label>';
 	dialog_message += '</form>';
-	if (typeof eqLogic !== 'undefined' &&  typeof group !== 'undefined')
+	if (typeof _eqLogic !== 'undefined' &&  typeof group !== 'undefined')
 		getEqlogic({
 			id:group.id,
 			callback:function(data){
-				console.dir("removeFromGroup",data);				
+				//console.dir("removeFromGroup",data);				
 				bootbox.dialog({
 					title: dialog_title,
 					message: dialog_message,
@@ -371,20 +437,23 @@ function removeFromGroup(eqLogic,group){
 					buttons: {
 						"{{Annuler}}": {
 							callback: function () {
-							$('#div_raspbeeAlert').showAlert({message: "{{Retrait de}} "+eqLogic.name+" {{annulé}}", level: 'info'});
+							$('#div_raspbeeAlert').showAlert({message: "{{Retrait de}} "+_eqLogic.name+" {{annulé}}", level: 'info'});
+							
+							//updateMembersEqLogic(_eqLogic,$('#membersField').val());
 							}
 						},
 						success: {
 							label: "{{Retirer du groupe}}",
 							className: "btn-warning",
 							callback: function () {
-								$('#eqlmember'+eqLogic.id).remove();
-								removeFromGroupStep2(eqLogic.id,eqLogic.configuration.origid,group.configuration.origid);
+								$('#eqlmember'+_eqLogic.id).unbind();
+								$('#eqlmember'+_eqLogic.id).remove();
+								removeFromGroupStep2(_eqLogic,_eqLogic.id,_eqLogic.configuration.origid,group.configuration.origid);
 							}
 						}
 					}
 				}).on("shown.bs.modal", function(e) {
-					$("#eqLogic_Remove").html(eqLogic.name);
+					$("#eqLogic_Remove").html(_eqLogic.name);
 					$("#groupName_Remove").html(group.name);
 					});	
 			}
@@ -393,7 +462,7 @@ function removeFromGroup(eqLogic,group){
 
 }
 
-function removeFromGroupStep2(eqLogicId,deviceId,groupId){
+function removeFromGroupStep2(_eqLogic,eqLogicId,deviceId,groupId){
 	console.log("removeFromGroupStep2",deviceId,groupId);
 	var newTab = $('#membersEqLogic').html().match(/eqlorigid\d+/g);
 	var value = "";
@@ -411,7 +480,8 @@ function removeFromGroupStep2(eqLogicId,deviceId,groupId){
 	console.dir("newtab vide");	
 	
 	}
-	$('#membersField').val(value);	
+	$('#membersField').val(value);
+	//updateMembersEqLogic(_eqLogic);
 }
 
 
@@ -452,6 +522,50 @@ function syncDevices(action,syncType){
 		} 
 	});
 }
+
+function updateMembersEqLogic(_eqLogic,members){
+	$('#membersCard').empty();	
+	var lights=JSON.parse(members);
+	if (!is_null(lights)){
+
+		var master ="";
+		//master+='<legend><i class="fa fa-table"></i> {{Membres du groupe}}';
+		//master+='<a class="btn btn-success" id="bt_addMember" style="margin-left: 5px;"><i class="fa fa-plus-circle"></i></a></legend>';
+		//master+='<div class="membersCard" style="display: flex;">';
+
+		for(var i= 0; i < lights.length; i++){
+			jeedom.raspbee.eqLogic.humanNameByOrigIdAndType({
+			origId:lights[i],
+			type: "light",
+			error: function(error){
+					//console.dir("THE error printMemberEqLogic ",_eqLogic);	
+					//console.log("THE error printMemberEqLogic light[i] "+lights[i]);
+
+			},
+			success:function (result){
+					if (typeof result !== 'undefined'){			
+						$('#membersCard').append(memberDraw(result,_eqLogic.configuration.origid));
+						$('.eqlmember'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
+						$('.eqlmemberremove'+result.id).click(function() {
+							var id = result.id;
+							getEqlogic({
+								id:id,
+								callback:function(data){
+									removeFromGroup(data,_eqLogic);
+								}
+							});
+						});
+					}
+				}		
+			});
+		}
+		//master+="</div>";
+		//$('#membersCard').append(master);
+	}
+}
+
+
+
 
 function createEqLogic(device,syncType){
 	$.ajax({

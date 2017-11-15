@@ -52,6 +52,7 @@ class RaspBEE extends eqLogic {
 				$return->type=$eqLogic->getConfiguration('type');
 				$return->name=$eqLogic->getName();//->getHumanName(true,true);
 				$return->humanName=$eqLogic->getHumanName(true,true);
+				$return->origId=$eqLogic->getConfiguration('origid');
 				array_push($returnArray,$return);
 				//break;				
 			}
