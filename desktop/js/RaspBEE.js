@@ -154,14 +154,7 @@ function addGroupsToMember(_eqLogic){
 				}			
 			}		
 		});
-		//var actualMembers = JSON.parse($('#membersField').val());
-		//var memberEql=jeedom.eqLogic.byId({id:_eqLogic.id}) 
-		//console.dir(actualMembers);
-		//$("#eqLogic_Remove").html(eqLogic.name);
-		//$("#groupName_Remove").html(group.name);
-		});		
-	
-	
+	});		
 }
 
 
@@ -365,6 +358,16 @@ function printGroupEqlogic(id){
 					groups.push(result.origid);
 					$('#membersField').val(JSON.stringify(groups));
 				$('.eqlgroup'+id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+id)});
+				$('.eqlgroupremove'+id).click(function() {
+					console.log("click");
+					//var id = result.id;
+					/*getEqlogic({
+						id:id,
+						callback:function(data){
+							//removeFromGroup(data,_eqLogic);
+						}
+					});*/
+				});
 			}			
 		}				
 	})
@@ -381,6 +384,7 @@ function printGroupsEqLogic(_eqLogic){
 	$('#bt_addGroupToMember').on('click', function () {
 		addGroupsToMember(_eqLogic);
 	});
+	
 	//console.dir("printGroupsEqLogic",_eqLogic.configuration["origid"]);
 	var origId = _eqLogic.configuration["origid"];
 	//console.log("origid: ",origId);
@@ -558,6 +562,60 @@ function removeFromGroupStep2(_eqLogic,eqLogicId,deviceId,groupId){
 	$('#membersField').val(value);
 }
 
+function removeGroupFromLight(_eqLogic,group){
+	var dialog_title = '{{Retrait d\'un équipement d\'un groupe}}.';
+	var dialog_message = '<form class="form-horizontal onsubmit="return false;"> ';
+	dialog_message += '{{Veuillez confirmer le retrait de}} <b><span id="eqLogic_Remove"></span></b> {{du groupe}} <b><span id="groupName_Remove"></span></b>.';
+	dialog_message += '</form>';
+	if (typeof _eqLogic !== 'undefined' &&  typeof group !== 'undefined')
+		getEqlogic({
+			id:group.id,
+			callback:function(data){			
+				bootbox.dialog({
+					title: dialog_title,
+					message: dialog_message,
+					//size: 'small',
+					buttons: {
+						"{{Annuler}}": {
+							callback: function () {
+							$('#div_raspbeeAlert').showAlert({message: "{{Retrait de}} "+_eqLogic.name+" {{annulé}}", level: 'info'});
+							}
+						},
+						success: {
+							label: "{{Retirer du groupe}}",
+							className: "btn-warning",
+							callback: function () {
+								$('#eqlgroup'+_eqLogic.id).unbind();
+								$('#eqlgroup'+_eqLogic.id).remove();
+								removeGroupFromLightStep2(_eqLogic,_eqLogic.id,_eqLogic.origid,group.configuration.origid);
+							}
+						}
+					}
+				}).on("shown.bs.modal", function(e) {
+					$("#eqLogic_Remove").html(_eqLogic.name);
+					$("#groupName_Remove").html(group.name);
+					});	
+			}
+		});	
+
+
+}
+
+function removeGroupFromLightStep2(_eqLogic,eqLogicId,deviceId,groupId){
+	console.log("removeGroupFromLightStep2",deviceId,groupId);
+	var newTab = $('#groupsEqLogic').html().match(/eqlorigid\d+/g);
+	var value = "";
+	if (newTab){
+	// on ne garde que le nombre (qui est egal à l'id)
+	for (var i=0; i<newTab.length;i++) {
+		newTab[i] = newTab[i].replace('eqlorigid', "");	
+	}
+	//console.dir("newtab after",JSON.stringify(newTab));
+	value = JSON.stringify(newTab);
+	}
+	$('#membersField').val(value);
+}
+
 
 function syncDevices(action,syncType){
 	$.ajax({
@@ -600,9 +658,7 @@ function updateGroupsEqLogic(_eqLogic,groups){
 	$('#groupsCard').empty();	
 	var groups=JSON.parse(groups);
 	if (!is_null(groups)){
-
 		var master ="";
-
 		for(var i= 0; i < groups.length; i++){
 			console.dir("boucle",groups[i]);
 			jeedom.raspbee.eqLogic.humanNameByOrigIdAndType({
@@ -612,13 +668,14 @@ function updateGroupsEqLogic(_eqLogic,groups){
 				console.dir("success",result);
 					if (typeof result !== 'undefined'){			
 						$('#groupsCard').append(groupDraw(result,_eqLogic.configuration.origid));
-						$('.eqlgroup'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
-						$('.eqlgroupremove'+result.id).click(function() {
+						$('#eqlgroup'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
+						$('#eqlgroupremove'+result.id).click(function() {
 							var id = result.id;
 							getEqlogic({
 								id:id,
 								callback:function(data){
-									//removeFromGroup(data,_eqLogic);
+									//removeGroupFromLight(data,_eqLogic);
+									console.log("click");
 								}
 							});
 						});
@@ -649,7 +706,7 @@ function updateMembersEqLogic(_eqLogic,members){
 							getEqlogic({
 								id:id,
 								callback:function(data){
-									removeFromGroup(data,_eqLogic);
+									//removeFromGroup(data,_eqLogic);
 								}
 							});
 						});
