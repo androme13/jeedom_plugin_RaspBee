@@ -115,12 +115,14 @@ class RaspBEE extends eqLogic {
 				//$obj = json_decode($decode);				
 				if ($equipement->getId()===$data[id]) {
 					//error_log("humanNameById trouve: |",3,"/tmp/prob.txt");
+					$id = $equipement->id;
+					$origid = $equipement->getConfiguration('origid');
 					$humanName = $equipement->getHumanName(true,true);
+					return array('id' => $id, 'origid' => $origid, 'humanName' => $humanName);
 					//return $humanName;
-				}
-				
+				}				
 		}
-		return $humanName;
+		//return $humanName;
 		//return "probleme humanNameByid";		
 	}
 	
@@ -129,9 +131,12 @@ class RaspBEE extends eqLogic {
 	public function humanNameByOrigIdAndType($data){	
 		//error_log("data: ".$data['type']."|",3,"/tmp/prob.txt");
 		foreach (eqLogic::byType('RaspBEE') as $equipement) {
-				$decode = str_replace('\"', '"',$equipement->configuration);
-				$obj = json_decode($decode);				
-				if ($obj->origid==$data[origId] && strstr(strtolower($obj->type), strtolower($data[type]))!==false) {
+			//error_log("humanNameByOrigIdAndType equip: ".equipement."|",3,"/tmp/prob.txt");
+				//$decode = str_replace('\"', '"',$equipement->configuration);
+				//$obj = json_decode($decode);
+				error_log("name: ".$equipement->getName()."|",3,"/tmp/prob.txt");
+				error_log("name: ".$equipement->getConfiguration('type')."|",3,"/tmp/prob.txt");
+				if ($equipement->getConfiguration('origid')==$data[origId] && strstr(strtolower($equipement->getConfiguration('type')), strtolower($data[type]))!==false) {
 					$id = $equipement->id;
 					$origid = $equipement->getConfiguration('origid');
 					$humanName = $equipement->getHumanName(true,true);
@@ -139,7 +144,7 @@ class RaspBEE extends eqLogic {
 
 				}
 		}			
-			
+		return array('id' => -1, 'origid' => -1, 'humanName' => "none");	
 	}
 		
 	public static function dependancy_info() {

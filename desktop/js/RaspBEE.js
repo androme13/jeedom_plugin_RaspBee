@@ -52,10 +52,10 @@ $('#bt_syncEqLogic').on('click', function () {
 	$('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=synchronize').dialog('open');	
 });
 
-$('#bt_RaspBEEHealth').on('click', function () {
+/*$('#bt_RaspBEEHealth').on('click', function () {
 	$('#md_modal').dialog({title: "{{Santé RaspBEE}}"});
 	$('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=health').dialog('open');
-});
+});*/
 
 $('#bt_RaspBEENetwork').on('click', function () {
 	$('#md_modal').dialog({title: "{{Réseaux RaspBEE}}"});
@@ -88,6 +88,82 @@ function addCmdToTable(_cmd) {
 	}
 	jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
 }
+
+function addGroupsToMember(_eqLogic){	
+	var dialog_title = "{{Inclure}} "+_eqLogic.name+" dans des groupes";
+	var dialog_message = '<center><form> ';
+	dialog_message += '<select size="10" multiple name="groupsList" id="groupsList"  style="width: 300px; text-align:center;">';
+	dialog_message += '</select>';
+	dialog_message += '</form></center>';
+	bootbox.dialog({
+		title: dialog_title,
+		message: dialog_message,
+		buttons: {
+			"{{Annuler}}": {
+				callback: function () {
+				$('#div_raspbeeAlert').showAlert({message: "{{Ajout au groupe annulé}}", level: 'info'});
+				}
+			},
+			success: {
+				label: "{{Inclure à la selection}}",
+				className: "btn-success",
+				callback: function () {		
+					//console.log($("#groupName").val())
+					if (!$('#membersField').val()) $('#membersField').val("[]");
+					
+					var actualGroups = JSON.parse($('#membersField').val());
+					if (!actualGroups) actualGroups = [];
+					var groupsToAdd = $("#groupsList").val();
+					console.dir("oldgroups",actualGroups);
+					console.dir("groupsToAdd",groupsToAdd);
+					groupsToAdd.forEach(function(groupToAdd)
+					{
+						console.dir("groupToAdd",groupToAdd);
+						var index = actualGroups.indexOf(groupToAdd);
+						if(index == -1){
+						console.dir("ajout",groupToAdd);
+						actualGroups.push(groupToAdd);
+						};
+					
+					});
+					
+					$('#membersField').val(JSON.stringify(actualGroups))
+					updateGroupsEqLogic(_eqLogic,$('#membersField').val());
+				}
+			}
+		}
+	}).on("shown.bs.modal", function(e) {
+		jeedom.raspbee.eqLogic.getAll({
+			error: function(error){
+				console.dir("THE error refreshEqlogicsList "+error);
+			},
+			success:function (result){
+				if (result!=undefined){			
+					//console.dir("result eqlogics filtré",JSON.parse(result));
+					resultArray=JSON.parse(result);
+					var objects="";
+					resultArray.forEach(function(element) {
+						//var position = element.type.indexOf("light");
+						if (element.type==='LightGroup'){
+							//console.dir(element);
+							var o = new Option("option text", element.origId);
+							$(o).html(element.humanName);
+							$("#groupsList").append(o);
+						}
+					})
+				}			
+			}		
+		});
+		//var actualMembers = JSON.parse($('#membersField').val());
+		//var memberEql=jeedom.eqLogic.byId({id:_eqLogic.id}) 
+		//console.dir(actualMembers);
+		//$("#eqLogic_Remove").html(eqLogic.name);
+		//$("#groupName_Remove").html(group.name);
+		});		
+	
+	
+}
+
 
 function addMemberToGroup(_eqLogic){	
 	var dialog_title = "{{Ajout de membres au groupe}}: "+_eqLogic.name;
@@ -269,8 +345,7 @@ function printEqLogic(_eqLogic) {
 
 
 function printGroupEqlogic(id){	
-	//console.dir("result humanNameById ",id );
-		
+	//console.dir("result humanNameById ",id );	
 	jeedom.raspbee.eqLogic.humanNameById({
 		id: id,
 		error: function(error){
@@ -279,7 +354,16 @@ function printGroupEqlogic(id){
 		success:function (result){
 			//console.dir("pringGroupEqlogic result",result);
 			if (result!==undefined){			
-				$('.groupsCard').append(groupDraw(id,result));
+				$('#groupsCard').append(groupDraw(result,id));
+				//console.dir("result",result.origid);
+				var groups = [];
+				var value = $('#membersField').val()
+				if (value.length>0){
+					groups = JSON.parse(value);
+
+				}	
+					groups.push(result.origid);
+					$('#membersField').val(JSON.stringify(groups));
 				$('.eqlgroup'+id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+id)});
 			}			
 		}				
@@ -289,11 +373,15 @@ function printGroupEqlogic(id){
 function printGroupsEqLogic(_eqLogic){
 	$('#groupsEqLogic').empty();	
 	var master ="";
-	master+='<legend><i class="fa fa-circle-o"></i> {{Groupe(s)}}</legend>'
-	master+='<div class="groupsCard" style="display: flex;">';	
-	master+="</div>";		
+	master+='<legend><i class="fa fa-circle-o"></i> {{Groupe(s)}}';
+	master+='<a title="{{Inclure cet éclairage dans un groupe}}" class="btn btn-success" id="bt_addGroupToMember" style="margin-left: 5px;"><i class="fa fa-plus-circle"></i></a></legend>';
+	master+='<div id="groupsCard" style="display: flex;">';	
+			
 	$('#groupsEqLogic').append(master);
-	console.dir("printGroupsEqLogic",_eqLogic.configuration["origid"]);
+	$('#bt_addGroupToMember').on('click', function () {
+		addGroupsToMember(_eqLogic);
+	});
+	//console.dir("printGroupsEqLogic",_eqLogic.configuration["origid"]);
 	var origId = _eqLogic.configuration["origid"];
 	//console.log("origid: ",origId);
 	jeedom.raspbee.eqLogic.getOwnersGroups({
@@ -302,15 +390,17 @@ function printGroupsEqLogic(_eqLogic){
 			if (error) $('#div_raspbeeAlert').showAlert({message: error.message, level: 'danger'});
 		},
 		success:function (groupResult){
-			console.dir("pringroup",groupResult);
+			//console.dir("pringroup",groupResult);
 			if (groupResult!==undefined){
+				//var groupsArray = [];
 				for (var i=0;i<groupResult.length;i++){
 					printGroupEqlogic(groupResult[i]);
+					//console.dir("groupResult",groupResult[i].origid);
 				}
 			}
 		}				
 	})
-	
+	master+="</div>";	
 }
 
 function printMasterEqLogic(_eqLogic){
@@ -343,23 +433,20 @@ function printMasterEqLogic(_eqLogic){
 
 function printMembersEqLogic(_eqLogic){
 	$('#membersEqLogic').empty();
-		console.dir(_eqLogic.configuration.lights);
-			var master ="";
-			master+='<legend><i class="fa fa-table"></i> {{Membres du groupe}}';
-			master+='<a title="{{Ajouter un éclairage au groupe}}" class="btn btn-success" id="bt_addMember" style="margin-left: 5px;"><i class="fa fa-plus-circle"></i></a></legend>';
-			master+='<div id="membersCard" style="display: flex;">';		
-			if (_eqLogic.configuration.lights){
-			var lights=JSON.parse(_eqLogic.configuration.lights);
-			if (!is_null(lights)){
-			
-
-
+	//console.dir(_eqLogic.configuration.lights);
+	var master ="";
+	master+='<legend><i class="fa fa-table"></i> {{Membres du groupe}}';
+	master+='<a title="{{Ajouter un éclairage au groupe}}" class="btn btn-success" id="bt_addMember" style="margin-left: 5px;"><i class="fa fa-plus-circle"></i></a></legend>';
+	master+='<div id="membersCard" style="display: flex;">';		
+	if (_eqLogic.configuration.lights){
+		var lights=JSON.parse(_eqLogic.configuration.lights);
+		if (!is_null(lights)){
 			for(var i= 0; i < lights.length; i++){
 				console.dir("boucle");
 				jeedom.raspbee.eqLogic.humanNameByOrigIdAndType({
-				origId:lights[i],
-				type: "light",
-				success:function (result){
+					origId:lights[i],
+					type: "light",
+					success:function (result){
 						if (typeof result !== 'undefined'){			
 							$('#membersCard').append(memberDraw(result,_eqLogic.configuration.origid));
 							$('.eqlmember'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
@@ -378,16 +465,14 @@ function printMembersEqLogic(_eqLogic){
 						}
 					}		
 				});
-			}
-			
+			}			
 		}
-
 	}
-			master+="</div>";
-			$('#membersEqLogic').append(master);
-			$('#bt_addMember').on('click', function () {
-				addMemberToGroup(_eqLogic);
-			});
+	master+="</div>";
+	$('#membersEqLogic').append(master);
+	$('#bt_addMember').on('click', function () {
+		addMemberToGroup(_eqLogic);
+	});
 }
 
 
@@ -508,6 +593,40 @@ function syncDevices(action,syncType){
 			}
 		} 
 	});
+}
+
+function updateGroupsEqLogic(_eqLogic,groups){
+	console.dir("updateGroupsEqLogic",groups);
+	$('#groupsCard').empty();	
+	var groups=JSON.parse(groups);
+	if (!is_null(groups)){
+
+		var master ="";
+
+		for(var i= 0; i < groups.length; i++){
+			console.dir("boucle",groups[i]);
+			jeedom.raspbee.eqLogic.humanNameByOrigIdAndType({
+			origId:groups[i],
+			type: 'light',
+			success:function (result){
+				console.dir("success",result);
+					if (typeof result !== 'undefined'){			
+						$('#groupsCard').append(groupDraw(result,_eqLogic.configuration.origid));
+						$('.eqlgroup'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
+						$('.eqlgroupremove'+result.id).click(function() {
+							var id = result.id;
+							getEqlogic({
+								id:id,
+								callback:function(data){
+									//removeFromGroup(data,_eqLogic);
+								}
+							});
+						});
+					}
+				}		
+			});
+		}
+	}
 }
 
 function updateMembersEqLogic(_eqLogic,members){
