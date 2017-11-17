@@ -287,19 +287,81 @@ class RaspBEE extends eqLogic {
 	}
 
 	public function preSave() {
-		error_log("preSave:",3,"/tmp/prob.txt");
+		error_log("preSave:\n",3,"/tmp/prob.txt");
 		$eqLogic= $this;
-		if ($eqLogic->getConfiguration("type")=="LightGroup"){
-		$value = $eqLogic->getConfiguration("lights");
+		error_log("preSave eqlogic: ".json_encode($eqLogic)."|\n",3,"/tmp/prob.txt");
 		
-		//$newTab = $('#membersEqLogic').html().match('/eql\d+/g');
-		//$newTab = $('#membersEqLogic').html();
-		error_log("preSave: ".$value."|",3,"/tmp/prob.txt");
 		
-		}
-		/*if ($this->getConfiguration('addr') == '') {
-            throw new Exception(__('L\'adresse IP ne peut etre vide. Vous pouvez la trouver dans les paramètres de votre TV ou de votre routeur (box).',__FILE__));
-        }*/
+		// si c'est un eclairage on supprime le champ lights auparavant, car il ne sert qu'a gerer les groupes au niveau de l'UI
+		if (strpos($eqLogic->getConfiguration("type"), 'light') !== false && $eqLogic->getConfiguration("type") !== "LightGroup") {
+			$lightId = $eqLogic->getId();
+			if ($eqLogic->getConfiguration("lights"))
+				$groupsJSON = $eqLogic->getConfiguration("lights");
+			else
+				$groupsJSON = "[]";
+			error_log("preSave id light: ".$lightId."|\n",3,"/tmp/prob.txt");
+			error_log("preSave ids groups: ".$groupsJSON."|\n",3,"/tmp/prob.txt");
+			// on recupere tous les groupes
+			//$groups = eqLogic::byTypeAndSearhConfiguration('RaspBEE','lights');
+			foreach (eqLogic::byTypeAndSearhConfiguration('RaspBEE','lights') as $group) {
+				error_log("preSave groupes: ".json_encode($group->getName())."|\n",3,"/tmp/prob.txt");
+				$groupArray=json_decode($groupsJSON);
+				$lights=json_decode($group->getConfiguration("lights"));
+				if ($lights===null) $lights=array();
+				//error_log("preSave gettype light[1]: ".$lights[0]."|\n",3,"/tmp/prob.txt");
+				//error_log("preSave gettype groupArray[1]: ".$groupArray[0]."|\n",3,"/tmp/prob.txt");
+				foreach ($groupArray as $groupId) {
+					
+					if ($group->getConfiguration("origid")===$groupId){
+						error_log("preSave le groupe concorde: ".$groupId."|".$group->getConfiguration("origid")."\n",3,"/tmp/prob.txt");
+						if (!in_array($eqLogic->getConfiguration("origid"), $lights)) {
+							//error_log("preSave light non presente dans le groupe, ajout dans: ".json_encode($group->getName())."|\n",3,"/tmp/prob.txt");
+							array_push($lights,$eqLogic->getConfiguration("origid"));
+							//error_log("preSave ancien: ".json_encode($lights)."|\n",3,"/tmp/prob.txt");
+							self::setGroupsMembers($group->getId(),json_encode($lights));
+							$group->setConfiguration("lights",json_encode($lights));
+							//error_log("preSave nouveau avant save: ".$group->getConfiguration("lights")."|\n",3,"/tmp/prob.txt");
+							$group->save();
+							//error_log("preSave nouveau après save: ".$group->getConfiguration("lights")."|\n",3,"/tmp/prob.txt");
+							
+							
+						}
+						//$lights=$group->getConfiguration("lights")
+						
+						//if ($group->getConfiguration("lights"))
+					}
+					else
+					{
+					error_log("preSave le groupe ne concorde pas: ".$groupId."|\n",3,"/tmp/prob.txt");
+						$pos = array_search($lightId, $lights);
+						if ($pos!==false) {
+							error_log("preSave light presente dans le groupe ou elle ne devrait pas être, suppression: ".$lightId."|\n",3,"/tmp/prob.txt");
+							error_log("lights before: ".json_encode($lights)."|\n",3,"/tmp/prob.txt");
+							
+							unset($lights[$pos]);
+							error_log("lights after: ".json_encode($lights)."|\n",3,"/tmp/prob.txt");
+
+							error_log("preSave light presente dans le groupe ou elle ne devrait pas être, suppression: ".$lightId."|\n",3,"/tmp/prob.txt");
+							
+							$group->setConfiguration("lights",json_encode($lights));
+							$group->save();
+						
+						}
+						else{
+						error_log("preSave light NON presente dans le groupe ou elle ne devrait pas être, normal: ".$lightId."|\n",3,"/tmp/prob.txt");	
+							
+						}
+					}
+				}
+				//$groupArray=$group->getConfiguration("lights");				
+				//if ($group->getConfiguration("origid")===)
+				//if ($group->getConfiguration("lights"))
+			}
+			//);
+			$this->setConfiguration("lights",null);
+			// on recupere tous les groupes
+			
+		}	
 	}
 
 	public function postSave() {
@@ -388,9 +450,11 @@ class RaspBEE extends eqLogic {
 	}
 	
 	public function setGroupsMembers($id,$members){
-		$eql = $eqLogic->byId($id);		
+		$eql = eqLogic::byId($id);		
 		$eql->setConfiguration('lights',$members);
 		$eql->save();
+		$eql->refresh();
+		
 		$result = array("error" => 0, "message" => "", "state" => "");
 		$result->state="ok";
 		return $result;

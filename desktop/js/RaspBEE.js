@@ -324,7 +324,7 @@ function printEqLogic(_eqLogic) {
 	printMasterEqLogic(_eqLogic);
 	else
 	$('#masterEqLogic').empty();
-	if (("lights" in _eqLogic.configuration))
+	if (("lights" in _eqLogic.configuration) && (_eqLogic.configuration.type).indexOf('LightGroup')!=-1 )
 	printMembersEqLogic(_eqLogic);
 	else
 		$('#membersEqLogic').empty();
@@ -337,7 +337,7 @@ function printEqLogic(_eqLogic) {
 }
 
 
-function printGroupEqlogic(id){	
+function printGroupEqlogic(id,_eqLogic){	
 	//console.dir("result humanNameById ",id );	
 	jeedom.raspbee.eqLogic.humanNameById({
 		id: id,
@@ -345,7 +345,7 @@ function printGroupEqlogic(id){
 			if (error) $('#div_raspbeeAlert').showAlert({message: error.message, level: 'danger'});
 		},
 		success:function (result){
-			//console.dir("pringGroupEqlogic result",result);
+			console.dir("pringGroupEqlogic result",result);
 			if (result!==undefined){			
 				$('#groupsCard').append(groupDraw(result,id));
 				//console.dir("result",result.origid);
@@ -353,20 +353,23 @@ function printGroupEqlogic(id){
 				var value = $('#membersField').val()
 				if (value.length>0){
 					groups = JSON.parse(value);
-
 				}	
-					groups.push(result.origid);
-					$('#membersField').val(JSON.stringify(groups));
+				groups.push(result.origid);
+				$('#membersField').val(JSON.stringify(groups));
 				$('.eqlgroup'+id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+id)});
+				console.log("print eqlgroupremove id ",id);
 				$('.eqlgroupremove'+id).click(function() {
-					console.log("click");
-					//var id = result.id;
-					/*getEqlogic({
-						id:id,
-						callback:function(data){
-							//removeFromGroup(data,_eqLogic);
-						}
-					});*/
+					var id = result.id;
+					console.log("eqlgroupremove click",result.id);
+						jeedom.raspbee.eqLogic.getById({
+							id: result.id,
+							error: function(error){
+								console.dir("THE error refreshEqlogicsList ",error);
+							},
+							success:function (data){
+							removeGroupFromLight(data,_eqLogic);	
+							}			
+						});
 				});
 			}			
 		}				
@@ -398,7 +401,7 @@ function printGroupsEqLogic(_eqLogic){
 			if (groupResult!==undefined){
 				//var groupsArray = [];
 				for (var i=0;i<groupResult.length;i++){
-					printGroupEqlogic(groupResult[i]);
+					printGroupEqlogic(groupResult[i],_eqLogic);
 					//console.dir("groupResult",groupResult[i].origid);
 				}
 			}
@@ -586,14 +589,15 @@ function removeGroupFromLight(_eqLogic,group){
 							className: "btn-warning",
 							callback: function () {
 								$('#eqlgroup'+_eqLogic.id).unbind();
+								//$('#eqlgroupremove'+_eqLogic.id).unbind();
 								$('#eqlgroup'+_eqLogic.id).remove();
 								removeGroupFromLightStep2(_eqLogic,_eqLogic.id,_eqLogic.origid,group.configuration.origid);
 							}
 						}
 					}
 				}).on("shown.bs.modal", function(e) {
-					$("#eqLogic_Remove").html(_eqLogic.name);
-					$("#groupName_Remove").html(group.name);
+					$("#eqLogic_Remove").html(group.name);
+					$("#groupName_Remove").html(_eqLogic.name);
 					});	
 			}
 		});	
@@ -653,7 +657,7 @@ function syncDevices(action,syncType){
 	});
 }
 
-function updateGroupsEqLogic(_eqLogic,groups){
+function updateGroupsEqLogic(_eqLogic,groups){	
 	console.dir("updateGroupsEqLogic",groups);
 	$('#groupsCard').empty();	
 	var groups=JSON.parse(groups);
@@ -668,15 +672,20 @@ function updateGroupsEqLogic(_eqLogic,groups){
 				console.dir("success",result);
 					if (typeof result !== 'undefined'){			
 						$('#groupsCard').append(groupDraw(result,_eqLogic.configuration.origid));
-						$('#eqlgroup'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
-						$('#eqlgroupremove'+result.id).click(function() {
+						$('.eqlgroup'+result.id).click(function() {$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE&id="+result.id)});
+						console.log("update eqlgroupremove id ",result.id);
+						$('.eqlgroupremove'+result.id).off();
+						$('.eqlgroupremove'+result.id).click(function() {
+							console.log("click");
 							var id = result.id;
-							getEqlogic({
-								id:id,
-								callback:function(data){
-									//removeGroupFromLight(data,_eqLogic);
-									console.log("click");
-								}
+							jeedom.raspbee.eqLogic.getById({
+								id: result.id,
+								error: function(error){
+									console.dir("THE error refreshEqlogicsList ",error);
+								},
+								success:function (data){
+								removeGroupFromLight(data,_eqLogic);	
+								}			
 							});
 						});
 					}
@@ -706,7 +715,7 @@ function updateMembersEqLogic(_eqLogic,members){
 							getEqlogic({
 								id:id,
 								callback:function(data){
-									//removeFromGroup(data,_eqLogic);
+									removeFromGroup(data,_eqLogic);
 								}
 							});
 						});
