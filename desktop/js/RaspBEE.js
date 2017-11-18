@@ -287,6 +287,7 @@ function createGroup(){
 
 // fonction executée par jeedom lors de l'affichage des details d'un eqlogic
 function printEqLogic(_eqLogic) {
+	
 	if (!isset(_eqLogic)) {
 		var _eqLogic = {configuration: {}};
 	}
@@ -328,6 +329,7 @@ function printEqLogic(_eqLogic) {
 	printMembersEqLogic(_eqLogic);
 	else
 		$('#membersEqLogic').empty();
+	
 	if ((_eqLogic.configuration.type).indexOf('light')!=-1){
 		printGroupsEqLogic(_eqLogic);
 	}
