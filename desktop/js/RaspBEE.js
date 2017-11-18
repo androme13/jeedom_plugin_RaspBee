@@ -609,13 +609,14 @@ function removeGroupFromLight(_eqLogic,group){
 
 function removeGroupFromLightStep2(_eqLogic,eqLogicId,deviceId,groupId){
 	console.log("removeGroupFromLightStep2",deviceId,groupId);
-	var newTab = $('#groupsEqLogic').html().match(/eqlorigid\d+/g);
+	var newTab = $('#groupsEqLogic').html().match(/eqlgrouporigid\d+/g);
 	var value = "";
 	if (newTab){
 	// on ne garde que le nombre (qui est egal à l'id)
 	for (var i=0; i<newTab.length;i++) {
-		newTab[i] = newTab[i].replace('eqlorigid', "");	
+		newTab[i] = newTab[i].replace('eqlgrouporigid', "");	
 	}
+	console.dir("newtab",newTab);
 	//console.dir("newtab after",JSON.stringify(newTab));
 	value = JSON.stringify(newTab);
 	}
