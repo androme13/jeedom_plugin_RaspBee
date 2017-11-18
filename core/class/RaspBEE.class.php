@@ -308,14 +308,17 @@ class RaspBEE extends eqLogic {
 			foreach ($allEqlGroups as $group) {
 				if ($group->getConfiguration("type")==="LightGroup"){	
 					error_log("---------------------------------- \n",3,"/tmp/prob.txt");
-					error_log("preSave groupe en cours: ".$group->getName()."|\n",3,"/tmp/prob.txt");
+					error_log("preSave groupe en cours: ".$group->getName()."| origid".$group->getConfiguration("origid")."\n",3,"/tmp/prob.txt");
 					//$groupArray=json_decode($groupsJSON);
-					$lightsInGroupJson = $group->getConfiguration("lights");
+					
+					$groupOrigid=$group->getConfiguration("origid");
+					$lightsInGroupJson=$group->getConfiguration("lights");
 					if ($lightsInGroupJson==='') $lightsInGroupJson="[]";
 					$lightsInGroup=json_decode($lightsInGroupJson);
+					
 					error_log("preSave json lights du groupe: ".$lightsInGroupJson."|\n",3,"/tmp/prob.txt");
 					error_log("eclairages dans le groupe: ".count($lightsInGroup)."|\n",3,"/tmp/prob.txt");
-					if ($lights===null) $lights=array();
+					if ($lightsInGroup===null) $lightsInGroup=array();
 					//error_log("preSave gettype light[1]: ".$lights[0]."|\n",3,"/tmp/prob.txt");
 					//error_log("preSave gettype groupArray[1]: ".$groupArray[0]."|\n",3,"/tmp/prob.txt");
 					error_log("preSave nombre de groupe dans le field : ".count($actualGroups)."\n",3,"/tmp/prob.txt");
@@ -323,14 +326,16 @@ class RaspBEE extends eqLogic {
 					/*$needToAdd = false;
 					$needToRemove = false;
 					$inGroup = false;*/
-					foreach ($actualGroups as $actualGroupId){
+					foreach ($actualGroups as $actualGroupOrigid){
+						error_log("boucle sur field, groupirigid: ".$actualGroupOrigid."\n",3,"/tmp/prob.txt");
 						$needToAdd = false;
 						$needToRemove = false;
 						$inGroup = false;
 						error_log("----------group scan\n",3,"/tmp/prob.txt");
-						if ($group->getConfiguration("origid")===$actualGroupId){
+						if ($groupOrigid===$actualGroupOrigid){
 							if (in_array($lightOrigid, $lightsInGroup)) {
 								//$needToRemove=false;
+								
 								$needToAdd = false;
 								$inGroup = true;							
 							}
@@ -338,47 +343,48 @@ class RaspBEE extends eqLogic {
 								//$needToRemove=false;
 								$needToAdd = true;
 								$inGroup = false;
+															
 							}
 							break;
 						}
-						/*else
+					/*	else
 						{							
-							$pos2 = array_search($group->getConfiguration("origid"), $actualGroups);
+							$pos2 = array_search($lightOrigid,$lightsInGroup);
 							if ($pos2!==false) {
+								error_log("preSave light ".$lightOrigid." presente dans le groupe mais pas dans le field ".json_encode($group->getName())."|\n",3,"/tmp/prob.txt");
 								//$needToAdd = false;
+								
 								$needToRemove=true;
-								$inGroup=false;
+								//$inGroup=false;
+								break;
 							}
-							else{
-								//$needToAdd = false;
-								$needToRemove=false;
-								$inGroup=false;
-							}
-							break;
+							
 						}*/
 						error_log("----------fin group scan\n",3,"/tmp/prob.txt");
 						if ($needToAdd===true ){
-							//$needToRemove=false;
-							break;
-						}/*
+						//	//$needToRemove=false;
+							//break;
+						}
 						if ($needToRemove===true){
-							$needToAdd=false;
-							break;
-						}*/
+						//	$needToAdd=false;
+						//	break;
+						}
 						
 					}
 					if ($needToAdd===true && $inGroup===false){
-						error_log("preSave light ".$lightOrigid." non presente dans le groupe, besoin d'être ajouté dans: ".json_encode($group->getName())."|\n",3,"/tmp/prob.txt");
+						error_log("preSave light ".$lightOrigid." non presente dans le field, besoin d'être ajouté dans: ".json_encode($group->getName())."|\n",3,"/tmp/prob.txt");
 					}
 					if ($needToAdd===false && $inGroup===true){
-						error_log("preSave light ".$lightOrigid." presente dans le groupe, pas besoin d'être ajouté dans: ".json_encode($group->getName())."|\n",3,"/tmp/prob.txt");
+						error_log("preSave light ".$lightOrigid." presente dans le field, pas besoin d'être ajouté dans: ".json_encode($group->getName())."|\n",3,"/tmp/prob.txt");
 					}
 					if ($needToAdd===false && $inGroup===false){			
-						error_log("preSave light ".$lightOrigid." non presente dans le groupe, elle ne devrait pas, pas besoin d'être ajouté dans: ".json_encode($group->getName())."|\n",3,"/tmp/prob.txt");
+						error_log("preSave light ".$lightOrigid." non presente dans le field, elle ne devrait pas, pas besoin d'être ajouté dans: ".json_encode($group->getName())."|\n",3,"/tmp/prob.txt");
+							$pos2 = array_search($lightOrigid,$lightsInGroup);
+							if ($pos2!==false) {
+								error_log("preSave light ".$lightOrigid." presente dans le groupe mais pas dans le field donc a supprimer dans le groupe".json_encode($group->getName())."|\n",3,"/tmp/prob.txt");
+							}
+						
 					}
-					//if ($needToRemove===true && $inGroup===false){			
-					//	error_log("preSave light ".$lightOrigid." presente dans le groupe, besoin d'être supprimée dans: ".json_encode($group->getName())."|\n",3,"/tmp/prob.txt");
-					//}
 				}
 			}
 			error_log("----------fin scan des groupes\n",3,"/tmp/prob.txt");
