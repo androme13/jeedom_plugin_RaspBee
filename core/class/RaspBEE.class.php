@@ -327,6 +327,9 @@ class RaspBEE extends eqLogic {
 					{
 						$lightsInGroup=array();
 					}
+					// on ne garde que les values dans le tableau
+					$lightsInGroup=array_values($lightsInGroup);
+					
 					foreach ($actualGroups as $actualGroupOrigid){
 						$needToAdd = false;
 						$needToRemove = false;
