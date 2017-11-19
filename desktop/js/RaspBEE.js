@@ -237,7 +237,7 @@ function addMemberToGroup(_eqLogic){
 function createGroup(){
 	var dialog_title = "{{Création d'un groupe}}";
 	var dialog_message = '<form class="form-horizontal onsubmit="return false;"> ';
-	dialog_message += '{{Veuillez saisir le nom du groupe à créer}}.<br><label for="text-3">Nom du groupe: </label><br><input data-clear-btn="true" name="text-3" id="groupName" value="" type="text"><br><br><label class="lbl lbl-warning" for="name">{{Attention, une fois le groupe crée, une synchronisation de celui-ci débutera}}.</label>';
+	dialog_message += '{{Veuillez saisir le nom du groupe à créer}}.<br><label>Nom du groupe: </label><br><input id="groupName" value="" type="text"><br><br><label class="lbl lbl-warning" for="name">{{Attention, une fois le groupe crée, une synchronisation de celui-ci débutera}}.</label>';
 	dialog_message += '</form>';
 	bootbox.dialog({
 		title: dialog_title,
@@ -262,20 +262,17 @@ function createGroup(){
 						},
 						dataType: 'json',
 						error: function (request, status, error) {
-							//console.dir(error);
+							console.dir("error",error);
 							$('#div_raspbeeAlert').showAlert({message: error.message, level: 'danger'});
 						},
 						success: function (data) { 
 							if (data.state != 'ok') {
-								//console.dir(data);
+								console.dir("data",data);
 								$('#div_raspbeeAlert').showAlert({message: data.result, level: 'danger'});
 							}else
 							{
-								//console.dir(data);
-								
+								console.dir("data",data);								
 								syncDevices('getRaspBEEGroups','basic');
-								//window.location.reload();
-								//$( location ).attr('href',"/index.php?v=d&m=RaspBEE&p=RaspBEE");
 							}
 						}
 					});								
@@ -548,8 +545,6 @@ function removeFromGroup(_eqLogic,group){
 					});	
 			}
 		});	
-
-
 }
 
 function removeFromGroupStep2(_eqLogic,eqLogicId,deviceId,groupId){
@@ -764,11 +759,12 @@ function createEqLogic(device,syncType){
 				} else{
 					switch(jsonResp.cmdError){
 						case 2:
-							$('#div_raspbeeAlert').showAlert({message: "{{Le groupe est crée avec succès}}", level: 'info'});
+							//$('#div_raspbeeAlert').showAlert({message: "{{Le groupe est crée avec succès}}", level: 'info'});
+							window.location.replace(window.location.origin+"/index.php?v=d&m=RaspBEE&p=RaspBEE");						
 							break;									
 					}					
 				}
-			window.location.reload();				
+							
 		}
 	});	
 };

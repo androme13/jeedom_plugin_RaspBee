@@ -118,7 +118,7 @@ class RaspBEECom {
 			CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
 			CURLOPT_POSTFIELDS     => $param,
 			CURLOPT_URL            => $url,
-			CURLOPT_POST		   => true,
+			//CURLOPT_POST		   => true,
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_TIMEOUT        => 30,
 			CURLOPT_CONNECTTIMEOUT => 30
@@ -211,6 +211,10 @@ class RaspBEECom {
 	
 	public function groupCreate($name){
 		return self::genericPost("http://".$this->ip."/api/".$this->apikey."/groups",'{"name":"'.$name.'"}');
+	}
+	
+	public function setGroupAttributes($groupId,$attributesJSON){
+		return self::genericPut("http://".$this->ip."/api/".$this->apikey."/groups/".$groupId,$attributesJSON);
 	}
 	
 	public function groupDelete($id){
