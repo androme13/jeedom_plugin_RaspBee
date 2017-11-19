@@ -57,7 +57,7 @@ require_once dirname(__FILE__).'/../core/class/DeCONZTools.class.php';
 				</div>
 			</div>
 		</div>
-		<div class="panel panel-primary">
+		<div class="panel panel-primary" style="visibility:hidden;">
 			<div class="panel-heading"><h4 class="panel-title"><i class="personne personne-boy22"></i> {{Mot de passe de l'utilisateur 'pi' de la passerelle distante}}</h4></div>
 						<span><i class="fa fa-info-circle"></i> {{Utile pour que le plugin effectue les mise à jour de la passerelle tout seul. Si non rempli ou erroné, la mise à jour devra être effectuée manuellement par l'utilisateur}}.</span>
 			<div class="panel-body">
@@ -72,7 +72,7 @@ require_once dirname(__FILE__).'/../core/class/DeCONZTools.class.php';
 				</div>
 			</div>
 		</div>
-		<div class="panel panel-primary">
+		<div class="panel panel-primary"  style="visibility:hidden;">
 			<div class="panel-heading"><h4 class="panel-title"><i class="personne personne-boy22"></i> {{etat ssh}}</h4></div>
 						<span><i class="fa fa-info-circle"></i> {{ssh}}.</span>
 			<div class="panel-body">
