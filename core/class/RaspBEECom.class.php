@@ -217,12 +217,16 @@ class RaspBEECom {
 		return self::genericPut("http://".$this->ip."/api/".$this->apikey."/groups/".$groupId,$attributesJSON);
 	}
 	
+	public function setLightAttributes($groupId,$attributesJSON){
+		return self::genericPut("http://".$this->ip."/api/".$this->apikey."/lights/".$groupId,$attributesJSON);
+	}
+	
 	public function groupDelete($id){
 		return self::genericDelete("http://".$this->ip."/api/".$this->apikey."/groups/".$id);
 	}
 	
 	
-	public function removeFromGroup($params){
+/*	public function removeFromGroup($params){
 		$groupAttrAction = self::getGroupAttributes($groupId);
 		$groupAttr = json_decode($groupAttrAction->message);
 		$lightsGroup = $groupAttr->{$params['groupId']}->lights;
@@ -246,7 +250,7 @@ class RaspBEECom {
 			$response->error=0;
 			$response->message="Element supprimé du groupe";
 			return $response;		
-	}
+	}*/
 	
 	/*public function setGroupMembers($params){
 			$response->state="nok";

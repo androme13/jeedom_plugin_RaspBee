@@ -385,6 +385,16 @@ class RaspBEE extends eqLogic {
 			}
 			//on supprime le champ lights, car il ne sert qu'à gerer les groupes au niveau de l'UI			
 			$this->setConfiguration("lights",null);
+			// on set le nom de l'éclairage dans deconz
+			$raspbeecom = new RaspBEECom;
+			$attr='{';
+			$attr.='"name":"'.$this->getName().'"';
+			$attr.='}';
+			$result = $raspbeecom->setLightAttributes($lightOrigid,$attr);
+			unset($raspbeecom);
+			if($result->state!=="ok"){
+				error_log("error group : ".json_encode($result)."|\n",3,"/tmp/prob.txt");
+			}
 		}		
 	}
 
