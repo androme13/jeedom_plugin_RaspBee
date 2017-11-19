@@ -281,13 +281,33 @@ class RaspBEE extends eqLogic {
 	public function preSave() {
 		$eqLogic=$this;
 		//$isError =0;		
+		// on traite les groupes
+		if ($this->getConfiguration("type")=== "LightGroup") {
+		//	$groupId = $this->getId();
+			$groupOrigid = $this->getConfiguration("origid");
+			if (json_decode($this->getConfiguration("lights"))!==null)
+			{
+				$groupsJSON = $this->getConfiguration("lights");
+				error_log("presave lights recuperation lights:\n",3,"/tmp/prob.txt");
+			}
+			else
+			{
+				$groupsJSON = "[]";
+				error_log("presave lights creation tableau vide lights:\n",3,"/tmp/prob.txt");
+			}
+			$raspbeecom = new RaspBEECom;
+			$attrLights='{"lights":'.$groupsJSON.'}';
+			$result = $raspbeecom->setGroupAttributes($groupOrigid,$attrLights);
+			unset($raspbeecom);
+			if($result->state!=="ok"){
+				error_log("error group : ".json_encode($result)."|\n",3,"/tmp/prob.txt");
+			}
+			
+		}
 		// on traite les eql de type éclairage
 		if (strpos($this->getConfiguration("type"), 'light') !== false && $this->getConfiguration("type") !== "LightGroup") {
 			$lightId = $this->getId();
 			$lightOrigid = $this->getConfiguration("origid");
-			
-			error_log("presave lights type: ".gettype($this->getConfiguration("lights"))."|\n",3,"/tmp/prob.txt");
-			error_log("presave lights length: ".count($this->getConfiguration("lights"))."|\n",3,"/tmp/prob.txt");
 			if (json_decode($this->getConfiguration("lights"))!==null)
 			{
 				$groupsJSON = $this->getConfiguration("lights");
@@ -305,8 +325,6 @@ class RaspBEE extends eqLogic {
 				if ($group->getConfiguration("type")==="LightGroup"){				
 					$groupOrigid=$group->getConfiguration("origid");
 					$lightsInGroupJson=$group->getConfiguration("lights");
-				//if ($lightsInGroupJson==='') {$lightsInGroupJson="[]";}
-					//$lightsInGroup=json_decode($lightsInGroupJson);
 					if (json_decode($lightsInGroupJson)!==null){
 						$lightsInGroup=json_decode($lightsInGroupJson);
 					}
@@ -314,7 +332,6 @@ class RaspBEE extends eqLogic {
 					{
 						$lightsInGroup=array();
 					}
-					//if ($lightsInGroup===null) {$lightsInGroup=array();}
 					foreach ($actualGroups as $actualGroupOrigid){
 						$needToAdd = false;
 						$needToRemove = false;
@@ -336,23 +353,7 @@ class RaspBEE extends eqLogic {
 					if ($needToAdd===true && $inGroup===false){
 						//non presente dans le field, besoin d'être ajoutée
 						$lightsInGroup[]=$lightOrigid;
-						//$raspbeecom = new RaspBEECom;
-						//$attrLights='{"lights":'.json_encode($lightsInGroup).'}';						
-						//$result = $raspbeecom->setGroupAttributes($groupOrigid,$attrLights);
-						//unset($raspbeecom);
-						//error_log("request add group : ".$attrLights."|",3,"/tmp/prob.txt");
-						//error_log("result add group : ".json_encode($result)."|",3,"/tmp/prob.txt");
-						//if ($result->state==="ok"){
-							$isGroupModified=true;
-							//$group->setConfiguration("lights",json_encode($lightsInGroup));
-							//$group->save();
-						//}
-						//else
-						//{
-						//	$isError++;
-						//	error_log("error (".$isError.") group : ".json_encode($result)."|\n",3,"/tmp/prob.txt");
-						//}
-												
+							$isGroupModified=true;							
 					}
 					if (($needToAdd===false && $inGroup===false) || count($actualGroups)<1){			
 						$pos=array_search($lightOrigid,$lightsInGroup);
@@ -367,23 +368,7 @@ class RaspBEE extends eqLogic {
 							{
 								$attrLights='{"lights":'.json_encode($lightsInGroup).'}';
 							}
-							//error_log("debut request remove group : ".$attrLights."|",3,"/tmp/prob.txt");
-							//$attrLights='{"lights":'.json_encode($lightsInGroup).'}';
-							//$raspbeecom = new RaspBEECom;
-							//$result = $raspbeecom->setGroupAttributes($groupOrigid,$attrLights);
-							//unset($raspbeecom);
-							//error_log("fin request remove group : ".$attrLights."|",3,"/tmp/prob.txt");
-							//error_log("result remove group : ".json_encode($result)."|",3,"/tmp/prob.txt");
-							//if($result->state==="ok"){
-								$isGroupModified=true;
-							//	$group->setConfiguration("lights",json_encode($lightsInGroup));
-							//	$group->save();
-							//}
-							//else
-							//{
-							//	$isError++;
-							//	error_log("error (".$isError.") group : ".json_encode($result)."|\n",3,"/tmp/prob.txt");
-							//}
+							$isGroupModified=true;
 						}						
 					}
 				}
