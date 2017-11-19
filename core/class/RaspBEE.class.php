@@ -23,11 +23,7 @@ require_once dirname(__FILE__) . '/../class/RaspBEECom.class.php';
 require_once dirname(__FILE__) . '/eqLogicOperate.class.php';
 require_once dirname(__FILE__) . '/colorHelper.class.php';
 
-class RaspBEE extends eqLogic {
-	//private $raspbeecom = null; // attention les variables déclarées ici s'enregistrent dans la base sql lors du save
-	
-	//private $responseHelper = array("error" => 0, "message" => "", "state" => "");	
-	
+class RaspBEE extends eqLogic {	
 	public function getAllEqLogics(){
 		$returnArray=array();			
 			foreach(eqLogic::byType('RaspBEE') as $eqLogic)
@@ -42,15 +38,12 @@ class RaspBEE extends eqLogic {
 				$return->origId=$eqLogic->getConfiguration('origid');
 				array_push($returnArray,$return);			
 			}
-			//error_log("return: ".$return."|",3,"/tmp/prob.txt");
 			return $returnArray;			
 	}
 	
 	
 	public function getById($data){
-		//error_log("getbyid id : ".json_encode($id),3,"/tmp/prob.txt");
 		$eqLogic=eqLogic::byId($data[id]);
-		//error_log("getbyid  : ".json_encode($eqLogic),3,"/tmp/prob.txt");
 		$return=null;
 		$return->id=$eqLogic->getId();
 		$return->logicalId=$eqLogic->getLogicalId();
@@ -89,7 +82,6 @@ class RaspBEE extends eqLogic {
 		$humanName="";
 		foreach (eqLogic::byType('RaspBEE') as $equipement) {			
 			if ($equipement->getId()===$data[id]) {
-				//error_log("humanNameById trouve: |",3,"/tmp/prob.txt");
 				$id = $equipement->id;
 				$origid = $equipement->getConfiguration('origid');
 				$humanName = $equipement->getHumanName(true,true);
@@ -296,8 +288,11 @@ class RaspBEE extends eqLogic {
 				error_log("presave lights creation tableau vide lights:\n",3,"/tmp/prob.txt");
 			}
 			$raspbeecom = new RaspBEECom;
-			$attrLights='{"lights":'.$groupsJSON.'}';
-			$result = $raspbeecom->setGroupAttributes($groupOrigid,$attrLights);
+			$attr='{';
+			$attr.='"name":"'.$this->getName().'",';
+			$attr.='"lights":'.$groupsJSON;
+			$attr.='}';
+			$result = $raspbeecom->setGroupAttributes($groupOrigid,$attr);
 			unset($raspbeecom);
 			if($result->state!=="ok"){
 				error_log("error group : ".json_encode($result)."|\n",3,"/tmp/prob.txt");
