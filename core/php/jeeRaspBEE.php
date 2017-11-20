@@ -54,9 +54,11 @@ if ($results->type == "sensors"){
 			foreach ($equipement->getCmd('info') as $cmd){
 				foreach ($results->action as $actioncmd => $key){
 					if ($cmd->getConfiguration('fieldname')==$actioncmd){
+						//error_log("traitement action sensor: ".$actioncmd." ".$key,3,"/tmp/prob.txt");
 						// si le param reversed existe c'estque c'est un boolean
-						if ($cmd->getConfiguration('isReversed'))
+						if ($cmd->getConfiguration('isReversed') && is_bool($key)){
 							$key = !$key;							
+						}
 						if ($cmd->getConfiguration('fieldname')=="temperature" || $cmd->getConfiguration('fieldname')=="humidity")
 							$cmd->event($key/100);
 						else
@@ -85,6 +87,9 @@ if($results->type == "lights"){
 				// si la clé correspond au fieldname (bri, sat etc ..)
 				if ($cmd->getConfiguration('fieldname')==$actioncmd){
 					// on affecte la valeur à la commande
+					if ($cmd->getConfiguration('isReversed') && is_bool($key)){
+						$key = !$key;
+					}
 					$cmd->event($key);
 					// on parcours les commandes de type action
 					foreach ($equipement->getCmd('action') as $cmd2){
@@ -100,6 +105,7 @@ if($results->type == "lights"){
 									// on traite le changement de couleur du widget
 									// on recuperes aussi toutes les valeurs hue sat et bri (hsl) afin d'envoyer un hexrgb au widget;
 									// enlever (|| $actioncmd=='bri') pour eviter variations sur action couleur.
+	
 									if ($actioncmd=='hue' || $actioncmd=='sat' || $actioncmd=='bri'){
 										//error_log("changement couleur recquis",3,'/tmp/prob.txt');
 										$hue=0;
@@ -151,10 +157,16 @@ if($results->type == "groups"){
 				foreach ($results->action as $actioncmd => $key){
 					//error_log("|any_on: ".$actioncmd."=".$key." cmd :".$cmd->getConfiguration('fieldname')."|",3,"/tmp/prob.txt");
 					if ($actioncmd==="any_on" && $cmd->getConfiguration('fieldname')=="on"){
+						if ($cmd->getConfiguration('isReversed') && is_bool($key)){
+							$key = !$key;
+						}
 						$cmd->event($key);
 						break;
 					}				
 					if ($cmd->getConfiguration('fieldname')==$actioncmd){
+						/*if ($cmd2->getConfiguration('isReversed') && is_bool($key)){
+							$key = !$key;
+						}*/
 						$cmd->event($key);
 						break;							
 					}

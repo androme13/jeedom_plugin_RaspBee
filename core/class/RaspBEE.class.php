@@ -308,7 +308,7 @@ class RaspBEE extends eqLogic {
 			$raspbeecom = new RaspBEECom;
 			$attr='{';
 			$attr.='"name":"'.$this->getName().'",';
-			$attr.='"hidden":'.($this->getIsEnableName()) ? 'false' : 'true'.',';
+			$attr.='"hidden":'.($this->getIsEnable()) ? 'false' : 'true'.',';
 			$attr.='"lights":'.$groupsJSON;
 			$attr.='}';
 			$result = $raspbeecom->setGroupAttributes($groupOrigid,$attr);
