@@ -221,6 +221,10 @@ class RaspBEECom {
 		return self::genericPut("http://".$this->ip."/api/".$this->apikey."/lights/".$groupId,$attributesJSON);
 	}
 	
+	public function setSensorAttributes($sensorId,$attributesJSON){
+		return self::genericPut("http://".$this->ip."/api/".$this->apikey."/sensors/".$sensorId,$attributesJSON);
+	}
+	
 	public function groupDelete($id){
 		return self::genericDelete("http://".$this->ip."/api/".$this->apikey."/groups/".$id);
 	}

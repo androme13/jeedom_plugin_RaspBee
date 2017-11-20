@@ -272,7 +272,25 @@ class RaspBEE extends eqLogic {
 
 	public function preSave() {
 		$eqLogic=$this;
-		//$isError =0;		
+		//$isError =0;
+
+
+
+		// on traite les sensors
+		if (strpos($this->getConfiguration("type"), "ZHA")!==false){
+			//error_log("maj sensor : "."|\n",3,"/tmp/prob.txt");
+			$raspbeecom = new RaspBEECom;
+			$attr='{';
+			$attr.='"name":"'.$this->getName().'"';
+			$attr.='}';
+			$result = $raspbeecom->setSensorAttributes($this->getConfiguration("origid"),$attr);
+			unset($raspbeecom);
+			if($result->state!=="ok"){
+				error_log("error sensor : ".json_encode($result)."|\n",3,"/tmp/prob.txt");
+			}
+		}
+
+		
 		// on traite les groupes
 		if ($this->getConfiguration("type")=== "LightGroup") {
 		//	$groupId = $this->getId();
@@ -290,6 +308,7 @@ class RaspBEE extends eqLogic {
 			$raspbeecom = new RaspBEECom;
 			$attr='{';
 			$attr.='"name":"'.$this->getName().'",';
+			$attr.='"hidden":'.($this->getIsEnableName()) ? 'false' : 'true'.',';
 			$attr.='"lights":'.$groupsJSON;
 			$attr.='}';
 			$result = $raspbeecom->setGroupAttributes($groupOrigid,$attr);
