@@ -306,9 +306,10 @@ class RaspBEE extends eqLogic {
 				error_log("presave lights creation tableau vide lights:\n",3,"/tmp/prob.txt");
 			}
 			$raspbeecom = new RaspBEECom;
+			$hidden = 
 			$attr='{';
 			$attr.='"name":"'.$this->getName().'",';
-			$attr.='"hidden":'.($this->getIsEnable()) ? 'false' : 'true'.',';
+			//$attr.='"hidden":'.($this->getIsEnable() ? 'false' : 'true').',';
 			$attr.='"lights":'.$groupsJSON;
 			$attr.='}';
 			$result = $raspbeecom->setGroupAttributes($groupOrigid,$attr);

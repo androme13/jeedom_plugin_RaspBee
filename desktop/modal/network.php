@@ -182,38 +182,63 @@ $raspbeecom = new RaspBEECom;
                     <div class="panel panel-primary">
                         <div class="panel-heading"><h4 class="panel-title">{{Configuration de la passerelle}}</h4></div>
                         <div class="panel-body">
-						<p><span class="label label-default" style="font-size : 1em;">{{Nom}}</span><input type="text" name="name">
+						<div class="row">
+						<div class="col-sm-10">
+						<form class="form-horizontal">
+						<fieldset>
+						<div class="form-group">
+						<label class="label label-default col-sm-2" style="font-size : 1em;">{{Nom}}</label>
+						<div class="col-sm-4">						
+						<input class="form-control" type="text" name="name">
+						</div>
+						</div>
 							<?php
 							//echo $RaspBEEConfJson[modelid];
 							?>
-						</p>
-						<p><span class="label label-default" style="font-size : 1em;">{{Mises à jour OTA}}</span>
-							 <select>
+						<div class="form-group">
+						<label class="label label-default col-sm-2" style="font-size : 1em;">{{Mises à jour OTA}}</label>
+						<div class="col-sm-6">	
+							 <select class="form-control">
 							  <option value="volvo">Activer</option>
 							  <option value="saab">Désactiver</option>
 							</select> 
-						</p>	
-						<p><span class="label label-default" style="font-size : 1em;">{{Mode découverte}}</span>
-							 <select>
+						</div>
+						</div>
+						<label class="label label-default" style="font-size : 1em;">{{Mode découverte}}</label>
+							 <select class="form-control">
 							  <option value="volvo">Activer</option>
 							  <option value="saab">Désactiver</option>
 							</select> 
-						</p>
-						<p><span class="label label-default" style="font-size : 1em;">{{Canal ZigBEE}}</span>
-							 <select>
+						
+						<label class="label label-default" style="font-size : 1em;">{{Canal ZigBEE}}</label>
+							 <select class="form-control">
 							  <option value="11">11</option>
 							  <option value="15">15</option>
 							  <option value="25">20</option>
 							  <option value="25">25</option>
 							</select> 
-						</p>
-						<p><span class="label label-default" style="font-size : 1em;">{{Format de l'heure}}</span>
-							 <select>
+							<label class="label label-default" style="font-size : 1em;">{{Time Zone}}</label>
+							 <select class="form-control">
+								<?php
+								$timeZones = DateTimeZone::listIdentifiers();
+								foreach ($timeZones as $timeZone){
+									echo '<option value="$timeZone">'.$timeZone.'</option>';
+								}
+								?>
+							</select> 
+						
+						<label class="label label-default" style="font-size : 1em;">{{Format de l'heure}}</label>
+							 <select class="form-control">
 							  <option value="12h">12 Heures</option>
 							  <option value="24h">24 Heures</option>
 							</select> 
-						</p>											
+						
+						</fieldset>
+						</form>
+						</div>
                         </div>
+						</div>
+						</div>
                     </div>
 						<div class="panel panel-primary">
                         <div class="panel-heading"><h4 class="panel-title">{{Réinitialisation}}</h4></div>
