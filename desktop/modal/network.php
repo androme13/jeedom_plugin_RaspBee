@@ -33,7 +33,8 @@ $raspbeecom = new RaspBEECom;
         <div id="content">
             <ul id="tabs_network" class="nav nav-tabs" data-tabs="tabs">
                 <li class="active"><a href="#summary_network" data-toggle="tab"><i class="fa fa-info-circle"></i> {{Informations}}</a></li>
-				<li id="tab_actions"><a href="#api_actions" data-toggle="tab"><i class="fa fa-cog"></i> {{Actions}}</a></li>
+				<li id="tab_config"><a href="#config_network" data-toggle="tab"><i class="fa fa-cog"></i> {{Configuration}}</a></li>
+				<li id="tab_actions"><a href="#api_actions" data-toggle="tab"><i class="fa fa-wrench"></i> {{Actions}}</a></li>
                 <li id="tab_users"><a href="#api_users" data-toggle="tab"><i class="fa fa-user"></i> {{Utilisateurs}}</a></li>
             </ul>
             <div id="network-tab-content" class="tab-content">
@@ -172,6 +173,60 @@ $raspbeecom = new RaspBEECom;
                         </div>
                     </div>
                 </div>
+				
+				
+				
+				
+				<div id="config_network" class="tab-pane">
+					<br>
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"><h4 class="panel-title">{{Configuration de la passerelle}}</h4></div>
+                        <div class="panel-body">
+						<p><span class="label label-default" style="font-size : 1em;">{{Nom}}</span><input type="text" name="name">
+							<?php
+							//echo $RaspBEEConfJson[modelid];
+							?>
+						</p>
+						<p><span class="label label-default" style="font-size : 1em;">{{Mises à jour OTA}}</span>
+							 <select>
+							  <option value="volvo">Activer</option>
+							  <option value="saab">Désactiver</option>
+							</select> 
+						</p>	
+						<p><span class="label label-default" style="font-size : 1em;">{{Mode découverte}}</span>
+							 <select>
+							  <option value="volvo">Activer</option>
+							  <option value="saab">Désactiver</option>
+							</select> 
+						</p>
+						<p><span class="label label-default" style="font-size : 1em;">{{Canal ZigBEE}}</span>
+							 <select>
+							  <option value="11">11</option>
+							  <option value="15">15</option>
+							  <option value="25">20</option>
+							  <option value="25">25</option>
+							</select> 
+						</p>
+						<p><span class="label label-default" style="font-size : 1em;">{{Format de l'heure}}</span>
+							 <select>
+							  <option value="12h">12 Heures</option>
+							  <option value="24h">24 Heures</option>
+							</select> 
+						</p>											
+                        </div>
+                    </div>
+						<div class="panel panel-primary">
+                        <div class="panel-heading"><h4 class="panel-title">{{Réinitialisation}}</h4></div>
+                        <div class="panel-body">
+						<a id="bt_saveRaspBEEConfig" class="btn btn-success"><i class="fa fa-check"></i> {{Sauvegarder}}</a>
+						</div>
+					</div>
+				</div>
+				
+				
+				
+				
+				
 				<div id="api_actions" class="tab-pane">
 					<br>
                     <div class="panel panel-primary">

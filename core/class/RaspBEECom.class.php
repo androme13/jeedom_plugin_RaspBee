@@ -157,7 +157,7 @@ class RaspBEECom {
 		$opts = [
 			CURLOPT_SSL_VERIFYPEER => false,
 			CURLOPT_FORBID_REUSE   => true,
-			CURLOPT_POSTFIELDS     => "{\"devicetype\":\"jeedomRaspBEEPlugin\"}",
+			CURLOPT_POSTFIELDS     => "{\"devicetype\":\"jeedom_RaspBEE_Plugin\"}",
 			CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
 			CURLOPT_URL            => "http://".$this->ip."/api",
 			CURLOPT_POST		   => true,
@@ -227,6 +227,22 @@ class RaspBEECom {
 	
 	public function groupDelete($id){
 		return self::genericDelete("http://".$this->ip."/api/".$this->apikey."/groups/".$id);
+	}
+	
+	public function permitJoin($state){
+		$state=intval($state);
+		if ($state<0) $state = 0;
+		if ($state>255) $state = 255;
+		$command = '{permitjoin:'.$state.'}';
+		return self::genericPut("http://".$this->ip."/api/".$this->apikey."/config/",$state);		
+	}
+	
+	public function raspbeeConfig($config){
+		//$state=intval($state);
+		//if ($state<0) $state = 0;
+		//if ($state>255) $state = 255;
+		//$command = '{permitjoin:'.$state.'}';
+		return self::genericPut("http://".$this->ip."/api/".$this->apikey."/config/",$config);		
 	}
 	
 	

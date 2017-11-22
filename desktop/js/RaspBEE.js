@@ -19,7 +19,7 @@
 	containment : '#eqLogicThumbnailContainment'
 });*/
 //refreshEqlogicsList();
-/*$('#bt_include').on('click', function () {
+$('#bt_include').on('click', function () {
 	$('#md_modal').dialog({
 		title: "{{Mode inclusion}}",
 		dialogClass: "no-close",
@@ -33,7 +33,7 @@
 		}],
 	});
 	$('#md_modal').load('index.php?v=d&plugin=RaspBEE&modal=include').dialog('open');	
-});*/
+});
 
 $('#bt_syncEqLogic').on('click', function () {
 	$('#md_modal').dialog({
