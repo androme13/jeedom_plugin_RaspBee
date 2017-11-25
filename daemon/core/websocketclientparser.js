@@ -3,9 +3,9 @@ websocketclientparser = module.exports = {
 
 
 	process : function (jsondata) {
-		console.log("--------------------------------");
-		console.log("beginprocess",jsondata);
-		console.log("--------------------------------");
+		//console.log("--------------------------------");
+		//console.log("beginprocess",jsondata);
+		//console.log("--------------------------------");
 		//console.log("websocketclientparser process:");
 		// on traite le type (r)
 		switch (jsondata.r){
@@ -29,7 +29,7 @@ websocketclientparser = module.exports = {
 		console.log("--------------------------------");
 		console.log("websocketclientparser sensorsprocess:");
 		console.log ("raw sensor object:", sensorsobj);
-		console.log("--------------------------------");
+		//console.log("--------------------------------");
 		var call = new Object();
 		// on traite les events (t)
 		switch (sensorsobj.t){
@@ -89,7 +89,7 @@ websocketclientparser = module.exports = {
 		console.log("--------------------------------");
 		console.log("websocketclientparser groupsprocess:");
 		console.log (groupsobj);
-		console.log("--------------------------------");
+		//console.log("--------------------------------");
 		var call = new Object();
 		// on traite les events (t)
 		switch (groupsobj.t){

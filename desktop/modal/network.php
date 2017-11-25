@@ -240,13 +240,7 @@ $raspbeecom = new RaspBEECom;
 						</div>
 						</div>
                     </div>
-						<div class="panel panel-primary">
-                        <div class="panel-heading"><h4 class="panel-title">{{Réinitialisation}}</h4></div>
-                        <div class="panel-body">
-						<a id="bt_saveRaspBEEConfig" class="btn btn-success"><i class="fa fa-check"></i> {{Sauvegarder}}</a>
-						</div>
-					</div>
-				</div>
+
 				
 				
 				

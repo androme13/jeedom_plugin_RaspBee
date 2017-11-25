@@ -38,22 +38,24 @@ if ($results->type == "sensors"){
 			// le type ne doit pas comporter le mot light (eviter de se melanger dans le originid qui peuvent être identiques entre les light et les sensors, donc on teste)
 			if (strpos(strtolower($type),"light")===false){
 				if ($equipement->getConfiguration('origid')===$results->id){
-					if (!$results->info->reachable)
-					event::add('jeedom::alert', array(
-						'level' => 'warning',
-						'page' => 'RaspBEE',
-						'message' => __($equipement->getName().' est devenu injoignable', __FILE__),
-					));
-					else if (!$equipement->getConfiguration("reachable"))
+					if (!$results->info->reachable){
+						$level = "warning";
+						$message = __($equipement->getHumanName().' est devenu injoignable', __FILE__);
+					}
+					else{
+						$level =  "success";
+						$message=__($equipement->getHumanName().' est devenu joignable', __FILE__);
+					}
+					if (boolval($equipement->getConfiguration("reachable"))!==boolval($results->info->reachable))
+					{
 						event::add('jeedom::alert', array(
-						'level' => 'success',
-						'page' => 'RaspBEE',
-						'message' => __($equipement->getName().' est devenu joignable', __FILE__),
-					));
-					
-					$equipement->setConfiguration("reachable",$results->info->reachable);
-					$equipement->save();
-					break;
+							'level' => $level,
+							'page' => 'RaspBEE',
+							'message' => $message
+						));
+						$equipement->setConfiguration("reachable",$results->info->reachable);
+						$equipement->save();
+					}				
 				}	
 			}			
 		}
@@ -108,72 +110,98 @@ if($results->type == "lights"){
 	// on parcours tous les équipements RASPBEE
 	foreach (eqLogic::byType('RaspBEE') as $equipement) {
 		// si l'origiid et result->id correspondent
-		if ($equipement->getConfiguration('origid')==$results->id)
+		if ($equipement->getConfiguration('origid')===$results->id ){
+		//{"e":"changed","id":"2","r":"lights","state":{"reachable":false},"t":"event"}
+		error_log("\nlight event".json_encode($results),3,'/tmp/prob.txt');
+		if (is_bool($results->action->reachable)){			
+			if (!$results->action->reachable){
+				$level = "warning";
+				$message = __($equipement->getHumanName().' est devenu injoignable', __FILE__);
+			}
+			else{
+				$level =  "success";
+				$message=__($equipement->getHumanName().' est devenu joignable', __FILE__);
+			}
+			if (boolval($equipement->getConfiguration("reachable"))!==boolval($results->action->reachable))
+			{
+				event::add('jeedom::alert', array(
+					'level' => $level,
+					'page' => 'RaspBEE',
+					'message' => $message
+				));
+				$equipement->setConfiguration("reachable",$results->action->reachable);
+				$equipement->save();
+			}
+		}			
+		
+		
 		// on parcours les commandes de type info
-		foreach ($equipement->getCmd('info') as $cmd){
-			// on parcours les resultats->action
-			foreach ($results->action as $actioncmd => $key){
-				// si la clé correspond au fieldname (bri, sat etc ..)
-				if ($cmd->getConfiguration('fieldname')==$actioncmd){
-					// on affecte la valeur à la commande
-					if ($cmd->getConfiguration('isReversed') && is_bool($key)){
-						$key = !$key;
-					}
-					$cmd->event($key);
-					// on parcours les commandes de type action
-					foreach ($equipement->getCmd('action') as $cmd2){
-						// on parcours les resultats->action
-						foreach ($results->action as $actioncmd2 => $key2){
-							// si la clé correspond au fieldname (bri, sat etc ..)
-							if ($cmd2->getConfiguration('fieldname')==$actioncmd2){
-								//error_log("|INFO ".$actioncmd.'('.$key.') => ACTION '.$actioncmd2.":".$key2."|",3,'/tmp/prob.txt');
-								// si la valeur est differente de la valeur stockée
-								if ($cmd2->getConfiguration('lastCmdValue')!=$key){
-									$cmd2->setConfiguration('lastCmdValue',$key);
-									$cmd2->save();									
-									// on traite le changement de couleur du widget
-									// on recuperes aussi toutes les valeurs hue sat et bri (hsl) afin d'envoyer un hexrgb au widget;
-									// enlever (|| $actioncmd=='bri') pour eviter variations sur action couleur.
-	
-									if ($actioncmd=='hue' || $actioncmd=='sat' || $actioncmd=='bri'){
-										//error_log("changement couleur recquis",3,'/tmp/prob.txt');
-										$hue=0;
-										$sat=0;
-										$bri=0;
-										foreach ($equipement->getCmd('action') as $colorcpnt){
-											switch ($colorcpnt->getConfiguration('fieldname')){
-											case "hue":
-												$hue = $colorcpnt->getConfiguration('lastCmdValue');
-												break;
-											case "sat":
-												$sat = $colorcpnt->getConfiguration('lastCmdValue');
-												break;
-											case "bri":
-												$bri = $colorcpnt->getConfiguration('lastCmdValue');
-												break;
-											}
-											$finalHue = (360*((100/65535)*$hue))/100;
-											$finalSat = (100/255)*$sat;
-											$finalBri = (100/255)*$bri;
-											
-											$rvb = colorHelper::HSV2RGB($finalHue,$finalSat,$finalBri);
-											$color = sprintf("#%02x%02x%02x", $rvb[0], $rvb[1], $rvb[2]); // #0d00ff
-											foreach ($equipement->getCmd('action') as $colorSearch){
-												if ($colorSearch->getConfiguration('fieldname')=='color'){
-													$colorSearch->setConfiguration('lastCmdValue',$color)	;
-													$colorSearch->save();
+			foreach ($equipement->getCmd('info') as $cmd){
+				// on parcours les resultats->action
+				foreach ($results->action as $actioncmd => $key){
+					// si la clé correspond au fieldname (bri, sat etc ..)
+					if ($cmd->getConfiguration('fieldname')==$actioncmd){
+						// on affecte la valeur à la commande
+						if ($cmd->getConfiguration('isReversed') && is_bool($key)){
+							$key = !$key;
+						}
+						$cmd->event($key);
+						// on parcours les commandes de type action
+						foreach ($equipement->getCmd('action') as $cmd2){
+							// on parcours les resultats->action
+							foreach ($results->action as $actioncmd2 => $key2){
+								// si la clé correspond au fieldname (bri, sat etc ..)
+								if ($cmd2->getConfiguration('fieldname')==$actioncmd2){
+									//error_log("|INFO ".$actioncmd.'('.$key.') => ACTION '.$actioncmd2.":".$key2."|",3,'/tmp/prob.txt');
+									// si la valeur est differente de la valeur stockée
+									if ($cmd2->getConfiguration('lastCmdValue')!=$key){
+										$cmd2->setConfiguration('lastCmdValue',$key);
+										$cmd2->save();									
+										// on traite le changement de couleur du widget
+										// on recuperes aussi toutes les valeurs hue sat et bri (hsl) afin d'envoyer un hexrgb au widget;
+										// enlever (|| $actioncmd=='bri') pour eviter variations sur action couleur.
+		
+										if ($actioncmd=='hue' || $actioncmd=='sat' || $actioncmd=='bri'){
+											//error_log("changement couleur recquis",3,'/tmp/prob.txt');
+											$hue=0;
+											$sat=0;
+											$bri=0;
+											foreach ($equipement->getCmd('action') as $colorcpnt){
+												switch ($colorcpnt->getConfiguration('fieldname')){
+												case "hue":
+													$hue = $colorcpnt->getConfiguration('lastCmdValue');
+													break;
+												case "sat":
+													$sat = $colorcpnt->getConfiguration('lastCmdValue');
+													break;
+												case "bri":
+													$bri = $colorcpnt->getConfiguration('lastCmdValue');
+													break;
+												}
+												$finalHue = (360*((100/65535)*$hue))/100;
+												$finalSat = (100/255)*$sat;
+												$finalBri = (100/255)*$bri;
+												
+												$rvb = colorHelper::HSV2RGB($finalHue,$finalSat,$finalBri);
+												$color = sprintf("#%02x%02x%02x", $rvb[0], $rvb[1], $rvb[2]); // #0d00ff
+												foreach ($equipement->getCmd('action') as $colorSearch){
+													if ($colorSearch->getConfiguration('fieldname')=='color'){
+														$colorSearch->setConfiguration('lastCmdValue',$color)	;
+														$colorSearch->save();
+													}
 												}
 											}
 										}
-									}
-									$cmd2->getEqLogic()->refreshWidget();
-									break;
-								}								
+										$cmd2->getEqLogic()->refreshWidget();
+										break;
+									}								
+								}
 							}
-						}
-					}						
+						}						
+					}
 				}
 			}
+			break;
 		}		
 	}
 }
@@ -208,5 +236,5 @@ if($results->type == "groups"){
 
 
 //else
-echo json_encode($results->params);
+//echo json_encode($results->params);
 ?>

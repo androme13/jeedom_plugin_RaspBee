@@ -298,15 +298,15 @@ class RaspBEE extends eqLogic {
 			if (json_decode($this->getConfiguration("lights"))!==null)
 			{
 				$groupsJSON = $this->getConfiguration("lights");
-				error_log("presave lights recuperation lights:\n",3,"/tmp/prob.txt");
+				error_log("presave group recuperation lights:\n",3,"/tmp/prob.txt");
 			}
 			else
 			{
 				$groupsJSON = "[]";
-				error_log("presave lights creation tableau vide lights:\n",3,"/tmp/prob.txt");
+				error_log("presave group creation tableau vide lights:\n",3,"/tmp/prob.txt");
 			}
 			$raspbeecom = new RaspBEECom;
-			$hidden = 
+			//$hidden = 
 			$attr='{';
 			$attr.='"name":"'.$this->getName().'",';
 			//$attr.='"hidden":'.($this->getIsEnable() ? 'false' : 'true').',';
@@ -320,7 +320,7 @@ class RaspBEE extends eqLogic {
 			
 		}
 		// on traite les eql de type éclairage
-		if (strpos($this->getConfiguration("type"), 'light') !== false && $this->getConfiguration("type") !== "LightGroup") {
+		if (strpos($this->getConfiguration("type"), 'light') !== false && $this->getConfiguration("type") !== "LightGroup" && $this->getConfiguration("lights")!==null) {
 			$lightId = $this->getId();
 			$lightOrigid = $this->getConfiguration("origid");
 			if (json_decode($this->getConfiguration("lights"))!==null)
@@ -390,7 +390,7 @@ class RaspBEE extends eqLogic {
 						}						
 					}
 				}
-				// on set le group su deconz
+				// on set le group sur deconz
 				if ($isGroupModified===true){
 					$raspbeecom = new RaspBEECom;
 					$attrLights='{"lights":'.json_encode($lightsInGroup).'}';
@@ -406,8 +406,7 @@ class RaspBEE extends eqLogic {
 					}
 				}
 			}
-			//on supprime le champ lights, car il ne sert qu'à gerer les groupes au niveau de l'UI			
-			$this->setConfiguration("lights",null);
+			//on supprime le champ lights, car il ne sert qu'à gerer les groupes au niveau de l'UI						
 			// on set le nom de l'éclairage dans deconz
 			$raspbeecom = new RaspBEECom;
 			$attr='{';
@@ -418,6 +417,7 @@ class RaspBEE extends eqLogic {
 			if($result->state!=="ok"){
 				error_log("error group : ".json_encode($result)."|\n",3,"/tmp/prob.txt");
 			}
+			$this->setConfiguration("lights",null);
 		}		
 	}
 
