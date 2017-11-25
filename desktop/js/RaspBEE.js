@@ -15,9 +15,13 @@
 * along with Plugin RaspBEE for jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 //refreshEqlogicsList();
-/*$(".eqLogicDisplayCard").draggable({
-	containment : '#eqLogicThumbnailContainment'
-});*/
+$(".eqLogicDisplayCard").draggable({
+	containment : '#eqLogicThumbnailContainment',
+	revert:  function(dropped) {
+           var dropped = dropped && dropped[0].id == "droppable";
+           return !dropped;
+        } 
+});
 //refreshEqlogicsList();
 $('#bt_include').on('click', function () {
 	$('#md_modal').dialog({
@@ -293,7 +297,7 @@ function printEqLogic(_eqLogic) {
 	}
 	$('#table_infoseqlogic tbody').empty();
 	$('#buttons_infoseqlogic').empty();
-	var subst = { true : '<span title="Le périphérique est online"><i class="fa fa-check-circle" style="color:#007600;"></i></span', false: '<span title="Le périphérique est offline"><i class="fa fa-times-circle" style="color:#760000;"></i></span>'};
+	var subst = { 1 : '<span title="Le périphérique est online"><i class="fa fa-check-circle" style="color:#007600;"></i></span', 0: '<span title="Le périphérique est offline"><i class="fa fa-times-circle" style="color:#760000;"></i></span>'};
 	printEqLogicHelper(false,"{{Connecté}}","reachable",_eqLogic,subst);
 	printEqLogicHelper(true,"{{Id origine}}","origid",_eqLogic);	
 	printEqLogicHelper(false,"{{Marque}}","manufacturername",_eqLogic);
@@ -301,6 +305,7 @@ function printEqLogic(_eqLogic) {
 	printEqLogicHelper(true,"{{Firmware}}","swversion",_eqLogic);	
 	printEqLogicHelper(true,"{{Type}}","type",_eqLogic);	
 	printEqLogicHelper(true,"{{UID}}","uniqueid",_eqLogic);
+	printEqLogicHelper(true,"{{Batterie}}","battery",_eqLogic);
 	//printEqLogicHelper(true,"{{membership}}","devicemembership",_eqLogic);
 	// on regarde si c'est un groupe ou pas
 	// on ne peut pas supprimer les groupes qui ont un ctrl maitre

@@ -32,6 +32,32 @@ if (!is_object($results)) {
 }
 
 if ($results->type == "sensors"){
+	if (is_bool($results->info->reachable)){
+		foreach (eqLogic::byType('RaspBEE') as $equipement) {		
+			$type = $equipement->getConfiguration('type');
+			// le type ne doit pas comporter le mot light (eviter de se melanger dans le originid qui peuvent être identiques entre les light et les sensors, donc on teste)
+			if (strpos(strtolower($type),"light")===false){
+				if ($equipement->getConfiguration('origid')===$results->id){
+					if (!$results->info->reachable)
+					event::add('jeedom::alert', array(
+						'level' => 'warning',
+						'page' => 'RaspBEE',
+						'message' => __($equipement->getName().' est devenu injoignable', __FILE__),
+					));
+					else if (!$equipement->getConfiguration("reachable"))
+						event::add('jeedom::alert', array(
+						'level' => 'success',
+						'page' => 'RaspBEE',
+						'message' => __($equipement->getName().' est devenu joignable', __FILE__),
+					));
+					
+					$equipement->setConfiguration("reachable",$results->info->reachable);
+					$equipement->save();
+					break;
+				}	
+			}			
+		}
+	}	
 	if (is_int($results->info->battery))
 	{	
 		//error_log("traitement batterie: ".json_encode($results),3,"/tmp/prob.txt");
@@ -40,13 +66,15 @@ if ($results->type == "sensors"){
 			// le type ne doit pas comporter le mot light (eviter de se melanger dans le originid qui peuvent être identiques entre les light et les sensors, donc on teste)
 			if (strpos(strtolower($type),"light")===false){
 				//error_log("traitement batterie type eq: ".$equipement->getConfiguration('type'),3,"/tmp/prob.txt");
-				if ($equipement->getConfiguration('origid')==$results->id){
+				if ($equipement->getConfiguration('origid')===$results->id){
+					//error_log("batterie ".$results->id." à: ".$results->info->battery,3,"/tmp/prob.txt");
 					$equipement->batteryStatus($results->info->battery);
+					$equipement->save();
 					break;
 				}	
 			}			
 		}
-	}else
+	}//else
 	if (is_object($results->action)){
 		// on traite l'info d'un device	
 		foreach (eqLogic::byType('RaspBEE') as $equipement) {
@@ -69,6 +97,7 @@ if ($results->type == "sensors"){
 			}			
 		}
 	}
+	//error_log("\n fin traitement sensor ",3,"/tmp/prob.txt");
 }
 
 

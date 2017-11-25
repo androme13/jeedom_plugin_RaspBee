@@ -43,7 +43,7 @@ $('input[type=radio][name=optionType]').on( "click", function() {
 $('input[type=radio][name=optionType][value=light]').click();
 
 $('#bt_launchinclude').on('click', function () {
-	
+	console.dir("jeedom",jeedom);
 });
 
 var displayHelp = function() {
@@ -58,11 +58,15 @@ function HTMLClean(value){
 
 function showTouchlinkView(){	
 	var content='<a id="bt_TouchlinkRefresh" class="btn btn-success" style="margin-bottom:20px;"><i class="fa fa-refresh"></i> {{Raffraichir}}</a><br>';	
-	content+='<div id="progressbar" class="AcceptedBar"></div>';
+	content+='<div id="progressbar"></div>';
 	content+='<span class="label label-default">Dernier scan</span>&nbsp<span id="touchlinkLastScan" class="label label-info" style="margin-right: 20px;">'+touchlinkLastScan+'</span>';
 	content+='<span class="label label-default">Statut du scan</span>&nbsp<span id="touchlinkState" class="label label-info">'+touchlinkState+'</span>';
 	
 	$('#includecontent').html(content);
+	progressbar = $( "#progressbar" );
+	progressbarValue = progressbar.find( ".ui-progressbar-value" );
+	progressbarValue.css({"background": '#'+ Math.floor( Math.random() * 16777215 ).toString( 16 )});
+	
 	$('#bt_TouchlinkRefresh').on( "click", function(e) {
 		waitMode(true);
 		launchTouchlinkScan();
@@ -254,9 +258,6 @@ function constructTouchlinkTable(data){
 	var dataresultJson=data;
 	//var dataresultJson=JSON.parse(data);
 	var table ='<table id="touchlinkTable" class="table table-bordered table-condensed" style="width:100%;margin-top:10px;">';
-	//table+='<caption><span class="label label-default">Dernier scan</span>&nbsp<span class="label label-info" style="margin-right: 20px;">'+dataresultJson.lastscan+'</span>';
-	//table+='<span class="label label-default">Statut du scan</span>&nbsp<span class="label label-info">'+dataresultJson.scanstate+'</span>';
-	//table+='</caption>';
 	table+='<tr>';
 	table+='<th>{{Identifier}}</th>';
 	table+='<th>{{ID réseau}}</th>';
@@ -298,7 +299,7 @@ function waitMode(mode){
 		  }
 		});
 		$( "#progressbar" ).progressbar({value: 0}); 
-		$('#progressbar').css("background-color","#FF0000 !important;");  
+	//	$('#progressbar').css("background-color","#FF0000 !important;");  
 	}
 	else{
 		$('#progressbar').hide();

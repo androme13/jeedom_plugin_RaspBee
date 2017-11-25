@@ -229,7 +229,7 @@ class RaspBEECom {
 		return self::genericDelete("http://".$this->ip."/api/".$this->apikey."/groups/".$id);
 	}
 	
-	public function permitJoin($state){
+	public function permitJoin($state=254){
 		$state=intval($state);
 		if ($state<0) $state = 0;
 		if ($state>255) $state = 255;

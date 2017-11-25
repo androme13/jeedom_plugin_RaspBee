@@ -77,13 +77,12 @@ require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
 	</div>
 	</div>
 	</div>
-<style>
-.AcceptedBar {
-  background-color: #497ad6;
-}
-
-
-</style>
-
-
-<?php include_file('desktop', 'include', 'js', 'RaspBEE');?>
+	<style>
+	#includebar .ui-progressbar-value{
+	  background: green;
+	  background-image: none;
+	}
+	</style>
+<?php include_file('desktop', 'include', 'js', 'RaspBEE');
+  //background-color: #497ad6;
+?>

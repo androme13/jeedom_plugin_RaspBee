@@ -45,7 +45,7 @@ function eqLogicDraw(eqLogic){
 	icon="";
 	card="";
 	type="";
-	card= '<div class="eqLogicDisplayCard eqLogicHoverEffect cursor" data-eqLogic_id="'+ eqLogic.id+'" data-logical-id="' + eqLogic.logicalId+'"  style="background-color : #ffffff; height : 200px;box-shadow: 3px 3px 8px #000;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;"' + opacity + '" >';
+	card= '<div class="eqLogicDisplayCard eqLogicHoverEffect cursor ui-draggable ui-draggable-handle" data-eqLogic_id="'+ eqLogic.id+'" data-logical-id="' + eqLogic.logicalId+'"  style="background-color : #ffffff; height : 200px;box-shadow: 3px 3px 8px #000;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
 	card+="<center>";
 	
 	switch (eqLogic.type){
@@ -87,9 +87,8 @@ function eqLogicDraw(eqLogic){
 	card+=type;
 	card+="</span>";		
 	card+="</center>";
-	card+='<span style="font-size : 1.1em;position:relative; top : 15px;white-space: pre-wrap;word-wrap: normal;"><center>' + eqLogic.humanName+ '</center>';
-	card+="</div>";
-	
+	card+='<span style="font-size : 1.1em;position:relative; top : 15px;white-space: pre-wrap;word-wrap: normal;"><center>' + eqLogic.humanName+ '</center></span>';
+	card+="</div>";	
 	return card;
 }
 
@@ -146,16 +145,28 @@ function memberDraw(member,groupid)
 
 
 function printEqLogicHelper(expertMode,label,name,_eqLogic,_subst){
+	console.dir("name avant",_eqLogic);
 	var expertModeVal="";
 	if (expertMode==true) expertModeVal = "expertModeVisible";
 	// (expertmodevisible,nom du champ,eqlogic en cours,tableau de substitution des valeurs)
-	if (_eqLogic.configuration[name]==undefined) return;
-	if (_subst!=null && _subst!=undefined){
-		name = _subst[_eqLogic.configuration[name]];
-		var trm = '<tr class="eqLogic '+expertModeVal+'"><td class="col-sm-2"><span class="label control-label" style="font-size : 1em;">'+label+'</span></td><td><span class="label label-default" style="font-size : 1em;">'+name+'</span></td></tr>';
+	if (_eqLogic.status.battery==undefined && name==="battery")return;
+	if (_eqLogic.configuration[name]==undefined && name!=="battery") return;
+	//console.dir("name après",name);
+	if (name=="battery"){
+	//	console.log("printEqLogicHelper battery");
+		var trm = '<tr class="'+expertModeVal+'"><td class="col-sm-2"><span class="label control-label" style="font-size : 1em;">'+label+'</span></td><td><span class="label label-default" style="font-size : 1em;">'+_eqLogic.status.battery+'\% ('+_eqLogic.status.lastCommunication+')</span></td></tr>';
 	}
 	else
-	var trm = '<tr class="eqLogic '+expertModeVal+'"><td class="col-sm-2"><span class="label control-label" style="font-size : 1em;">'+label+'</span></td><td><span class="label label-default" style="font-size : 1em;"> <span class="eqLogicAttr" data-l1key="configuration" data-l2key="'+name+'"></span></span></td></tr>';
+	{
+		if (_subst!=null && _subst!=undefined){
+			name = _subst[_eqLogic.configuration[name]];
+			var trm = '<tr class="eqLogic '+expertModeVal+'"><td class="col-sm-2"><span class="label control-label" style="font-size : 1em;">'+label+'</span></td><td><span class="label label-default" style="font-size : 1em;">'+name+'</span></td></tr>';
+		}
+		else{
+		var trm = '<tr class="eqLogic '+expertModeVal+'"><td class="col-sm-2"><span class="label control-label" style="font-size : 1em;">'+label+'</span></td><td><span class="label label-default" style="font-size : 1em;"> <span class="eqLogicAttr" data-l1key="configuration" data-l2key="'+name+'"></span></span></td></tr>';
+		}
+	}
+	
 	$('#table_infoseqlogic tbody').append(trm);
 	$('#table_infoseqlogic tbody tr:last').setValues(_eqLogic, '.eqLogicAttr');		
 }
