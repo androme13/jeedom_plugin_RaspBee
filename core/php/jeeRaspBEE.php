@@ -129,9 +129,11 @@ if($results->type == "lights"){
 					'page' => 'RaspBEE',
 					'message' => $message
 				));
-				$equipement->setConfiguration("reachable",$results->action->reachable);
-				$equipement->save();
+				$equipement->setConfiguration("reachable",boolval($results->action->reachable));
+				$equipement->save(true);
 			}
+			// on sort après traitement du reachable.
+			break;
 		}			
 		
 		

@@ -273,9 +273,6 @@ class RaspBEE extends eqLogic {
 	public function preSave() {
 		$eqLogic=$this;
 		//$isError =0;
-
-
-
 		// on traite les sensors
 		if (strpos($this->getConfiguration("type"), "ZHA")!==false){
 			//error_log("maj sensor : "."|\n",3,"/tmp/prob.txt");

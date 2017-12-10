@@ -297,7 +297,7 @@ function printEqLogic(_eqLogic) {
 	}
 	$('#table_infoseqlogic tbody').empty();
 	$('#buttons_infoseqlogic').empty();
-	var subst = { 1 : '<span title="Le périphérique est online"><i class="fa fa-check-circle" style="color:#007600;"></i></span', 0: '<span title="Le périphérique est offline"><i class="fa fa-times-circle" style="color:#760000;"></i></span>'};
+	var subst = { 1 : '<span title="Le périphérique est online"><i class="fa fa-check-circle" style="color:#007600;"></i></span', '': '<span title="Le périphérique est offline"><i class="fa fa-times-circle" style="color:#760000;"></i></span>'};
 	printEqLogicHelper(false,"{{Connecté}}","reachable",_eqLogic,subst);
 	printEqLogicHelper(true,"{{Id origine}}","origid",_eqLogic);	
 	printEqLogicHelper(false,"{{Marque}}","manufacturername",_eqLogic);
@@ -555,14 +555,14 @@ function removeFromGroup(_eqLogic,group){
 function removeFromGroupStep2(_eqLogic,eqLogicId,deviceId,groupId){
 	console.log("removeFromGroupStep2",deviceId,groupId);
 	var newTab = $('#membersEqLogic').html().match(/eqlorigid\d+/g);
-	var value = "";
+	//var value = "";
 	if (newTab){
 	// on ne garde que le nombre (qui est egal à l'id)
 	for (var i=0; i<newTab.length;i++) {
 		newTab[i] = newTab[i].replace('eqlorigid', "");	
 	}
 	//console.dir("newtab after",JSON.stringify(newTab));
-	value = JSON.stringify(newTab);
+	var value = JSON.stringify(newTab);
 	}
 	$('#membersField').val(value);
 }
