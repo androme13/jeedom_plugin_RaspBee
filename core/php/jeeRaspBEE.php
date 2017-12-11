@@ -158,13 +158,13 @@ if($results->type == "lights"){
 									// si la valeur est differente de la valeur stockée
 									if ($cmd2->getConfiguration('lastCmdValue')!=$key){
 										$cmd2->setConfiguration('lastCmdValue',$key);
-										$cmd2->save();									
+										$cmd2->save(true);									
 										// on traite le changement de couleur du widget
 										// on recuperes aussi toutes les valeurs hue sat et bri (hsl) afin d'envoyer un hexrgb au widget;
 										// enlever (|| $actioncmd=='bri') pour eviter variations sur action couleur.
 		
 										if ($actioncmd=='hue' || $actioncmd=='sat' || $actioncmd=='bri'){
-											//error_log("changement couleur recquis",3,'/tmp/prob.txt');
+											error_log("changement couleur recquis",3,'/tmp/prob.txt');
 											$hue=0;
 											$sat=0;
 											$bri=0;
@@ -189,11 +189,12 @@ if($results->type == "lights"){
 												foreach ($equipement->getCmd('action') as $colorSearch){
 													if ($colorSearch->getConfiguration('fieldname')=='color'){
 														$colorSearch->setConfiguration('lastCmdValue',$color)	;
-														$colorSearch->save();
+														$colorSearch->save(true);
 													}
 												}
 											}
 										}
+										error_log("refresh widget : ".$cmd2->getName()." value: ".$cmd2->getValue()."/n",3,'/tmp/prob.txt');
 										$cmd2->getEqLogic()->refreshWidget();
 										break;
 									}								

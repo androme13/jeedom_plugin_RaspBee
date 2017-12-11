@@ -179,67 +179,97 @@ $raspbeecom = new RaspBEECom;
 				
 				<div id="config_network" class="tab-pane">
 					<br>
+					<div class="panel-group" id="network_configuration_accordion">
                     <div class="panel panel-primary">
-                        <div class="panel-heading"><h4 class="panel-title">{{Configuration de la passerelle}}</h4></div>
-                        <div class="panel-body">
-						<div class="row">
-						<div class="col-sm-10">
-						<form class="form-horizontal">
-						<fieldset>
-						<div class="form-group">
-						<label class="label label-default col-sm-2" style="font-size : 1em;">{{Nom}}</label>
-						<div class="col-sm-4">						
-						<input class="form-control" type="text" name="name">
-						</div>
-						</div>
-							<?php
-							//echo $RaspBEEConfJson[modelid];
+					<div class="panel-heading"><h4 class="panel-title">
+					 <a data-toggle="collapse" data-parent="#network_configuration_accordion" href="#collapseOne">
+					{{Configuration de la passerelle}}</a></h4></div>
+					<div id="collapseOne" class="panel-collapse collapse out">
+					<div class="panel-body">
+					<p><span class="label" style="font-size : 1em;">{{Nom}}</span>
+					<input class="form-control" type="text" name="gw_name_configuration" value="<?php
+							echo $RaspBEEConfJson[name];
+							?>">
+					</p>
+					<p><span class="label" style="font-size : 1em;">{{Mises à jour OTA}}</span>
+					<select class="form-control">
+					<?php
+					$options = array('Activer','Désactiver');
+					foreach ($options as $option){
+						echo '<option value="true">'.$option.'</option>';
+						//commandes
+					}
+					//echo '<option value="true">Activer</option>';
+					//echo '<option value="false">Désactiver</option>';
+					?>
+						</select>
+					</p>
+					<p><span class="label" style="font-size : 1em;">{{Mode découverte}}</span>
+					<select class="form-control">
+						  <option value="true">Activer</option>
+						  <option value="false">Désactiver</option>
+						</select>
+					</p>
+					<p><span class="label" style="font-size : 1em;">{{Canal ZigBEE}}</span>
+					<select class="form-control" selected="11">
+					<?php
+					$options = array('11','15','20','25');
+					foreach ($options as $option){
+						$selected='';
+						if ($option == $RaspBEEConfJson[zigbeechannel])
+							$selected ='selected="selected"';
+						
+						echo '<option value="true" '.$selected.'>'.$option.'</option>';
+					}
+					?>
+						  
+						</select>
+					</p>
+					<p><span class="label" style="font-size : 1em;">{{Time Zone}}</span>
+					<select class="form-control">
+						  <?php
+							$options = DateTimeZone::listIdentifiers();
+							foreach ($options as $option){
+								$selected='';
+								if ($option == $RaspBEEConfJson[timezone])
+								$selected ='selected="selected"';
+								echo '<option value="'.$option.'" '.$selected.'>'.$option.'</option>';
+							}
 							?>
-						<div class="form-group">
-						<label class="label label-default col-sm-2" style="font-size : 1em;">{{Mises à jour OTA}}</label>
-						<div class="col-sm-6">	
-							 <select class="form-control">
-							  <option value="volvo">Activer</option>
-							  <option value="saab">Désactiver</option>
-							</select> 
-						</div>
-						</div>
-						<label class="label label-default" style="font-size : 1em;">{{Mode découverte}}</label>
-							 <select class="form-control">
-							  <option value="volvo">Activer</option>
-							  <option value="saab">Désactiver</option>
-							</select> 
-						
-						<label class="label label-default" style="font-size : 1em;">{{Canal ZigBEE}}</label>
-							 <select class="form-control">
-							  <option value="11">11</option>
-							  <option value="15">15</option>
-							  <option value="25">20</option>
-							  <option value="25">25</option>
-							</select> 
-							<label class="label label-default" style="font-size : 1em;">{{Time Zone}}</label>
-							 <select class="form-control">
-								<?php
-								$timeZones = DateTimeZone::listIdentifiers();
-								foreach ($timeZones as $timeZone){
-									echo '<option value="$timeZone">'.$timeZone.'</option>';
-								}
-								?>
-							</select> 
-						
-						<label class="label label-default" style="font-size : 1em;">{{Format de l'heure}}</label>
-							 <select class="form-control">
-							  <option value="12h">12 Heures</option>
-							  <option value="24h">24 Heures</option>
-							</select> 
-						
-						</fieldset>
-						</form>
-						</div>
-                        </div>
-						</div>
-						</div>
-                    </div>
+						</select>
+					</p>
+					<p><span class="label" style="font-size : 1em;">{{Format de l'heure}}</span>
+					<select class="form-control">
+							<?php
+							$options = array('12h','24h');
+							foreach ($options as $option){
+								$selected='';
+								if ($option == $RaspBEEConfJson[timeformat])
+								$selected ='selected="selected"';
+								echo '<option value="'.$option.'" '.$selected.'>'.$option.'</option>';
+							}
+							?>
+						</select>
+					</p>
+					</div>
+					</div>					
+					</div>
+					
+					<div class="panel panel-primary">
+					<div class="panel-heading"><h4 class="panel-title">
+					 <a data-toggle="collapse" data-parent="#network_configuration_accordion" href="#collapseTwo">
+					{{Configuration de l'éclairage}}</a></h4></div>
+					<div id="collapseTwo" class="panel-collapse collapse in">
+					<div class="panel-body">
+					<p><span class="label" style="font-size : 1em;">
+					{{Restaurer l'état de l'éclairage lors d'une coupure/retour du courant (experimental)}}</span>
+					</p><p><input class="" type="checkbox" name="power_outage"></p>			
+					</div>
+					</div>					
+					</div>
+					
+					</div>
+				</div>
 
 				
 				

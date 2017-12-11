@@ -28,7 +28,7 @@ try {
 			$resp = RaspBEE::humanNameById(init('request'));
 			break;
 		case 'getOwnersGroups' :
-		$resp = RaspBEE::getOwnersGroups(init('request'));
+			$resp = RaspBEE::getOwnersGroups(init('request'));
 			break;
 		case 'getById' :
 			$resp = RaspBEE::getById(init('request'));
