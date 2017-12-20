@@ -13,7 +13,8 @@
 * You should have received a copy of the GNU General Public License
 * along with Plugin RaspBEE for jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
-
+//console.dir("jjedom",jeedom);
+//jeedom.config.save();
 $('.bt_RaspBEERemoveAll').on('click', function () {
 console.log('removeall');	
 	var dialog_title = '{{Confirmation de suppression de tous les équipements RaspBEE}}';

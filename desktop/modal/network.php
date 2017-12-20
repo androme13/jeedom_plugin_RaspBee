@@ -59,7 +59,7 @@ $raspbeecom = new RaspBEECom;
 							echo'</span>';
 							$versionDetail = explode(".", $RaspBEEConfJson[swversion]);
 							// version mini de deconz 2.4.70
-							$minVersion = array(2,4,70);
+							$minVersion = array(2,4,82);
 							$error = '';							
 							if (($versionDetail===false || count($versionDetail)<3))
 							$error=' <span class="label label-warning" style="font-size : 1em;">{{Version obsolète de deconz, veuillez mettre à jour deconz (mini 2.04.70)}}</span>';
