@@ -19,6 +19,7 @@ if (!isConnect('admin')) {
 	throw new Exception('401 Unauthorized');
 }
 require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
+//require_once dirname(__FILE__) . "/../../../../core/php/core.inc.php";
 $raspbeecom = new RaspBEECom;
 		$RaspBEEConf = $raspbeecom->getConf();
 		$RaspBEEConfJson = json_decode($RaspBEEConf->message,true);
@@ -266,9 +267,14 @@ $raspbeecom = new RaspBEECom;
 					{{Configuration de l'éclairage}}</a></h4></div>
 					<div id="lightsConfigPanel" class="panel-collapse collapse in">
 					<div class="panel-body">
+					<div id="div_lightsConfigNetworkPanelAlert"></div>
 					<p><span class="label" style="font-size : 1em;">
 					{{Restaurer l'état de l'éclairage lors d'une coupure/retour du courant (experimental)}}</span>
-					</p><p><input class="" type="checkbox" name="power_outage"></p><a class="btn btn-success pull-right lightsConfigSaveButton" id="lightsConfigSaveButton"><i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>			
+					</p><p><input class="" type="checkbox" name="power_outage" key="poweroutagerestore"></p>
+					<?php
+					//config::
+					?>
+					<a class="btn btn-success pull-right lightsConfigSaveButton" id="lightsConfigSaveButton"><i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>			
 					</div>
 					</div>					
 					</div>

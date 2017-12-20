@@ -213,7 +213,7 @@ $('.deconzConfigSaveButton').on( "click", function(e) {
 });
 
 function deconzConfigSave(jsonStr){	
-		console.dir("deconzConfigSave",jsonStr);
+		//console.dir("deconzConfigSave",jsonStr);
 		jeedom.raspbee.com.setDeconzConfig({
 		config: jsonStr,
 		error: function(error){
@@ -234,12 +234,49 @@ function deconzConfigSave(jsonStr){
 
 $('.lightsConfigSaveButton').on( "click", function(e) {
 	var inputs = $("#lightsConfigPanel :input");
-	console.dir("inputs",inputs);
-	//console.log(e);
-	//var row = $(this).closest("tr")[0].id;
-	//deleteUser(e,$(this).closest("tr")[0].id);	
+	console.dir("lightsConfigSaveButton",inputs);	
+	var json = "";
+	json+="{";
+	for (var i=0;i<inputs.length;i++){
+		var coma="";
+		if (inputs[i].attributes.type){
+			if (inputs[i].attributes.type.nodeValue==="text"){
+				var coma='"';
+			}			
+		}
+		if (inputs[i].type==="checkbox"){
+			json+='"'+inputs[i].attributes.key.nodeValue+'":';
+			json+=coma+inputs[i].checked+coma;
+		}
+		else
+		{
+			json+='"'+inputs[i].attributes.key.nodeValue+'":';
+			json+=coma+inputs[i].value+coma;
+		}
+		if (i<inputs.length-1){
+			json+=',';
+		}
+	}
+	json+="}";
+	lightsConfigSave(json);
 });
 
-function lightsConfigSave(){
-	
+function lightsConfigSave(jsonStr){
+	console.dir("lightsConfigSave ",jsonStr);
+	jeedom.raspbee.setLightsConfig({
+		config: jsonStr,
+		error: function(error){
+			if (error) $('#div_lightsConfigNetworkPanelAlert').showAlert({message: error.message, level: 'danger'});
+		},
+		success:function (result){
+			console.dir("deconzConfigSave result toto",result);
+			if (result!==undefined){
+				if (result.state==="ok"){
+				$('#div_lightsConfigNetworkPanelAlert').showAlert({message: "Règlages de l'éclairage sauvegardés avec succès", level: 'success'});
+				}
+				else
+				$('#div_lightsConfigNetworkPanelAlert').showAlert({message: "Erreur lors de la sauvegarde des règlages de l'éclairage DeCONZ "+result.message, level: 'danger'});	
+			}
+		}				
+	})
 }

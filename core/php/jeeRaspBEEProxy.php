@@ -51,6 +51,9 @@ try {
 		case 'setDeconzConfig' :
 			$resp = RaspBEE::setDeconzConfig(init('request'));
 			break;
+		case 'setLightsConfig' :
+			$resp = RaspBEE::setLightsConfig(init('request'));
+			break;			
 	}
 	
 	

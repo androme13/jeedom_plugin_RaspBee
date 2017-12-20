@@ -598,6 +598,15 @@ class RaspBEE extends eqLogic {
 		unset($raspbeecom);
 		return $result;
 	}
+	
+	public function setLightsConfig($data){
+		//$process = str_replace('\\','',$data[config]);
+		//$res = config::save("lightsConfig",$data[config]),"raspbee");
+		$result = array("error" => '', "message" => $data[config], "state" => "ok");
+		//$result->state="ok";
+		//$result->message="Règlages de l'éclairage sauvegardés avec succès ".$data[config];
+		return $result;		
+	}
 	/*
 	* Non obligatoire mais permet de modifier l'affichage du widget si vous en avez besoin
 	public function toHtml($_version = 'dashboard') {
