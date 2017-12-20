@@ -48,6 +48,9 @@ try {
 		case 'setGroupsMembers' :
 			$resp = RaspBEE::setGroupsMembers(init('request'));
 			break;
+		case 'setDeconzConfig' :
+			$resp = RaspBEE::setDeconzConfig(init('request'));
+			break;
 	}
 	
 	

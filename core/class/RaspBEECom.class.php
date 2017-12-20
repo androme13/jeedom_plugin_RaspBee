@@ -237,60 +237,9 @@ class RaspBEECom {
 		return self::genericPut("http://".$this->ip."/api/".$this->apikey."/config/",$state);		
 	}
 	
-	public function raspbeeConfig($config){
-		//$state=intval($state);
-		//if ($state<0) $state = 0;
-		//if ($state>255) $state = 255;
-		//$command = '{permitjoin:'.$state.'}';
+	public function setDeconzConfig($config){
 		return self::genericPut("http://".$this->ip."/api/".$this->apikey."/config/",$config);		
 	}
-	
-	
-/*	public function removeFromGroup($params){
-		$groupAttrAction = self::getGroupAttributes($groupId);
-		$groupAttr = json_decode($groupAttrAction->message);
-		$lightsGroup = $groupAttr->{$params['groupId']}->lights;
-		$count=0;
-		foreach ($lightsGroup as $light){
-			
-			error_log("comparaison(".$light."<->".$params['deviceId'].")",3,"/tmp/prob.txt");
-			if ($light === $params['deviceId']){
-				//error_log("lumiere trouvée(".$light.")",3,"/tmp/prob.txt");
-				unset($lightsGroup[$count]);
-				break;				
-			}
-			$count++;
-		}
-		// on vire les clés du tableau avant d'encoder en json (api deconz)
-		$lightsGroup = array_values($lightsGroup);
-		//error_log("removeFromGroup(".json_encode($groupAttr).")",3,"/tmp/prob.txt");
-		$final = '{"lights":'.json_encode($lightsGroup).'}';
-		error_log("final(".$final.")",3,"/tmp/prob.txt");
-			$response->state="ok";
-			$response->error=0;
-			$response->message="Element supprimé du groupe";
-			return $response;		
-	}*/
-	
-	/*public function setGroupMembers($params){
-			$response->state="nok";
-			$response->error=-1;
-			$response->message="";
-			if (json.decode($params->lights))
-			{
-				
-			}
-			else {
-				$response->error=1;
-				$response->message="Lights pas au format json";
-			}
-				
-			
-			
-			return $response;
-		
-	}*/
-	
 	
 	
 	public function sendCommand($type=null,$id=null,$command=null){

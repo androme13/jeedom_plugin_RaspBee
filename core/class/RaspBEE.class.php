@@ -507,8 +507,7 @@ class RaspBEE extends eqLogic {
 		$eql = eqLogic::byId($id);		
 		$eql->setConfiguration('lights',$members);
 		$eql->save();
-		$eql->refresh();
-		
+		$eql->refresh();		
 		$result = array("error" => 0, "message" => "", "state" => "");
 		$result->state="ok";
 		return $result;
@@ -589,6 +588,13 @@ class RaspBEE extends eqLogic {
 	public function removeFromGroup($deviceId,$groupId){
 		$raspbeecom = new RaspBEECom;
 		$result = $raspbeecom->removeFromGroup($deviceId,$groupId);
+		unset($raspbeecom);
+		return $result;
+	}
+	
+	public function setDeconzConfig($data){
+		$raspbeecom = new RaspBEECom;
+		$result = $raspbeecom->setDeconzConfig($data[config]);
 		unset($raspbeecom);
 		return $result;
 	}

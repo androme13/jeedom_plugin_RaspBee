@@ -178,21 +178,25 @@ $raspbeecom = new RaspBEECom;
 				
 				
 				<div id="config_network" class="tab-pane">
+				
 					<br>
 					<div class="panel-group" id="network_configuration_accordion">
                     <div class="panel panel-primary">
 					<div class="panel-heading"><h4 class="panel-title">
-					 <a data-toggle="collapse" data-parent="#network_configuration_accordion" href="#collapseOne">
-					{{Configuration de la passerelle}}</a></h4></div>
-					<div id="collapseOne" class="panel-collapse collapse out">
+					 <a data-toggle="collapse" data-parent="#network_configuration_accordion" href="#deconzConfigPanel">
+					{{Configuration de la passerelle}}</a></h4>
+					</div>
+					<div id="deconzConfigPanel" class="panel-collapse collapse out">
+					
 					<div class="panel-body">
+					<div id="div_deconzConfigNetworkPanelAlert"></div>
 					<p><span class="label" style="font-size : 1em;">{{Nom}}</span>
-					<input class="form-control" type="text" name="gw_name_configuration" value="<?php
+					<input class="form-control" type="text" name="gw_name_configuration" key="name" value="<?php
 							echo $RaspBEEConfJson[name];
 							?>">
 					</p>
 					<p><span class="label" style="font-size : 1em;">{{Mises à jour OTA}}</span>
-					<select class="form-control">
+					<select class="form-control" key="otauactive">
 					<?php
 					$options = array('Activer','Désactiver');
 					foreach ($options as $option){
@@ -205,13 +209,13 @@ $raspbeecom = new RaspBEECom;
 						</select>
 					</p>
 					<p><span class="label" style="font-size : 1em;">{{Mode découverte}}</span>
-					<select class="form-control">
+					<select class="form-control" key="discovery">
 						  <option value="true">Activer</option>
 						  <option value="false">Désactiver</option>
 						</select>
 					</p>
 					<p><span class="label" style="font-size : 1em;">{{Canal ZigBEE}}</span>
-					<select class="form-control" selected="11">
+					<select class="form-control" selected="11" key="zigbeechannel">
 					<?php
 					$options = array('11','15','20','25');
 					foreach ($options as $option){
@@ -219,14 +223,14 @@ $raspbeecom = new RaspBEECom;
 						if ($option == $RaspBEEConfJson[zigbeechannel])
 							$selected ='selected="selected"';
 						
-						echo '<option value="true" '.$selected.'>'.$option.'</option>';
+						echo '<option value="'.$option.'" '.$selected.'>'.$option.'</option>';
 					}
 					?>
 						  
 						</select>
 					</p>
 					<p><span class="label" style="font-size : 1em;">{{Time Zone}}</span>
-					<select class="form-control">
+					<select class="form-control" key="timezone" type="text">
 						  <?php
 							$options = DateTimeZone::listIdentifiers();
 							foreach ($options as $option){
@@ -239,7 +243,7 @@ $raspbeecom = new RaspBEECom;
 						</select>
 					</p>
 					<p><span class="label" style="font-size : 1em;">{{Format de l'heure}}</span>
-					<select class="form-control">
+					<select class="form-control" key="timeformat" type="text">
 							<?php
 							$options = array('12h','24h');
 							foreach ($options as $option){
@@ -251,19 +255,20 @@ $raspbeecom = new RaspBEECom;
 							?>
 						</select>
 					</p>
+					<a class="btn btn-success pull-right deconzConfigSaveButton" id="deconzConfigSaveButton"><i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>
 					</div>
 					</div>					
 					</div>
 					
 					<div class="panel panel-primary">
 					<div class="panel-heading"><h4 class="panel-title">
-					 <a data-toggle="collapse" data-parent="#network_configuration_accordion" href="#collapseTwo">
+					 <a data-toggle="collapse" data-parent="#network_configuration_accordion" href="#lightsConfigPanel">
 					{{Configuration de l'éclairage}}</a></h4></div>
-					<div id="collapseTwo" class="panel-collapse collapse in">
+					<div id="lightsConfigPanel" class="panel-collapse collapse in">
 					<div class="panel-body">
 					<p><span class="label" style="font-size : 1em;">
 					{{Restaurer l'état de l'éclairage lors d'une coupure/retour du courant (experimental)}}</span>
-					</p><p><input class="" type="checkbox" name="power_outage"></p>			
+					</p><p><input class="" type="checkbox" name="power_outage"></p><a class="btn btn-success pull-right lightsConfigSaveButton" id="lightsConfigSaveButton"><i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>			
 					</div>
 					</div>					
 					</div>

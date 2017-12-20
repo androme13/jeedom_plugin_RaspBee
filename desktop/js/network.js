@@ -187,19 +187,59 @@ $.ajax({
 			}
 	} 
 });
+}
 
+$('.deconzConfigSaveButton').on( "click", function(e) {
+	var inputs = $("#deconzConfigPanel :input");
+	//console.dir("inputs",inputs);
+	var json = "";
+	json+="{";
+	for (var i=0;i<inputs.length;i++){
+		var coma="";
+		if (inputs[i].attributes.type){
+			if (inputs[i].attributes.type.nodeValue=="text"){
+				var coma='"';
+			}
+		}
+		json+='"'+inputs[i].attributes.key.nodeValue+'":';
+		json+=coma+inputs[i].value+coma;
+		if (i<inputs.length-1){
+			json+=',';
+		}
+	}
+	json+="}";
+	//console.dir(json);
+	deconzConfigSave(json);
+});
 
+function deconzConfigSave(jsonStr){	
+		console.dir("deconzConfigSave",jsonStr);
+		jeedom.raspbee.com.setDeconzConfig({
+		config: jsonStr,
+		error: function(error){
+			if (error) $('#div_deconzConfigNetworkPanelAlert').showAlert({message: error.message, level: 'danger'});
+		},
+		success:function (result){
+			console.dir("deconzConfigSave result",result);
+			if (result!==undefined){
+				if (result.state==="ok"){
+				$('#div_deconzConfigNetworkPanelAlert').showAlert({message: "Configuration de DéCONZ sauvegardée avec succès", level: 'success'});
+				}
+				else
+				$('#div_deconzConfigNetworkPanelAlert').showAlert({message: "Erreur lors de la sauvegarde de DeCONZ "+result.message, level: 'danger'});	
+			}
+		}				
+	})
+}
 
+$('.lightsConfigSaveButton').on( "click", function(e) {
+	var inputs = $("#lightsConfigPanel :input");
+	console.dir("inputs",inputs);
+	//console.log(e);
+	//var row = $(this).closest("tr")[0].id;
+	//deleteUser(e,$(this).closest("tr")[0].id);	
+});
 
-
-
-
-
-
-
-
-
-
-
-
+function lightsConfigSave(){
+	
 }
