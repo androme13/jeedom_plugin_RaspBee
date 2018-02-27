@@ -1,0 +1,196 @@
+{
+		"name": "Eclairage",
+		"configuration": {
+			"colormode": "",
+			"hascolor": 0,
+			"manufacturername": "",
+			"modelid": "",
+			"origID": 0,		
+			"swversion": "",
+			"type": "",
+			"uniqueid": ""
+		},
+		"commands": [
+			{
+				"name": "Alerte on", 
+				"type": "action", 
+				"isVisible": 0, 
+				"isHistorized": 0,
+				"logicalId": "alert_on",				
+				"configuration": {
+					"fieldname" : "alert"
+				},
+				"value" : "Etat alerte",								
+				"subtype": "other", 
+				"display": {
+					"generic_type": "DONT"
+				}
+			},
+			{
+				"name": "Alerte off", 
+				"type": "action", 
+				"isVisible": 0, 
+				"isHistorized": 0,
+				"logicalId": "alert_off",				
+				"configuration": {
+					"fieldname" : "alert"
+				},
+				"value" : "Etat alerte",
+				"subtype": "other", 
+				"display": {
+					"generic_type": "DONT"
+				}
+			},
+			{
+				"name": "Effet", 
+				"type": "action", 
+				"isVisible": 1, 
+				"isHistorized": 0,
+				"logicalId": "alert_on",				
+				"configuration": {
+					"fieldname" : "effect"
+				},
+				"value" : "Etat alerte",								
+				"subtype": "other", 
+				"display": {
+					"generic_type": "DONT"
+				}
+			},
+			{
+				"name": "Etat alerte", 
+				"type": "info", 
+				"isVisible": 0, 
+				"isHistorized": 0,
+				"logicalId": "alert_state",				
+				"configuration" :{
+					"fieldname" : "alert"
+				}, 
+				"subtype": "other", 
+				"display": {
+					"generic_type": "DONT"
+				},
+				"template":{
+					"dashboard" : "badge",
+					"mobile" : "badge"
+				}
+			},
+			{
+				"name": "Etat", 
+				"type": "info", 
+				"isVisible": 1, 
+				"isHistorized": 0,
+				"logicalId": "on_state",				
+				"configuration" :{
+					"fieldname" : "on"
+				}, 
+				"subtype": "binary", 
+				"display": {
+					"generic_type": "LIGHT_STATE"
+				},
+				"template":{
+                    "dashboard" : "light",
+                    "mobile" : "light"
+                }
+			},	
+			{
+				"name": "On", 
+				"type": "action", 
+				"isVisible": 1, 
+				"isHistorized": 0,
+				"logicalId": "on",				
+				"configuration": {
+					"fieldname" : "on"
+				},
+				"value" : "Etat",				
+				"subtype": "other", 
+				"display": {
+					"generic_type": "LIGHT_ON"
+				}
+			},
+			{
+				"name": "Off", 
+				"type": "action", 
+				"isVisible": 1, 
+				"isHistorized": 0,
+				"logicalId": "off",				
+				"configuration": {
+				"fieldname" : "on"
+				},
+				"value" : "Etat",				
+				"subtype": "other", 
+				"display": {
+					"generic_type": "LIGHT_OFF"
+				}
+			},
+			{
+				"name": "Etat luminosité", 
+				"type": "info", 
+				"isVisible": 0, 
+				"isHistorized": 0,			
+				"configuration" :{
+					"fieldname" : "bri",
+					"minValue": 0, 
+					"maxValue": 255
+				},
+				"logicalId": "luminosity_state",				
+				"subtype": "numeric", 
+				"display": {
+					"generic_type": "DONT"
+				}
+			},			
+			{
+				"name": "Luminosité", 
+				"type": "action", 
+				"isVisible": 1, 
+				"isHistorized": 0, 
+				"configuration": {
+					"fieldname" : "bri",
+					"minValue": 0, 
+					"maxValue": 255
+				},
+				"logicalId": "luminosity",
+				"value" : "Etat luminosité",				
+				"subtype": "slider", 
+				"display": {
+					"generic_type": "LIGHT_SLIDER"
+				},
+				"template":{
+                    "dashboard" : "",
+                    "mobile" : ""
+                }
+			},
+			{
+				"name": "Etat Temperature Blanc", 
+				"type": "info", 
+				"isVisible": 0, 
+				"isHistorized": 0, 
+				"configuration" :{
+					"fieldname" : "ct",
+					"minValue": 153, 
+					"maxValue": 500					
+				},
+				"logicalId": "tc_state",				
+				"subtype": "numeric", 
+				"display": {
+					"generic_type": "DONT"
+				}
+			},
+			{
+				"name": "Température Blanc", 
+				"type": "action", 
+				"isVisible": 1, 
+				"isHistorized": 0, 
+				"configuration": {
+					"fieldname" : "ct",
+					"minValue": 153, 
+					"maxValue": 500	
+				},
+				"logicalId": "tc",
+				"value" : "Etat Temperature Blanc",				
+				"subtype": "slider", 
+				"display": {
+					"generic_type": "DONT"
+				}
+			}					
+		]
+}
