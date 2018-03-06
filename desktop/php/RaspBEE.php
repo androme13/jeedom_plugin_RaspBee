@@ -135,7 +135,8 @@ foreach ($eqLogics as $eqLogic) {
 		echo '<i class="meteo meteo-nuage-soleil-pluie" style="font-size :6em;color:#767676;"></i>';
 		break;
 	case "Color light" :
-	case "Dimmable light" :
+	case "Color temperature light" :
+        case "Dimmable light" :
 	case "Extended color light" :
 		echo '<i class="jeedom jeedom-lumiere-off" style="font-size : 6em;color:#767676;"></i>';
 		break;
@@ -166,6 +167,7 @@ foreach ($eqLogics as $eqLogic) {
 		echo '{{Capteur de pression}}';
 		break;
 	case "Color light" :
+        case "Color temperature light" :
 	case "Dimmable light" :
 	case "Extended color light" :
 		echo '{{Eclairage}}';
@@ -314,4 +316,3 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
     opacity: 0.7; /* css standard */	
 }
 </style>
-
