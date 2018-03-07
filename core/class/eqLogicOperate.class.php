@@ -60,6 +60,10 @@ class eqLogicOperate extends eqLogic {
 				return eqLogicOperate::createLight('/../config/devices/ColorLight.json',$eqLogic,$device,$syncType,$eqLogicMode);
 				break;
 		}
+                case "Color temperature light" :{
+                                return eqLogicOperate::createLight('/../config/devices/ColorTemperatureLight.json',$eqLogic,$device,$syncType,$eqLogicMode);
+                                break;
+                }
 		case "Extended color light" :{
 				return eqLogicOperate::createLight('/../config/devices/ExtendedColorLight.json',$eqLogic,$device,$syncType,$eqLogicMode);
 				break;
