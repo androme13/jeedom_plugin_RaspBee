@@ -32,7 +32,7 @@
 				"configuration": {
 					"fieldname" : "effect"
 				},
-				"value" : "Etat alerte",								
+				"value" : "Etat effet",								
 				"subtype": "other", 
 				"display": {
 					"generic_type": "DONT"
@@ -146,7 +146,7 @@
 				"logicalId": "tc_state",				
 				"subtype": "numeric", 
 				"display": {
-					"generic_type": "DONT"
+					"generic_type": "LIGHT_COLOR_TEMP"
 				}
 			},			
 			{
@@ -163,7 +163,7 @@
 				"value" : "Etat Temperature Blanc",				
 				"subtype": "slider", 
 				"display": {
-					"generic_type": "DONT"
+					"generic_type": "LIGHT_SET_COLOR_TEMP"
 				}
 			},
 			{

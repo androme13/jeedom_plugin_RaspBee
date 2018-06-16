@@ -1,11 +1,14 @@
 {
     "id" : "RaspBEE",
     "name" : "RaspBEE",
+    "description" : "Plugin pour la communication avec les passerelles RaspBEE et ConBEE",
     "licence" : "AGPL",
     "author" : "Thierry MATHIEU",
     "require" : "3.1",
     "category" : "automation protocol",
-	"mobile" : "RaspBEE",
-	"hasDependency" : true,
-	"hasOwnDeamon" : true
+    "mobile" : "RaspBEE",
+    "hasDependency" : true,
+    "hasOwnDeamon" : true,
+    "language" : ["fr_FR","en_US"],
+    "compatibility" : ["miniplus","smart","rpi","docker","diy","mobile"]
 }

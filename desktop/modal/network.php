@@ -65,7 +65,7 @@ $raspbeecom = new RaspBEECom;
 							if (($versionDetail===false || count($versionDetail)<3))
 							$error=' <span class="label label-warning" style="font-size : 1em;">{{Version obsolète de deconz, veuillez mettre à jour deconz (mini 2.04.70)}}</span>';
 							else
-							if (($versionDetail[0]<$minVersion[0] || ($versionDetail[0]>=$minVersion[0] && $versionDetail[1]<$minVersion[1]) || ($versionDetail[0]>=$minVersion[0] && $versionDetail[1]>=$minVersion[1] && $versionDetail[2]<$minVersion[2]) ))
+							if (($versionDetail[0]<$minVersion[0] || ($versionDetail[0]==$minVersion[0] && $versionDetail[1]<$minVersion[1]) || ($versionDetail[0]==$minVersion[0] && $versionDetail[1]==$minVersion[1] && $versionDetail[2]<$minVersion[2]) ))
 							$error=' <span class="label label-warning" style="font-size : 1em;">{{Version obsolète de deconz, veuillez mettre à jour deconz }}({{mini}} '.$minVersion[0].'.'.$minVersion[1].'.'.$minVersion[2].')</span>';
 						
 							echo $error;		

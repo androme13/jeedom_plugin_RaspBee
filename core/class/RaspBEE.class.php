@@ -110,7 +110,7 @@ class RaspBEE extends eqLogic {
 		$return = array();
 		$return['log'] = 'RaspBEE_dep';
 		$websocket = realpath(dirname(__FILE__) . '/../../daemon/node_modules/websocket');
-		$return['progress_file'] = '/tmp/RaspBEE_dep';
+		$return['progress_file'] = jeedom::getTmpFolder('RaspBEE') . '/dependance';
 		if (is_dir($websocket)) {
 		  $return['state'] = 'ok';
 		} else {
@@ -118,14 +118,12 @@ class RaspBEE extends eqLogic {
 		}
 		return $return;
 	}
-	
+
 	public static function dependancy_install() {
-		log::add('RaspBEE','info','Installation des dépendances nodejs');
-		$resource_path = realpath(dirname(__FILE__) . '/../../resources');
-		$daemon_path = realpath(dirname(__FILE__) . '/../../daemon');
-		passthru('/bin/bash ' . $resource_path . '/deps.sh ' . $daemon_path . ' > ' . log::getPathToLog('RaspBEE_dep') . ' 2>&1 &');
+		log::remove(__CLASS__ . '_dep');
+		return array('script' => dirname(__FILE__) . '/../../resources/install_#stype#.sh ' . jeedom::getTmpFolder('RaspBEE') . '/dependance', 'log' => log::getPathToLog(__CLASS__ . '_dep'));
 	}
-	
+
 	public static function deamon_info() {	
 		$return = array();
 		$return['log'] = 'RaspBEE_node';	
