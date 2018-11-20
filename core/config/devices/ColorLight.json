@@ -244,7 +244,7 @@
 				"type": "action", 
 				"isVisible": 1, 
 				"isHistorized": 0,
-				"logicalId": "alert_on",				
+				"logicalId": "effect",				
 				"configuration": {
 					"fieldname" : "effect"
 				},
