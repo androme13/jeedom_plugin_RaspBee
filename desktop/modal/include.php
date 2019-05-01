@@ -14,8 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Plugin RaspBEE for jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
- 
-require_once dirname(__FILE__) . '/../../core/class/eqLogicOperate.class.php'; 
+
+require_once dirname(__FILE__) . '/../../core/class/eqLogicOperate.class.php';
 
 if (!isConnect('admin')) {
 	throw new Exception('401 Unauthorized');
@@ -24,7 +24,7 @@ if (!isConnect('admin')) {
 require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
 /*$raspbeecom = new RaspBEECom;
 		$lights = json_decode($raspbeecom->getLights());
-		$groups = json_decode($raspbeecom->getGroups());*/		
+		$groups = json_decode($raspbeecom->getGroups());*/
 ?>
 <div id='div_includeAlert' style="display: none;"></div>
 <div class="col-sm-4" style="overflow: hidden;height:inherit;">
@@ -45,7 +45,7 @@ require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
 								</h4>
 								<input type="radio" id="optionType1" name="optionType" value="light" >
 								<label for="optionType1">{{Un éclairage}}.</label><br>
-								
+
 								<input type="radio" id="optionType2" name="optionType" value="sensor" >
 								<label for="optionType1">{{Autre (capteur, télécommande, etc ...)}}.</label><br>
 							</div>
@@ -54,11 +54,11 @@ require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
 					<div id="syncOptionsHelp" class="panel-footer"></div>
 				</div>
 			</div>
-			<div class="panel panel-footer">			
+			<div class="panel panel-footer">
 				<a class="btn btn-info" id="bt_launchinclude">
 				<i class="fa fa-sign-in fa-rotate-90"></i> {{Lancer l'inclusion}}</a>
-			</div>        
-		</div> 	
+			</div>
+		</div>
 	</form>
 	</div>
 	<div class="panel-group col-sm-8" >
