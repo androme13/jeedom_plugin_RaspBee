@@ -1,31 +1,30 @@
 {
     "name": "Commande",
     "configuration": {
-		"swversion": "",
-		"type": "",
-		"uniqueid": "",
-		"origID": 0,
-		"type": "", 
-		"manufacturername": "",
-		"modelid": ""	
+        "swversion": "",
+        "type": "",
+        "uniqueid": "",
+        "origID": 0,
+        "manufacturername": "",
+        "modelid": ""
     },
     "commands": [
         {
-            "name": "Etat bouton", 
-            "type": "info", 
-            "isVisible": 1, 
-            "isHistorized": 0,		
+            "name": "Etat bouton",
+            "type": "info",
+            "isVisible": 1,
+            "isHistorized": 0,
             "configuration": {
-			    "fieldname" : "buttonevent"
-            }, 
-            "subtype": "numeric", 
+                "fieldname" : "buttonevent"
+            },
+            "subtype": "numeric",
             "display": {
                 "generic_type": "GENERIC_INFO"
             },
-			"template":{
-				"dashboard" : "tile",
-				"mobile" : "tile"
-			}
-        }		
+            "template":{
+                "dashboard" : "tile",
+                "mobile" : "tile"
+            }
+        }
     ]
 }

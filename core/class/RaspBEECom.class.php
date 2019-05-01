@@ -16,21 +16,21 @@
  */
 
  require_once dirname(__FILE__) . "/../../../../core/php/core.inc.php";
- 
+
 // interactions vers le RASPBEE
 
 
 class RaspBEECom {
-	
+
 	private $apikey = null;
 	private $ip = null;
 	private $responseHelper = array("error" => 0, "message" => "", "state" => "");
-	
+
 	public function __construct() {
        	$this->ip = config::byKey('raspbeeIP','RaspBEE');
-		$this->apikey = config::byKey('raspbeeAPIKEY','RaspBEE');		
-    }	
-	
+		$this->apikey = config::byKey('raspbeeAPIKEY','RaspBEE');
+    }
+
 	public function deleteRaspBEEUser($user=''){
 		$opts = [
 			CURLOPT_SSL_VERIFYPEER => false,
@@ -44,7 +44,7 @@ class RaspBEECom {
 		];
 		return self::genericResponseProcess($opts);
 	}
-	
+
 	public function findRaspBEE(){
 		$opts = [
 			CURLOPT_SSL_VERIFYPEER => false,
@@ -53,10 +53,10 @@ class RaspBEECom {
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_TIMEOUT        => 30,
 			CURLOPT_CONNECTTIMEOUT => 30
-		];		
+		];
 		return self::genericResponseProcess($opts);
 	}
-	
+
 	private function genericDelete($url=null,$param=null){
 		//if ($url==null) return false;
 		//$ch = curl_init();
@@ -74,7 +74,7 @@ class RaspBEECom {
 		];
 		return self::genericResponseProcess($opts);
 	}
-	
+
 	private function genericGet($url=null){
 		//if ($url==null) return false;
 		//$ch = curl_init();
@@ -90,7 +90,7 @@ class RaspBEECom {
 		];
 		return self::genericResponseProcess($opts);
 	}
-	
+
 	private function genericPost($url=null,$param=null){
 		//if ($url==null) return false;
 		//$ch = curl_init();
@@ -107,7 +107,7 @@ class RaspBEECom {
 		];
 		return self::genericResponseProcess($opts);
 	}
-	
+
 	private function genericPut($url=null,$param=null){
 		//if ($url==null) return false;
 		//$ch = curl_init();
@@ -125,7 +125,7 @@ class RaspBEECom {
 		];
 		return self::genericResponseProcess($opts);
 	}
-	
+
 	private function genericResponseProcess($opts){
 		$ch = curl_init();
 		curl_setopt_array($ch, $opts);
@@ -140,15 +140,15 @@ class RaspBEECom {
 			$response->error=$httpcode;
 			$response->message=$error;
 			return $response;
-		}else{		
+		}else{
 			$response->state="ok";
 			$response->error=$httpcode;
 			if ($response->error!='200')$response->state="nok";
 			$response->message=$result;
 			if ($response->message=='')
-			$response->message=strval($response->error);			
+			$response->message=strval($response->error);
 			return $response;
-		}		
+		}
 	}
 
 
@@ -173,75 +173,75 @@ class RaspBEECom {
 		$usr = "delight";
 		$pwd = "delight";
 		$opts[CURLOPT_HTTPHEADER] = array('Content-Type: application/json','Authorization: Basic '.base64_encode(utf8_encode($usr.':'.$pwd)));
-		$response = self::genericResponseProcess($opts);		
-		return $response;								
+		$response = self::genericResponseProcess($opts);
+		return $response;
 	}
-	
+
 	public function getConf(){
 		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/config");
 	}
-	
+
 	public function getSensors(){
-		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/sensors");		
+		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/sensors");
 	}
-	
+
 	public function getGroups(){
-		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/groups");		
+		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/groups");
 	}
-	
+
 	public function getGroupAttributes($groupId){
 		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/groups/".$groupId);
 	}
-		
+
 	public function getLights(){
 		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/lights");
 	}
-	
+
 	public function getTouchlink(){
 		return self::genericGet("http://".$this->ip."/api/".$this->apikey."/touchlink/scan");
 	}
-	
+
 	public function getTouchlinkIdentify($id){
 		return self::genericPost("http://".$this->ip."/api/".$this->apikey."/touchlink/".$id."/identify");
 	}
-	
+
 	public function getTouchlinkRefresh($id){
 		return self::genericPost("http://".$this->ip."/api/".$this->apikey."/touchlink/scan");
 	}
-	
+
 	public function groupCreate($name){
 		return self::genericPost("http://".$this->ip."/api/".$this->apikey."/groups",'{"name":"'.$name.'"}');
 	}
-	
+
 	public function setGroupAttributes($groupId,$attributesJSON){
 		return self::genericPut("http://".$this->ip."/api/".$this->apikey."/groups/".$groupId,$attributesJSON);
 	}
-	
+
 	public function setLightAttributes($groupId,$attributesJSON){
 		return self::genericPut("http://".$this->ip."/api/".$this->apikey."/lights/".$groupId,$attributesJSON);
 	}
-	
+
 	public function setSensorAttributes($sensorId,$attributesJSON){
 		return self::genericPut("http://".$this->ip."/api/".$this->apikey."/sensors/".$sensorId,$attributesJSON);
 	}
-	
+
 	public function groupDelete($id){
 		return self::genericDelete("http://".$this->ip."/api/".$this->apikey."/groups/".$id);
 	}
-	
+
 	public function permitJoin($state=254){
 		$state=intval($state);
 		if ($state<0) $state = 0;
 		if ($state>255) $state = 255;
 		$command = '{permitjoin:'.$state.'}';
-		return self::genericPut("http://".$this->ip."/api/".$this->apikey."/config/",$state);		
+		return self::genericPut("http://".$this->ip."/api/".$this->apikey."/config/",$state);
 	}
-	
+
 	public function setDeconzConfig($config){
-		return self::genericPut("http://".$this->ip."/api/".$this->apikey."/config/",$config);		
+		return self::genericPut("http://".$this->ip."/api/".$this->apikey."/config/",$config);
 	}
-	
-	
+
+
 	public function sendCommand($type=null,$id=null,$command=null){
 		//error_log("sendLightCommand(".$id.":".$command.")",3,"/tmp/prob.txt");
 		$url= 'http://'.$this->ip.'/api/'.$this->apikey.'/'.$type.'/'.$id;
@@ -266,11 +266,9 @@ class RaspBEECom {
 		$result=curl_exec ($ch);
 		curl_close($ch);
 		if ($result===false){
-		return false;	
+		return false;
 		}else{
 		return $result;//substr($result,1,-1);
 		}
 	}
 }
-
-?>

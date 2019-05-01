@@ -20,7 +20,7 @@
 		return this.firstName + ' ' + this.lastName;
 	},
 	set addStage (value) {
-		
+
 		this.value++;
 	}
 	set removeStage(){
@@ -35,7 +35,7 @@ $('input[type=radio][name=optionType]').on( "click", function() {
 		case 'basic' : help = "{{Normale}} : {{Type de synchronisation par défaut, conserve les équipements existants et ajoute les nouveaux équipements ainsi que l\'ajout/suppression des nouvelles/anciennes commandes sur les équipements existants}}."; break;
 		case 'renew' : help = "{{Resynchronisation totale}} : {{Tous les équipements sont supprimés, et une nouvelle synchronisation débute}}."; break;
 		case 'renewbutidandname' : help = "{{Resynchronisation partielle}} : {{Tous les équipements sont renouvellés avec conservation de leur nom et de leur id, idem concernant les commandes des équipements.}}."; break;
-		
+
 	};
   $( "#syncOptionsHelp" ).html(help);
 });
@@ -50,11 +50,11 @@ $('#bt_synchronize').on('click', function () {
 	}
 	else
 	{
-	console.log('synctype: ',syncType);
-	syncDevices('Capteurs','getRaspBEESensors',syncType);	
-	syncDevices('Eclairages','getRaspBEELights',syncType);	
-	syncDevices('Groupes','getRaspBEEGroups',syncType);
-	$('#div_syncAlert').showAlert({message: "{{Synchronisation Terminée}}", level: 'success'});
+	    console.log('synctype: ',syncType);
+	    syncDevices('Capteurs','getRaspBEESensors',syncType);
+	    syncDevices('Eclairages','getRaspBEELights',syncType);
+	    syncDevices('Groupes','getRaspBEEGroups',syncType);
+	    $('#div_syncAlert').showAlert({message: "{{Synchronisation Terminée}}", level: 'success'});
 	}
 });
 
@@ -80,10 +80,10 @@ var dialog_title = '{{Confirmation de synchronisation totale}}';
 		success: {
 			label: "{{Synchroniser}}",
 			className: "btn-danger",
-			callback: function () {		   
+			callback: function () {
 				$.ajax({
-					type: "POST", 
-					url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+					type: "POST",
+					url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php",
 					data: {
 						action: "removeAll",
 					},
@@ -93,7 +93,7 @@ var dialog_title = '{{Confirmation de synchronisation totale}}';
 						$('#div_syncAlert').showAlert({message: error.message, level: 'danger'});
 						handleAjaxError(request, status, error);
 					},
-					success: function (data) { 
+					success: function (data) {
 						if (data.state != 'ok') {
 							console.dir(data);
 							$('#div_syncAlert').showAlert({message: data.result, level: 'danger'});
@@ -101,19 +101,19 @@ var dialog_title = '{{Confirmation de synchronisation totale}}';
 						{
 							console.log("synchro après suppression");
 							syncType="basic";
-							syncDevices('Capteurs','getRaspBEESensors',syncType);	
-							syncDevices('Eclairages','getRaspBEELights',syncType);	
+							syncDevices('Capteurs','getRaspBEESensors',syncType);
+							syncDevices('Eclairages','getRaspBEELights',syncType);
 							syncDevices('Groupes','getRaspBEEGroups',syncType);
 							$('#div_syncAlert').showAlert({message: "{{Synchronisation Terminée}}", level: 'success'});
 						}
 					}
 				});
-								
+
 			}
 		}
 		}
-	});	
-	
+	});
+
 }
 
 
@@ -121,15 +121,15 @@ function syncDevices(type,action,syncType){
 	var treechild =   '<li class="treeblock"><input type="checkbox" id="'+type+'" class="tree"><i class="fa fa-angle-double-right"></i><i class="fa fa-angle-double-down"></i><strong><label id="'+type+'Label" for="'+type+'"> '+type+'</label></strong><ul id="'+type+'childs"></ul></li>';
 	$('#treeSync').append(treechild);
 	$.ajax({
-		type: "POST", 
-		url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+		type: "POST",
+		url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php",
 		data: {
 			action: action
 		},
 		dataType: 'json',
 		error: function (resp, status, error) {
-			$('#div_syncAlert').showAlert({message: '{{Erreur}} : '+error+' ('+resp.status+')', level: 'danger'});		
-		},		
+			$('#div_syncAlert').showAlert({message: '{{Erreur}} : '+error+' ('+resp.status+')', level: 'danger'});
+		},
 		success: function (resp) {
 		//console.dir(resp);
 		try
@@ -139,7 +139,7 @@ function syncDevices(type,action,syncType){
 			catch(e)
 			{
 			   var cleanResp='invalid json';
-			}							
+			}
 			if (resp.state == 'ok') {
 				let devices = JSON.parse(cleanResp);
 				if (Object.keys(devices).length>0){
@@ -147,14 +147,14 @@ function syncDevices(type,action,syncType){
 					for (var device in devices) {
 						devices[device].origid=device;
 						//console.dir(devices[device]);
-						createEqLogic(devices[device],type,syncType);										
+						createEqLogic(devices[device],type,syncType);
 					}
-				}	
+				}
 
 			} else{
 				$('#div_syncAlert').showAlert({message: '{{Impossible d\'afficher les infos}} : '+HTMLClean(resp.result), level: 'danger'});
 			}
-		} 
+		}
 	});
 }
 
@@ -169,8 +169,8 @@ function createEqLogic(device,type,syncType){
 	var treechild = '<li class="tree" style="list-style:none;" id="'+deviceName+'"><div id="'+deviceName+'Icon" class="fa fa-refresh"></div> '+device.name+'</li>';
 	$('#'+type+'childs').append(treechild);
 	$.ajax({
-		type: "POST", 
-		url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+		type: "POST",
+		url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php",
 		data: {
 			action: "createEqLogic",
 			device: device,
@@ -183,26 +183,26 @@ function createEqLogic(device,type,syncType){
 			//console.log("create error",error);
 			$('#'+deviceName+'Icon').attr("class", "fa fa-times");
 			$('#'+deviceName+'Icon').css("color", "red");
-			$('#'+deviceName).append('{{Erreur}} : '+error+' ('+resp.status+')');		
+			$('#'+deviceName).append('{{Erreur}} : '+error+' ('+resp.status+')');
 		},
-		
-		success: function (resp) {		
+
+		success: function (resp) {
 			try	{
-				
+
 					var cleanResp = resp.result.replace('\"', '"');
 					console.dir(cleanResp);
 					var jsonResp = JSON.parse(cleanResp);
-				   
+
 				}
 				catch(e)
 				{
 				   var jsonResp=new Object();
 				   jsonResp.cmdError = 3;
-				}							
+				}
 				if (jsonResp.cmdError == 3) {
 					$('#'+deviceName+'Icon').attr("class", "fa fa-times");
 					$('#'+deviceName+'Icon').css("color", "red");
-					$('#'+deviceName).append(' <span style="font-size:80%">erreur inconnue ('+cleanResp+')</span>');	
+					$('#'+deviceName).append(' <span style="font-size:80%">erreur inconnue ('+cleanResp+')</span>');
 				} else{
 
 					switch(jsonResp.cmdError){
@@ -220,11 +220,11 @@ function createEqLogic(device,type,syncType){
 							$('#'+deviceName+'Icon').attr("class", "fa fa-plus");
 							$('#'+deviceName+'Icon').css("color", "DarkCyan");
 							$('#'+deviceName).append(' <span style="font-size:80%">Equipement ajouté ( <i class="fa fa-plus-circle">'+jsonResp.totalCmdCount+'</i> ) '+cleanResp+'</span>');
-							break;										
-					}					
-				}	
+							break;
+					}
+				}
 		}
-	});	
+	});
 };
 
 function HTMLClean(value){

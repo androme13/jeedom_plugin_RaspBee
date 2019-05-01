@@ -21,7 +21,7 @@ require_once dirname(__FILE__) . "/../class/colorHelper.class.php";
 
 
 if (!jeedom::apiAccess(init('apikey'), 'RaspBEE')) {
-	echo __('Vous n\'etes pas autorisé à effectuer cette action', __FILE__);	
+	echo __('Vous n\'etes pas autorisÃ© Ã  effectuer cette action', __FILE__);
 	die();
 }
 $results = json_decode(file_get_contents("php://input"));
@@ -33,9 +33,9 @@ if (!is_object($results)) {
 
 if ($results->type == "sensors"){
 	if (is_bool($results->info->reachable)){
-		foreach (eqLogic::byType('RaspBEE') as $equipement) {		
+		foreach (eqLogic::byType('RaspBEE') as $equipement) {
 			$type = $equipement->getConfiguration('type');
-			// le type ne doit pas comporter le mot light (eviter de se melanger dans le originid qui peuvent être identiques entre les light et les sensors, donc on teste)
+			// le type ne doit pas comporter le mot light (eviter de se melanger dans le originid qui peuvent ï¿½tre identiques entre les light et les sensors, donc on teste)
 			if (strpos(strtolower($type),"light")===false){
 				if ($equipement->getConfiguration('origid')===$results->id){
 					if (!$results->info->reachable){
@@ -55,39 +55,39 @@ if ($results->type == "sensors"){
 						));
 						$equipement->setConfiguration("reachable",$results->info->reachable);
 						$equipement->save();
-					}				
-				}	
-			}			
+					}
+				}
+			}
 		}
-	}	
+	}
 	if (is_int($results->info->battery))
-	{	
+	{
 		//error_log("traitement batterie: ".json_encode($results),3,"/tmp/prob.txt");
-		foreach (eqLogic::byType('RaspBEE') as $equipement) {		
+		foreach (eqLogic::byType('RaspBEE') as $equipement) {
 			$type = $equipement->getConfiguration('type');
-			// le type ne doit pas comporter le mot light (eviter de se melanger dans le originid qui peuvent être identiques entre les light et les sensors, donc on teste)
+			// le type ne doit pas comporter le mot light (eviter de se melanger dans le originid qui peuvent ï¿½tre identiques entre les light et les sensors, donc on teste)
 			if (strpos(strtolower($type),"light")===false){
 				//error_log("traitement batterie type eq: ".$equipement->getConfiguration('type'),3,"/tmp/prob.txt");
 				if ($equipement->getConfiguration('origid')===$results->id){
-					//error_log("batterie ".$results->id." à: ".$results->info->battery,3,"/tmp/prob.txt");
+					//error_log("batterie ".$results->id." ï¿½: ".$results->info->battery,3,"/tmp/prob.txt");
 					$equipement->batteryStatus($results->info->battery);
 					$equipement->save();
 					break;
-				}	
-			}			
+				}
+			}
 		}
 	}//else
 	if (is_object($results->action)){
-		// on traite l'info d'un device	
+		// on traite l'info d'un device
 		foreach (eqLogic::byType('RaspBEE') as $equipement) {
-			if ($equipement->getConfiguration('origid')==$results->id)			
+			if ($equipement->getConfiguration('origid')==$results->id)
 			foreach ($equipement->getCmd('info') as $cmd){
 				foreach ($results->action as $actioncmd => $key){
 					if ($cmd->getConfiguration('fieldname')==$actioncmd){
 						//error_log("traitement action sensor: ".$actioncmd." ".$key,3,"/tmp/prob.txt");
 						// si le param reversed existe c'estque c'est un boolean
 						if ($cmd->getConfiguration('isReversed') && is_bool($key)){
-							$key = !$key;							
+							$key = !$key;
 						}
 						if ($cmd->getConfiguration('fieldname')=="temperature" || $cmd->getConfiguration('fieldname')=="humidity")
 							$cmd->event($key/100);
@@ -96,7 +96,7 @@ if ($results->type == "sensors"){
 						break;
 					}
 				}
-			}			
+			}
 		}
 	}
 	//error_log("\n fin traitement sensor ",3,"/tmp/prob.txt");
@@ -105,15 +105,15 @@ if ($results->type == "sensors"){
 
 
 if($results->type == "lights"){
-	//error_log("info light à traiter",3,'/tmp/prob.txt');
+	//error_log("info light Ã  traiter",3,'/tmp/prob.txt');
 	// on traite l'info d'un device
-	// on parcours tous les équipements RASPBEE
+	// on parcours tous les Ã©quipements RASPBEE
 	foreach (eqLogic::byType('RaspBEE') as $equipement) {
 		// si l'origiid et result->id correspondent
 		if ($equipement->getConfiguration('origid')===$results->id ){
 		//{"e":"changed","id":"2","r":"lights","state":{"reachable":false},"t":"event"}
 		error_log("\nlight event".json_encode($results),3,'/tmp/prob.txt');
-		if (is_bool($results->action->reachable)){			
+		if (is_bool($results->action->reachable)){
 			if (!$results->action->reachable){
 				$level = "warning";
 				$message = __($equipement->getHumanName().' est devenu injoignable', __FILE__);
@@ -132,18 +132,18 @@ if($results->type == "lights"){
 				$equipement->setConfiguration("reachable",boolval($results->action->reachable));
 				$equipement->save(true);
 			}
-			// on sort après traitement du reachable.
+			// on sort aprÃ¨s traitement du reachable.
 			break;
-		}			
-		
-		
+		}
+
+
 		// on parcours les commandes de type info
 			foreach ($equipement->getCmd('info') as $cmd){
 				// on parcours les resultats->action
 				foreach ($results->action as $actioncmd => $key){
-					// si la clé correspond au fieldname (bri, sat etc ..)
+					// si la clÃ© correspond au fieldname (bri, sat etc ..)
 					if ($cmd->getConfiguration('fieldname')==$actioncmd){
-						// on affecte la valeur à la commande
+						// on affecte la valeur Ã  la commande
 						if ($cmd->getConfiguration('isReversed') && is_bool($key)){
 							$key = !$key;
 						}
@@ -152,17 +152,17 @@ if($results->type == "lights"){
 						foreach ($equipement->getCmd('action') as $cmd2){
 							// on parcours les resultats->action
 							foreach ($results->action as $actioncmd2 => $key2){
-								// si la clé correspond au fieldname (bri, sat etc ..)
+								// si la clÃ© correspond au fieldname (bri, sat etc ..)
 								if ($cmd2->getConfiguration('fieldname')==$actioncmd2){
 									//error_log("|INFO ".$actioncmd.'('.$key.') => ACTION '.$actioncmd2.":".$key2."|",3,'/tmp/prob.txt');
-									// si la valeur est differente de la valeur stockée
+									// si la valeur est differente de la valeur stockÃ©e
 									if ($cmd2->getConfiguration('lastCmdValue')!=$key){
 										$cmd2->setConfiguration('lastCmdValue',$key);
-										$cmd2->save(true);									
+										$cmd2->save(true);
 										// on traite le changement de couleur du widget
 										// on recuperes aussi toutes les valeurs hue sat et bri (hsl) afin d'envoyer un hexrgb au widget;
 										// enlever (|| $actioncmd=='bri') pour eviter variations sur action couleur.
-		
+
 										if ($actioncmd=='hue' || $actioncmd=='sat' || $actioncmd=='bri'){
 											error_log("changement couleur recquis",3,'/tmp/prob.txt');
 											$hue=0;
@@ -183,7 +183,7 @@ if($results->type == "lights"){
 												$finalHue = (360*((100/65535)*$hue))/100;
 												$finalSat = (100/255)*$sat;
 												$finalBri = (100/255)*$bri;
-												
+
 												$rvb = colorHelper::HSV2RGB($finalHue,$finalSat,$finalBri);
 												$color = sprintf("#%02x%02x%02x", $rvb[0], $rvb[1], $rvb[2]); // #0d00ff
 												foreach ($equipement->getCmd('action') as $colorSearch){
@@ -197,22 +197,22 @@ if($results->type == "lights"){
 										error_log("refresh widget : ".$cmd2->getName()." value: ".$cmd2->getValue()."/n",3,'/tmp/prob.txt');
 										$cmd2->getEqLogic()->refreshWidget();
 										break;
-									}								
+									}
 								}
 							}
-						}						
+						}
 					}
 				}
 			}
 			break;
-		}		
+		}
 	}
 }
 
 if($results->type == "groups"){
 	// on traite l'info d'un device
 	foreach (eqLogic::byType('RaspBEE') as $equipement) {
-		if ($equipement->getConfiguration('origid')==$results->id){			
+		if ($equipement->getConfiguration('origid')==$results->id){
 			foreach ($equipement->getCmd('info') as $cmd){
 				foreach ($results->action as $actioncmd => $key){
 					//error_log("|any_on: ".$actioncmd."=".$key." cmd :".$cmd->getConfiguration('fieldname')."|",3,"/tmp/prob.txt");
@@ -222,17 +222,17 @@ if($results->type == "groups"){
 						}
 						$cmd->event($key);
 						break;
-					}				
+					}
 					if ($cmd->getConfiguration('fieldname')==$actioncmd){
 						/*if ($cmd2->getConfiguration('isReversed') && is_bool($key)){
 							$key = !$key;
 						}*/
 						$cmd->event($key);
-						break;							
+						break;
 					}
 				}
 			}
-		}			
+		}
 	}
 }
 
@@ -240,4 +240,3 @@ if($results->type == "groups"){
 
 //else
 //echo json_encode($results->params);
-?>

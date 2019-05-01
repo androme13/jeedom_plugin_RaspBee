@@ -24,10 +24,10 @@ try {
         throw new Exception(__('401 - Accès non autorisé', __FILE__));
     }
 	ajax::init();
-	
+
 	/*if (init('action') == 'removeAll') {
 		$resp=RaspBEE::removeAll();
-		if ($resp===false){		
+		if ($resp===false){
 			ajax::error($resp);
 		} else{
 			ajax::success($resp);
@@ -67,7 +67,7 @@ try {
 		break;
 		case 'getRaspBEELights' :
 		$resp=RaspBEE::getRaspBEELights();
-		break;	
+		break;
 		case 'getTouchlinkInfos' :
 		$resp=RaspBEE::getTouchlink();
 		break;
@@ -79,12 +79,12 @@ try {
 		break;
 		case 'removeAll' :
 		$resp=RaspBEE::removeAll();
-		break;				
+		break;
 	}
 	if ($resp!='')
 		if ($resp->state=="nok") ajax::error($resp->message);
 		else ajax::success($resp->message);
-		
+
 	throw new Exception('Aucune methode correspondante');
 	/*     * *********Catch exeption*************** */
 } catch (Exception $e) {
@@ -92,12 +92,11 @@ try {
 }
 
 function genericSendResponse($resp){
-	if ($resp->state=="error"){
+	if ($resp->state=="error") {
 		ajax::error($resp);
-		}
-		else
-		{
-			ajax::success($resp);
-		}	
+	}
+	else
+	{
+		ajax::success($resp);
+	}
 }
-?>

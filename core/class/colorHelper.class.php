@@ -15,15 +15,15 @@
  * along with Plugin RaspBEE for jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
- require_once dirname(__FILE__) . "/../../../../core/php/core.inc.php";
- 
- class colorHelper{	
- 
- 
+require_once dirname(__FILE__) . "/../../../../core/php/core.inc.php";
+
+class colorHelper{
+
+
  	public function __construct() {
-       	
+
     }
- 
+
 	public function HSV2RGB($iH, $iS, $iV) {
 		if($iH < 0)   $iH = 0;   // Hue:
 		if($iH > 360) $iH = 360; //   0-360
@@ -59,9 +59,9 @@
 		$dR *= 255; $dG *= 255; $dB *= 255;
 		return array(round($dR),round($dG),round($dB));
 	}
-	
+
 	public function RGB2XY($R,$G,$B,$isFloat=false){
-	//error_log("RGBtoXY:",3,"/tmp/prob.txt");		
+	//error_log("RGBtoXY:",3,"/tmp/prob.txt");
 		if ($isFloat==false){
 			$R=$R/256;
 			$G=$G/256;
@@ -74,8 +74,8 @@
 		$y = $Y / ($X + $Y + $Z);
 	return 	array('x' => $x,'y' => $y);
 	}
-	
-	public function XY2RGB($x,$y){		
+
+	public function XY2RGB($x,$y){
 		$R = 3.240479*(($x*$y)/$y) + -1.537150*$y + -0.498535*(((1-$x-$y)*$y)/$y);
 		$G = -0.969256*(($x*$y)/$y) + 1.875992*$y + 0.041556*(((1-$x-$y)*$y)/$y);
 		$B = 0.055648*(($x*$y)/$y) + -0.204043*$y + 1.057311*(((1-$x-$y)*$y)/$y);
@@ -86,8 +86,8 @@
 		$h =$hsl[0]/365;
 		$s = $hsl[1]/256;
 		$l = $hsl[2]/256;
-		$r; 
-		$g; 
+		$r;
+		$g;
 		$b;
 		$c = ( 1 - abs( 2 * $l - 1 ) ) * $s;
 		$x = $c * ( 1 - abs( fmod( ( $h / 60 ), 2 ) - 1 ) );
@@ -99,11 +99,11 @@
 		} else if ( $h < 120 ) {
 			$r = $x;
 			$g = $c;
-			$b = 0;			
+			$b = 0;
 		} else if ( $h < 180 ) {
 			$r = 0;
 			$g = $c;
-			$b = $x;					
+			$b = $x;
 		} else if ( $h < 240 ) {
 			$r = 0;
 			$g = $x;
@@ -122,11 +122,11 @@
 		$b = ( $b + $m  ) * 255;
 		return array( floor( $r ), floor( $g ), floor( $b ) );
 	}
-	
+
 	public function HEX2RGB(string $hex){
 		$hex = ltrim($hex, '#');
 		if(strlen($hex) == 3)
-			return array ('r' => hexdec($hex[0].$hex[0]),'g' => hexdec($hex[1].$hex[1]),'b' => hexdec($hex[2].$hex[2]));			
+			return array ('r' => hexdec($hex[0].$hex[0]),'g' => hexdec($hex[1].$hex[1]),'b' => hexdec($hex[2].$hex[2]));
 		else
 			return array ('r' => hexdec($hex[0].$hex[1]),'g' => hexdec($hex[2].$hex[3]),'b' => hexdec($hex[4].$hex[5]));
 	}
@@ -138,4 +138,3 @@
 			. sprintf('%02x', $rgb[2]);
 	}
 }
-?>

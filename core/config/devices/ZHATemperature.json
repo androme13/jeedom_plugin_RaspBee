@@ -1,32 +1,31 @@
 {
     "name": "Température",
     "configuration": {
-		"swversion": "",
-		"type": "",
-		"uniqueid": "",
-		"origID": 0,
-		"type": "", 
-		"manufacturername": "",
-		"modelid": ""	
+        "swversion": "",
+        "type": "",
+        "uniqueid": "",
+        "origID": 0,
+        "manufacturername": "",
+        "modelid": ""
     },
     "commands": [
         {
-            "name": "Etat température", 
-            "type": "info", 
-            "isVisible": 1, 
+            "name": "Etat température",
+            "type": "info",
+            "isVisible": 1,
             "isHistorized": 1,
-			"unite": "°C",			
+            "unite": "°C",
             "configuration": {
-			    "fieldname" : "temperature"
-            }, 
-            "subtype": "numeric", 
+                "fieldname" : "temperature"
+            },
+            "subtype": "numeric",
             "display": {
                 "generic_type": "TEMPERATURE"
             },
-			"template":{
-				"dashboard" : "tile",
-				"mobile" : "tile"
-			}
-        }		
+            "template":{
+                "dashboard" : "tile",
+                "mobile" : "tile"
+            }
+        }
     ]
 }
