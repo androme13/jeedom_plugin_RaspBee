@@ -1,5 +1,4 @@
 <?php
-
 /* This file is part of Plugin RaspBEE for jeedom.
 *
 * Plugin RaspBEE for jeedom is free software: you can redistribute it and/or modify
@@ -23,9 +22,9 @@ require_once dirname(__FILE__) . '/../class/RaspBEECom.class.php';
 require_once dirname(__FILE__) . '/eqLogicOperate.class.php';
 require_once dirname(__FILE__) . '/colorHelper.class.php';
 
-class RaspBEE extends eqLogic {	
+class RaspBEE extends eqLogic {
 	public function getAllEqLogics(){
-		$returnArray=array();			
+		$returnArray=array();
 			foreach(eqLogic::byType('RaspBEE') as $eqLogic)
 			{
 				$return=null;
@@ -36,12 +35,12 @@ class RaspBEE extends eqLogic {
 				$return->name=$eqLogic->getName();//->getHumanName(true,true);
 				$return->humanName=$eqLogic->getHumanName(true,true);
 				$return->origId=$eqLogic->getConfiguration('origid');
-				array_push($returnArray,$return);			
+				array_push($returnArray,$return);
 			}
-			return $returnArray;			
+			return $returnArray;
 	}
-	
-	
+
+
 	public function getById($data){
 		$eqLogic=eqLogic::byId($data[id]);
 		$return=null;
@@ -55,14 +54,14 @@ class RaspBEE extends eqLogic {
 		$return->lights=$eqLogic->getConfiguration('lights');
 		return $return;
 	}
-	
+
 	// recupere les groupes d'un equipement par son id
 	// return array(humanName)
-	public function getOwnersGroups($data){	
+	public function getOwnersGroups($data){
 		$groups = array();
-		foreach (eqLogic::byType('RaspBEE') as $equipement) {				
+		foreach (eqLogic::byType('RaspBEE') as $equipement) {
 			$isGroup = stristr($equipement->getConfiguration('type'), "LightGroup");
-			if ($isGroup){					
+			if ($isGroup){
 				$obj = json_decode($equipement->configuration);
 				$lights = json_decode($obj->lights);
 				foreach ($lights as $light){
@@ -73,26 +72,26 @@ class RaspBEE extends eqLogic {
 				}
 			}
 		}
-		return $groups;		
+		return $groups;
 	}
 
 	// recupere un humaname par son id
 	// return humanName
 	public function humanNameById($data){
 		$humanName="";
-		foreach (eqLogic::byType('RaspBEE') as $equipement) {			
+		foreach (eqLogic::byType('RaspBEE') as $equipement) {
 			if ($equipement->getId()===$data[id]) {
 				$id = $equipement->id;
 				$origid = $equipement->getConfiguration('origid');
 				$humanName = $equipement->getHumanName(true,true);
 				return array('id' => $id, 'origid' => $origid, 'humanName' => $humanName);
-			}				
-		}		
+			}
+		}
 	}
-	
+
 	// recupere un humaname et un id par l'originid et le type (ex : switch ou light)
 	// return array(id,origid,humanName)
-	public function humanNameByOrigIdAndType($data){	
+	public function humanNameByOrigIdAndType($data){
 		foreach (eqLogic::byType('RaspBEE') as $equipement) {
 				error_log("name: ".$equipement->getName()."|",3,"/tmp/prob.txt");
 				error_log("name: ".$equipement->getConfiguration('type')."|",3,"/tmp/prob.txt");
@@ -102,10 +101,10 @@ class RaspBEE extends eqLogic {
 					$humanName = $equipement->getHumanName(true,true);
 					return array('id' => $id, 'origid' => $origid, 'humanName' => $humanName);
 				}
-		}			
-		return array('id' => -1, 'origid' => -1, 'humanName' => "none");	
+		}
+		return array('id' => -1, 'origid' => -1, 'humanName' => "none");
 	}
-		
+
 	public static function dependancy_info() {
 		$return = array();
 		$return['log'] = 'RaspBEE_dep';
@@ -124,9 +123,9 @@ class RaspBEE extends eqLogic {
 		return array('script' => dirname(__FILE__) . '/../../resources/install_#stype#.sh ' . jeedom::getTmpFolder('RaspBEE') . '/dependance', 'log' => log::getPathToLog(__CLASS__ . '_dep'));
 	}
 
-	public static function deamon_info() {	
+	public static function deamon_info() {
 		$return = array();
-		$return['log'] = 'RaspBEE_node';	
+		$return['log'] = 'RaspBEE_node';
 		$return['state'] = 'nok';
 		$pid_file = '/tmp/raspbee.pid';
 		if (file_exists($pid_file)) {
@@ -147,10 +146,10 @@ class RaspBEE extends eqLogic {
 		if ($apikey == '') {
 			$return['launchable'] = 'nok';
 			$return['launchable_message'] = __('<br><br>La clé API de la passerelle RaspBEE n\'est pas configurée', __FILE__);
-			}			
+			}
 		return $return;
 	}
-	
+
 	public static function deamon_start($_debug = false) {
 		self::deamon_stop();
 		$deamon_info = self::deamon_info();
@@ -162,9 +161,9 @@ class RaspBEE extends eqLogic {
 		$rurlRAW=config::byKey('raspbeeIP','RaspBEE');
 		$rurl = explode(":",config::byKey('raspbeeIP','RaspBEE'));
 		$japikey = jeedom::getApiKey('RaspBEE');
-		$raspbeeCom = new RaspBEECom;		
+		$raspbeeCom = new RaspBEECom;
 		$wsconfig = json_decode($raspbeeCom->getConf()->message);
-		$cmd = 'nice -n 19 nodejs ' . $daemon_path . '/daemon.js ' .'apikey='.$japikey . ' jurl='.$jurl . ' rurl='.$rurl[0]. ' wsp='.$wsconfig->websocketport;		
+		$cmd = 'nice -n 19 nodejs ' . $daemon_path . '/daemon.js ' .'apikey='.$japikey . ' jurl='.$jurl . ' rurl='.$rurl[0]. ' wsp='.$wsconfig->websocketport;
 		log::add('RaspBEE', 'info', 'Lancement du démon RAspBEE : ' . $cmd);
 		exec('nohup ' . $cmd . ' >> ' . log::getPathToLog('RaspBEE_node') . ' 2>&1 &');
 		$i = 0;
@@ -184,15 +183,15 @@ class RaspBEE extends eqLogic {
 		log::add('RaspBEE', 'info', 'Démon RaspBEE lancé');
 	}
 
-	public static function deamon_stop() {			
+	public static function deamon_stop() {
 		$pid_file = '/tmp/raspbee.pid';
 		if (file_exists($pid_file)) {
 			$pid = intval(trim(file_get_contents($pid_file)));
 			system::kill($pid);
 		}
-		
-		
-		
+
+
+
 		exec('kill $(ps aux | grep "RaspBEE/daemon/daemon.js" | awk \'{print $2}\')');
 		log::add('RaspBEE', 'info', 'Arrêt du service RaspBEE');
 		$deamon_info = self::deamon_info();
@@ -200,7 +199,7 @@ class RaspBEE extends eqLogic {
 			sleep(1);
 			exec('kill -9 $(ps aux | grep "RaspBEE/daemon/daemon.js" | awk \'{print $2}\')');
 		}
-		
+
 		if ($deamon_info['state'] == 'ok') {
 			sleep(1);
 			exec('sudo kill -9 $(ps aux | grep "RaspBEE/daemon/daemon.js" | awk \'{print $2}\')');
@@ -208,7 +207,7 @@ class RaspBEE extends eqLogic {
 		sleep(1);
 	}
 
-	public static function deamon_changeAutoMode($_mode) {	
+	public static function deamon_changeAutoMode($_mode) {
 	/*$cron = cron::byClassAndFunction('RaspBEE', 'pull');
     if (!is_object($cron)) {
         $cron = new cron();
@@ -258,14 +257,14 @@ class RaspBEE extends eqLogic {
 
 
 	/*     * *********************Méthodes d'instance************************* */
-	
-	
+
+
 	public function preInsert() {
-		
+
 	}
 
 	public function postInsert() {
-		
+
 	}
 
 	public function preSave() {
@@ -285,7 +284,7 @@ class RaspBEE extends eqLogic {
 			}
 		}
 
-		
+
 		// on traite les groupes
 		if ($this->getConfiguration("type")=== "LightGroup") {
 		//	$groupId = $this->getId();
@@ -301,7 +300,7 @@ class RaspBEE extends eqLogic {
 				error_log("presave group creation tableau vide lights:\n",3,"/tmp/prob.txt");
 			}
 			$raspbeecom = new RaspBEECom;
-			//$hidden = 
+			//$hidden =
 			$attr='{';
 			$attr.='"name":"'.$this->getName().'",';
 			//$attr.='"hidden":'.($this->getIsEnable() ? 'false' : 'true').',';
@@ -312,7 +311,7 @@ class RaspBEE extends eqLogic {
 			if($result->state!=="ok"){
 				error_log("error group : ".json_encode($result)."|\n",3,"/tmp/prob.txt");
 			}
-			
+
 		}
 		// on traite les eql de type éclairage
 		if (strpos($this->getConfiguration("type"), 'light') !== false && $this->getConfiguration("type") !== "LightGroup" && $this->getConfiguration("lights")!==null) {
@@ -332,7 +331,7 @@ class RaspBEE extends eqLogic {
 			$allEqlGroups=eqLogic::byType('RaspBEE');
 			foreach ($allEqlGroups as $group) {
 				$isGroupModified=false;
-				if ($group->getConfiguration("type")==="LightGroup"){				
+				if ($group->getConfiguration("type")==="LightGroup"){
 					$groupOrigid=$group->getConfiguration("origid");
 					$lightsInGroupJson=$group->getConfiguration("lights");
 					if (json_decode($lightsInGroupJson)!==null){
@@ -344,7 +343,7 @@ class RaspBEE extends eqLogic {
 					}
 					// on ne garde que les values dans le tableau
 					$lightsInGroup=array_values($lightsInGroup);
-					
+
 					foreach ($actualGroups as $actualGroupOrigid){
 						$needToAdd = false;
 						$needToRemove = false;
@@ -353,7 +352,7 @@ class RaspBEE extends eqLogic {
 							if (in_array($lightOrigid, $lightsInGroup))
 							{
 								$needToAdd = false;
-								$inGroup = true;							
+								$inGroup = true;
 							}
 							else
 							{
@@ -361,14 +360,14 @@ class RaspBEE extends eqLogic {
 								$inGroup = false;
 							}
 							break;
-						}						
+						}
 					}
 					if ($needToAdd===true && $inGroup===false){
 						//non presente dans le field, besoin d'être ajoutée
 						$lightsInGroup[]=$lightOrigid;
-							$isGroupModified=true;							
+							$isGroupModified=true;
 					}
-					if (($needToAdd===false && $inGroup===false) || count($actualGroups)<1){			
+					if (($needToAdd===false && $inGroup===false) || count($actualGroups)<1){
 						$pos=array_search($lightOrigid,$lightsInGroup);
 						if ($pos!==false) {
 							// non presente dans le field mais présente dans le groupe, à supprimer donc.
@@ -382,7 +381,7 @@ class RaspBEE extends eqLogic {
 								$attrLights='{"lights":'.json_encode($lightsInGroup).'}';
 							}
 							$isGroupModified=true;
-						}						
+						}
 					}
 				}
 				// on set le group sur deconz
@@ -401,7 +400,7 @@ class RaspBEE extends eqLogic {
 					}
 				}
 			}
-			//on supprime le champ lights, car il ne sert qu'à gerer les groupes au niveau de l'UI						
+			//on supprime le champ lights, car il ne sert qu'à gerer les groupes au niveau de l'UI
 			// on set le nom de l'éclairage dans deconz
 			$raspbeecom = new RaspBEECom;
 			$attr='{';
@@ -413,21 +412,21 @@ class RaspBEE extends eqLogic {
 				error_log("error group : ".json_encode($result)."|\n",3,"/tmp/prob.txt");
 			}
 			$this->setConfiguration("lights",null);
-		}		
+		}
 	}
 
 	public function postSave() {
 		//error_log("postSave:",3,"/tmp/prob.txt");
-		
+
 	}
 
 	public function preUpdate() {
 
-		
+
 	}
 
 	public function postUpdate() {
-		
+
 
 	}
 
@@ -442,21 +441,21 @@ class RaspBEE extends eqLogic {
 	}
 
 	public function postRemove() {
-		
+
 	}
 
-	
+
 	/*public function syncEqLogicWithRaspBEE($_logical_id = null, $_exclusion = 0){
 		return eqLogicOperate::createEqLogic();
 	}*/
-		
+
 	public function deleteRaspBEEUser($user){
 		$raspbeecom = new RaspBEECom;
 		$result = $raspbeecom->deleteRaspBEEUser($user);
 		unset($raspbeecom);
 		return $result;
 	}
-	
+
 	public function eqLogicDelete($id){
 		//$raspbeecom = new RaspBEECom;
 		return eqLogicOperate::deleteEqLogic($id);
@@ -464,35 +463,35 @@ class RaspBEE extends eqLogic {
 		//unset($raspbeecom);
 		//return $result;
 	}
-	
+
 	public function findRaspBEE(){
 		$raspbeecom = new RaspBEECom;
 		$result = $raspbeecom->findRaspBEE();
 		unset($raspbeecom);
 		return $result;
 	}
-	
+
 	public function groupCreate($name){
 		$raspbeecom = new RaspBEECom;
 		$result = $raspbeecom->groupCreate($name);
 		unset($raspbeecom);
 		return $result;
 	}
-	
+
 	public function groupDelete($id){
 		$raspbeecom = new RaspBEECom;
 		$result = $raspbeecom->groupDelete($id);
 		unset($raspbeecom);
 		return $result;
 	}
-	
+
 	public function getApiKey(){
 		$raspbeecom = new RaspBEECom;
 		$result = $raspbeecom->getAPIAccess();
 		unset($raspbeecom);
 		return $result;
 	}
-	
+
 	public function getGroupsMembers($id){
 		$eql=$eqLogic->getById($id);
 		$result = array("error" => 0, "message" => "", "state" => "");
@@ -500,32 +499,32 @@ class RaspBEE extends eqLogic {
 		$result->message=$eql->getConfiguration('lights');
 		return $result;
 	}
-	
+
 	public function setGroupsMembers($id,$members){
-		$eql = eqLogic::byId($id);		
+		$eql = eqLogic::byId($id);
 		$eql->setConfiguration('lights',$members);
 		$eql->save();
-		$eql->refresh();		
+		$eql->refresh();
 		$result = array("error" => 0, "message" => "", "state" => "");
 		$result->state="ok";
 		return $result;
 	}
-	
+
 	public function getRaspBEEConf(){
 		$raspbeecom = new RaspBEECom;
 		$result = $raspbeecom->getConf();
 		unset($raspbeecom);
 		return $result;
 	}
-	
+
 	public function getRaspBEEGroups(){
 		//error_log("|getRaspBEEGroups|".$result,3,"/tmp/rasbee.err");
 		$raspbeecom = new RaspBEECom;
-		$result = $raspbeecom->getGroups();		
+		$result = $raspbeecom->getGroups();
 		unset($raspbeecom);
 		return $result;
 	}
-	
+
 	public function getRaspBEESensors(){
 		//error_log("getRaspBEESensors pass");
 		$raspbeecom = new RaspBEECom;
@@ -533,7 +532,7 @@ class RaspBEE extends eqLogic {
 		unset($raspbeecom);
 		return $result;
 	}
-	
+
 	public function getRaspBEELights(){
 		//error_log("getRaspBEESensors pass");
 		$raspbeecom = new RaspBEECom;
@@ -541,7 +540,7 @@ class RaspBEE extends eqLogic {
 		unset($raspbeecom);
 		return $result;
 	}
-	
+
 	public function getTouchlink(){
 		//error_log("getRaspBEESensors pass");
 		$raspbeecom = new RaspBEECom;
@@ -549,7 +548,7 @@ class RaspBEE extends eqLogic {
 		unset($raspbeecom);
 		return $result;
 	}
-	
+
 	public function getTouchlinkIdentify($id){
 		//error_log("getRaspBEESensors pass");
 		$raspbeecom = new RaspBEECom;
@@ -557,7 +556,7 @@ class RaspBEE extends eqLogic {
 		unset($raspbeecom);
 		return $result;
 	}
-	
+
 	public function getTouchlinkRefresh(){
 		//error_log("getRaspBEESensors pass");
 		$raspbeecom = new RaspBEECom;
@@ -565,12 +564,12 @@ class RaspBEE extends eqLogic {
 		unset($raspbeecom);
 		return $result;
 	}
-	
+
 	public function createEqLogic($device,$syncType){
 		//error_log("createEqLogic pass");
 		return eqLogicOperate::createEqLogic($device,$syncType);
 	}
-	
+
 	public function removeAll(){
 		foreach (eqLogic::byType('RaspBEE') as $equipement) {
 			$equipement->remove();
@@ -580,30 +579,30 @@ class RaspBEE extends eqLogic {
 		//$error='';
 		//$response->error=$httpcode;
 		$result->message="Tous les équipements supprimés";
-		return $result;		
+		return $result;
 	}
-	
+
 	public function removeFromGroup($deviceId,$groupId){
 		$raspbeecom = new RaspBEECom;
 		$result = $raspbeecom->removeFromGroup($deviceId,$groupId);
 		unset($raspbeecom);
 		return $result;
 	}
-	
+
 	public function setDeconzConfig($data){
 		$raspbeecom = new RaspBEECom;
 		$result = $raspbeecom->setDeconzConfig($data[config]);
 		unset($raspbeecom);
 		return $result;
 	}
-	
+
 	public function setLightsConfig($data){
 		//$process = str_replace('\\','',$data[config]);
 		//$res = config::save("lightsConfig",$data[config]),"raspbee");
 		$result = array("error" => '', "message" => $data[config], "state" => "ok");
 		//$result->state="ok";
 		//$result->message="Règlages de l'éclairage sauvegardés avec succès ".$data[config];
-		return $result;		
+		return $result;
 	}
 	/*
 	* Non obligatoire mais permet de modifier l'affichage du widget si vous en avez besoin
@@ -633,9 +632,9 @@ class RaspBEECmd extends cmd {
 
 	public function execute($_options = array()) {
 		if ($this->getType() == 'action'){
-			
+
 			$eqLogic = $this->getEqLogic();
-			
+
 			switch ($this->getConfiguration('fieldname'))
 			{
 				case "effect":
@@ -650,15 +649,15 @@ class RaspBEECmd extends cmd {
 				case "color":
 				$color = $_options[color];
 					$temp = HEX2RGB($color);
-					$xy = colorHelper::RGB2XY($temp[0],$temp[1],$temp[2],false);				
+					$xy = colorHelper::RGB2XY($temp[0],$temp[1],$temp[2],false);
 					$commandtosend='{"xy" :['.$xy[x].','.$xy[y].']}';
 				break;
-				default :				
+				default :
 					$commandtosend='{"'.$this->getConfiguration('fieldname').'" : '.$_options[slider].'}';
-					
-					
-					
-				
+
+
+
+
 			}
 			//error_log("action group".$commandtosend,3,"/tmp/prob.txt");
 			switch ($eqLogic->getConfiguration('type')){
@@ -671,21 +670,21 @@ class RaspBEECmd extends cmd {
 				case "LightGroup":
 				//error_log("action group".$commandtosend,3,"/tmp/prob.txt");
 				self::sendCommand("groups",$this->getEqlogic()->getConfiguration('origid'),$commandtosend);
-				break;				
+				break;
 			}
-			
+
 			//error_log("commande : ".$commandtosend,3,"/tmp/prob.txt");
 			return;
 		}
-		
+
 		if ($this->getType() == 'info'){
 			error_log("execute info",3,"/tmp/prob.txt");
 			//error_log(json_encode($_options),3,"/tmp/prob.txt");
 			return;
-		}	
+		}
 	}
 
-	
+
 	/**
 	 * #rrggbb or #rgb to [r, g, b]
 	 */
@@ -694,21 +693,19 @@ class RaspBEECmd extends cmd {
 		return colorHelper::HEX2RGB($hex);
 	}
 
-	
+
 	public static function convert(){
-	error_log("convert :",3,"/tmp/prob.txt");	
+	error_log("convert :",3,"/tmp/prob.txt");
 	}
-	
-	
+
+
 	private function sendCommand($type=null,$id=null,$command=null){
 		if ($id===null || $command===null || $type===null)return false;
 		$raspbeecom = new RaspBEECom;
 		$result = $raspbeecom->sendCommand($type,$id,$command);
 		unset($raspbeecom);
-		return $result;		
+		return $result;
 	}
 
 	/*     * **********************Getteur Setteur*************************** */
 }
-
-?>

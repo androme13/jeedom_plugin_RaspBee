@@ -36,7 +36,7 @@ require_once dirname(__FILE__).'/../core/class/DeCONZTools.class.php';
 					<label class="raspbeeGWRefresh col-lg-4 control-label">{{Adresse IP:PORT du pont RaspBEE}}</label>
 					<div class="col-lg-2">
 						<input class="configKey form-control" id="raspbeeGWIP" data-l1key="raspbeeIP" />
-					</div>		
+					</div>
 					<div class="col-lg-5">
 						<a class="btn btn-success tooltips" id="bt_searchRaspBEE" title="{{Cherche automatiquement la première passerelle RaspBee sur le réseau}}"><i class="fa fa-refresh"></i></a>
 					</div>
@@ -50,7 +50,7 @@ require_once dirname(__FILE__).'/../core/class/DeCONZTools.class.php';
 					<label class="col-lg-4 control-label">{{Clé API RaspBEE}}</label>
 					<div class="col-lg-2">
 						<input disabled class="configKey form-control" id="raspbeeAPIKEY" data-l1key="raspbeeAPIKEY"/>
-					</div>		
+					</div>
 					<div class="col-lg-5">
 						<a class="btn btn-info tooltips" id="bt_raspbeeGETNEWKEY" title="{{Demande automatiquement une nouvelle cléf API}}" disabled><i class="fa fa-refresh"></i></a>
 					</div>
@@ -68,7 +68,7 @@ require_once dirname(__FILE__).'/../core/class/DeCONZTools.class.php';
 					</div>
 						<div class="col-lg-5">
 						<a class="btn btn-info tooltips" id="bt_raspbeePIPWD" title="{{Tester l'accès}}"><i class="fa fa-refresh"></i></a>
-					</div>					
+					</div>
 				</div>
 			</div>
 		</div>
@@ -79,7 +79,7 @@ require_once dirname(__FILE__).'/../core/class/DeCONZTools.class.php';
 				<div class="form-group">
 					<textarea id="sshtext" class="col-lg-8" rows="30"><?php
 						$DT = new DeCONZTools;
-						
+
 						$result = $DT->cnxTest("dpkg-deb --info deconz-2.04.82-qt5.deb");
 						$DT->cnxClose();
 						unset($DT);
@@ -93,10 +93,10 @@ require_once dirname(__FILE__).'/../core/class/DeCONZTools.class.php';
 </form>
 <script>
 
-$('#bt_searchRaspBEE').on('click', function () {			
+$('#bt_searchRaspBEE').on('click', function () {
 	$.ajax({
-type: "POST", 
-url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+type: "POST",
+url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php",
 data: {
 action: "findRaspBEE",
 		},
@@ -113,7 +113,7 @@ success: function (resp,status) {
 			catch(e)
 			{
 			   var cleanResp='invalid json';
-			}							
+			}
 			if (resp.state == 'ok') {
 				$('#raspbeeGWIP').val(cleanResp[0].internalipaddress+":"+cleanResp[0].internalport);
 				fieldValidate($('#raspbeeGWIP').val());
@@ -127,8 +127,8 @@ success: function (resp,status) {
 
 $('#bt_raspbeeGETNEWKEY').on('click', function () {
 	$.ajax({
-		type: "POST", 
-		url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php", 
+		type: "POST",
+		url: "plugins/RaspBEE/core/ajax/RaspBEE.ajax.php",
 		data: {
 		action: "getAPIAccess",
 				},
@@ -145,7 +145,7 @@ $('#bt_raspbeeGETNEWKEY').on('click', function () {
 			catch(e)
 			{
 			   var cleanResp='invalid json';
-			}							
+			}
 			if (resp.state == 'ok') {
 				$('#div_configAlert').showAlert({message: '{{Clé récupérée}}: '+cleanResp[0].success.username, level: 'success'});
 				$('#raspbeeAPIKEY').val(cleanResp[0].success.username);
@@ -157,7 +157,7 @@ $('#bt_raspbeeGETNEWKEY').on('click', function () {
 	});
 });
 
-$('#raspbeeGWIP').on('change paste keyup', function () {		
+$('#raspbeeGWIP').on('change paste keyup', function () {
 	fieldValidate($(this).val());
 });
 
@@ -167,17 +167,17 @@ function HTMLClean(value){
 }
 
 
-function fieldValidate(value){	
+function fieldValidate(value){
 	if (validateIpAndPort(value)==true){
 		$('#raspbeeAPIKEY').prop('disabled', false);
 		$('#bt_raspbeeGETNEWKEY').removeAttr('disabled');
 	}
 	else{
 		$('#raspbeeAPIKEY').prop('disabled', true);
-		$('#bt_raspbeeGETNEWKEY').attr('disabled', 'disabled');  
+		$('#bt_raspbeeGETNEWKEY').attr('disabled', 'disabled');
 
-	}	
-}	
+	}
+}
 
 function validateIpAndPort(input) {
 	var parts = input.split(":");

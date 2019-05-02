@@ -47,9 +47,9 @@ function eqLogicDraw(eqLogic){
 	type="";
 	card= '<div class="eqLogicDisplayCard eqLogicHoverEffect cursor ui-draggable ui-draggable-handle" data-eqLogic_id="'+ eqLogic.id+'" data-logical-id="' + eqLogic.logicalId+'"  style="background-color : #ffffff; height : 200px;box-shadow: 3px 3px 8px #000;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
 	card+="<center>";
-	
+
 	switch (eqLogic.type){
-	
+
 	case "ZHASwitch" :
 		type='{{Commande}}';
 		icon='<i class="fa fa-th-large" style="font-size : 6em;color:#767676;"></i>';
@@ -76,7 +76,7 @@ function eqLogicDraw(eqLogic){
 	case "LightGroup" :
 		type='{{Groupe}}';
 		icon= '<i class="fa fa-circle-o" style="font-size : 6em;color:#767676;"></i>';
-		break;	
+		break;
 	default:
 		type='{{Inconnu}}';
 		icon= '<i class="fa fa-question-circle" style="font-size : 6em;color:#767676;"></i>';
@@ -85,17 +85,17 @@ function eqLogicDraw(eqLogic){
 	card+="<br>";
 	card+='<span style="font-size : 0.8em;">';
 	card+=type;
-	card+="</span>";		
+	card+="</span>";
 	card+="</center>";
 	card+='<span style="font-size : 1.1em;position:relative; top : 15px;white-space: pre-wrap;word-wrap: normal;"><center>' + eqLogic.humanName+ '</center></span>';
-	card+="</div>";	
+	card+="</div>";
 	return card;
 }
 
 function groupDraw(group,memberid)
 {
 	var card = "";
-	card+='<div style="position: relative;" id="eqlgroup'+group.id+'">';			
+	card+='<div style="position: relative;" id="eqlgroup'+group.id+'">';
 	card+='<div class="eqLogicDisplayCard cursor eqLogicHoverEffect eqlgrouporigid'+group.origid+' eqlgroup'+group.id+'" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">';
 	card+= "<center>";
 	card+= '<i class="fa fa-circle-o" style="font-size : 6em;color:#767676;"></i>';
@@ -120,7 +120,7 @@ function masterDraw(master){
 	card+= '{{Commande}}';
 	card+= '</span>';
 	card+= "<span style='font-size : 1.1em;position:relative; top : 15px;white-space: pre-wrap;word-wrap: break-word;'><center>"+master.humanName+"</center></span>";
-	card+='</div>';				
+	card+='</div>';
 	return card;
 }
 
@@ -166,8 +166,8 @@ function printEqLogicHelper(expertMode,label,name,_eqLogic,_subst){
 		var trm = '<tr class="eqLogic '+expertModeVal+'"><td class="col-sm-2"><span class="label control-label" style="font-size : 1em;">'+label+'</span></td><td><span class="label label-default" style="font-size : 1em;"> <span class="eqLogicAttr" data-l1key="configuration" data-l2key="'+name+'"></span></span></td></tr>';
 		}
 	}
-	
+
 	$('#table_infoseqlogic tbody').append(trm);
-	$('#table_infoseqlogic tbody tr:last').setValues(_eqLogic, '.eqLogicAttr');		
+	$('#table_infoseqlogic tbody tr:last').setValues(_eqLogic, '.eqLogicAttr');
 }
 

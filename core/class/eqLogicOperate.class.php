@@ -16,24 +16,24 @@
 */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 class eqLogicOperate extends eqLogic {
-	
+
 	private $responseHelper = array("error" => 0, "message" => "", "state" => "");
-	
+
 	public function createEqLogic($device,$syncType="basic"){
 		//error_log("|eqlogic create device|".json_encode($device[type])."|",3,"/tmp/prob.txt");
 		$response = $responseHelper;
 		$eqLogicMode = false;
 		$eqLogic=null;
 		// on check si l'eqLogic existe
-		foreach (eqlogic::byType('RaspBEE') as $eqLogicPass){			
+		foreach (eqlogic::byType('RaspBEE') as $eqLogicPass){
 			if ($eqLogicPass->getConfiguration('origid')==$device[origid] && $eqLogicPass->getConfiguration('type')==$device[type]){
 				error_log("|eqlogic create device deja existant|".$eqLogicPass->getName()."|",3,"/tmp/prob.txt");
 				$eqLogicMode = true;
 				$eqLogic = $eqLogicPass;
 				break;
-			}		
+			}
 		}
-		
+
 		//error_log("|eqlogic create device NON existant|".$device[type]."|",3,"/tmp/prob.txt");
 		switch ($device[type]){
 		case "ZHASwitch" :{
@@ -60,10 +60,10 @@ class eqLogicOperate extends eqLogic {
 				return eqLogicOperate::createLight('/../config/devices/ColorLight.json',$eqLogic,$device,$syncType,$eqLogicMode);
 				break;
 		}
-                case "Color temperature light" :{
-                                return eqLogicOperate::createLight('/../config/devices/ColorTemperatureLight.json',$eqLogic,$device,$syncType,$eqLogicMode);
-                                break;
-                }
+        case "Color temperature light" :{
+                return eqLogicOperate::createLight('/../config/devices/ColorTemperatureLight.json',$eqLogic,$device,$syncType,$eqLogicMode);
+                break;
+            }
 		case "Extended color light" :{
 				return eqLogicOperate::createLight('/../config/devices/ExtendedColorLight.json',$eqLogic,$device,$syncType,$eqLogicMode);
 				break;
@@ -85,7 +85,7 @@ class eqLogicOperate extends eqLogic {
 		}
 		//return true;
 	}
-	
+
 	public function createLight($config='',$eqLogic,$device,$syncType="basic",$eqLogicMode){
 		if (!is_file(dirname(__FILE__) . $config)){
 		return false;
@@ -93,7 +93,7 @@ class eqLogicOperate extends eqLogic {
 		$configFile = file_get_contents(dirname(__FILE__) . $config);
 		if (!is_json($configFile)) {
 			return false;
-		}			
+		}
 		if ($eqLogicMode ==false && $eqLogic==null){
 			$eqLogic = new eqLogic();
 			$eqLogic->setIsEnable(1);
@@ -105,7 +105,7 @@ class eqLogicOperate extends eqLogic {
 		}
 		switch ($syncType){
 			case "limited" :
-			case "basic" :			
+			case "basic" :
 				$eqLogic = self::setGenericEqLogicConf($eqLogic,$device,$syncType,$eqLogicMode);
 				$eqLogic = self::checkAndSetEqLogicConfiguration($eqLogic,'hascolor',$device[hascolor],$syncType);
 				$eqLogic = self::checkAndSetEqLogicConfiguration($eqLogic,'colormode',$device[state][colormode],$syncType);
@@ -120,21 +120,21 @@ class eqLogicOperate extends eqLogic {
 				$eqLogic->save();
 			break;
 		}
-		return self::setGenericCmdList(basename($config),$eqLogic,$syncType);			
+		return self::setGenericCmdList(basename($config),$eqLogic,$syncType);
 	}
-	
+
 	public function createLightGroup($config='',$eqLogic,$device,$syncType="basic",$eqLogicMode){
 		//error_log("|createLightGroup syncType| ".$syncType,3,"/tmp/prob.txt");
 		if (!is_file(dirname(__FILE__) . $config)){
-		return false;
+		    return false;
 		};
 		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/Group.json');
 		if (!is_json($configFile)) {
 			//error_log("Fichier json invalide",3,"/tmp/rasbee.err");
 			return false;
 		}
-		
-		
+
+
 		if ($eqLogicMode == false && $eqLogic==null){
 			$eqLogic = new eqLogic();
 			$eqLogic->setIsEnable(1);
@@ -146,7 +146,7 @@ class eqLogicOperate extends eqLogic {
 		}
 		switch ($syncType){
 			case "limited" :
-			case "basic" :			
+			case "basic" :
 				$eqLogic = self::setGenericEqLogicConf($eqLogic,$device,$syncType,$eqLogicMode);
 				$eqLogic = self::checkAndSetEqLogicConfiguration($eqLogic,'lights',json_encode($device[lights]),$syncType);
 				$eqLogic = self::checkAndSetEqLogicConfiguration($eqLogic,'devicemembership',json_encode($device[devicemembership]),$syncType);
@@ -157,11 +157,11 @@ class eqLogicOperate extends eqLogic {
 			case "renewbutidandname" :
 			break;
 		}
-		
-		
-		return self::setGenericCmdList(basename($config),$eqLogic,$syncType);	
+
+
+		return self::setGenericCmdList(basename($config),$eqLogic,$syncType);
 	}
-	
+
 	public function createGenericDevice($path,$eqLogic=null,$device,$syncType="basic",$eqLogicMode){
 		if (!is_file(dirname(__FILE__) . $path)){
 		return false;
@@ -173,14 +173,14 @@ class eqLogicOperate extends eqLogic {
 		$eqLogic = self::setGenericEqLogic($eqLogic,$device,$syncType,$eqLogicMode);
 		return self::setGenericCmdList(basename($path),$eqLogic,$syncType,$eqLogicMode);
 	}
-	
-	
+
+
 	private function checkAndSetEqLogicConfiguration($eqLogic=null,$attr,$value,$syncType="basic"){
-		
+
 		switch ($syncType){
 			case "limited" :
 			case "basic" :
-			//error_log("|checkAndSetEqLogicConfiguration attr|".$eqLogic->getConfiguration($attr),3,"/tmp/rasbee.err");
+			    //error_log("|checkAndSetEqLogicConfiguration attr|".$eqLogic->getConfiguration($attr),3,"/tmp/rasbee.err");
 				$eqLogic->setConfiguration($attr, $value);
 			break;
 			case "renew" :
@@ -191,7 +191,7 @@ class eqLogicOperate extends eqLogic {
 		}
 		return $eqLogic;
 	}
-	
+
 	public function deleteEqLogic($id){
 		$response = $responseHelper;
 		$response->state="nok";
@@ -201,7 +201,7 @@ class eqLogicOperate extends eqLogic {
 		$eqLogic = null;
 		foreach (eqlogic::byType('RaspBEE') as $eqLogicPass){
 			if ($eqLogicPass->getId()==$id){
-				$eqLogicPass->remove();			
+				$eqLogicPass->remove();
 				$response->state="ok";
 				$response->error = 0;
 				$response->message = json_encode($eqLogicPass);
@@ -210,7 +210,7 @@ class eqLogicOperate extends eqLogic {
 		}
 		return $response;
 	}
-	
+
 	/*public function removeFromGroup($id){
 		$response = $responseHelper;
 		$response->state="nok";
@@ -220,7 +220,7 @@ class eqLogicOperate extends eqLogic {
 		$eqLogic = null;
 		foreach (eqlogic::byType('RaspBEE') as $eqLogicPass){
 			if ($eqLogicPass->getId()==$id){
-				$eqLogicPass->remove();			
+				$eqLogicPass->remove();
 				$response->state="ok";
 				$response->error = 0;
 				$response->message = json_encode($eqLogicPass);
@@ -229,8 +229,8 @@ class eqLogicOperate extends eqLogic {
 		}
 		return $response;
 	}*/
-	
-	
+
+
 	function setGenericEqLogicConf($eqLogic=null,$device,$syncType="basic",$eqLogicMode){
 		//error_log("synctype: ".$syncType,3,"/tmp/prob.text");
 		switch ($syncType){
@@ -255,10 +255,10 @@ class eqLogicOperate extends eqLogic {
 				self::checkAndSetEqLogicConfiguration($eqLogic,'type',$device[type],$syncType);
 				self::checkAndSetEqLogicConfiguration($eqLogic,'uniqueid',$device[uniqueid],$syncType);
 			break;
-		}	
-		return $eqLogic;		
+		}
+		return $eqLogic;
 	}
-		
+
 	function setGenericEqLogic($eqLogic=null,$device,$syncType="basic",$eqLogicMode){
 		error_log("setGenericEqLogic: ".json_encode($device),3,"/tmp/prob.txt");
 		if ($eqLogicMode == false && $eqLogic==null){
@@ -274,7 +274,7 @@ class eqLogicOperate extends eqLogic {
 		}
 		switch ($syncType){
 			case "limited" :
-			case "basic" :			
+			case "basic" :
 				$eqLogic = self::setGenericEqLogicConf($eqLogic,$device,$syncType,$eqLogicMode);
 				$eqLogic->save();
 			break;
@@ -285,7 +285,7 @@ class eqLogicOperate extends eqLogic {
 				$eqLogic->save();
 			break;
 		}
-		return $eqLogic;		
+		return $eqLogic;
 	}
 
 	function setGenericCmd($eqLogic=null,$cmdPass,$command,$syncType="basic",$cmdMode){
@@ -305,14 +305,14 @@ class eqLogicOperate extends eqLogic {
 			case "basic" :
 				if ($cmdMode==false){
 					if (array_key_exists('isVisible', $command)) {
-						$RaspBEECmd->setIsVisible($command[isVisible]);	
+						$RaspBEECmd->setIsVisible($command[isVisible]);
 					}
 					if (array_key_exists('isHistorized', $command)) {
 						$RaspBEECmd->setIsHistorized($command[isHistorized]);
 					}
 					if (array_key_exists('display', $command)) {
 						$RaspBEECmd->setDisplay('generic_type',$command[display][generic_type]);
-					}			
+					}
 					if (array_key_exists('template', $command)) {
 						if (array_key_exists('dashboard',$command[template])){
 							$RaspBEECmd->setTemplate('dashboard',$command[template][dashboard]);
@@ -320,28 +320,28 @@ class eqLogicOperate extends eqLogic {
 						if (array_key_exists('mobile',$command[template])){
 							$RaspBEECmd->setTemplate('mobile',$command[template][mobile]);
 						}
-					}						
+					}
 					if (array_key_exists('unite', $command)) {
 						$RaspBEECmd->setUnite($command[unite]);
-					}	
+					}
 					if (array_key_exists('type', $command)) {
 						 $RaspBEECmd->setType($command[type]);
-					}				
+					}
 					if (array_key_exists('subtype', $command)) {
 						 $RaspBEECmd->setSubType($command[subtype]);
 					}
 					if (array_key_exists('value', $command)) {
 						foreach ($eqLogic->getCmd() as $_cmd) {
 							if ($_cmd->getName()===$command[value]){
-									error_log("setvalue : ".$_cmd->getName()." +++ ".$command[value],3,"/tmp/prob.txt");
-									$RaspBEECmd->setValue($_cmd->getId());
-									break;
+								error_log("setvalue : ".$_cmd->getName()." +++ ".$command[value],3,"/tmp/prob.txt");
+								$RaspBEECmd->setValue($_cmd->getId());
+								break;
 							}
 						}
-					}					
+					}
 					foreach ($command[configuration] as $command => $key){
-						$RaspBEECmd->setConfiguration($command,$key);				
-					}				
+						$RaspBEECmd->setConfiguration($command,$key);
+					}
 					$RaspBEECmd->save();
 					$response->message=$RaspBEECmd;
 					$response->error = 1;
@@ -370,7 +370,7 @@ class eqLogicOperate extends eqLogic {
 						$RaspBEECmd->setDisplay('generic_type',$command[display][generic_type]);
 						$response->error = 2;
 					}
-				}			
+				}
 				if (array_key_exists('template', $command)) {
 					if (array_key_exists('dashboard',$command[template])){
 						if ($RaspBEECmd->getTemplate('dashboard')!=$command[template][dashboard]){
@@ -384,19 +384,19 @@ class eqLogicOperate extends eqLogic {
 							$response->error = 2;
 						}
 					}
-				}						
+				}
 				if (array_key_exists('unite', $command)) {
 					if ($RaspBEECmd->getUnite()!=$command[unite]){
 						$RaspBEECmd->setUnite($command[unite]);
 						$response->error = 2;
 					}
-				}	
+				}
 				if (array_key_exists('type', $command)) {
 					if ($RaspBEECmd->getType()!=$command[type]){
 						$RaspBEECmd->setType($command[type]);
 						$response->error = 2;
 					}
-				}				
+				}
 				if (array_key_exists('subtype', $command)) {
 					if ($RaspBEECmd->getSubType()!=$command[subtype]){
 						$RaspBEECmd->setSubType($command[subtype]);
@@ -413,22 +413,22 @@ class eqLogicOperate extends eqLogic {
 							}
 						}
 					}
-				}	
-				foreach ($command[configuration] as $command => $key){					
+				}
+				foreach ($command[configuration] as $command => $key){
 					if ($RaspBEECmd->getConfiguration($command)!=$key){
 						$RaspBEECmd->setConfiguration($command,$key);
 						$response->error = 2;
-					}					
+					}
 				}
-				
-				
-				
+
+
+
 				$RaspBEECmd->save();
 				$response->message=$RaspBEECmd;
 				//$response->error = 2;
 			break;
 		}
-		
+
 		$response->state="ok";
 		// 0 : commande à jour
 		// 1 : commande crée
@@ -437,28 +437,28 @@ class eqLogicOperate extends eqLogic {
 		//$response->error = 0;
 		$response->message = "";
 		return $response;
-		//return $RaspBEECmd;		
+		//return $RaspBEECmd;
 	}
-	
-	
-	
-	
+
+
+
+
 	function setGenericCmdList($file=null,$eqLogic=null,$syncType="basic",$eqLogicMode){
-	//error_log("setGenericCmdList synctype: ".$syncType,3,"/tmp/prob.text");		
+	//error_log("setGenericCmdList synctype: ".$syncType,3,"/tmp/prob.text");
 		if ($file == null ||$eqLogic==null) return false;
 		$configFile = file_get_contents(dirname(__FILE__) . '/../config/devices/'.$file);
 		if (!is_json($configFile)) return false;
 		$eqLogicModel = json_decode($configFile, true);
-		$commands = $eqLogicModel['commands'];		
+		$commands = $eqLogicModel['commands'];
 		$response = $responseHelper;
 		$cmdAddCount = 0;
 		$cmdNotTouchedCount = 0;
 		$cmdModifiedCount = 0;
 		$cmdRemoveCount = 0;
-		$cmdTotalCount = 0;		
+		$cmdTotalCount = 0;
 		// on s'occupe en premier d'updater les commandes si nécessaire
 		foreach ($eqLogicModel['commands'] as $command) {
-			$cmdTotalCount++;	
+			$cmdTotalCount++;
 			// on check si la commande existe ou pas
 			$cmdMode = false;
 			$cmdPass = null;
@@ -490,7 +490,7 @@ class eqLogicOperate extends eqLogic {
 				break;
 				case "renewbutidandname" :
 					// on teste si la commande existe
-					//if ($cmdMode===true){					
+					//if ($cmdMode===true){
 					$cmd = self::setGenericCmd($eqLogic,$cmdPass,$command,$syncType,$cmdMode);
 					error_log("|modification de la commande retour erruer :".$cmd->error,3,"/tmp/prob.txt");
 					if ($cmd->error==0)
@@ -498,7 +498,7 @@ class eqLogicOperate extends eqLogic {
 					if ($cmd->error==1)
 						$cmdAddCount++;
 					if ($cmd->error==2)
-						$cmdModifiedCount++;				
+						$cmdModifiedCount++;
 					//}
 					//else
 					//{
@@ -509,7 +509,7 @@ class eqLogicOperate extends eqLogic {
 			}
 		}
 		// on s'occupe ensuite de supprimer les commandes obsolètes selon le mode de synchro
-		
+
 		foreach ($eqLogic->getCmd(null,null,null,true) as $checkCmd) {
 			$cmdInConfigFile = false;
 			foreach ($eqLogicModel['commands'] as $command) {
@@ -528,7 +528,7 @@ class eqLogicOperate extends eqLogic {
 						error_log("|commande non presente dans config|(command:".$command[name].", config:".$checkCmd->getName().")",3,"/tmp/prob.txt");
 						$checkCmd->remove();
 						$cmdRemoveCount++;
-						if ($cmdNotTouchedCount>0) $cmdNotTouchedCount--;					
+						if ($cmdNotTouchedCount>0) $cmdNotTouchedCount--;
 					}
 				break;
 				case "renew" :
@@ -537,8 +537,8 @@ class eqLogicOperate extends eqLogic {
 				break;
 			}
 		}
-		
-		
+
+
 		$response->error="3";
 		// 0: commandes non modifiées car à jour,
 		// 1: commandes modifiées car pas à jour,
@@ -549,9 +549,8 @@ class eqLogicOperate extends eqLogic {
 		//if (cmdAddCount!=0 || cmdRemoveCount !=0) $response->error=1;
 		if ($cmdTotalCount!=$cmdNotTouchedCount) $response->error=1;
 		//if (cmdAddCount!=0 || cmdRemoveCount !=0) $response->error=3;
-		if ($cmdTotalCount==$cmdAddCount && $cmdNotTouchedCount==0) $response->error=2;		
+		if ($cmdTotalCount==$cmdAddCount && $cmdNotTouchedCount==0) $response->error=2;
 		$response->message='{"cmdError":'.$response->error.',"totalCmdCount":'.$cmdTotalCount.',"modifiedCmd":'.$cmdModifiedCount.',"notTouchedCmd":'.$cmdNotTouchedCount.',"addedCmd":'.$cmdAddCount.',"removedCmd":'.$cmdRemoveCount.'}';
-		return $response;		
+		return $response;
 	}
 }
-?>

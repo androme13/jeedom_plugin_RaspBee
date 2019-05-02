@@ -9,9 +9,9 @@ raspbeegw = module.exports = {
 		WSclient.connect('ws://'+host+':'+port);
 	},
 	close : function() {
-		
+
 	},
-	setup : function(callback){		
+	setup : function(callback){
 		WSclient.on('connectFailed', function(error) {
 			console.log('Connect Error: ' + error.toString());
 		});
@@ -24,7 +24,7 @@ raspbeegw = module.exports = {
 				console.log('Connection Closed');
 			});
 			connection.on('message', function(message) {
-				if (message.type === 'utf8') {					
+				if (message.type === 'utf8') {
 						try{
 						callback(WebSocketClientParser.process(JSON.parse(message.utf8Data)));
 						}
@@ -33,6 +33,6 @@ raspbeegw = module.exports = {
 						}
 				}
 			});
-		});		
+		});
 		}
 };

@@ -14,7 +14,7 @@ global.wsp;
 
 process.on('uncaughtException', function(err) {
 	console.log(JSON.stringify(process.memoryUsage()));
-	console.error("Erreur inattendue, arrêt du daemon. " + err + ", stacktrace: " + err.stack);
+	console.error("Erreur inattendue, arrÃªt du daemon. " + err + ", stacktrace: " + err.stack);
 	return process.exit(1);
 });
 
@@ -31,7 +31,7 @@ process.on('SIGTERM', function() {
 });
 
 function cleanexit(){
-	console.log("Arrêt du daemon en cours ...");
+	console.log("ArrÃªt du daemon en cours ...");
 	if (typeof server !== 'undefined') server.close();
 	pidfile.removepidfile();
 	process.exit();
@@ -41,7 +41,7 @@ function cleanexit(){
 	try {
 		return fs.readFileSync(path.resolve(__dirname, 'config/default.json'), 'UTF-8');
 	} catch (err) {
-		console.log ("Problème avec le fichier de configuration :",err);
+		console.log ("ProblÃ¨me avec le fichier de configuration :",err);
 		return 0;
 	}
 }*/
@@ -57,7 +57,7 @@ function websocketCallBack(jsondata){
 
 function findlaunchparam($key){
 	var args = process.argv;
-	for (var i = 0, len = args.length; i < len; i++) {		
+	for (var i = 0, len = args.length; i < len; i++) {
 		var res = args[i].split("=");
 		if (res[0]==$key) return res[1];
 	}
@@ -73,26 +73,24 @@ if (pidfile.createpidfile()==1){
 	console.log(process.argv);
 	var start = true;
 	if (global.apikey==null){
-		console.log('Le paramètre "apikey" est manquant');
+		console.log('Le paramÃ¨tre "apikey" est manquant');
 		start = false;
-	} 
+	}
 	if (global.jurl==null){
-		console.log('Le paramètre "jurl" (adresse de jeedom) est manquant');
+		console.log('Le paramÃ¨tre "jurl" (adresse de jeedom) est manquant');
 		start = false;
 	}
 	if (global.rurl==null){
-		console.log('Le paramètre "rurl" (adresse de RaspBEE) est manquant');
+		console.log('Le paramÃ¨tre "rurl" (adresse de RaspBEE) est manquant');
 		start = false;
 	}
 	if (global.wsp==null){
-		console.log('Le paramètre "wsp" (port websocket) est manquant');
+		console.log('Le paramÃ¨tre "wsp" (port websocket) est manquant');
 		start = false;
-	} 	 	
+	}
 	if (start==true){
 		raspbee.connect(rurl,wsp,websocketCallBack);
-	} 
+	}
 }
 else
-console.log('Impossible de creer le fichier PID : ARRET du daemon');			
-
-
+console.log('Impossible de creer le fichier PID : ARRET du daemon');

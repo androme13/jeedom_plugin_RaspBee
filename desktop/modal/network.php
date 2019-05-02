@@ -55,36 +55,36 @@ $raspbeecom = new RaspBEECom;
 							?>
 							</span></p>
                             <p>{{Version}} <span class="label label-default" style="font-size : 1em;">
-							<?php							
-							echo $RaspBEEConfJson[swversion];	
+							<?php
+							echo $RaspBEEConfJson[swversion];
 							echo'</span>';
 							$versionDetail = explode(".", $RaspBEEConfJson[swversion]);
 							// version mini de deconz 2.4.70
 							$minVersion = array(2,4,82);
-							$error = '';							
+							$error = '';
 							if (($versionDetail===false || count($versionDetail)<3))
 							$error=' <span class="label label-warning" style="font-size : 1em;">{{Version obsolète de deconz, veuillez mettre à jour deconz (mini 2.04.70)}}</span>';
 							else
 							if (($versionDetail[0]<$minVersion[0] || ($versionDetail[0]==$minVersion[0] && $versionDetail[1]<$minVersion[1]) || ($versionDetail[0]==$minVersion[0] && $versionDetail[1]==$minVersion[1] && $versionDetail[2]<$minVersion[2]) ))
 							$error=' <span class="label label-warning" style="font-size : 1em;">{{Version obsolète de deconz, veuillez mettre à jour deconz }}({{mini}} '.$minVersion[0].'.'.$minVersion[1].'.'.$minVersion[2].')</span>';
-						
-							echo $error;		
+
+							echo $error;
 							?>
-							</p>								
+							</p>
                             <p>{{UUID}} <span class="label label-default" style="font-size : 1em;">
 							<?php
 							echo $RaspBEEConfJson[uuid];
 							?>
-							</span></p>								
+							</span></p>
 							<p>{{ID bridge RaspBEE}} <span class="label label-default" style="font-size : 1em;">
 							<?php
 							echo $RaspBEEConfJson[bridgeid];
 							?>
-							</span></p>							
+							</span></p>
                             <p>{{Port Websocket}} <span class="label label-default" style="font-size : 1em;">
 							<?php
 							echo $RaspBEEConfJson[websocketport];
-							?>							
+							?>
                             <p>{{Canal ZigBEE}} <span class="label label-default" style="font-size : 1em;">
 							<?php
 							echo $RaspBEEConfJson[zigbeechannel];
@@ -94,7 +94,7 @@ $raspbeecom = new RaspBEECom;
 							<?php
 							echo config::byKey('raspbeeAPIKEY','RaspBEE');
 							?>
-							</span></p>							
+							</span></p>
                         </div>
                     </div>
                     <div class="panel panel-primary">
@@ -120,7 +120,7 @@ $raspbeecom = new RaspBEECom;
 							<?php
 							echo $RaspBEEConfJson[mac];
 							?>
-							</span></p>								
+							</span></p>
 						</div>
                     </div>
 					<div class="panel panel-primary">
@@ -150,9 +150,9 @@ $raspbeecom = new RaspBEECom;
 							<?php
 							echo $RaspBEEConfJson[wifitype];
 							?>
-							</span></p>							
+							</span></p>
 						</div>
-                    </div>					
+                    </div>
                     <div class="panel panel-primary">
                         <div class="panel-heading"><h4 class="panel-title">{{Système}}</h4></div>
                         <div class="panel-body">
@@ -160,26 +160,26 @@ $raspbeecom = new RaspBEECom;
 							<?php
 							echo $RaspBEEConfJson[localtime];
 							?>
-							</span></p>							
+							</span></p>
                             <p>{{Format de l'heure}} <span class="label label-default" style="font-size : 1em;">
 							<?php
 							echo $RaspBEEConfJson[timeformat];
 							?>
-							</span></p>							
+							</span></p>
                             <p>{{TimeZone}} <span class="label label-default" style="font-size : 1em;">
 							<?php
 							echo $RaspBEEConfJson[timezone];
 							?>
-							</span></p>							
+							</span></p>
                         </div>
                     </div>
                 </div>
-				
-				
-				
-				
+
+
+
+
 				<div id="config_network" class="tab-pane">
-				
+
 					<br>
 					<div class="panel-group" id="network_configuration_accordion">
                     <div class="panel panel-primary">
@@ -188,7 +188,7 @@ $raspbeecom = new RaspBEECom;
 					{{Configuration de la passerelle}}</a></h4>
 					</div>
 					<div id="deconzConfigPanel" class="panel-collapse collapse out">
-					
+
 					<div class="panel-body">
 					<div id="div_deconzConfigNetworkPanelAlert"></div>
 					<p><span class="label" style="font-size : 1em;">{{Nom}}</span>
@@ -223,11 +223,11 @@ $raspbeecom = new RaspBEECom;
 						$selected='';
 						if ($option == $RaspBEEConfJson[zigbeechannel])
 							$selected ='selected="selected"';
-						
+
 						echo '<option value="'.$option.'" '.$selected.'>'.$option.'</option>';
 					}
 					?>
-						  
+
 						</select>
 					</p>
 					<p><span class="label" style="font-size : 1em;">{{Time Zone}}</span>
@@ -258,9 +258,9 @@ $raspbeecom = new RaspBEECom;
 					</p>
 					<a class="btn btn-success pull-right deconzConfigSaveButton" id="deconzConfigSaveButton"><i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>
 					</div>
-					</div>					
 					</div>
-					
+					</div>
+
 					<div class="panel panel-primary">
 					<div class="panel-heading"><h4 class="panel-title">
 					 <a data-toggle="collapse" data-parent="#network_configuration_accordion" href="#lightsConfigPanel">
@@ -274,19 +274,19 @@ $raspbeecom = new RaspBEECom;
 					<?php
 					//config::
 					?>
-					<a class="btn btn-success pull-right lightsConfigSaveButton" id="lightsConfigSaveButton"><i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>			
+					<a class="btn btn-success pull-right lightsConfigSaveButton" id="lightsConfigSaveButton"><i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>
 					</div>
-					</div>					
 					</div>
-					
+					</div>
+
 					</div>
 				</div>
 
-				
-				
-				
-				
-				
+
+
+
+
+
 				<div id="api_actions" class="tab-pane">
 					<br>
                     <div class="panel panel-primary">
@@ -295,7 +295,7 @@ $raspbeecom = new RaspBEECom;
 						<a id="showdebugsensors" name='.$value->name.' class="btn btn-info showDebugInfoBTN"><i class="fa fa-info-circle"></i> {{Afficher les capteurs}}</a>
 						<a id="showdebuglights" name='.$value->name.' class="btn btn-info  showDebugInfoBTN"><i class="fa fa-info-circle"></i> {{Afficher les éclairages}}</a>
 						<a id="showdebuggroups" name='.$value->name.' class="btn btn-info showDebugInfoBTN"><i class="fa fa-info-circle"></i> {{Afficher les groupes}}</a>
-						<a id="showdebugconfig" name='.$value->name.' class="btn btn-info showDebugInfoBTN"><i class="fa fa-info-circle"></i> {{Afficher la config raspbee}}</a>						
+						<a id="showdebugconfig" name='.$value->name.' class="btn btn-info showDebugInfoBTN"><i class="fa fa-info-circle"></i> {{Afficher la config raspbee}}</a>
                         </div>
                     </div>
 						<div class="panel panel-primary">
@@ -326,7 +326,7 @@ $raspbeecom = new RaspBEECom;
 						echo "<td>".$value[name]."</td>";
 						echo "<td>".$value["create date"].".</td>";
 						echo "<td>".$value["last use date"]."</td>";
-						if (config::byKey('raspbeeAPIKEY','RaspBEE')==$user)							
+						if (config::byKey('raspbeeAPIKEY','RaspBEE')==$user)
 							echo '<td><span class="label control-label" style="font-size : 1.1em;">{{Clé utilisée par le plugin}}.</span></td>';
 						else
 							echo '<td><a id='.$user.' name='.$value[name].' class="btn btn-danger  deleteRaspBeeUser"><i class="fa fa-minus-circle"></i> {{Supprimer l\'utilisateur}}</a></td>';
@@ -335,7 +335,7 @@ $raspbeecom = new RaspBEECom;
 					?>
 					</tbody>
 					</table>
-                </div>                
+                </div>
             </div>
         </div>
     </div>

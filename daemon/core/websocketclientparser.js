@@ -22,9 +22,9 @@ websocketclientparser = module.exports = {
 			//console.log("raw: ",jsondata);
 		return jsondata;
 		}
-					
+
 	},
-	
+
 	sensorsprocess : function (sensorsobj){
 		console.log("--------------------------------");
 		console.log("websocketclientparser sensorsprocess:");
@@ -56,10 +56,10 @@ websocketclientparser = module.exports = {
 			default :
 			//console.log("raw: ",sensorsobj);
 			return "raw: "+sensorsobj;
-			
+
 		}
 	},
-	
+
 	lightsprocess : function (lightobj){
 		console.log("websocketclientparser lightsprocess:");
 		console.log("raw lightobject: ",lightobj);
@@ -82,7 +82,7 @@ websocketclientparser = module.exports = {
 			break;
 			default :
 			//console.log("raw: ",lightobj);
-			return "raw: "+lightobj;			
+			return "raw: "+lightobj;
 		}
 	},
 	groupsprocess : function (groupsobj){
@@ -116,7 +116,7 @@ websocketclientparser = module.exports = {
 			default :
 			//console.log("raw: ",sensorsobj);
 			return "raw: "+groupsobj;
-			
+
 		}
 	}
 }

@@ -5,67 +5,67 @@
 			"hascolor": 1,
 			"manufacturername": "",
 			"modelid": "",
-			"origID": 0,		
+			"origID": 0,
 			"swversion": "",
 			"type": "",
 			"uniqueid": ""
 		},
 		"commands": [
 			{
-				"name": "Alerte on", 
-				"type": "action", 
-				"isVisible": 0, 
+				"name": "Alerte on",
+				"type": "action",
+				"isVisible": 0,
 				"isHistorized": 0,
-				"logicalId": "alert_on",				
-				"configuration": {
-					"fieldname" : "alert"
-				},
-				"value" : "Etat alerte",								
-				"subtype": "other", 
-				"display": {
-					"generic_type": "DONT"
-				}
-			},
-			{
-				"name": "Alerte off", 
-				"type": "action", 
-				"isVisible": 0, 
-				"isHistorized": 0,
-				"logicalId": "alert_off",				
+				"logicalId": "alert_on",
 				"configuration": {
 					"fieldname" : "alert"
 				},
 				"value" : "Etat alerte",
-				"subtype": "other", 
+				"subtype": "other",
 				"display": {
 					"generic_type": "DONT"
 				}
 			},
 			{
-				"name": "Effet", 
-				"type": "action", 
-				"isVisible": 1, 
+				"name": "Alerte off",
+				"type": "action",
+				"isVisible": 0,
 				"isHistorized": 0,
-				"logicalId": "effect",				
+				"logicalId": "alert_off",
+				"configuration": {
+					"fieldname" : "alert"
+				},
+				"value" : "Etat alerte",
+				"subtype": "other",
+				"display": {
+					"generic_type": "DONT"
+				}
+			},
+			{
+				"name": "Effet",
+				"type": "action",
+				"isVisible": 1,
+				"isHistorized": 0,
+				"logicalId": "effect",
 				"configuration": {
 					"fieldname" : "effect"
 				},
-				"value" : "Etat alerte",								
-				"subtype": "other", 
+				"value" : "Etat alerte",
+				"subtype": "other",
 				"display": {
 					"generic_type": "DONT"
 				}
 			},
 			{
-				"name": "Etat alerte", 
-				"type": "info", 
-				"isVisible": 0, 
+				"name": "Etat alerte",
+				"type": "info",
+				"isVisible": 0,
 				"isHistorized": 0,
-				"logicalId": "alert_state",				
+				"logicalId": "alert_state",
 				"configuration" :{
 					"fieldname" : "alert"
-				}, 
-				"subtype": "other", 
+				},
+				"subtype": "other",
 				"display": {
 					"generic_type": "DONT"
 				},
@@ -75,15 +75,15 @@
 				}
 			},
 			{
-				"name": "Etat", 
-				"type": "info", 
-				"isVisible": 1, 
+				"name": "Etat",
+				"type": "info",
+				"isVisible": 1,
 				"isHistorized": 0,
-				"logicalId": "on_state",				
+				"logicalId": "on_state",
 				"configuration" :{
 					"fieldname" : "on"
-				}, 
-				"subtype": "binary", 
+				},
+				"subtype": "binary",
 				"display": {
 					"generic_type": "LIGHT_STATE"
 				},
@@ -91,66 +91,66 @@
                     "dashboard" : "light",
                     "mobile" : "light"
                 }
-			},	
+			},
 			{
-				"name": "On", 
-				"type": "action", 
-				"isVisible": 1, 
+				"name": "On",
+				"type": "action",
+				"isVisible": 1,
 				"isHistorized": 0,
-				"logicalId": "on",				
+				"logicalId": "on",
 				"configuration": {
 					"fieldname" : "on"
 				},
-				"value" : "Etat",				
-				"subtype": "other", 
+				"value" : "Etat",
+				"subtype": "other",
 				"display": {
 					"generic_type": "LIGHT_ON"
 				}
 			},
 			{
-				"name": "Off", 
-				"type": "action", 
-				"isVisible": 1, 
+				"name": "Off",
+				"type": "action",
+				"isVisible": 1,
 				"isHistorized": 0,
-				"logicalId": "off",				
+				"logicalId": "off",
 				"configuration": {
 				"fieldname" : "on"
 				},
-				"value" : "Etat",				
-				"subtype": "other", 
+				"value" : "Etat",
+				"subtype": "other",
 				"display": {
 					"generic_type": "LIGHT_OFF"
 				}
 			},
 			{
-				"name": "Etat luminosité", 
-				"type": "info", 
-				"isVisible": 0, 
-				"isHistorized": 0,			
+				"name": "Etat luminosité",
+				"type": "info",
+				"isVisible": 0,
+				"isHistorized": 0,
 				"configuration" :{
 					"fieldname" : "bri",
-					"minValue": 0, 
+					"minValue": 0,
 					"maxValue": 255
 				},
-				"logicalId": "luminosity_state",				
-				"subtype": "numeric", 
+				"logicalId": "luminosity_state",
+				"subtype": "numeric",
 				"display": {
 					"generic_type": "DONT"
 				}
-			},			
+			},
 			{
-				"name": "Luminosité", 
-				"type": "action", 
-				"isVisible": 1, 
-				"isHistorized": 0, 
+				"name": "Luminosité",
+				"type": "action",
+				"isVisible": 1,
+				"isHistorized": 0,
 				"configuration": {
 					"fieldname" : "bri",
-					"minValue": 0, 
+					"minValue": 0,
 					"maxValue": 255
 				},
 				"logicalId": "luminosity",
-				"value" : "Etat luminosité",				
-				"subtype": "slider", 
+				"value" : "Etat luminosité",
+				"subtype": "slider",
 				"display": {
 					"generic_type": "LIGHT_SLIDER"
 				},
@@ -160,132 +160,132 @@
                 }
 			},
 			{
-				"name": "Etat Temperature Blanc", 
-				"type": "info", 
-				"isVisible": 0, 
-				"isHistorized": 0, 
+				"name": "Etat Temperature Blanc",
+				"type": "info",
+				"isVisible": 0,
+				"isHistorized": 0,
 				"configuration" :{
 					"fieldname" : "ct",
-					"minValue": 153, 
-					"maxValue": 500					
+					"minValue": 153,
+					"maxValue": 500
 				},
-				"logicalId": "tc_state",				
-				"subtype": "numeric", 
+				"logicalId": "tc_state",
+				"subtype": "numeric",
 				"display": {
 					"generic_type": "LIGHT_COLOR_TEMP"
 				}
 			},
 			{
-				"name": "Température Blanc", 
-				"type": "action", 
-				"isVisible": 1, 
-				"isHistorized": 0, 
+				"name": "Température Blanc",
+				"type": "action",
+				"isVisible": 1,
+				"isHistorized": 0,
 				"configuration": {
 					"fieldname" : "ct",
-					"minValue": 153, 
-					"maxValue": 500	
+					"minValue": 153,
+					"maxValue": 500
 				},
 				"logicalId": "tc",
-				"value" : "Etat Temperature Blanc",				
-				"subtype": "slider", 
+				"value" : "Etat Temperature Blanc",
+				"subtype": "slider",
 				"display": {
 					"generic_type": "LIGHT_SET_COLOR_TEMP"
 				}
 			},
 			{
-				"name": "Etat Teinte", 
-				"type": "info", 
-				"isVisible": 0, 
-				"isHistorized": 0, 
+				"name": "Etat Teinte",
+				"type": "info",
+				"isVisible": 0,
+				"isHistorized": 0,
 				"configuration" :{
 					"fieldname" : "hue",
-					"minValue": 0, 
-					"maxValue": 65535					
+					"minValue": 0,
+					"maxValue": 65535
 				},
-				"logicalId": "hue_state",				
-				"subtype": "numeric", 
+				"logicalId": "hue_state",
+				"subtype": "numeric",
 				"display": {
 					"generic_type": "DONT"
 				}
 			},
 			{
-				"name": "Teinte", 
-				"type": "action", 
-				"isVisible": 0, 
-				"isHistorized": 0, 
+				"name": "Teinte",
+				"type": "action",
+				"isVisible": 0,
+				"isHistorized": 0,
 				"configuration": {
 				"fieldname" : "hue",
-					"minValue": 0, 
-					"maxValue": 65535	
+					"minValue": 0,
+					"maxValue": 65535
 				},
 				"logicalId": "hue",
-				"value" : "Etat Teinte",					
-				"subtype": "slider", 
+				"value" : "Etat Teinte",
+				"subtype": "slider",
 				"display": {
 					"generic_type": "DONT"
 				}
 			},
 			{
-				"name": "Etat saturation", 
-				"type": "info", 
-				"isVisible": 0, 
-				"isHistorized": 0, 
+				"name": "Etat saturation",
+				"type": "info",
+				"isVisible": 0,
+				"isHistorized": 0,
 				"configuration" :{
 					"fieldname" : "sat",
-					"minValue": 0, 
-					"maxValue": 255					
+					"minValue": 0,
+					"maxValue": 255
 				},
-				"logicalId": "saturation_state",				
-				"subtype": "numeric", 
+				"logicalId": "saturation_state",
+				"subtype": "numeric",
 				"display": {
 					"generic_type": "DONT"
 				}
 			},
 			{
-				"name": "Saturation", 
-				"type": "action", 
-				"isVisible": 0, 
-				"isHistorized": 0, 
+				"name": "Saturation",
+				"type": "action",
+				"isVisible": 0,
+				"isHistorized": 0,
 				"configuration": {
 				"fieldname" : "sat",
-					"minValue": 0, 
-					"maxValue": 255	
+					"minValue": 0,
+					"maxValue": 255
 				},
 				"logicalId": "saturation",
-				"value" : "Etat saturation",				
-				"subtype": "slider", 
+				"value" : "Etat saturation",
+				"subtype": "slider",
 				"display": {
 					"generic_type": "DONT"
 				}
 			},
 			{
-				"name": "Etat couleur", 
-				"type": "info", 
-				"isVisible": 0, 
-				"isHistorized": 0, 
+				"name": "Etat couleur",
+				"type": "info",
+				"isVisible": 0,
+				"isHistorized": 0,
 				"configuration" :{
-					"fieldname" : "color"				
+					"fieldname" : "color"
 				},
-				"logicalId": "color_state",				
-				"subtype": "other", 
+				"logicalId": "color_state",
+				"subtype": "other",
 				"display": {
 					"generic_type": "LIGHT_COLOR"
 				}
 			},
 			{
-				"name": "Couleur", 
-				"type": "action", 
-				"isVisible": 1, 
-				"isHistorized": 0, 
+				"name": "Couleur",
+				"type": "action",
+				"isVisible": 1,
+				"isHistorized": 0,
 				"configuration": {
 				"fieldname" : "color"
 				},
 				"logicalId": "color",
-				"value" : "Etat couleur",								
-				"subtype": "color", 
+				"value" : "Etat couleur",
+				"subtype": "color",
 				"display": {
 					"generic_type": "LIGHT_SET_COLOR"
 				}
-			}					
+			}
 		]
 }

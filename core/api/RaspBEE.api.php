@@ -1,4 +1,4 @@
- <?php
+<?php
 /* Jeedom is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -26,4 +26,3 @@ if ($jsonrpc->getMethod() == 'test') {
 }
 
 throw new Exception(__('Aucune methode correspondante pour le plugin RaspBEE : ' . $jsonrpc->getMethod(), __FILE__));
-?>

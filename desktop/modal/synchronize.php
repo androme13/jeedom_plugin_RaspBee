@@ -14,8 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Plugin RaspBEE for jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
- 
-require_once dirname(__FILE__) . '/../../core/class/eqLogicOperate.class.php'; 
+
+require_once dirname(__FILE__) . '/../../core/class/eqLogicOperate.class.php';
 
 if (!isConnect('admin')) {
 	throw new Exception('401 Unauthorized');
@@ -24,7 +24,7 @@ if (!isConnect('admin')) {
 require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
 /*$raspbeecom = new RaspBEECom;
 		$lights = json_decode($raspbeecom->getLights());
-		$groups = json_decode($raspbeecom->getGroups());*/		
+		$groups = json_decode($raspbeecom->getGroups());*/
 ?>
 <div id='div_syncAlert' style="display: none;"></div>
 <div class="col-sm-4" style="overflow: hidden;height:inherit;">
@@ -45,13 +45,13 @@ require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
 								</h4>
 								<input type="radio" id="optionType1" name="optionType" value="limited" >
 								<label for="optionType1">{{Limitée}}.</label><br>
-								
+
 								<input type="radio" id="optionType2" name="optionType" value="basic" >
 								<label for="optionType1">{{Normale}} ({{recommandée}}).</label><br>
 
 								<input type="radio" id="optionType3" name="optionType" value="renew" >
 								<label for="optionType2">{{Resynchronisation totale}}.</label><br>
-								
+
 								<input type="radio" id="optionType4" name="optionType" value="renewbutidandname">
 								<label for="optionType3">{{Resynchronisation partielle}}.</label><br>
 
@@ -62,18 +62,18 @@ require_once dirname(__FILE__) . '/../../core/class/RaspBEECom.class.php';
 				</div>
 			</div>
 
-		<div class="panel panel-footer">			
+		<div class="panel panel-footer">
 				<a class="btn btn-success" id="bt_synchronize">
 					<i class="fa fa-refresh"> {{Synchroniser}}</i></a>
-		</div>        
-		</div> 	
+		</div>
+		</div>
 	</form>
 	</div>
 	<div class="panel-group col-sm-8" >
 	<div class="panel panel-default">
 		<div class="  panel-heading">
 		<h4 class=" panel-title">
-			<a">{{Résumé de la synchronisation}}</a>
+			<a>{{Résumé de la synchronisation}}</a>
 		</h4>
 	</div>
 	<div class="  panel-default">

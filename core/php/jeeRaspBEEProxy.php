@@ -18,7 +18,7 @@
 require_once dirname(__FILE__) . "/../../../../core/php/core.inc.php";
 include_file('core', 'authentification', 'php');
 if (!isConnect('admin')) {
-	echo '401 - Accès non autorisé';
+	echo '401 - AccÃ¨s non autorisÃ©';
 	die();
 }
 ajax::init();
@@ -53,10 +53,10 @@ try {
 			break;
 		case 'setLightsConfig' :
 			$resp = RaspBEE::setLightsConfig(init('request'));
-			break;			
+			break;
 	}
-	
-	
+
+
 	//$resp = RaspBEE::humanNameByOrigIdAndType(init('request'));
 	//error_log(json_encode($resp),3,"/tmp/prob.txt");
 	ajax::success($resp);

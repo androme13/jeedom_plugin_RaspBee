@@ -6,11 +6,11 @@ catch (err){
 }
 
 ajaxclient = module.exports = {
-	
-	
+
+
 sendPOST: function (DATA){
-					console.log("sendpost"+global.jurl+"?apikey="+global.apikey);
-		request.post({
+	console.log("sendpost"+global.jurl+"?apikey="+global.apikey);
+	request.post({
 url: global.jurl+"?apikey="+global.apikey,
 data: DATA,
 headers: {}
@@ -29,6 +29,6 @@ headers: {}
 				console.log("ajaxclient error",err);
 			}
 		});
-		
+
 	}
 }

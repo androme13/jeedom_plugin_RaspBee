@@ -44,7 +44,7 @@ foreach ($eqLogics as $eqLogic) {
 	<div class="col-lg-10 col-md-9 col-sm-8 eqLogicThumbnailDisplay" style="border-left: solid 1px #EEE; padding-left: 25px;">
 		<legend>
 			<i class="fa fa-cog"></i>  {{Gestion du plugin}}</legend>
-		<div class="eqLogicThumbnailContainer">	
+		<div class="eqLogicThumbnailContainer">
 			<?php
 $controllerMode=1;
 $status=RaspBEE::deamon_info();
@@ -97,7 +97,7 @@ if ($status['launchable']=="ok"){
 <center>{{Réseau RaspBEE}}</center>
 </span>';
 	echo '</div>';
-	
+
 	// bouton santé
 	echo '<div class="cursor card eqLogicHoverEffect" id="bt_RaspBEEHealth" style="background-color : #8000FF; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
 	echo '<center>';
@@ -108,11 +108,11 @@ if ($status['launchable']=="ok"){
 </span>';
 	echo '</div>';
 }
-?>	 
+?>
 		</div>
 		<legend><i class="fa fa-table"></i> {{Mes équipements RaspBEE}}</legend>
 		<div class="eqLogicThumbnailContainer" id="eqLogicThumbnailContainment" style="">
-				
+
 <?php
 foreach ($eqLogics as $eqLogic) {
 	$opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
@@ -143,7 +143,7 @@ foreach ($eqLogics as $eqLogic) {
 
 	case "LightGroup" :
 		echo '<i class="fa fa-circle-o" style="font-size : 6em;color:#767676;"></i>';
-		break;	
+		break;
 	default:
 		echo '<i class="fa fa-question-circle" style="font-size : 6em;color:#767676;"></i>';
 	}
@@ -162,7 +162,7 @@ foreach ($eqLogics as $eqLogic) {
 		break;
 	case "ZHAOpenClose" :
 		echo '{{Capteur ouvert/fermé}}';
-		break;		
+		break;
 	case "ZHAPressure" :
 		echo '{{Capteur de pression}}';
 		break;
@@ -177,18 +177,18 @@ foreach ($eqLogics as $eqLogic) {
 		break;
 	default :
 		echo '{{Inconnu}}';
-	}	
+	}
 	echo '</span>';
 	echo '</center>';
 	echo '<span style="font-size : 1.1em;position:relative; top : 15px;white-space: pre-wrap;word-wrap: normal;"><center>' . $eqLogic->getHumanName(true, true) . '</center>
 	</span>';
-	echo '</div>';	
+	echo '</div>';
 }
 ?>
 		</div>
 	</div>
 
-	<div class="col-lg-10 col-md-9 col-sm-8 eqLogic" style="border-left: solid 1px #EEE;padding-left: 25px;display: none;" id="eqLogicDetailSaveButtons">		
+	<div class="col-lg-10 col-md-9 col-sm-8 eqLogic" style="border-left: solid 1px #EEE;padding-left: 25px;display: none;" id="eqLogicDetailSaveButtons">
 		<a class="btn btn-success eqLogicAction pull-right" id="eqLogicSave" data-action="save"><i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>
 		<div id="div_removeGeneric"><a class="btn btn-danger eqLogicAction pull-right" data-action="remove">
 			<i class="fa fa-minus-circle"></i> {{Supprimer}}</a></div>
@@ -265,7 +265,7 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 				</form>
 			</div>
 			<div class="col-sm-5" id="div_infoseqlogic">
-				<form class="form-horizontal">				
+				<form class="form-horizontal">
 					<table id="table_infoseqlogic" class="table table-condensed" style="border-radius: 10px;">
 						<thead>
 						</thead>
@@ -277,7 +277,7 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 			</div>
 		</div>
 		<div id="masterEqLogic"></div>
-		<div id="groupsEqLogic"></div>		
+		<div id="groupsEqLogic"></div>
 		<div id="membersEqLogic"></div>
 	</div>
 
@@ -288,7 +288,7 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 		<br>
 		<table id="table_cmd" class="table table-bordered table-condensed">
 			<thead>
-				<tr>                
+				<tr>
 					<th class="expertModeVisible">{{ID}}</th>
 					<th>{{Nom}}</th>
 					<th>{{Paramètres}}</th>
@@ -313,6 +313,6 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 	box-shadow: 3px 3px 8px #000;
 }
 .eqLogicHoverEffect:hover {
-    opacity: 0.7; /* css standard */	
+    opacity: 0.7; /* css standard */
 }
 </style>
